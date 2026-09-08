@@ -89,3 +89,7 @@ No analytics, no accounts, no developer servers: see [PRIVACY.md](PRIVACY.md) (a
 ## License
 
 MIT — see [LICENSE](LICENSE). Not affiliated with Lime Technology / Unraid; the icon is an original design.
+
+## Release
+
+`scripts/release.sh` archives, exports and uploads the iOS and visionOS builds to TestFlight (needs `ASC_ISSUER` in the environment and the App Store Connect API key in `~/.appstoreconnect/private_keys/`). `AppStore/store_meta.py` holds the localized App Store listing texts.
