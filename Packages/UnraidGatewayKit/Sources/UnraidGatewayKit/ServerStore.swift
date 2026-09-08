@@ -3,7 +3,7 @@ import Foundation
 /// Identifiers shared between the app and the File Provider extension.
 public enum AppGroup {
     /// Must match the `com.apple.security.application-groups` entitlement of both targets.
-    public static let identifier = "group.com.sidimam.unraiddrive"
+    public static let identifier = "group.com.sdimambro.unraid-drive"
 
     public static var containerURL: URL? {
         FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: identifier)

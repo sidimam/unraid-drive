@@ -1,6 +1,6 @@
 name: UnraidDrive
 options:
-  bundleIdPrefix: com.sidimam
+  bundleIdPrefix: com.sdimambro
   deploymentTarget:
     iOS: "17.0"
     visionOS: "1.0"
@@ -9,7 +9,7 @@ options:
 settings:
   base:
     SWIFT_VERSION: "5.0"
-    DEVELOPMENT_TEAM: 3B344DJ2L5
+    DEVELOPMENT_TEAM: X5SR67A8AL
     CODE_SIGN_STYLE: Automatic
     TARGETED_DEVICE_FAMILY: "1,2,7"
     MARKETING_VERSION: "0.1.0"
@@ -44,10 +44,10 @@ targets:
     entitlements:
       path: App/UnraidDrive.entitlements
       properties:
-        com.apple.security.application-groups: [group.com.sidimam.unraiddrive]
+        com.apple.security.application-groups: [group.com.sdimambro.unraid-drive]
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.sidimam.unraiddrive
+        PRODUCT_BUNDLE_IDENTIFIER: com.sdimambro.unraid-drive
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
   UnraidDriveFileProvider:
@@ -69,16 +69,16 @@ targets:
           NSExtensionPointIdentifier: com.apple.fileprovider-nonui
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).FileProviderExtension
           NSExtensionFileProviderSupportsEnumeration: true
-          NSExtensionFileProviderDocumentGroup: group.com.sidimam.unraiddrive
+          NSExtensionFileProviderDocumentGroup: group.com.sdimambro.unraid-drive
         NSAppTransportSecurity:
           NSAllowsLocalNetworking: true
     entitlements:
       path: FileProvider/UnraidDriveFileProvider.entitlements
       properties:
-        com.apple.security.application-groups: [group.com.sidimam.unraiddrive]
+        com.apple.security.application-groups: [group.com.sdimambro.unraid-drive]
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.sidimam.unraiddrive.fileprovider
+        PRODUCT_BUNDLE_IDENTIFIER: com.sdimambro.unraid-drive.fileprovider
 schemes:
   UnraidDrive:
     build:

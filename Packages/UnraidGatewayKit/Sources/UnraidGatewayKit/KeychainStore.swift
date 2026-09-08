@@ -14,7 +14,7 @@ public struct CloudflareServiceToken: Hashable, Sendable {
 /// Stores per-server secrets in the shared Keychain access group so the
 /// File Provider extension can authenticate without the app running.
 public struct KeychainStore: Sendable {
-    private let service = "com.sidimam.unraiddrive.secrets"
+    private let service = "com.sdimambro.unraid-drive.secrets"
     public init() {}
 
     // MARK: API key

@@ -4,7 +4,7 @@ import UniformTypeIdentifiers
 import UnraidGatewayKit
 import os
 
-let fpLog = Logger(subsystem: "com.sidimam.unraiddrive", category: "fileprovider")
+let fpLog = Logger(subsystem: "com.sdimambro.unraid-drive", category: "fileprovider")
 
 /// Replicated File Provider extension backed by unraid-gateway.
 ///

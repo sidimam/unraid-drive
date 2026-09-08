@@ -49,7 +49,7 @@ xcodegen generate
 open UnraidDrive.xcodeproj
 ```
 
-Set your team in `project.yml` (`DEVELOPMENT_TEAM`) and change the bundle identifier prefix and the app group (`group.com.sidimam.unraiddrive` in `project.yml` and `AppGroup.identifier`) if you fork.
+Set your team in `project.yml` (`DEVELOPMENT_TEAM`) and change the bundle identifier prefix and the app group (`group.com.sdimambro.unraid-drive` in `project.yml` and `AppGroup.identifier`) if you fork.
 
 Command line:
 
