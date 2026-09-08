@@ -1,0 +1,333 @@
+import Foundation
+
+struct GraphQLEnvelope<T: Decodable>: Decodable {
+    var data: T?
+    var errors: [GQLError]?
+    struct GQLError: Decodable { var message: String }
+}
+
+/// Async client for the unraid-gateway HTTP API.
+///
+/// Authentication: the API key is exchanged for a session token on first use;
+/// a 401 triggers exactly one transparent re-login and retry.
+public actor GatewayClient {
+    public let baseURL: URL
+    private let apiKey: String
+    private let extraHeaders: [String: String]
+    private let session: URLSession
+    private var token: String?
+    private var loginTask: Task<String, Error>?
+
+    /// Uploads larger than this use the resumable protocol.
+    public private(set) var resumableThreshold: Int64 = 16 * 1024 * 1024
+    public private(set) var chunkSize: Int = 8 * 1024 * 1024
+    public func setResumableThreshold(_ n: Int64) { resumableThreshold = n }
+    public func setChunkSize(_ n: Int) { chunkSize = n }
+
+    /// - Parameter extraHeaders: sent on every request, e.g. a Cloudflare Access service token.
+    public init(baseURL: URL, apiKey: String, extraHeaders: [String: String] = [:], session: URLSession? = nil) {
+        self.baseURL = baseURL
+        self.apiKey = apiKey
+        self.extraHeaders = extraHeaders
+        if let session {
+            self.session = session
+        } else {
+            let cfg = URLSessionConfiguration.ephemeral
+            cfg.timeoutIntervalForRequest = 60
+            cfg.timeoutIntervalForResource = 24 * 3600
+            cfg.waitsForConnectivity = false
+            cfg.httpAdditionalHeaders = ["Accept": "application/json"]
+            self.session = URLSession(configuration: cfg)
+        }
+    }
+
+    // MARK: - Public API
+
+    public func health() async throws -> HealthResponse {
+        let (data, resp) = try await perform(URLRequest(url: url("/healthz")))
+        try Self.check(resp, data)
+        return try decode(HealthResponse.self, data)
+    }
+
+    /// Validates the API key and caches the session token.
+    @discardableResult
+    public func login() async throws -> LoginResponse {
+        var req = URLRequest(url: url("/api/v1/auth/login"))
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.httpBody = try JSONEncoder().encode(["apiKey": apiKey])
+        let (data, resp) = try await perform(req)
+        try Self.check(resp, data)
+        let login = try decode(LoginResponse.self, data)
+        token = login.token
+        return login
+    }
+
+    public func logout() async {
+        guard let t = token else { return }
+        var req = URLRequest(url: url("/api/v1/auth/logout"))
+        req.httpMethod = "POST"
+        req.setValue("Bearer \(t)", forHTTPHeaderField: "Authorization")
+        _ = try? await session.data(for: req)
+        token = nil
+    }
+
+    public func list(_ path: String, hidden: Bool = false) async throws -> ListResponse {
+        var items = [URLQueryItem(name: "path", value: path)]
+        if hidden { items.append(URLQueryItem(name: "hidden", value: "1")) }
+        let (data, _) = try await authorized(get("/api/v1/fs/list", items))
+        return try decode(ListResponse.self, data)
+    }
+
+    public func stat(_ path: String) async throws -> FSEntry {
+        let (data, _) = try await authorized(get("/api/v1/fs/stat", [URLQueryItem(name: "path", value: path)]))
+        return try decode(FSEntry.self, data)
+    }
+
+    /// Downloads a file to a temporary location owned by the caller.
+    public func download(_ path: String, to destination: URL) async throws -> FSEntry {
+        let req = get("/api/v1/fs/content", [URLQueryItem(name: "path", value: path)])
+        let (tmp, resp) = try await authorizedDownload(req)
+        try? FileManager.default.removeItem(at: destination)
+        try FileManager.default.moveItem(at: tmp, to: destination)
+        // Build the entry from headers to avoid a second round trip.
+        let http = resp as? HTTPURLResponse
+        let etag = http?.value(forHTTPHeaderField: "ETag") ?? ""
+        let size = (try? FileManager.default.attributesOfItem(atPath: destination.path)[.size] as? Int64) ?? 0
+        let mtime = http?.value(forHTTPHeaderField: "Last-Modified").flatMap(Self.httpDate) ?? Date()
+        return FSEntry(name: GatewayPath.name(path), path: path, type: .file, size: size, mtime: mtime, etag: etag)
+    }
+
+    /// Uploads a local file to `path`. Small files use one atomic PUT; large
+    /// files use the resumable session protocol and survive offset mismatches.
+    public func upload(fileURL: URL, to path: String, overwrite: Bool = true, mtime: Date? = nil, ifMatch: String? = nil,
+                       progress: (@Sendable (Int64, Int64) -> Void)? = nil) async throws -> FSEntry {
+        let size = (try FileManager.default.attributesOfItem(atPath: fileURL.path)[.size] as? Int64) ?? 0
+        if size <= resumableThreshold {
+            var items = [URLQueryItem(name: "path", value: path)]
+            if !overwrite { items.append(URLQueryItem(name: "overwrite", value: "false")) }
+            var req = get("/api/v1/fs/content", items)
+            req.httpMethod = "PUT"
+            req.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+            if let mtime { req.setValue(GatewayJSON.rfc3339.string(from: mtime), forHTTPHeaderField: "X-Mtime") }
+            if let ifMatch { req.setValue(ifMatch, forHTTPHeaderField: "If-Match") }
+            let (data, _) = try await authorizedUpload(req, fromFile: fileURL)
+            progress?(size, size)
+            return try decode(FSEntry.self, data)
+        }
+        return try await resumableUpload(fileURL: fileURL, size: size, to: path, overwrite: overwrite, mtime: mtime, progress: progress)
+    }
+
+    public func mkdir(_ path: String, parents: Bool = false) async throws -> FSEntry {
+        let (data, _) = try await authorized(post("/api/v1/fs/mkdir", ["path": path, "parents": parents]))
+        return try decode(FSEntry.self, data)
+    }
+
+    public func move(_ from: String, to: String, overwrite: Bool = false) async throws -> FSEntry {
+        let (data, _) = try await authorized(post("/api/v1/fs/move", ["from": from, "to": to, "overwrite": overwrite]))
+        return try decode(FSEntry.self, data)
+    }
+
+    public func copy(_ from: String, to: String, overwrite: Bool = false) async throws -> FSEntry {
+        let (data, _) = try await authorized(post("/api/v1/fs/copy", ["from": from, "to": to, "overwrite": overwrite]))
+        return try decode(FSEntry.self, data)
+    }
+
+    public func delete(_ path: String, recursive: Bool = true) async throws {
+        _ = try await authorized(post("/api/v1/fs/delete", ["path": path, "recursive": recursive]))
+    }
+
+    /// One page of the change feed. Pass `after`/`cursor` from a truncated page to continue.
+    public func changes(_ path: String, since: Int64, after: String? = nil, cursor: Int64? = nil, limit: Int? = nil) async throws -> ChangesPage {
+        var items = [URLQueryItem(name: "path", value: path), URLQueryItem(name: "since", value: String(since))]
+        if let after { items.append(URLQueryItem(name: "after", value: after)) }
+        if let cursor { items.append(URLQueryItem(name: "cursor", value: String(cursor))) }
+        if let limit { items.append(URLQueryItem(name: "limit", value: String(limit))) }
+        let (data, _) = try await authorized(get("/api/v1/fs/changes", items))
+        return try decode(ChangesPage.self, data)
+    }
+
+    /// Runs a GraphQL query through the gateway proxy and returns the `data` object.
+    public func graphQL<T: Decodable>(_ query: String, variables: [String: Any]? = nil, as type: T.Type) async throws -> T {
+        var body: [String: Any] = ["query": query]
+        if let variables { body["variables"] = variables }
+        let (data, _) = try await authorized(post("/api/v1/graphql", body))
+        let env = try decode(GraphQLEnvelope<T>.self, data)
+        if let errs = env.errors, !errs.isEmpty, env.data == nil {
+            throw GatewayError.graphQL(errs.map(\.message))
+        }
+        guard let d = env.data else { throw GatewayError.decoding("empty GraphQL data") }
+        return d
+    }
+
+    /// Raw GraphQL passthrough for ad-hoc queries.
+    public func graphQLRaw(_ query: String) async throws -> Data {
+        let (data, _) = try await authorized(post("/api/v1/graphql", ["query": query]))
+        return data
+    }
+
+    // MARK: - Resumable upload
+
+    private func resumableUpload(fileURL: URL, size: Int64, to path: String, overwrite: Bool, mtime: Date?,
+                                 progress: (@Sendable (Int64, Int64) -> Void)?) async throws -> FSEntry {
+        let (data, _) = try await authorized(post("/api/v1/fs/uploads", ["path": path, "size": size, "overwrite": overwrite]))
+        let sess = try decode(UploadSession.self, data)
+        let handle = try FileHandle(forReadingFrom: fileURL)
+        defer { try? handle.close() }
+        var offset: Int64 = sess.offset
+        var attempts = 0
+        while offset < size {
+            try Task.checkCancellation()
+            try handle.seek(toOffset: UInt64(offset))
+            let chunk = handle.readData(ofLength: Int(min(Int64(chunkSize), size - offset)))
+            var req = URLRequest(url: url("/api/v1/fs/uploads/\(sess.id)"))
+            req.httpMethod = "PATCH"
+            req.setValue("application/offset+octet-stream", forHTTPHeaderField: "Content-Type")
+            req.setValue(String(offset), forHTTPHeaderField: "Upload-Offset")
+            do {
+                let (_, resp) = try await authorizedUpload(req, data: chunk)
+                if let o = (resp as? HTTPURLResponse)?.value(forHTTPHeaderField: "Upload-Offset"), let n = Int64(o) {
+                    offset = n
+                } else {
+                    offset += Int64(chunk.count)
+                }
+                attempts = 0
+            } catch GatewayError.conflict {
+                // Offset mismatch: ask the server where it is and continue from there.
+                attempts += 1
+                if attempts > 5 { throw GatewayError.conflict("upload offset mismatch") }
+                var head = URLRequest(url: url("/api/v1/fs/uploads/\(sess.id)"))
+                head.httpMethod = "HEAD"
+                let (_, resp) = try await authorized(head)
+                guard let o = (resp as? HTTPURLResponse)?.value(forHTTPHeaderField: "Upload-Offset"), let n = Int64(o) else {
+                    throw GatewayError.conflict("upload offset unknown")
+                }
+                offset = n
+            }
+            progress?(offset, size)
+        }
+        var commit = URLRequest(url: url("/api/v1/fs/uploads/\(sess.id)/commit"))
+        commit.httpMethod = "POST"
+        if let mtime { commit.setValue(GatewayJSON.rfc3339.string(from: mtime), forHTTPHeaderField: "X-Mtime") }
+        let (out, _) = try await authorized(commit)
+        return try decode(FSEntry.self, out)
+    }
+
+    // MARK: - Plumbing
+
+    private func url(_ path: String) -> URL {
+        baseURL.appendingPathComponent(path)
+    }
+
+    private func get(_ path: String, _ items: [URLQueryItem]) -> URLRequest {
+        var comps = URLComponents(url: url(path), resolvingAgainstBaseURL: false)!
+        comps.queryItems = items
+        return URLRequest(url: comps.url!)
+    }
+
+    private func post(_ path: String, _ body: [String: Any]) -> URLRequest {
+        var req = URLRequest(url: url(path))
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        return req
+    }
+
+    private func ensureToken() async throws -> String {
+        if let token { return token }
+        if let loginTask { return try await loginTask.value }
+        let t = Task<String, Error> { try await self.login().token }
+        loginTask = t
+        defer { loginTask = nil }
+        return try await t.value
+    }
+
+    private func authorized(_ request: URLRequest) async throws -> (Data, URLResponse) {
+        var req = request
+        req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
+        let (data, resp) = try await perform(req)
+        if (resp as? HTTPURLResponse)?.statusCode == 401 {
+            token = nil
+            req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
+            let (d2, r2) = try await perform(req)
+            try Self.check(r2, d2)
+            return (d2, r2)
+        }
+        try Self.check(resp, data)
+        return (data, resp)
+    }
+
+    private func authorizedUpload(_ request: URLRequest, fromFile file: URL? = nil, data body: Data? = nil) async throws -> (Data, URLResponse) {
+        var req = request
+        req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
+        func send(_ r: URLRequest) async throws -> (Data, URLResponse) {
+            do {
+                if let file { return try await session.upload(for: decorate(r), fromFile: file) }
+                return try await session.upload(for: decorate(r), from: body ?? Data())
+            } catch { throw GatewayError.network(error.localizedDescription) }
+        }
+        var (data, resp) = try await send(req)
+        if (resp as? HTTPURLResponse)?.statusCode == 401 {
+            token = nil
+            req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
+            (data, resp) = try await send(req)
+        }
+        try Self.check(resp, data)
+        return (data, resp)
+    }
+
+    private func authorizedDownload(_ request: URLRequest) async throws -> (URL, URLResponse) {
+        var req = request
+        req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
+        func send(_ r: URLRequest) async throws -> (URL, URLResponse) {
+            do { return try await session.download(for: decorate(r)) } catch { throw GatewayError.network(error.localizedDescription) }
+        }
+        var (tmp, resp) = try await send(req)
+        if (resp as? HTTPURLResponse)?.statusCode == 401 {
+            token = nil
+            req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
+            (tmp, resp) = try await send(req)
+        }
+        if let http = resp as? HTTPURLResponse, http.statusCode >= 300 {
+            let body = (try? Data(contentsOf: tmp)) ?? Data()
+            try? FileManager.default.removeItem(at: tmp)
+            try Self.check(resp, body)
+        }
+        return (tmp, resp)
+    }
+
+    private func perform(_ req: URLRequest) async throws -> (Data, URLResponse) {
+        do { return try await session.data(for: decorate(req)) } catch { throw GatewayError.network(error.localizedDescription) }
+    }
+
+    private func decorate(_ req: URLRequest) -> URLRequest {
+        var r = req
+        for (k, v) in extraHeaders { r.setValue(v, forHTTPHeaderField: k) }
+        return r
+    }
+
+    private func decode<T: Decodable>(_ type: T.Type, _ data: Data) throws -> T {
+        do { return try GatewayJSON.decoder.decode(type, from: data) } catch { throw GatewayError.decoding(String(describing: error)) }
+    }
+
+    static func check(_ resp: URLResponse, _ data: Data) throws {
+        guard let http = resp as? HTTPURLResponse else { throw GatewayError.network("no HTTP response") }
+        guard http.statusCode >= 300 else { return }
+        let msg = (try? JSONDecoder().decode([String: String].self, from: data))?["error"] ?? HTTPURLResponse.localizedString(forStatusCode: http.statusCode)
+        switch http.statusCode {
+        case 401: throw GatewayError.unauthorized
+        case 403: throw GatewayError.forbidden(msg)
+        case 404: throw GatewayError.notFound
+        case 409: throw GatewayError.conflict(msg)
+        case 412: throw GatewayError.preconditionFailed
+        case 429: throw GatewayError.locked
+        default: throw GatewayError.http(http.statusCode, msg)
+        }
+    }
+
+    private static let httpDateFormatter: DateFormatter = {
+        let f = DateFormatter(); f.locale = Locale(identifier: "en_US_POSIX"); f.timeZone = TimeZone(identifier: "GMT")
+        f.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"; return f
+    }()
+    private static func httpDate(_ s: String) -> Date? { httpDateFormatter.date(from: s) }
+}

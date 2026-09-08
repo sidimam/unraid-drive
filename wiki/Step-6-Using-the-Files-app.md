@@ -1,0 +1,44 @@
+# Step 6 — Use your shares in the Files app
+
+## Finding your shares
+
+1. Open the **Files** app.
+2. Tap **Browse** (bottom right on iPhone; sidebar on iPad).
+3. Under **Locations** you see **Unraid Drive**. The first time, iOS asks *Do you want to enable "Unraid Drive"?* → **Enable**. (If it does not appear, tap **⋯ → Edit** at the top of the Browse page and switch it on.)
+4. Tap it. Each server you added is a folder; inside, each mapped share is a folder.
+
+On iPad and Vision Pro you can also drag **Unraid Drive** into the sidebar favourites.
+
+## Everyday operations
+
+| You want to… | Do this |
+|---|---|
+| Open a file | tap it. It downloads on first open (cloud icon), then opens in the built-in viewer or in the app you choose |
+| Save a file from another app to Unraid | in that app use **Share → Save to Files** (or *Export*), navigate to *Unraid Drive → server → share*, **Save** |
+| Upload photos | Photos app → select → **Share → Save to Files** → pick a share |
+| Copy or move | long-press → **Copy** / **Move**, or drag and drop between locations on iPad |
+| Rename, duplicate, delete | long-press the item |
+| New folder | **⋯** menu (iPhone) or the *new folder* button (iPad) inside a share |
+| Attach a NAS file in Mail | Mail → attachment → **Browse** → Unraid Drive |
+| Open a NAS document in Pages, GoodNotes, etc. | in that app choose *Open… / Browse* → Unraid Drive |
+| Free space on the device | long-press → **Remove Download**. The file stays on the NAS |
+| Keep a file available offline | long-press → **Download Now** (iOS 17+) |
+
+## What the little icons mean
+
+- **cloud with arrow**: on the NAS, not downloaded yet. Tap to fetch.
+- **progress ring**: transfer in progress. Large uploads are sent in chunks and resume after a network drop.
+- **exclamation**: the last sync failed. Usually the gateway is unreachable; see [Troubleshooting](Troubleshooting).
+
+## How changes made elsewhere show up
+
+If you add files on the NAS via SMB or another device, the Files app picks them up when you open or pull-refresh the folder, and periodically in the background through the gateway's change feed. On very large shares (hundreds of thousands of files) the first full sync of a folder tree can take a minute; subsequent checks are incremental.
+
+## Limits and good practice
+
+- **Root and share level are read-only.** You cannot create files directly under *Unraid Drive → server*; open a share first. You also cannot rename or delete a share from Files: shares are mount points managed in the container settings.
+- **Very large files** work (there is no size limit in the app), but remember Cloudflare's 100 MB single-request limit applies only to the gateway *web page*, not to the app, which chunks uploads.
+- **Do not point the Photos app "Sync" or third-party backup tools at a share** through the Files app; they are not designed for cloud providers and will spin. Use Immich or a dedicated backup app for that.
+- **Battery**: like every cloud provider, syncing happens when you use Files or when iOS schedules background refresh. Nothing runs continuously.
+
+→ See also: [Troubleshooting](Troubleshooting), [Security notes](Security)
