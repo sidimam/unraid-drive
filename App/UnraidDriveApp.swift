@@ -17,7 +17,11 @@ struct UnraidDriveApp: App {
                     if phase == .active { Task { await servers.signalAllDomains() } }
                 }
                 .task { await seedFromLaunchArguments() }
-                .preferredColorScheme(Appearance(rawValue: appearance)?.colorScheme)
+                .onAppear { (Appearance(rawValue: appearance) ?? .system).applyToWindows() }
+                .onChange(of: appearance) { _, v in (Appearance(rawValue: v) ?? .system).applyToWindows() }
+                .onChange(of: scenePhase) { _, phase in
+                    if phase == .active { (Appearance(rawValue: appearance) ?? .system).applyToWindows() }
+                }
                 .modifier(AppLocaleModifier(language: AppLanguage(rawValue: language) ?? .system))
         }
     }
