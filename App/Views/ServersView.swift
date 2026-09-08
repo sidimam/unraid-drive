@@ -5,6 +5,7 @@ struct ServersView: View {
     @EnvironmentObject private var model: ServersModel
     @State private var adding = false
     @State private var showWalkthrough = false
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @AppStorage("walkthrough.seen") private var walkthroughSeen = false
     /// Navigation path; `-openServer` as a launch argument opens the first server (screenshot automation).
     @State private var path: [ServerConfig] = []
@@ -38,6 +39,11 @@ struct ServersView: View {
                             let victims = idx.map { model.servers[$0] }
                             Task { for s in victims { await model.remove(s) } }
                         }
+                        Section {
+                            Button { adding = true } label: { Label("Add another server", systemImage: "plus.circle") }
+                        } footer: {
+                            Text("Every server you add becomes its own location in the Files app. Swipe left on a server to remove it.")
+                        }
                     }
                 }
             }
@@ -51,7 +57,10 @@ struct ServersView: View {
                     Button { adding = true } label: { Image(systemName: "plus") }
                 }
             }
-            .sheet(isPresented: $adding) { AddServerView() }
+            .fullScreenCover(isPresented: Binding(get: { adding && sizeClass == .compact }, set: { adding = $0 })) { AddServerView() }
+            .sheet(isPresented: Binding(get: { adding && sizeClass != .compact }, set: { adding = $0 })) {
+                AddServerView().presentationDetents([.large])
+            }
             .sheet(isPresented: $showWalkthrough, onDismiss: { walkthroughSeen = true }) {
                 WalkthroughView(onTryDemo: model.hasDemo ? nil : { Task { await model.addDemo() } })
             }

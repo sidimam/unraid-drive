@@ -6,8 +6,34 @@ public struct CloudflareServiceToken: Hashable, Sendable {
     public var clientID: String
     public var clientSecret: String
     public init(clientID: String, clientSecret: String) { self.clientID = clientID; self.clientSecret = clientSecret }
+
+    /// Cloudflare's dashboard copies tokens as header lines, e.g.
+    /// `CF-Access-Client-Id: 8297….access`. Accept a raw value, a labelled line, or both
+    /// lines pasted together, and return what was recognised.
+    public static func parse(_ text: String) -> (clientID: String?, clientSecret: String?) {
+        var id: String?, secret: String?
+        var loose: [String] = []
+        for rawLine in text.split(whereSeparator: { $0.isNewline }) {
+            let line = rawLine.trimmingCharacters(in: .whitespaces)
+            guard !line.isEmpty else { continue }
+            let lower = line.lowercased()
+            if let r = lower.range(of: "cf-access-client-id") {
+                id = String(line[r.upperBound...]).trimmingCharacters(in: CharacterSet(charactersIn: ": \t\"'"))
+            } else if let r = lower.range(of: "cf-access-client-secret") {
+                secret = String(line[r.upperBound...]).trimmingCharacters(in: CharacterSet(charactersIn: ": \t\"'"))
+            } else {
+                loose.append(line)
+            }
+        }
+        // Unlabelled values: the id ends with ".access", the secret is a 64-hex string.
+        for v in loose {
+            if v.hasSuffix(".access") { id = id ?? v } else if secret == nil, v.count >= 32 { secret = v } else { id = id ?? v }
+        }
+        return (id, secret)
+    }
     public var headers: [String: String] {
-        ["CF-Access-Client-Id": clientID, "CF-Access-Client-Secret": clientSecret]
+        let clean: (String) -> String = { $0.trimmingCharacters(in: .whitespacesAndNewlines).filter { !$0.isNewline } }
+        return ["CF-Access-Client-Id": clean(clientID), "CF-Access-Client-Secret": clean(clientSecret)]
     }
 }
 

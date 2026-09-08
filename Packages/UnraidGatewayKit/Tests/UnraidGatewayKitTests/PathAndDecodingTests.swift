@@ -68,3 +68,16 @@ final class ProxyInterceptionTests: XCTestCase {
         XCTAssertNoThrow(try GatewayClient.check(resp, Data("{}".utf8)))
     }
 }
+
+final class CloudflareTokenParsingTests: XCTestCase {
+    func testParsesLabelledLinesAndBareValues() {
+        let both = "CF-Access-Client-Id: 8297915feda35f08aaaa.access\nCF-Access-Client-Secret: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef\n"
+        let p = CloudflareServiceToken.parse(both)
+        XCTAssertEqual(p.clientID, "8297915feda35f08aaaa.access")
+        XCTAssertEqual(p.clientSecret?.count, 64)
+        XCTAssertEqual(CloudflareServiceToken.parse("cf-access-client-id: abc.access").clientID, "abc.access")
+        XCTAssertEqual(CloudflareServiceToken.parse("abc.access").clientID, "abc.access")
+        XCTAssertEqual(CloudflareServiceToken.parse(String(repeating: "f", count: 64)).clientSecret?.count, 64)
+        XCTAssertNil(CloudflareServiceToken.parse("").clientID)
+    }
+}

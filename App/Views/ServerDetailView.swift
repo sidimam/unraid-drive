@@ -8,23 +8,32 @@ struct ServerDetailView: View {
     @State private var error: String?
     @State private var loading = false
     @State private var filesURL: URL?
+    @State private var testing = false
+    @State private var editing = false
 
     var body: some View {
         List {
             Section {
                 if let filesURL {
-                    Link(destination: filesURL) { Label("Open in Files", systemImage: "folder") }
+                    Link(destination: filesURL) { Label("Open the Files app", systemImage: "folder") }
                 }
                 NavigationLink { FileBrowserView(server: server, path: "/") } label: { Label("Browse shares", systemImage: "externaldrive.connected.to.line.below") }
+                Button { testing = true } label: { Label("Test connection", systemImage: "stethoscope") }
+                if !server.isDemo {
+                    Button { editing = true } label: { Label("Edit server or credentials", systemImage: "pencil") }
+                }
             } footer: {
-                Text("The shares are also available to every app through the Files app, under Unraid Drive › \(server.name).")
+                Text("In the Files app, tap Browse › Locations › Unraid Drive › \(server.name). The shares are then available to every app.")
             }
             if server.isDemo {
                 Section { Label("Demo server: sample data stored on this device only.", systemImage: "info.circle") }
             }
 
             if let error {
-                Section { Label(error, systemImage: "exclamationmark.triangle").foregroundStyle(.red) }
+                Section {
+                    Label(error, systemImage: "exclamationmark.triangle").foregroundStyle(.red)
+                    Button("Run connection test") { testing = true }
+                }
             }
             if let d = dashboard {
                 systemSection(d)
@@ -36,6 +45,8 @@ struct ServerDetailView: View {
             }
         }
         .navigationTitle(server.name)
+        .sheet(isPresented: $testing) { ConnectionTestView(server: server) }
+        .sheet(isPresented: $editing, onDismiss: { Task { await load() } }) { AddServerView(editing: model.servers.first { $0.id == server.id } ?? server) }
         .refreshable { await load() }
         .task { await load(); filesURL = await FileProviderDomains.filesAppURL(server) }
     }

@@ -1,0 +1,162 @@
+import SwiftUI
+import FileProvider
+import UnraidGatewayKit
+
+/// Step-by-step connectivity check for a configured server.
+struct ConnectionTestView: View {
+    @EnvironmentObject private var model: ServersModel
+    @Environment(\.dismiss) private var dismiss
+    let server: ServerConfig
+
+    struct Step: Identifiable {
+        enum State { case pending, running, ok(String), failed(String) }
+        let id: String
+        let title: String
+        var state: State = .pending
+    }
+
+    @State private var steps: [Step] = [
+        Step(id: "reach", title: "Gateway reachable"),
+        Step(id: "auth", title: "API key accepted"),
+        Step(id: "shares", title: "Shares listed"),
+        Step(id: "write", title: "Write access"),
+        Step(id: "files", title: "Files app location registered"),
+    ]
+    @State private var running = false
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section {
+                    LabeledContent("Server", value: server.name)
+                    LabeledContent("URL", value: server.url.absoluteString).font(.callout)
+                    LabeledContent("Connection", value: label(server.accessMode))
+                }
+                Section("Checks") {
+                    ForEach(steps) { s in
+                        HStack(alignment: .top, spacing: 12) {
+                            icon(s.state).frame(width: 22)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(s.title)
+                                if let d = detail(s.state) { Text(d).font(.caption).foregroundStyle(isFailed(s.state) ? .red : .secondary) }
+                            }
+                        }
+                    }
+                }
+                if let hint = hint {
+                    Section("What to do") { Text(hint).font(.callout) }
+                }
+            }
+            .navigationTitle("Test connection")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { Button("Close") { dismiss() } }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(running ? "Testing…" : "Run again") { Task { await run() } }.disabled(running)
+                }
+            }
+            .task { await run() }
+        }
+    }
+
+    private func label(_ m: AccessMode) -> String {
+        switch m { case .direct: return "Direct"; case .cloudflareAccess: return "Cloudflare Access"; case .demo: return "Demo" }
+    }
+    private func icon(_ s: Step.State) -> some View {
+        Group {
+            switch s {
+            case .pending: Image(systemName: "circle").foregroundStyle(.secondary)
+            case .running: ProgressView()
+            case .ok: Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+            case .failed: Image(systemName: "xmark.circle.fill").foregroundStyle(.red)
+            }
+        }
+    }
+    private func detail(_ s: Step.State) -> String? {
+        switch s { case .ok(let d), .failed(let d): return d; default: return nil }
+    }
+    private func isFailed(_ s: Step.State) -> Bool { if case .failed = s { return true }; return false }
+
+    private var hint: String? {
+        guard let first = steps.first(where: { isFailed($0.state) }) else { return nil }
+        switch first.id {
+        case "reach": return "Open the URL in Safari on this device. Check the container is running, the Cloudflare Tunnel or reverse proxy is up, and that you are not using a LAN address from outside your network."
+        case "auth": return "The gateway is up but rejected the key or the request never reached it. Use Edit to paste the API key again; with Cloudflare Access, check the two service token values and that the policy action is Service Auth."
+        case "shares": return "Authenticated, but no shares are mounted in the container. Add Path mappings under /data/<name> in the container settings."
+        case "write": return "Shares are read-only or the gateway runs with READ_ONLY=true. Check the volume access mode in the container settings."
+        case "files": return "The Files app location is missing. Remove and re-add the server; if the problem persists, restart the device."
+        default: return nil
+        }
+    }
+
+    private func set(_ id: String, _ state: Step.State) {
+        if let i = steps.firstIndex(where: { $0.id == id }) { steps[i].state = state }
+    }
+
+    private func run() async {
+        running = true; defer { running = false }
+        for i in steps.indices { steps[i].state = .pending }
+        guard let client = model.client(for: server) else {
+            set("reach", .failed("Credentials missing from the Keychain. Use Edit to enter them again.")); return
+        }
+        // 1. reachability
+        set("reach", .running)
+        let t0 = Date()
+        do {
+            let h = try await client.health()
+            set("reach", .ok("version \(h.version ?? "?") · \(Int(Date().timeIntervalSince(t0) * 1000)) ms"))
+        } catch {
+            set("reach", .failed(error.localizedDescription)); return
+        }
+        // 2. auth
+        set("auth", .running)
+        let login: LoginResponse
+        do {
+            login = try await client.login()
+            let roles = (login.identity.roles ?? []).joined(separator: ", ")
+            set("auth", .ok("\(login.identity.name ?? "key") · \(roles)\(login.readOnly ? " · gateway read-only" : "")"))
+        } catch {
+            set("auth", .failed(error.localizedDescription)); return
+        }
+        // 3. shares
+        set("shares", .running)
+        let shares: [FSEntry]
+        do {
+            shares = try await client.list("/").entries
+            if shares.isEmpty { set("shares", .failed("No shares mounted in the container")) ; return }
+            set("shares", .ok(shares.map(\.name).joined(separator: ", ")))
+        } catch {
+            set("shares", .failed(error.localizedDescription)); return
+        }
+        // 4. write probe: create and delete a tiny folder in the first writable share
+        set("write", .running)
+        if login.readOnly {
+            set("write", .failed("Gateway is configured READ_ONLY"))
+        } else {
+            var writable: String?
+            var lastError = "no writable share found"
+            for share in shares where share.isDirectory {
+                let probe = GatewayPath.join(share.path, ".unraid-drive-probe-\(UUID().uuidString.prefix(8))")
+                do {
+                    _ = try await client.mkdir(probe)
+                    try await client.delete(probe, recursive: true)
+                    writable = share.name; break
+                } catch { lastError = error.localizedDescription }
+            }
+            if let w = writable { set("write", .ok("created and removed a test folder in \(w)")) } else { set("write", .failed(lastError)) }
+        }
+        // 5. File Provider domain
+        set("files", .running)
+        do {
+            let domains = try await NSFileProviderManager.domains()
+            if domains.contains(where: { $0.identifier.rawValue == server.id }) {
+                set("files", .ok("Files › Unraid Drive › \(server.name)"))
+            } else {
+                try await FileProviderDomains.add(server)
+                set("files", .ok("registered now"))
+            }
+        } catch {
+            set("files", .failed(error.localizedDescription))
+        }
+    }
+}

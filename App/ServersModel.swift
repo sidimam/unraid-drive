@@ -33,6 +33,28 @@ final class ServersModel: ObservableObject {
         return login
     }
 
+    /// Re-validates and replaces the credentials (and mode/name/url) of an existing server,
+    /// keeping its id so the Files app location survives.
+    func update(_ server: ServerConfig, name: String, url: URL, apiKey: String, cloudflare: CloudflareServiceToken?) async throws -> LoginResponse {
+        let client = GatewayClient(baseURL: url, apiKey: apiKey, extraHeaders: cloudflare?.headers ?? [:])
+        let login = try await client.login()
+        var updated = server
+        updated.name = name; updated.url = url; updated.accessMode = cloudflare == nil ? .direct : .cloudflareAccess
+        keychain.remove(for: server.id)
+        try keychain.set(apiKey: apiKey, for: server.id)
+        if let cloudflare { try keychain.set(cloudflareToken: cloudflare, for: server.id) }
+        store.upsert(updated)
+        if updated.name != server.name {
+            // Domain display name is fixed at registration: re-register to rename it.
+            try? await FileProviderDomains.remove(server)
+            try? await FileProviderDomains.add(updated)
+        } else {
+            await FileProviderDomains.signal(updated)
+        }
+        reload()
+        return login
+    }
+
     /// Adds the built-in demo server (no network, sample files).
     func addDemo() async {
         let server = ServerConfig.demo
@@ -65,12 +87,10 @@ enum FileProviderDomains {
         try? await mgr.signalEnumerator(for: .rootContainer)
         try? await mgr.signalEnumerator(for: .workingSet)
     }
-    /// URL that opens the domain in the Files app (undocumented but long-standing scheme).
+    /// URL that opens the Files app. Deep-linking straight into a provider folder is not
+    /// reliable across iOS versions, so this opens Files' Browse view; the server is listed
+    /// under Locations › Unraid Drive.
     static func filesAppURL(_ server: ServerConfig) async -> URL? {
-        guard let mgr = NSFileProviderManager(for: domain(for: server)),
-              let url = try? await mgr.getUserVisibleURL(for: .rootContainer) else { return nil }
-        var comps = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        comps?.scheme = "shareddocuments"
-        return comps?.url
+        URL(string: "shareddocuments://")
     }
 }
