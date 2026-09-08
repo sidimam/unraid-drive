@@ -14,7 +14,7 @@ final class ServersModel: ObservableObject {
         reload()
         cloud.onRemoteChange = { [weak self] in await self?.reloadAndRegisterDomains() }
         if cloud.enabled { Task { await cloud.pull() } }
-        Task { await reimportStaleDomains() }
+        Task { await rebuildDomainsOncePerInstall() }
     }
 
     /// After servers arrived from iCloud: reload and make sure each has a Files app location.
@@ -22,20 +22,27 @@ final class ServersModel: ObservableObject {
         reload()
         let existing = (try? await NSFileProviderManager.domains().map(\.identifier.rawValue)) ?? []
         for s in servers where !existing.contains(s.id) { try? await FileProviderDomains.add(s) }
-        await reimportStaleDomains()
+        await rebuildDomainsOncePerInstall()
     }
 
-    /// The system keeps a Files location's database even across an uninstall when the same server
-    /// comes back (iCloud restore). Our own item index does not survive, so the two disagree and
-    /// stale entries can never be removed. Once per installation, ask the system to rebuild each
-    /// location from a fresh enumeration.
-    func reimportStaleDomains() async {
-        for s in servers {
-            let key = "fp.reimported." + s.id
+    /// The system keeps a Files location's database across an uninstall when the same server comes
+    /// back (iCloud restore), but the extension's item index, which maps its identifiers to paths,
+    /// does not survive. The two then disagree: stale entries can never be removed and re-enumerated
+    /// items look like new local files. Once per installation, remove and re-add each location so
+    /// the system starts from a clean database that matches the fresh index.
+    func rebuildDomainsOncePerInstall() async {
+        for s in servers where !s.isDemo {
+            let key = "fp.rebuilt." + s.id
             guard !AppGroup.defaults.bool(forKey: key) else { continue }
-            await FileProviderDomains.reimport(s)
+            await FileProviderDomains.rebuild(s)
             AppGroup.defaults.set(true, forKey: key)
         }
+    }
+
+    /// Explicit rebuild from the UI (discards local changes not yet uploaded).
+    func rebuildDomain(_ server: ServerConfig) async {
+        await FileProviderDomains.rebuild(server)
+        AppGroup.defaults.set(true, forKey: "fp.rebuilt." + server.id)
     }
 
     func reload() { servers = store.all() }
@@ -121,11 +128,18 @@ enum FileProviderDomains {
     static func remove(_ server: ServerConfig) async throws {
         try await NSFileProviderManager.remove(domain(for: server))
     }
-    /// Drops the system's cached tree for the location and re-enumerates it from the gateway.
-    /// Stronger than `signal`: use after the share layout changed or after a reinstall.
-    static func reimport(_ server: ServerConfig) async {
-        guard let mgr = NSFileProviderManager(for: domain(for: server)) else { return }
-        try? await mgr.reimportItems(below: .rootContainer)
+    /// Removes the location (and everything the system cached for it, including our item index)
+    /// and registers it again, so the Files app rebuilds the tree from the gateway.
+    static func rebuild(_ server: ServerConfig) async {
+        try? await remove(server)
+        if let dir = AppGroup.containerURL?.appendingPathComponent("FileProvider/\(server.id)", isDirectory: true) {
+            try? FileManager.default.removeItem(at: dir)
+        }
+        for attempt in 0..<5 {
+            do { try await add(server); return } catch {
+                try? await Task.sleep(for: .milliseconds(500 * (attempt + 1)))
+            }
+        }
     }
 
     /// Asks the system to refresh the domain's root and working set.

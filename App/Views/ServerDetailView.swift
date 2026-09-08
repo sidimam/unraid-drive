@@ -11,6 +11,8 @@ struct ServerDetailView: View {
     @State private var testing = false
     @State private var editing = false
     @State private var resyncRequested = false
+    @State private var confirmRebuild = false
+    @State private var rebuilt = false
 
     var body: some View {
         List {
@@ -21,9 +23,18 @@ struct ServerDetailView: View {
                 NavigationLink { FileBrowserView(server: server, path: "/") } label: { Label("Browse shares", systemImage: "externaldrive.connected.to.line.below") }
                 Button { testing = true } label: { Label("Test connection", systemImage: "stethoscope") }
                 Button {
-                    Task { await FileProviderDomains.reimport(server); await FileProviderDomains.signal(server); resyncRequested = true }
+                    Task { await FileProviderDomains.signal(server); resyncRequested = true }
                 } label: { Label(resyncRequested ? "Files app refresh requested" : "Refresh the Files app", systemImage: "arrow.triangle.2.circlepath") }
                 .disabled(resyncRequested)
+                if !server.isDemo {
+                    Button(role: .destructive) { confirmRebuild = true } label: { Label("Rebuild the Files location", systemImage: "arrow.counterclockwise.circle") }
+                        .confirmationDialog("Rebuild the Files location?", isPresented: $confirmRebuild, titleVisibility: .visible) {
+                            Button("Rebuild", role: .destructive) { Task { await model.rebuildDomain(server); rebuilt = true } }
+                        } message: {
+                            Text("The Files app forgets everything it cached for this server and reads the shares again from the gateway. Files created in the Files app that were never uploaded are lost. Use it when Files keeps showing folders that no longer exist.")
+                        }
+                    if rebuilt { Label("Location rebuilt. Open the Files app to see the shares.", systemImage: "checkmark.circle").foregroundStyle(.secondary) }
+                }
                 if !server.isDemo {
                     Button { editing = true } label: { Label("Edit server or credentials", systemImage: "pencil") }
                 }
