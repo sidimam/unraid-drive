@@ -21,7 +21,7 @@ struct ServerDetailView: View {
                 NavigationLink { FileBrowserView(server: server, path: "/") } label: { Label("Browse shares", systemImage: "externaldrive.connected.to.line.below") }
                 Button { testing = true } label: { Label("Test connection", systemImage: "stethoscope") }
                 Button {
-                    Task { await FileProviderDomains.signal(server); resyncRequested = true }
+                    Task { await FileProviderDomains.reimport(server); await FileProviderDomains.signal(server); resyncRequested = true }
                 } label: { Label(resyncRequested ? "Files app refresh requested" : "Refresh the Files app", systemImage: "arrow.triangle.2.circlepath") }
                 .disabled(resyncRequested)
                 if !server.isDemo {

@@ -14,6 +14,7 @@ final class ServersModel: ObservableObject {
         reload()
         cloud.onRemoteChange = { [weak self] in await self?.reloadAndRegisterDomains() }
         if cloud.enabled { Task { await cloud.pull() } }
+        Task { await reimportStaleDomains() }
     }
 
     /// After servers arrived from iCloud: reload and make sure each has a Files app location.
@@ -21,6 +22,20 @@ final class ServersModel: ObservableObject {
         reload()
         let existing = (try? await NSFileProviderManager.domains().map(\.identifier.rawValue)) ?? []
         for s in servers where !existing.contains(s.id) { try? await FileProviderDomains.add(s) }
+        await reimportStaleDomains()
+    }
+
+    /// The system keeps a Files location's database even across an uninstall when the same server
+    /// comes back (iCloud restore). Our own item index does not survive, so the two disagree and
+    /// stale entries can never be removed. Once per installation, ask the system to rebuild each
+    /// location from a fresh enumeration.
+    func reimportStaleDomains() async {
+        for s in servers {
+            let key = "fp.reimported." + s.id
+            guard !AppGroup.defaults.bool(forKey: key) else { continue }
+            await FileProviderDomains.reimport(s)
+            AppGroup.defaults.set(true, forKey: key)
+        }
     }
 
     func reload() { servers = store.all() }
@@ -106,6 +121,13 @@ enum FileProviderDomains {
     static func remove(_ server: ServerConfig) async throws {
         try await NSFileProviderManager.remove(domain(for: server))
     }
+    /// Drops the system's cached tree for the location and re-enumerates it from the gateway.
+    /// Stronger than `signal`: use after the share layout changed or after a reinstall.
+    static func reimport(_ server: ServerConfig) async {
+        guard let mgr = NSFileProviderManager(for: domain(for: server)) else { return }
+        try? await mgr.reimportItems(below: .rootContainer)
+    }
+
     /// Asks the system to refresh the domain's root and working set.
     static func signal(_ server: ServerConfig) async {
         guard let mgr = NSFileProviderManager(for: domain(for: server)) else { return }

@@ -62,7 +62,7 @@ Quick check from a terminal: without headers `curl -I https://gw.example.com/hea
 
 iOS pauses a location after a network error, for example while the container restarts during an update, and then shows the cached listing until something wakes it up. Nothing is lost.
 
-1. Open the Unraid Drive app: since build 7 it nudges every location whenever it comes to the foreground, and the server page has **Refresh the Files app**. **Test connection** does the same in its last check. Since build 8 the extension also re-reads the list of shares on every sync pass, so a share you unmapped from the container disappears from Files (together with anything cached below it) instead of producing endless "Error" retries.
+1. Open the Unraid Drive app: since build 7 it nudges every location whenever it comes to the foreground, and the server page has **Refresh the Files app**. **Test connection** does the same in its last check. Since build 8 the extension also re-reads the list of shares on every sync pass, so a share you unmapped from the container disappears from Files (together with anything cached below it) instead of producing endless "Error" retries. Since build 9 the app also rebuilds each location once per installation: after a reinstall iOS may keep the old cached tree for the same server, and **Refresh the Files app** now rebuilds the tree from the gateway rather than just nudging it.
 2. In Files, pull down in the Unraid Drive folder.
 3. Still paused? Toggle Airplane mode (or Wi-Fi) off and on: iOS re-checks paused locations when the network changes.
 4. Last resort: in the app remove the server and add it again. The Files location is recreated from scratch.
