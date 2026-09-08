@@ -31,6 +31,12 @@ final class ServersModel: ObservableObject {
 
     var hasDemo: Bool { servers.contains { $0.isDemo } }
 
+    /// Nudges every Files app location to re-check its server (used when the app comes to
+    /// the foreground: iOS pauses a domain after a network error and waits for a signal).
+    func signalAllDomains() async {
+        for s in servers where !s.isDemo { await FileProviderDomains.signal(s) }
+    }
+
     /// Validates the key against the gateway, then persists the server and
     /// registers its File Provider domain so it shows up in the Files app.
     func add(name: String, url: URL, apiKey: String, cloudflare: CloudflareServiceToken?, user: (username: String, password: String)? = nil) async throws -> LoginResponse {

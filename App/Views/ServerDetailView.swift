@@ -10,6 +10,7 @@ struct ServerDetailView: View {
     @State private var filesURL: URL?
     @State private var testing = false
     @State private var editing = false
+    @State private var resyncRequested = false
 
     var body: some View {
         List {
@@ -19,6 +20,10 @@ struct ServerDetailView: View {
                 }
                 NavigationLink { FileBrowserView(server: server, path: "/") } label: { Label("Browse shares", systemImage: "externaldrive.connected.to.line.below") }
                 Button { testing = true } label: { Label("Test connection", systemImage: "stethoscope") }
+                Button {
+                    Task { await FileProviderDomains.signal(server); resyncRequested = true }
+                } label: { Label(resyncRequested ? "Files app refresh requested" : "Refresh the Files app", systemImage: "arrow.triangle.2.circlepath") }
+                .disabled(resyncRequested)
                 if !server.isDemo {
                     Button { editing = true } label: { Label("Edit server or credentials", systemImage: "pencil") }
                 }
@@ -108,11 +113,25 @@ struct ServerDetailView: View {
         }
     }
 
+    /// Only the container that serves this app is relevant here; the rest of the Docker
+    /// list belongs to Unraid's own UI.
+    static func isGateway(_ c: Dashboard.Container) -> Bool {
+        let haystack = ([c.image ?? ""] + c.names).joined(separator: " ").lowercased()
+        return haystack.contains("unraid-gateway")
+    }
+
     @ViewBuilder private func dockerSection(_ d: Dashboard) -> some View {
-        Section("Docker") {
-            ForEach(d.docker?.containers ?? []) { c in
-                containerRow(c)
+        let gateway = (d.docker?.containers ?? []).filter { Self.isGateway($0) }
+        Section {
+            if gateway.isEmpty {
+                Label("No unraid-gateway container found in Docker.", systemImage: "questionmark.circle").foregroundStyle(.secondary)
+            } else {
+                ForEach(gateway) { c in containerRow(c) }
             }
+        } header: {
+            Text("Gateway container")
+        } footer: {
+            Text("The container this app talks to. Other containers are managed from the Unraid web UI.")
         }
     }
 

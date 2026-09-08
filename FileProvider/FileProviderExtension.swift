@@ -50,7 +50,9 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
             case .unauthorized, .locked: return NSFileProviderError(.notAuthenticated)
             case .notFound: return NSFileProviderError(.noSuchItem)
             case .conflict: return NSFileProviderError(.filenameCollision)
-            case .network: return NSFileProviderError(.serverUnreachable)
+            case .network, .interceptedByProxy: return NSFileProviderError(.serverUnreachable)
+            // Cloudflare answers 502/503/504 while the container restarts: transient, not a sync failure.
+            case .http(let code, _) where (502...504).contains(code): return NSFileProviderError(.serverUnreachable)
             case .forbidden: return NSError(domain: NSCocoaErrorDomain, code: NSFileWriteNoPermissionError)
             case .http(let code, _) where code == 507: return NSError(domain: NSCocoaErrorDomain, code: NSFileWriteOutOfSpaceError)
             default: return NSFileProviderError(.cannotSynchronize)

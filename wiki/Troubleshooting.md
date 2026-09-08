@@ -58,6 +58,17 @@ Quick check from a terminal: without headers `curl -I https://gw.example.com/hea
 - On iOS, **Settings → Unraid Drive** → make sure *Cellular Data* is allowed.
 - If it still spins, remove the server in the app and add it again; this rebuilds the local index.
 
+## Files says "Sync paused" (or a share you removed from the container is still listed)
+
+iOS pauses a location after a network error, for example while the container restarts during an update, and then shows the cached listing until something wakes it up. Nothing is lost.
+
+1. Open the Unraid Drive app: since build 7 it nudges every location whenever it comes to the foreground, and the server page has **Refresh the Files app**. **Test connection** does the same in its last check.
+2. In Files, pull down in the Unraid Drive folder.
+3. Still paused? Toggle Airplane mode (or Wi-Fi) off and on: iOS re-checks paused locations when the network changes.
+4. Last resort: in the app remove the server and add it again. The Files location is recreated from scratch.
+
+The bottom of the shares list always says *Read only*: that is the list of shares itself, which you cannot rename or delete. Inside a share you can write normally.
+
 ## Files says "The operation couldn't be completed" when saving
 
 - You are saving at the **root or share level**. Open a share and a folder inside it.

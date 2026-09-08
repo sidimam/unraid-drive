@@ -156,7 +156,9 @@ struct ConnectionTestView: View {
         do {
             let domains = try await NSFileProviderManager.domains()
             if domains.contains(where: { $0.identifier.rawValue == server.id }) {
-                set("files", .ok("Files › Unraid Drive › \(server.name)"))
+                // Also wake the domain up: after a network error iOS keeps it paused until asked.
+                await FileProviderDomains.signal(server)
+                set("files", .ok("Files › Unraid Drive › \(server.name) · refresh requested"))
             } else {
                 try await FileProviderDomains.add(server)
                 set("files", .ok("registered now"))
