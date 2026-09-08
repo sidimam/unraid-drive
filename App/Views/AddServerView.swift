@@ -96,7 +96,7 @@ struct AddServerView: View {
                     }
                 }
             }
-            .scrollDismissesKeyboard(.immediately)
+            .modifier(KeyboardDismissal())
             .onChange(of: cfClientID) { _, v in normaliseCloudflare(from: v, isSecretField: false) }
             .onChange(of: cfClientSecret) { _, v in normaliseCloudflare(from: v, isSecretField: true) }
             .onAppear {
@@ -113,10 +113,12 @@ struct AddServerView: View {
                     Button(busy ? "Connecting…" : (editing == nil ? "Connect" : "Save")) { Task { await connect() } }
                         .disabled(busy || !canConnect)
                 }
+#if !os(visionOS)
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
                     Button("Done") { focusedField = nil }
                 }
+#endif
             }
             .interactiveDismissDisabled(busy)
         }
@@ -156,5 +158,17 @@ struct AddServerView: View {
         } catch {
             self.error = error.localizedDescription
         }
+    }
+}
+
+
+/// Scroll-to-dismiss is an iOS/iPadOS affordance; visionOS has no on-screen keyboard to dismiss.
+private struct KeyboardDismissal: ViewModifier {
+    func body(content: Content) -> some View {
+#if os(visionOS)
+        content
+#else
+        content.scrollDismissesKeyboard(.immediately)
+#endif
     }
 }
