@@ -97,23 +97,23 @@ public enum GatewayError: Error, LocalizedError, Sendable {
 
     public var errorDescription: String? {
         switch self {
-        case .invalidURL: return "The server URL is not valid."
-        case .unauthorized: return "The API key, or the Unraid username and password, were rejected."
-        case .userRequired: return "This gateway requires an Unraid username and password in addition to the API key."
-        case .locked: return "Too many failed attempts. Try again in a few minutes."
-        case .notFound: return "Not found."
+        case .invalidURL: return String(localized: "The server URL is not valid.", bundle: .module)
+        case .unauthorized: return String(localized: "The API key, or the Unraid username and password, were rejected.", bundle: .module)
+        case .userRequired: return String(localized: "This gateway requires an Unraid username and password in addition to the API key.", bundle: .module)
+        case .locked: return String(localized: "Too many failed attempts. Try again in a few minutes.", bundle: .module)
+        case .notFound: return String(localized: "Not found.", bundle: .module)
         case .conflict(let m): return m
-        case .preconditionFailed: return "The file changed on the server."
+        case .preconditionFailed: return String(localized: "The file changed on the server.", bundle: .module)
         case .forbidden(let m): return m
-        case .http(let code, let m): return "Server error \(code): \(m)"
-        case .network(let m): return "Cannot reach the gateway: \(m)"
-        case .decoding(let m): return "Unexpected response: \(m)"
+        case .http(let code, let m): return String(localized: "Server error \(code): \(m)", bundle: .module)
+        case .network(let m): return String(localized: "Cannot reach the gateway: \(m)", bundle: .module)
+        case .decoding(let m): return String(localized: "Unexpected response: \(m)", bundle: .module)
         case .graphQL(let msgs): return msgs.joined(separator: "\n")
         case .interceptedByProxy(let host):
             if host.hasSuffix("cloudflareaccess.com") {
-                return "Cloudflare Access is blocking the request. Add this server with Connection: Cloudflare Access and a valid service token, and make sure the Access policy uses the Service Auth action."
+                return String(localized: "Cloudflare Access is blocking the request. Add this server with Connection: Cloudflare Access and a valid service token, and make sure the Access policy uses the Service Auth action.", bundle: .module)
             }
-            return "The server answered with a web page instead of data (\(host)). A login portal or proxy is intercepting the request: check the gateway URL and the connection mode."
+            return String(localized: "The server answered with a web page instead of data (\(host)). A login portal or proxy is intercepting the request: check the gateway URL and the connection mode.", bundle: .module)
         }
     }
 

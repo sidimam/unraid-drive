@@ -5,6 +5,8 @@ import UnraidGatewayKit
 struct UnraidDriveApp: App {
     @StateObject private var servers = ServersModel()
     @Environment(\.scenePhase) private var scenePhase
+    @AppStorage(Appearance.key, store: AppGroup.defaults) private var appearance = Appearance.system.rawValue
+    @AppStorage(AppLanguage.key, store: AppGroup.defaults) private var language = AppLanguage.system.rawValue
 
     var body: some Scene {
         WindowGroup {
@@ -15,6 +17,8 @@ struct UnraidDriveApp: App {
                     if phase == .active { Task { await servers.signalAllDomains() } }
                 }
                 .task { await seedFromLaunchArguments() }
+                .preferredColorScheme(Appearance(rawValue: appearance)?.colorScheme)
+                .modifier(AppLocaleModifier(language: AppLanguage(rawValue: language) ?? .system))
         }
     }
 

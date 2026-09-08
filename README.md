@@ -24,6 +24,7 @@ It talks to [`unraid-gateway`](https://github.com/sidimam/unraid-gateway), a 10 
 - **Per-user access**: add your Unraid username and password and the gateway applies your SMB share permissions (public / secure / private, read and write lists), verified by Unraid's Samba. Read-only shares are read-only in the Files app too.
 - **Dashboard** fed by the Unraid API: system info, CPU/memory load, notifications, array state and usage, parity check, disk temperatures, share usage, and the unraid-gateway container with its update badge (other containers stay in the Unraid web UI).
 - **Demo mode**: a built-in sample server that works offline, in the app and in the Files app. Handy for App Store review and for trying the app before installing the container.
+- **7 languages**: English, Italian, Spanish, French, German, Simplified Chinese and Arabic (right-to-left). The app follows the device language; Settings has a language picker with a "System" option, plus a System/Light/Dark theme switch.
 - **Walkthrough** on first launch, re-openable with **?**.
 - **Secrets in the Keychain**, shared only with the extension. No analytics, no third-party servers.
 - **Optional iCloud sync** (Settings): the server list goes to iCloud Key-Value Storage and the secrets to iCloud Keychain (end-to-end encrypted), so a restored or new iPhone finds its configuration. Off by default; a restore banner appears when iCloud holds a configuration and the device has none.

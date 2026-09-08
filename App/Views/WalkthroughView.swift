@@ -8,8 +8,8 @@ struct WalkthroughView: View {
     private struct Page: Identifiable {
         let id = UUID()
         let icon: String
-        let title: String
-        let text: String
+        let title: LocalizedStringKey
+        let text: LocalizedStringKey
         let link: (String, URL)?
     }
 

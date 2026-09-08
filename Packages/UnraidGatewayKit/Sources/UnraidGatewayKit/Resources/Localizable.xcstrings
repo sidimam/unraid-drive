@@ -1,0 +1,446 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Cannot reach the gateway: %@": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يمكن الوصول إلى البوابة: %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gateway nicht erreichbar: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se puede alcanzar el gateway: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de joindre la passerelle : %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile raggiungere il gateway: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法连接网关：%@"
+          }
+        }
+      }
+    },
+    "Cloudflare Access is blocking the request. Add this server with Connection: Cloudflare Access and a valid service token, and make sure the Access policy uses the Service Auth action.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يحجب Cloudflare Access الطلب. أضف هذا الخادم بوضع الاتصال Cloudflare Access ورمز خدمة صالح، وتأكد من أن سياسة Access تستخدم الإجراء Service Auth."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare Access blockiert die Anfrage. Füge diesen Server mit Verbindung: Cloudflare Access und einem gültigen Service Token hinzu und stelle sicher, dass die Access-Richtlinie die Aktion Service Auth verwendet."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare Access está bloqueando la petición. Añade este servidor con Conexión: Cloudflare Access y un service token válido, y asegúrate de que la política de Access use la acción Service Auth."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare Access bloque la requête. Ajoutez ce serveur avec Connexion : Cloudflare Access et un service token valide, et vérifiez que la politique Access utilise l’action Service Auth."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare Access sta bloccando la richiesta. Aggiungi questo server con Connessione: Cloudflare Access e un service token valido, e verifica che la policy di Access usi l’azione Service Auth."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare Access 阻止了请求。请以“连接方式：Cloudflare Access”和有效的 Service Token 添加此服务器，并确保 Access 策略使用 Service Auth 操作。"
+          }
+        }
+      }
+    },
+    "Not found.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غير موجود."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht gefunden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No encontrado."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Introuvable."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non trovato."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未找到。"
+          }
+        }
+      }
+    },
+    "Server error %lld: %@": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "خطأ في الخادم %lld: %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serverfehler %lld: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error del servidor %lld: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erreur du serveur %lld : %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Errore del server %lld: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服务器错误 %lld：%@"
+          }
+        }
+      }
+    },
+    "The API key, or the Unraid username and password, were rejected.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم رفض مفتاح API أو اسم مستخدم Unraid وكلمة المرور."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der API-Schlüssel oder Unraid-Benutzername und -Passwort wurden abgelehnt."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La clave API, o el usuario y la contraseña de Unraid, fueron rechazados."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La clé API, ou le nom d’utilisateur et le mot de passe Unraid, ont été refusés."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La chiave API, oppure utente e password Unraid, sono stati rifiutati."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API 密钥或 Unraid 用户名和密码被拒绝。"
+          }
+        }
+      }
+    },
+    "The file changed on the server.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تغيّر الملف على الخادم."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Datei wurde auf dem Server geändert."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El archivo cambió en el servidor."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le fichier a changé sur le serveur."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il file è cambiato sul server."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文件在服务器上已更改。"
+          }
+        }
+      }
+    },
+    "The server URL is not valid.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عنوان الخادم غير صالح."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Server-URL ist ungültig."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La URL del servidor no es válida."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’URL du serveur n’est pas valide."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’URL del server non è valido."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服务器 URL 无效。"
+          }
+        }
+      }
+    },
+    "The server answered with a web page instead of data (%@). A login portal or proxy is intercepting the request: check the gateway URL and the connection mode.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أجاب الخادم بصفحة ويب بدلًا من البيانات (%@). بوابة تسجيل دخول أو وكيل يعترض الطلب: تحقق من عنوان البوابة ووضع الاتصال."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Server hat mit einer Webseite statt mit Daten geantwortet (%@). Ein Anmeldeportal oder Proxy fängt die Anfrage ab: Prüfe Gateway-URL und Verbindungsmodus."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El servidor respondió con una página web en lugar de datos (%@). Un portal de inicio de sesión o un proxy intercepta la petición: revisa la URL del gateway y el modo de conexión."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le serveur a répondu par une page web au lieu de données (%@). Un portail de connexion ou un proxy intercepte la requête : vérifiez l’URL de la passerelle et le mode de connexion."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il server ha risposto con una pagina web invece dei dati (%@). Un portale di login o un proxy intercetta la richiesta: controlla l’URL del gateway e la modalità di connessione."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服务器返回了网页而非数据（%@）。登录门户或代理拦截了请求：请检查网关 URL 和连接方式。"
+          }
+        }
+      }
+    },
+    "This gateway requires an Unraid username and password in addition to the API key.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تتطلب هذه البوابة اسم مستخدم وكلمة مرور Unraid إضافة إلى مفتاح API."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Gateway verlangt zusätzlich zum API-Schlüssel einen Unraid-Benutzernamen und ein Passwort."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este gateway requiere usuario y contraseña de Unraid además de la clave API."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette passerelle exige un utilisateur et un mot de passe Unraid en plus de la clé API."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo gateway richiede utente e password Unraid oltre alla chiave API."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此网关除 API 密钥外还需要 Unraid 用户名和密码。"
+          }
+        }
+      }
+    },
+    "Too many failed attempts. Try again in a few minutes.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "محاولات فاشلة كثيرة. حاول مجددًا بعد بضع دقائق."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zu viele fehlgeschlagene Versuche. Versuche es in ein paar Minuten erneut."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demasiados intentos fallidos. Inténtalo de nuevo en unos minutos."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trop de tentatives échouées. Réessayez dans quelques minutes."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Troppi tentativi falliti. Riprova tra qualche minuto."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "失败次数过多。请几分钟后重试。"
+          }
+        }
+      }
+    },
+    "Unexpected response: %@": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استجابة غير متوقعة: %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unerwartete Antwort: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Respuesta inesperada: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réponse inattendue : %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Risposta inattesa: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "意外的响应：%@"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

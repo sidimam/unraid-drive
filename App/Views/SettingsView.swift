@@ -6,10 +6,24 @@ struct SettingsView: View {
     @EnvironmentObject private var cloud: CloudSync
     @Environment(\.dismiss) private var dismiss
     @State private var busy = false
+    @AppStorage(Appearance.key, store: AppGroup.defaults) private var appearance = Appearance.system.rawValue
+    @AppStorage(AppLanguage.key, store: AppGroup.defaults) private var language = AppLanguage.system.rawValue
 
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    Picker("Theme", selection: $appearance) {
+                        ForEach(Appearance.allCases) { a in Text(a.label).tag(a.rawValue) }
+                    }
+                    .pickerStyle(.segmented)
+                    Picker("Language", selection: $language) {
+                        ForEach(AppLanguage.allCases) { l in Text(l.label).tag(l.rawValue) }
+                    }
+                    .onChange(of: language) { _, v in (AppLanguage(rawValue: v) ?? .system).applySystemOverride() }
+                } header: { Text("Appearance") } footer: {
+                    Text("System follows the device settings. A forced language applies to this app only; a few system-provided texts follow at the next launch.")
+                }
                 Section {
                     Toggle(isOn: Binding(get: { cloud.enabled }, set: { v in Task { busy = true; await cloud.setEnabled(v); busy = false } })) {
                         Label("Sync configuration with iCloud", systemImage: "icloud")

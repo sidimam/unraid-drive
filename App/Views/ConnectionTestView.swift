@@ -11,7 +11,7 @@ struct ConnectionTestView: View {
     struct Step: Identifiable {
         enum State { case pending, running, ok(String), failed(String) }
         let id: String
-        let title: String
+        let title: LocalizedStringKey
         var state: State = .pending
     }
 
@@ -60,7 +60,11 @@ struct ConnectionTestView: View {
     }
 
     private func label(_ m: AccessMode) -> String {
-        switch m { case .direct: return "Direct"; case .cloudflareAccess: return "Cloudflare Access"; case .demo: return "Demo" }
+        switch m {
+        case .direct: return String(localized: "Direct")
+        case .cloudflareAccess: return String(localized: "Cloudflare Access")
+        case .demo: return String(localized: "Demo")
+        }
     }
     private func icon(_ s: Step.State) -> some View {
         Group {
@@ -77,7 +81,7 @@ struct ConnectionTestView: View {
     }
     private func isFailed(_ s: Step.State) -> Bool { if case .failed = s { return true }; return false }
 
-    private var hint: String? {
+    private var hint: LocalizedStringKey? {
         guard let first = steps.first(where: { isFailed($0.state) }) else { return nil }
         switch first.id {
         case "reach": return "Open the URL in Safari on this device. Check the container is running, the Cloudflare Tunnel or reverse proxy is up, and that you are not using a LAN address from outside your network."
@@ -97,14 +101,14 @@ struct ConnectionTestView: View {
         running = true; defer { running = false }
         for i in steps.indices { steps[i].state = .pending }
         guard let client = model.client(for: server) else {
-            set("reach", .failed("Credentials missing from the Keychain. Use Edit to enter them again.")); return
+            set("reach", .failed(String(localized: "Credentials missing from the Keychain. Use Edit to enter them again."))); return
         }
         // 1. reachability
         set("reach", .running)
         let t0 = Date()
         do {
             let h = try await client.health()
-            set("reach", .ok("version \(h.version ?? "?") · \(Int(Date().timeIntervalSince(t0) * 1000)) ms"))
+            set("reach", .ok(String(localized: "version \(h.version ?? "?") · \(Int(Date().timeIntervalSince(t0) * 1000)) ms")))
         } catch {
             set("reach", .failed(error.localizedDescription)); return
         }
@@ -114,8 +118,8 @@ struct ConnectionTestView: View {
         do {
             login = try await client.login()
             let roles = (login.identity.roles ?? []).joined(separator: ", ")
-            let who = login.user.map { "user \($0) · " } ?? ""
-            set("auth", .ok("\(who)key \(login.identity.name ?? "?") · \(roles)\(login.readOnly ? " · gateway read-only" : "")"))
+            let who = login.user.map { String(localized: "user \($0) · ") } ?? ""
+            set("auth", .ok(String(localized: "\(who)key \(login.identity.name ?? "?") · \(roles)") + (login.readOnly ? String(localized: " · gateway read-only") : "")))
         } catch {
             set("auth", .failed(error.localizedDescription)); return
         }
@@ -124,7 +128,7 @@ struct ConnectionTestView: View {
         let shares: [FSEntry]
         do {
             shares = try await client.list("/").entries
-            if shares.isEmpty { set("shares", .failed(login.user == nil ? "No shares mounted in the container" : "Your Unraid user has no access to any mounted share")) ; return }
+            if shares.isEmpty { set("shares", .failed(login.user == nil ? String(localized: "No shares mounted in the container") : String(localized: "Your Unraid user has no access to any mounted share"))) ; return }
             let perms = login.shares ?? [:]
             let labels = shares.map { share -> String in
                 if let p = perms[share.name] { return "\(share.name) (\(p))" }
@@ -137,10 +141,10 @@ struct ConnectionTestView: View {
         // 4. write probe: create and delete a tiny folder in the first writable share
         set("write", .running)
         if login.readOnly {
-            set("write", .failed("Gateway is configured READ_ONLY"))
+            set("write", .failed(String(localized: "Gateway is configured READ_ONLY")))
         } else {
             var writable: String?
-            var lastError = "no writable share found"
+            var lastError = String(localized: "no writable share found")
             for share in shares where share.isDirectory && (login.shares?[share.name] ?? "rw") == "rw" {
                 let probe = GatewayPath.join(share.path, ".unraid-drive-probe-\(UUID().uuidString.prefix(8))")
                 do {
@@ -149,7 +153,7 @@ struct ConnectionTestView: View {
                     writable = share.name; break
                 } catch { lastError = error.localizedDescription }
             }
-            if let w = writable { set("write", .ok("created and removed a test folder in \(w)")) } else { set("write", .failed(lastError)) }
+            if let w = writable { set("write", .ok(String(localized: "created and removed a test folder in \(w)"))) } else { set("write", .failed(lastError)) }
         }
         // 5. File Provider domain
         set("files", .running)
@@ -158,10 +162,10 @@ struct ConnectionTestView: View {
             if domains.contains(where: { $0.identifier.rawValue == server.id }) {
                 // Also wake the domain up: after a network error iOS keeps it paused until asked.
                 await FileProviderDomains.signal(server)
-                set("files", .ok("Files › Unraid Drive › \(server.name) · refresh requested"))
+                set("files", .ok(String(localized: "Files › Unraid Drive › \(server.name) · refresh requested")))
             } else {
                 try await FileProviderDomains.add(server)
-                set("files", .ok("registered now"))
+                set("files", .ok(String(localized: "registered now")))
             }
         } catch {
             set("files", .failed(error.localizedDescription))

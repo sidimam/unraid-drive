@@ -46,7 +46,7 @@ struct ServersView: View {
                                     Image(systemName: server.isDemo ? "sparkles" : (server.accessMode == .cloudflareAccess ? "cloud.fill" : "externaldrive.fill")).foregroundStyle(.tint)
                                     VStack(alignment: .leading, spacing: 2) {
                                         Text(server.name).font(.headline)
-                                        Text(server.isDemo ? "Sample data, offline" : (server.username.map { "\($0) · " } ?? "") + server.url.absoluteString).font(.caption).foregroundStyle(.secondary)
+                                        Text(server.isDemo ? String(localized: "Sample data, offline") : (server.username.map { "\($0) · " } ?? "") + server.url.absoluteString).font(.caption).foregroundStyle(.secondary)
                                     }
                                 }
                             }

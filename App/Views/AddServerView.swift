@@ -21,9 +21,9 @@ struct AddServerView: View {
     enum Field: Hashable { case name, url, apiKey, cfID, cfSecret, user, pass }
 
     enum Mode: String, CaseIterable, Identifiable {
-        case direct = "Direct"
-        case cloudflare = "Cloudflare Access"
+        case direct, cloudflare
         var id: String { rawValue }
+        var label: LocalizedStringKey { self == .direct ? "Direct" : "Cloudflare Access" }
     }
 
     private var url: URL? {
@@ -72,7 +72,7 @@ struct AddServerView: View {
                 }
                 Section {
                     Picker("Connection", selection: $mode) {
-                        ForEach(Mode.allCases) { Text($0.rawValue).tag($0) }
+                        ForEach(Mode.allCases) { Text($0.label).tag($0) }
                     }.pickerStyle(.segmented)
                     if mode == .cloudflare {
                         TextField("CF-Access-Client-Id", text: $cfClientID)

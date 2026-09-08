@@ -45,7 +45,11 @@ Tap the server to open its page:
 
 Repeat 5.2 for every Unraid server you have. Each one becomes its own location in the Files app.
 
-## 5.5 Keep the configuration after a restore (iCloud sync)
+## 5.5 Appearance and language
+
+The gear icon on the server list opens **Settings**. The *Appearance* section has a **System / Light / Dark** theme switch and a **Language** picker. The app ships in English, Italian, Spanish, French, German, Simplified Chinese and Arabic; with *System* (the default) it follows the language of your iPhone, exactly like the installer does. Forcing a language changes the interface immediately; a few texts provided by iOS itself (error messages from the network stack, formatters) switch at the next launch.
+
+## 5.6 Keep the configuration after a restore (iCloud sync)
 
 Tap the gear icon on the server list → **Sync configuration with iCloud**. When on:
 
@@ -55,11 +59,11 @@ Tap the gear icon on the server list → **Sync configuration with iCloud**. Whe
 
 When off (the default), nothing leaves the device. Turning it off again deletes the copy in iCloud. The demo server is never synced. Requires iCloud Drive and iCloud Keychain enabled in iOS Settings for your Apple ID.
 
-## 5.6 Test the connection
+## 5.7 Test the connection
 
 Server page → **Test connection** runs five checks with a suggestion for whatever fails: gateway reachable (version, latency), API key accepted (identity, role), shares listed, write access (creates and removes a tiny temporary folder), Files app location registered. Use **Edit server or credentials** to fix URL, mode, key or token without deleting the server.
 
-## 5.7 Removing a server
+## 5.8 Removing a server
 
 Swipe left on it in the list → **Delete**. This removes the Files app location, the cached files and the key from the Keychain. Nothing changes on the NAS.
 

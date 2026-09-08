@@ -2,7 +2,7 @@ import SwiftUI
 
 /// A secure text field with an eye button to reveal or hide its content.
 struct SecretField: View {
-    let title: String
+    let title: LocalizedStringKey
     @Binding var text: String
     var monospaced = false
     @State private var revealed = false
