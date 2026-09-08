@@ -12,11 +12,13 @@ struct AddServerView: View {
     @State private var mode: Mode = .direct
     @State private var cfClientID = ""
     @State private var cfClientSecret = ""
+    @State private var unraidUser = ""
+    @State private var unraidPassword = ""
     @State private var busy = false
     @State private var error: String?
     @State private var result: LoginResponse?
     @FocusState private var focusedField: Field?
-    enum Field: Hashable { case name, url, apiKey, cfID, cfSecret }
+    enum Field: Hashable { case name, url, apiKey, cfID, cfSecret, user, pass }
 
     enum Mode: String, CaseIterable, Identifiable {
         case direct = "Direct"
@@ -32,6 +34,7 @@ struct AddServerView: View {
     }
     private var canConnect: Bool {
         url != nil && !apiKey.isEmpty && (mode == .direct || (!cfClientID.isEmpty && !cfClientSecret.isEmpty))
+            && (unraidUser.isEmpty || !unraidPassword.isEmpty)
     }
 
     var body: some View {
@@ -59,6 +62,15 @@ struct AddServerView: View {
                     Text("Create the key in Unraid under Settings › Management Access › API Keys. It is stored in this device's Keychain and sent only to your gateway.")
                 }
                 Section {
+                    TextField("Unraid user (e.g. sdimambro)", text: $unraidUser)
+                        .textInputAutocapitalization(.never).autocorrectionDisabled().textContentType(.username)
+                        .focused($focusedField, equals: .user).submitLabel(.next).onSubmit { focusedField = .pass }
+                    SecretField(title: "Unraid password", text: $unraidPassword)
+                        .focused($focusedField, equals: .pass)
+                } header: { Text("Unraid user (optional)") } footer: {
+                    Text("With a user, the gateway applies that user's share permissions exactly as over SMB: only the shares the user may read appear, and read-only shares stay read-only. Leave empty to use the container mounts as they are. Some gateways require it.")
+                }
+                Section {
                     Picker("Connection", selection: $mode) {
                         ForEach(Mode.allCases) { Text($0.rawValue).tag($0) }
                     }.pickerStyle(.segmented)
@@ -83,6 +95,10 @@ struct AddServerView: View {
                     Section("Connected") {
                         LabeledContent("Identity", value: result.identity.name ?? "api key")
                         LabeledContent("Roles", value: (result.identity.roles ?? []).joined(separator: ", "))
+                        if let u = result.user { LabeledContent("Unraid user", value: u) }
+                        if let shares = result.shares, !shares.isEmpty {
+                            LabeledContent("Shares", value: shares.keys.sorted().map { "\($0) (\(shares[$0]!))" }.joined(separator: ", "))
+                        }
                         if result.readOnly { Label("Gateway is read-only", systemImage: "lock") }
                     }
                 }
@@ -103,6 +119,7 @@ struct AddServerView: View {
                 if let e = editing, name.isEmpty, urlText.isEmpty {
                     name = e.name; urlText = e.url.absoluteString
                     mode = e.accessMode == .cloudflareAccess ? .cloudflare : .direct
+                    unraidUser = e.username ?? ""
                 }
             }
             .navigationTitle(editing == nil ? "Add server" : "Edit server")
@@ -146,11 +163,12 @@ struct AddServerView: View {
             : nil
         do {
             let finalName = name.isEmpty ? (url.host ?? "Unraid") : name
+            let user: (username: String, password: String)? = unraidUser.trimmingCharacters(in: .whitespaces).isEmpty ? nil : (clean(unraidUser), unraidPassword.filter { !$0.isNewline })
             let login: LoginResponse
             if let editing {
-                login = try await model.update(editing, name: finalName, url: url, apiKey: clean(apiKey), cloudflare: token)
+                login = try await model.update(editing, name: finalName, url: url, apiKey: clean(apiKey), cloudflare: token, user: user)
             } else {
-                login = try await model.add(name: finalName, url: url, apiKey: clean(apiKey), cloudflare: token)
+                login = try await model.add(name: finalName, url: url, apiKey: clean(apiKey), cloudflare: token, user: user)
             }
             result = login
             try? await Task.sleep(for: .milliseconds(600))

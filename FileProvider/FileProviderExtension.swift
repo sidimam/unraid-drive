@@ -63,7 +63,13 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     func makeItem(_ entry: FSEntry) async -> FileProviderItem {
         let id = await index.identifier(for: entry.path)
         let parent = await index.identifier(for: GatewayPath.parent(entry.path))
-        return FileProviderItem(entry: entry, identifier: id, parent: parent)
+        // Share permissions come from the last login (per-user gateways); unknown → writable.
+        var readOnly = false
+        if let client, let share = entry.path.split(separator: "/").first {
+            if await client.sharePermissions == nil { _ = try? await client.login() }
+            readOnly = await client.access(forShare: String(share)) == .readOnly
+        }
+        return FileProviderItem(entry: entry, identifier: id, parent: parent, readOnly: readOnly)
     }
 
     /// Wraps an async operation in the Progress the system expects.

@@ -62,6 +62,21 @@ public struct KeychainStore: Sendable {
         return CloudflareServiceToken(clientID: id, clientSecret: secret)
     }
 
+    // MARK: Unraid user credentials
+    public func set(username: String, password: String, for serverID: String, synchronizable: Bool = false) throws {
+        try set(username, account: serverID + ".user", synchronizable: synchronizable)
+        try set(password, account: serverID + ".pass", synchronizable: synchronizable)
+    }
+    public func userCredentials(for serverID: String) -> (username: String, password: String)? {
+        guard let u = get(account: serverID + ".user"), let p = get(account: serverID + ".pass"), !u.isEmpty else { return nil }
+        return (u, p)
+    }
+    public func removeUserCredentials(for serverID: String) {
+        for acct in [serverID + ".user", serverID + ".pass"] {
+            for sync in [false, true] { SecItemDelete(query(acct, synchronizable: sync) as CFDictionary) }
+        }
+    }
+
     public func remove(for serverID: String) {
         for acct in accounts(serverID) {
             for sync in [false, true] { SecItemDelete(query(acct, synchronizable: sync) as CFDictionary) }
@@ -73,14 +88,16 @@ public struct KeychainStore: Sendable {
     public func setSynchronizable(_ synchronizable: Bool, for serverID: String) throws {
         let key = apiKey(for: serverID)
         let token = cloudflareToken(for: serverID)
+        let user = userCredentials(for: serverID)
         remove(for: serverID)
         if let key { try set(apiKey: key, for: serverID, synchronizable: synchronizable) }
         if let token { try set(cloudflareToken: token, for: serverID, synchronizable: synchronizable) }
+        if let user { try set(username: user.username, password: user.password, for: serverID, synchronizable: synchronizable) }
     }
 
     // MARK: Plumbing
 
-    private func accounts(_ serverID: String) -> [String] { [serverID, serverID + ".cf-id", serverID + ".cf-secret"] }
+    private func accounts(_ serverID: String) -> [String] { [serverID, serverID + ".cf-id", serverID + ".cf-secret", serverID + ".user", serverID + ".pass"] }
 
     private func query(_ account: String, synchronizable: Bool) -> [String: Any] {
         [

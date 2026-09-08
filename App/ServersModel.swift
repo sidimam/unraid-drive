@@ -33,12 +33,14 @@ final class ServersModel: ObservableObject {
 
     /// Validates the key against the gateway, then persists the server and
     /// registers its File Provider domain so it shows up in the Files app.
-    func add(name: String, url: URL, apiKey: String, cloudflare: CloudflareServiceToken?) async throws -> LoginResponse {
-        let client = GatewayClient(baseURL: url, apiKey: apiKey, extraHeaders: cloudflare?.headers ?? [:])
+    func add(name: String, url: URL, apiKey: String, cloudflare: CloudflareServiceToken?, user: (username: String, password: String)? = nil) async throws -> LoginResponse {
+        let client = GatewayClient(baseURL: url, apiKey: apiKey, username: user?.username, password: user?.password, extraHeaders: cloudflare?.headers ?? [:])
         let login = try await client.login()
-        let server = ServerConfig(name: name, url: url, accessMode: cloudflare == nil ? .direct : .cloudflareAccess)
+        var server = ServerConfig(name: name, url: url, accessMode: cloudflare == nil ? .direct : .cloudflareAccess)
+        server.username = user?.username
         try keychain.set(apiKey: apiKey, for: server.id, synchronizable: cloud.enabled)
         if let cloudflare { try keychain.set(cloudflareToken: cloudflare, for: server.id, synchronizable: cloud.enabled) }
+        if let user { try keychain.set(username: user.username, password: user.password, for: server.id, synchronizable: cloud.enabled) }
         store.upsert(server)
         try await FileProviderDomains.add(server)
         reload()
@@ -48,14 +50,16 @@ final class ServersModel: ObservableObject {
 
     /// Re-validates and replaces the credentials (and mode/name/url) of an existing server,
     /// keeping its id so the Files app location survives.
-    func update(_ server: ServerConfig, name: String, url: URL, apiKey: String, cloudflare: CloudflareServiceToken?) async throws -> LoginResponse {
-        let client = GatewayClient(baseURL: url, apiKey: apiKey, extraHeaders: cloudflare?.headers ?? [:])
+    func update(_ server: ServerConfig, name: String, url: URL, apiKey: String, cloudflare: CloudflareServiceToken?, user: (username: String, password: String)? = nil) async throws -> LoginResponse {
+        let client = GatewayClient(baseURL: url, apiKey: apiKey, username: user?.username, password: user?.password, extraHeaders: cloudflare?.headers ?? [:])
         let login = try await client.login()
         var updated = server
         updated.name = name; updated.url = url; updated.accessMode = cloudflare == nil ? .direct : .cloudflareAccess
+        updated.username = user?.username
         keychain.remove(for: server.id)
         try keychain.set(apiKey: apiKey, for: server.id, synchronizable: cloud.enabled)
         if let cloudflare { try keychain.set(cloudflareToken: cloudflare, for: server.id, synchronizable: cloud.enabled) }
+        if let user { try keychain.set(username: user.username, password: user.password, for: server.id, synchronizable: cloud.enabled) }
         store.upsert(updated)
         cloud.push()
         if updated.name != server.name {

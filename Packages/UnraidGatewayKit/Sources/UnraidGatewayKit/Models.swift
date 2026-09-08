@@ -58,6 +58,20 @@ public struct LoginResponse: Codable, Sendable {
     public var identity: Identity
     public var readOnly: Bool
     public var version: String?
+    /// "off" | "optional" | "required" (gateway ≥ 0.3).
+    public var userAuth: String?
+    /// Unraid user of the session, when the login carried credentials.
+    public var user: String?
+    /// Share name → "rw" | "ro" for that user (only shares the user may see).
+    public var shares: [String: String]?
+}
+
+/// Per-share access as reported by the gateway for the logged-in user.
+public enum ShareAccess: Sendable, Equatable {
+    case readWrite, readOnly
+    public init?(_ s: String) {
+        switch s { case "rw": self = .readWrite; case "ro": self = .readOnly; default: return nil }
+    }
 }
 
 public struct HealthResponse: Codable, Sendable {
@@ -68,6 +82,7 @@ public struct HealthResponse: Codable, Sendable {
 public enum GatewayError: Error, LocalizedError, Sendable {
     case invalidURL
     case unauthorized
+    case userRequired
     case locked
     case notFound
     case conflict(String)
@@ -83,7 +98,8 @@ public enum GatewayError: Error, LocalizedError, Sendable {
     public var errorDescription: String? {
         switch self {
         case .invalidURL: return "The server URL is not valid."
-        case .unauthorized: return "The API key was rejected by Unraid."
+        case .unauthorized: return "The API key, or the Unraid username and password, were rejected."
+        case .userRequired: return "This gateway requires an Unraid username and password in addition to the API key."
         case .locked: return "Too many failed attempts. Try again in a few minutes."
         case .notFound: return "Not found."
         case .conflict(let m): return m

@@ -114,7 +114,8 @@ struct ConnectionTestView: View {
         do {
             login = try await client.login()
             let roles = (login.identity.roles ?? []).joined(separator: ", ")
-            set("auth", .ok("\(login.identity.name ?? "key") · \(roles)\(login.readOnly ? " · gateway read-only" : "")"))
+            let who = login.user.map { "user \($0) · " } ?? ""
+            set("auth", .ok("\(who)key \(login.identity.name ?? "?") · \(roles)\(login.readOnly ? " · gateway read-only" : "")"))
         } catch {
             set("auth", .failed(error.localizedDescription)); return
         }
@@ -123,8 +124,13 @@ struct ConnectionTestView: View {
         let shares: [FSEntry]
         do {
             shares = try await client.list("/").entries
-            if shares.isEmpty { set("shares", .failed("No shares mounted in the container")) ; return }
-            set("shares", .ok(shares.map(\.name).joined(separator: ", ")))
+            if shares.isEmpty { set("shares", .failed(login.user == nil ? "No shares mounted in the container" : "Your Unraid user has no access to any mounted share")) ; return }
+            let perms = login.shares ?? [:]
+            let labels = shares.map { share -> String in
+                if let p = perms[share.name] { return "\(share.name) (\(p))" }
+                return share.name
+            }
+            set("shares", .ok(labels.joined(separator: ", ")))
         } catch {
             set("shares", .failed(error.localizedDescription)); return
         }
@@ -135,7 +141,7 @@ struct ConnectionTestView: View {
         } else {
             var writable: String?
             var lastError = "no writable share found"
-            for share in shares where share.isDirectory {
+            for share in shares where share.isDirectory && (login.shares?[share.name] ?? "rw") == "rw" {
                 let probe = GatewayPath.join(share.path, ".unraid-drive-probe-\(UUID().uuidString.prefix(8))")
                 do {
                     _ = try await client.mkdir(probe)

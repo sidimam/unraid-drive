@@ -9,11 +9,14 @@ final class FileProviderItem: NSObject, NSFileProviderItem {
     let entry: FSEntry
     let itemIdentifier: NSFileProviderItemIdentifier
     let parentItemIdentifier: NSFileProviderItemIdentifier
+    /// True when the user's share permission is read-only.
+    let readOnly: Bool
 
-    init(entry: FSEntry, identifier: NSFileProviderItemIdentifier, parent: NSFileProviderItemIdentifier) {
+    init(entry: FSEntry, identifier: NSFileProviderItemIdentifier, parent: NSFileProviderItemIdentifier, readOnly: Bool = false) {
         self.entry = entry
         self.itemIdentifier = identifier
         self.parentItemIdentifier = parent
+        self.readOnly = readOnly
     }
 
     var filename: String { entry.name }
@@ -26,6 +29,9 @@ final class FileProviderItem: NSObject, NSFileProviderItem {
 
     var capabilities: NSFileProviderItemCapabilities {
         let depth = GatewayPath.depth(entry.path)
+        if readOnly {
+            return entry.isDirectory ? [.allowsContentEnumerating, .allowsReading] : [.allowsReading, .allowsEvicting]
+        }
         if depth <= 1 {
             // A share is a mount point: browse and add, but never rename or delete it.
             return [.allowsContentEnumerating, .allowsReading, .allowsAddingSubItems]

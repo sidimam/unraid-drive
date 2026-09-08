@@ -13,10 +13,15 @@ struct GraphQLEnvelope<T: Decodable>: Decodable {
 public actor GatewayClient {
     public let baseURL: URL
     private let apiKey: String
+    private let username: String?
+    private let password: String?
     private let extraHeaders: [String: String]
     private let session: URLSession
     private var token: String?
     private var loginTask: Task<String, Error>?
+    /// Share permissions of the last login (nil when the session is unrestricted).
+    public private(set) var sharePermissions: [String: ShareAccess]?
+    public private(set) var currentUser: String?
 
     /// Uploads larger than this use the resumable protocol.
     public private(set) var resumableThreshold: Int64 = 16 * 1024 * 1024
@@ -24,10 +29,14 @@ public actor GatewayClient {
     public func setResumableThreshold(_ n: Int64) { resumableThreshold = n }
     public func setChunkSize(_ n: Int) { chunkSize = n }
 
-    /// - Parameter extraHeaders: sent on every request, e.g. a Cloudflare Access service token.
-    public init(baseURL: URL, apiKey: String, extraHeaders: [String: String] = [:], session: URLSession? = nil) {
+    /// - Parameters:
+    ///   - username/password: optional Unraid user; the gateway then applies that user's share permissions.
+    ///   - extraHeaders: sent on every request, e.g. a Cloudflare Access service token.
+    public init(baseURL: URL, apiKey: String, username: String? = nil, password: String? = nil, extraHeaders: [String: String] = [:], session: URLSession? = nil) {
         self.baseURL = baseURL
         self.apiKey = apiKey
+        self.username = (username?.isEmpty ?? true) ? nil : username
+        self.password = password
         self.extraHeaders = extraHeaders
         if let session {
             self.session = session
@@ -55,12 +64,31 @@ public actor GatewayClient {
         var req = URLRequest(url: url("/api/v1/auth/login"))
         req.httpMethod = "POST"
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        req.httpBody = try JSONEncoder().encode(["apiKey": apiKey])
+        var body: [String: String] = ["apiKey": apiKey]
+        if let username { body["username"] = username; body["password"] = password ?? "" }
+        req.httpBody = try JSONEncoder().encode(body)
         let (data, resp) = try await perform(req)
+        if (resp as? HTTPURLResponse)?.statusCode == 401, username == nil,
+           let msg = (try? JSONDecoder().decode([String: String].self, from: data))?["error"], msg.contains("username") {
+            throw GatewayError.userRequired
+        }
         try Self.check(resp, data)
         let login = try decode(LoginResponse.self, data)
         token = login.token
+        currentUser = login.user
+        if let shares = login.shares {
+            var perms: [String: ShareAccess] = [:]
+            for (k, v) in shares { if let a = ShareAccess(v) { perms[k.lowercased()] = a } }
+            sharePermissions = perms
+        } else {
+            sharePermissions = nil
+        }
         return login
+    }
+
+    /// Access level for a share name, or nil when unknown/unrestricted (call after login).
+    public func access(forShare share: String) -> ShareAccess? {
+        sharePermissions?[share.lowercased()]
     }
 
     public func logout() async {

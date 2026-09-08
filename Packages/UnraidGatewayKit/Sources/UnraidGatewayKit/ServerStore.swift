@@ -34,6 +34,8 @@ public struct ServerConfig: Codable, Hashable, Identifiable, Sendable {
     public var accessMode: AccessMode
     /// Last change to name/url/mode; used to resolve conflicts when merging with iCloud.
     public var modifiedAt: Date
+    /// Unraid user name shown in the UI (the password lives in the Keychain).
+    public var username: String?
 
     public init(id: String = UUID().uuidString, name: String, url: URL, createdAt: Date = Date(), accessMode: AccessMode = .direct, modifiedAt: Date = Date()) {
         self.id = id; self.name = name; self.url = url; self.createdAt = createdAt; self.accessMode = accessMode; self.modifiedAt = modifiedAt
@@ -47,6 +49,7 @@ public struct ServerConfig: Codable, Hashable, Identifiable, Sendable {
         createdAt = try c.decodeIfPresent(Date.self, forKey: .createdAt) ?? Date()
         accessMode = try c.decodeIfPresent(AccessMode.self, forKey: .accessMode) ?? .direct
         modifiedAt = try c.decodeIfPresent(Date.self, forKey: .modifiedAt) ?? createdAt
+        username = try c.decodeIfPresent(String.self, forKey: .username)
     }
 
     public var isDemo: Bool { accessMode == .demo }
@@ -96,10 +99,12 @@ public enum GatewayClientFactory {
             return GatewayClient(baseURL: server.url, apiKey: DemoGateway.apiKey, session: DemoGateway.session())
         case .direct:
             guard let key = keychain.apiKey(for: server.id) else { return nil }
-            return GatewayClient(baseURL: server.url, apiKey: key)
+            let u = keychain.userCredentials(for: server.id)
+            return GatewayClient(baseURL: server.url, apiKey: key, username: u?.username, password: u?.password)
         case .cloudflareAccess:
             guard let key = keychain.apiKey(for: server.id), let token = keychain.cloudflareToken(for: server.id) else { return nil }
-            return GatewayClient(baseURL: server.url, apiKey: key, extraHeaders: token.headers)
+            let u = keychain.userCredentials(for: server.id)
+            return GatewayClient(baseURL: server.url, apiKey: key, username: u?.username, password: u?.password, extraHeaders: token.headers)
         }
     }
 }
