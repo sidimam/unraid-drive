@@ -81,6 +81,10 @@ Launch argument `-openServer` opens the first configured server directly (used f
 - [ ] Per-share read-only flag surfaced in the UI
 - [ ] Localisation (Italian first)
 
+## Privacy
+
+No analytics, no accounts, no developer servers: see [PRIVACY.md](PRIVACY.md) (also published at https://sidimam.github.io/unraid-drive/).
+
 ## License
 
 MIT — see [LICENSE](LICENSE). Not affiliated with Lime Technology / Unraid; the icon is an original design.
