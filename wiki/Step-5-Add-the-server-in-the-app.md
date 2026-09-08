@@ -43,7 +43,21 @@ Tap the server to open its page:
 
 Repeat 5.2 for every Unraid server you have. Each one becomes its own location in the Files app.
 
-## 5.5 Removing a server
+## 5.5 Keep the configuration after a restore (iCloud sync)
+
+Tap the gear icon on the server list → **Sync configuration with iCloud**. When on:
+
+- the server list (names, URLs, connection modes) is stored in your iCloud account (Key-Value Storage);
+- API keys and Cloudflare service tokens are stored in **iCloud Keychain**, end-to-end encrypted by Apple;
+- after restoring, replacing or adding an iPhone/iPad/Vision Pro signed in to the same iCloud account, the app shows **Restore N server(s) from iCloud** on its first launch; one tap brings everything back, Files app locations included.
+
+When off (the default), nothing leaves the device. Turning it off again deletes the copy in iCloud. The demo server is never synced. Requires iCloud Drive and iCloud Keychain enabled in iOS Settings for your Apple ID.
+
+## 5.6 Test the connection
+
+Server page → **Test connection** runs five checks with a suggestion for whatever fails: gateway reachable (version, latency), API key accepted (identity, role), shares listed, write access (creates and removes a tiny temporary folder), Files app location registered. Use **Edit server or credentials** to fix URL, mode, key or token without deleting the server.
+
+## 5.7 Removing a server
 
 Swipe left on it in the list → **Delete**. This removes the Files app location, the cached files and the key from the Keychain. Nothing changes on the NAS.
 
