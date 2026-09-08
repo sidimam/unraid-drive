@@ -44,9 +44,12 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
                 let listing = try await client.list(path)
                 var items: [FileProviderItem] = []
                 for e in listing.entries { items.append(await ext.makeItem(e)) }
+                let vanished = await ext.index.vanishedIdentifiers(in: path, current: listing.entries.map(\.name))
                 await ext.index.rememberListing(path, names: listing.entries.map(\.name))
                 observer.didEnumerate(items)
                 observer.finishEnumerating(upTo: nil)
+                // A plain listing cannot delete items; the working set can. Wake it up.
+                if !vanished.isEmpty { ext.nudgeWorkingSet() }
             } catch { observer.finishEnumeratingWithError(FileProviderExtension.mapError(error)) }
         }
     }
@@ -61,7 +64,10 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
                 let page = try await client.changes(path, since: a.cursor, after: a.after, cursor: a.after == nil ? nil : a.cursor, limit: 5000)
                 var updated: [NSFileProviderItem] = []
                 var deleted: [NSFileProviderItemIdentifier] = []
-                let dirChanged = page.dirs.contains(path)
+                // The root lists the mounted shares. Mounts change only when the container is
+                // recreated, which the change feed (mtime based) cannot see, so the root is
+                // always re-listed: it is a handful of entries and costs one millisecond.
+                let dirChanged = path == "/" || page.dirs.contains(path)
                 if dirChanged {
                     let listing = try await client.list(path)
                     deleted = await ext.index.vanishedIdentifiers(in: path, current: listing.entries.map(\.name))
@@ -109,6 +115,13 @@ final class WorkingSetEnumerator: NSObject, NSFileProviderEnumerator {
                 let page = try await client.changes("/", since: a.cursor, after: a.after, cursor: a.after == nil ? nil : a.cursor, limit: 5000)
                 var updated: [NSFileProviderItem] = []
                 var deleted: [NSFileProviderItemIdentifier] = []
+                // Shares that were unmounted from the container disappear from the root listing;
+                // report them (and therefore everything below them) as deleted.
+                if a.after == nil, let root = try? await client.list("/") {
+                    deleted += await ext.index.vanishedIdentifiers(in: "/", current: root.entries.map(\.name))
+                    await ext.index.rememberListing("/", names: root.entries.map(\.name))
+                    for e in root.entries { updated.append(await ext.makeItem(e)) }
+                }
                 for f in page.files { updated.append(await ext.makeItem(f)) }
                 var relisted = 0
                 for d in page.dirs where d != "/" {

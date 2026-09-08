@@ -38,6 +38,12 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
 
     // MARK: - Helpers
 
+    /// Asks the system to enumerate the working set soon (deletions can only be reported there).
+    func nudgeWorkingSet() {
+        guard let mgr = NSFileProviderManager(for: domain) else { return }
+        mgr.signalEnumerator(for: .workingSet) { _ in }
+    }
+
     private func requireClient() throws -> GatewayClient {
         guard let client else { throw NSFileProviderError(.notAuthenticated) }
         return client
@@ -96,7 +102,10 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
             do {
                 let entry = try await self.requireClient().stat(path)
                 completionHandler(await self.makeItem(entry), nil)
-            } catch { completionHandler(nil, Self.mapError(error)) }
+            } catch {
+                if case GatewayError.notFound = error { self.nudgeWorkingSet() }
+                completionHandler(nil, Self.mapError(error))
+            }
         }
     }
 
@@ -141,7 +150,12 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
                                                     mtime: itemTemplate.contentModificationDate ?? nil)
                 }
                 completionHandler(await self.makeItem(entry), [], false, nil)
-            } catch { completionHandler(nil, [], false, Self.mapError(error)) }
+            } catch {
+                // The parent is gone on the server (typically a share removed from the container):
+                // let the working set delete it locally rather than retrying this item forever.
+                if case GatewayError.notFound = error { self.nudgeWorkingSet() }
+                completionHandler(nil, [], false, Self.mapError(error))
+            }
         }
     }
 

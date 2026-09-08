@@ -14,6 +14,18 @@ struct UnraidDriveApp: App {
                 .onChange(of: scenePhase) { _, phase in
                     if phase == .active { Task { await servers.signalAllDomains() } }
                 }
+                .task { await seedFromLaunchArguments() }
         }
+    }
+
+    /// Debug builds only: `-seedServer <url> <apiKey>` adds a Direct server without touching the UI
+    /// (used by simulator tests against a local gateway).
+    private func seedFromLaunchArguments() async {
+        #if DEBUG
+        let args = CommandLine.arguments
+        guard let i = args.firstIndex(of: "-seedServer"), args.count > i + 2, let url = URL(string: args[i + 1]) else { return }
+        guard !servers.servers.contains(where: { $0.url == url }) else { return }
+        _ = try? await servers.add(name: "Local test", url: url, apiKey: args[i + 2], cloudflare: nil)
+        #endif
     }
 }
