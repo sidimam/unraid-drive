@@ -15,6 +15,10 @@ The only thing exposed to the Internet is the gateway (through Cloudflare or you
 - **Optional Cloudflare Access.** With a service token, requests without the token never even reach your home.
 - **Secrets stay in the Keychain.** The API key and the Cloudflare token are stored in the device Keychain with *after first unlock, this device only* protection, shared only with the app's own extension.
 
+## Per-user access
+
+With an Unraid username and password in the app, the gateway opens a real SMB2 session to Unraid to verify them (Samba is the authority; the gateway keeps only the resulting permission map for the session) and enforces Unraid's per-share security on every request. Without a user, access is whatever the container mounts allow; `USER_AUTH=required` on the gateway removes that option.
+
 ## Good practice
 
 1. Use a **VIEWER** key unless you need more.

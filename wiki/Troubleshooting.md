@@ -20,6 +20,18 @@ The gateway page or the app says *invalid api key* although you pasted it correc
 3. Check the Unraid API is running: `unraid-api status` on the terminal. Restart with `unraid-api restart` if needed.
 4. Look at the container logs: a line `unraid validation error` with details points at the cause.
 
+## "invalid unraid username or password"
+
+The API key was fine but Unraid's Samba rejected the user: wrong password, or a user that does not exist. Check the user in the Unraid WebGUI (*Users*), reset its password there if needed, then *Edit server or credentials* in the app. Repeated failures lock your IP for 15 minutes like API-key failures.
+
+## "this Unraid user has no access to any share mounted in the gateway"
+
+The user exists but Unraid's share security grants nothing on the shares mapped into the container (private shares the user is not listed on, or only non-exported shares). Add the user to the share's read or write list in *Shares → share → SMB Security Settings*, or map a share the user may access.
+
+## "the Unraid share configuration is not readable by the gateway"
+
+The gateway runs with `USER_AUTH` on but `/etc/samba/smb-shares.conf` is not mounted at `/unraid-shares/smb-shares.conf`. Add the Path mapping in the container settings (the template has it) or set `USER_AUTH=off`.
+
 ## Too many failed attempts
 
 You typed a wrong key 5 times: your IP is locked for 15 minutes (`LOGIN_LOCKOUT`). Wait, or restart the container to reset. If you are behind Cloudflare and `TRUST_PROXY` is `false`, *all* remote users share one IP (Cloudflare's), so one person's mistakes lock everybody: set `TRUST_PROXY=true`.

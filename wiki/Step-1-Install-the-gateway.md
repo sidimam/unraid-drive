@@ -29,6 +29,10 @@ Leave everything at its default except what follows.
 | **media share** | `/mnt/user/media` | idem |
 | **downloads share** | `/mnt/user/downloads` | idem |
 
+### Per-user permissions (recommended)
+
+The template also maps **`/etc/samba/smb-shares.conf` → `/unraid-shares/smb-shares.conf` (read-only)**, the share definitions Unraid generates for Samba, and sets **User authentication = optional**. With that, anyone who adds an Unraid **username and password** in the app gets exactly the share permissions configured in Unraid (*Shares → share → SMB Security Settings*: Public / Secure / Private with read and write user lists), like over SMB: shares they may not read are hidden, read-only ones stay read-only. Set User authentication to **required** if every client must log in as a user; **off** disables the feature (API key only, access = mounts).
+
 ### Mapping your own shares
 
 Each share you want to see on your device is one **Path** entry:
@@ -51,6 +55,9 @@ You do not need to touch these to get started.
 | `SESSION_TTL` | `12h` | how long a login stays valid; the app re-logs in silently |
 | `MAX_LOGIN_ATTEMPTS` / `LOGIN_LOCKOUT` | `5` / `15m` | brute-force protection per IP |
 | `TRUST_PROXY` | `true` | keep `true` when behind Cloudflare or a reverse proxy, so lockouts apply to the real client IP |
+| `USER_AUTH` | `optional` | `optional`: Unraid user + password may be added to the API key; `required`: every client must add them; `off`: API key only |
+| `UNRAID_SMB_ADDR` | WebGUI host:445 | where user passwords are verified (Unraid's Samba) |
+| `SHARES_CONFIG` | `/unraid-shares/smb-shares.conf` | mount of Unraid's generated Samba share config |
 | `UNRAID_INSECURE_TLS` | `false` | only if your WebGUI URL is `https://` with a self-signed certificate |
 | `CHANGES_DEADLINE` | `20s` | how long one sync scan may take on very large shares |
 | `TZ` | `Europe/Rome` | log timestamps |
@@ -72,10 +79,11 @@ If you prefer the shell (Unraid terminal or SSH):
 ```bash
 docker run -d --name unraid-gateway --restart unless-stopped \
   -p 8484:8484 \
-  -e UNRAID_URL=http://192.168.0.100 -e TRUST_PROXY=true -e TZ=Europe/Rome \
+  -e UNRAID_URL=http://192.168.0.100 -e TRUST_PROXY=true -e TZ=Europe/Rome -e USER_AUTH=optional \
   -v /mnt/user/documents:/data/documents \
   -v /mnt/user/media:/data/media \
   -v /mnt/user/downloads:/data/downloads \
+  -v /etc/samba/smb-shares.conf:/unraid-shares/smb-shares.conf:ro \
   ghcr.io/sidimam/unraid-gateway:latest
 ```
 

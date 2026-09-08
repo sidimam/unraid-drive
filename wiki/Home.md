@@ -18,6 +18,15 @@ This wiki is a complete, step-by-step guide. Follow the pages in order; every st
 10. [Security notes](Security)
 11. [FAQ](FAQ)
 
+## Highlights
+
+- Files app integration on iPhone, iPad and Apple Vision Pro, working remotely without VPN.
+- Authentication with your Unraid API key; optionally your **Unraid user and password**, so each family member sees exactly the shares Unraid grants them.
+- Connection modes: Direct, **Cloudflare Access** (service token), Demo (offline sample).
+- Read-only dashboard: array, shares, Docker, notifications, CPU/RAM.
+- Optional **iCloud sync** of the configuration for painless device restores.
+- Built-in **connection test** and server editing.
+
 ## What you need
 
 | | |

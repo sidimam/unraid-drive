@@ -14,6 +14,8 @@
 | Item | Where | Notes |
 |---|---|---|
 | Your Unraid API key | The device Keychain, shared only with the extension | Sent only to your own gateway URL, once per session |
+| Unraid username and password (optional) | The device Keychain | Sent to your gateway at login; verified by Unraid's Samba |
+| iCloud copy (optional, Settings) | iCloud Key-Value Storage (server list) and iCloud Keychain (secrets) | Only when *Sync configuration with iCloud* is on |
 | Cloudflare service token (optional) | The device Keychain | Sent as HTTP headers on every request |
 | Session token | Memory of the gateway container | Dies when the container restarts; the app logs in again silently |
 | File contents | Your NAS | Files opened in the Files app are cached on the device like any cloud provider and can be evicted |
@@ -22,6 +24,8 @@
 ## Which shares are visible
 
 Only the shares you *mount into the container*. The gateway sees `/data/<name>` for every share you map. A share you do not map does not exist for the app. You can also map a share read-only.
+
+On top of that, when the app logs in with an **Unraid username and password**, the gateway applies that user's SMB share security (Public / Secure / Private with read and write lists) exactly as Unraid does: shares the user may not read disappear, read-only ones stay read-only. Passwords are verified by Unraid's Samba over a real SMB session (with a guest check, since Samba maps unknown users to guest); the gateway stores nothing but the resulting permissions for the session.
 
 ## What the app cannot do (by design)
 

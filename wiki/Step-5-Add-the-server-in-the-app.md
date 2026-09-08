@@ -16,16 +16,18 @@
    - LAN only: `http://192.168.0.100:8484` — works only on your Wi‑Fi; **do not** use it if you want the shares on 5G.
    If you type without `https://`, the app adds it.
 4. **Unraid API key**: paste the key from Step 2.
-5. **Connection**:
+5. **Unraid user (optional)**: your Unraid username (e.g. `sdimambro`) and its password. The gateway checks them against Unraid's SMB service and then applies *your* share permissions: you only see the shares you may read, and read-only shares cannot be modified. Every family member can add the same gateway with their own user and see only their shares. Leave empty to use the container mounts as they are (unless the gateway is set to *required*).
+6. **Connection**:
    - **Direct** — the normal case (LAN, reverse proxy, or Cloudflare Tunnel *without* Access).
    - **Cloudflare Access** — if you did Step 4. Two extra fields appear: paste `CF-Access-Client-Id` and `CF-Access-Client-Secret`.
-6. Tap **Connect**. The app logs in to the gateway, which validates the key with Unraid. On success you briefly see *Connected* with your key name and role, and the sheet closes.
+7. Tap **Connect**. The app logs in to the gateway, which validates the key with Unraid. On success you briefly see *Connected* with your key name and role, and the sheet closes.
 
 If it fails, the error is shown in red under the fields. The common ones:
 
 | Message | Meaning | Fix |
 |---|---|---|
-| *The API key was rejected by Unraid* | key wrong or deleted | copy it again from Unraid, check for spaces |
+| *The API key, or the Unraid username and password, were rejected* | key wrong or deleted; or wrong Unraid password | copy the key again; check the Unraid user's password (Users page in the WebGUI) |
+| *This gateway requires an Unraid username and password* | the gateway runs with `USER_AUTH=required` | fill in the Unraid user section |
 | *Cannot reach the gateway* | wrong URL, container stopped, tunnel down, or you are on LAN with an `https` URL that only resolves outside | open the URL in Safari on the same device first |
 | *Too many failed attempts* | the gateway locked your IP after 5 wrong keys | wait 15 minutes |
 | *Server error 403* on Cloudflare Access | wrong service token or the Access policy does not include it | redo Step 4.3 |

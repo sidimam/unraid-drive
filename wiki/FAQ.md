@@ -31,7 +31,7 @@ Not if *Sync configuration with iCloud* was on (gear icon → Settings). The fir
 Add each one as a server in the app. Each appears as its own folder in the Files app.
 
 **Several users in the family?**
-Each device gets its own API key. All keys see the same shares (the mounts), so create one gateway per user if you need different shares per person; each gateway is a few MB.
+One gateway, one API key (or one per device), and each person enters their own **Unraid username and password** in the app. The gateway applies Unraid's share security per user (public / secure / private, read and write lists), so everybody sees exactly what they see over SMB. Passwords are verified by Unraid's Samba, not stored by the gateway.
 
 **What happens if the container is down?**
 The Files app shows the last known listing and cached files; new operations wait and show a sync warning until it is back.
