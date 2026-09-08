@@ -8,8 +8,20 @@ final class ServersModel: ObservableObject {
     @Published private(set) var servers: [ServerConfig] = []
     private let store = ServerStore()
     private let keychain = KeychainStore()
+    let cloud = CloudSync()
 
-    init() { reload() }
+    init() {
+        reload()
+        cloud.onRemoteChange = { [weak self] in await self?.reloadAndRegisterDomains() }
+        if cloud.enabled { Task { await cloud.pull() } }
+    }
+
+    /// After servers arrived from iCloud: reload and make sure each has a Files app location.
+    func reloadAndRegisterDomains() async {
+        reload()
+        let existing = (try? await NSFileProviderManager.domains().map(\.identifier.rawValue)) ?? []
+        for s in servers where !existing.contains(s.id) { try? await FileProviderDomains.add(s) }
+    }
 
     func reload() { servers = store.all() }
 
@@ -25,11 +37,12 @@ final class ServersModel: ObservableObject {
         let client = GatewayClient(baseURL: url, apiKey: apiKey, extraHeaders: cloudflare?.headers ?? [:])
         let login = try await client.login()
         let server = ServerConfig(name: name, url: url, accessMode: cloudflare == nil ? .direct : .cloudflareAccess)
-        try keychain.set(apiKey: apiKey, for: server.id)
-        if let cloudflare { try keychain.set(cloudflareToken: cloudflare, for: server.id) }
+        try keychain.set(apiKey: apiKey, for: server.id, synchronizable: cloud.enabled)
+        if let cloudflare { try keychain.set(cloudflareToken: cloudflare, for: server.id, synchronizable: cloud.enabled) }
         store.upsert(server)
         try await FileProviderDomains.add(server)
         reload()
+        cloud.push()
         return login
     }
 
@@ -41,9 +54,10 @@ final class ServersModel: ObservableObject {
         var updated = server
         updated.name = name; updated.url = url; updated.accessMode = cloudflare == nil ? .direct : .cloudflareAccess
         keychain.remove(for: server.id)
-        try keychain.set(apiKey: apiKey, for: server.id)
-        if let cloudflare { try keychain.set(cloudflareToken: cloudflare, for: server.id) }
+        try keychain.set(apiKey: apiKey, for: server.id, synchronizable: cloud.enabled)
+        if let cloudflare { try keychain.set(cloudflareToken: cloudflare, for: server.id, synchronizable: cloud.enabled) }
         store.upsert(updated)
+        cloud.push()
         if updated.name != server.name {
             // Domain display name is fixed at registration: re-register to rename it.
             try? await FileProviderDomains.remove(server)
@@ -68,6 +82,7 @@ final class ServersModel: ObservableObject {
         keychain.remove(for: server.id)
         store.remove(id: server.id)
         reload()
+        cloud.push()
     }
 }
 

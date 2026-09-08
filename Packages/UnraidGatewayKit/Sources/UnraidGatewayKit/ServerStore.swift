@@ -32,9 +32,11 @@ public struct ServerConfig: Codable, Hashable, Identifiable, Sendable {
     public var url: URL
     public var createdAt: Date
     public var accessMode: AccessMode
+    /// Last change to name/url/mode; used to resolve conflicts when merging with iCloud.
+    public var modifiedAt: Date
 
-    public init(id: String = UUID().uuidString, name: String, url: URL, createdAt: Date = Date(), accessMode: AccessMode = .direct) {
-        self.id = id; self.name = name; self.url = url; self.createdAt = createdAt; self.accessMode = accessMode
+    public init(id: String = UUID().uuidString, name: String, url: URL, createdAt: Date = Date(), accessMode: AccessMode = .direct, modifiedAt: Date = Date()) {
+        self.id = id; self.name = name; self.url = url; self.createdAt = createdAt; self.accessMode = accessMode; self.modifiedAt = modifiedAt
     }
 
     public init(from decoder: Decoder) throws {
@@ -44,6 +46,7 @@ public struct ServerConfig: Codable, Hashable, Identifiable, Sendable {
         url = try c.decode(URL.self, forKey: .url)
         createdAt = try c.decodeIfPresent(Date.self, forKey: .createdAt) ?? Date()
         accessMode = try c.decodeIfPresent(AccessMode.self, forKey: .accessMode) ?? .direct
+        modifiedAt = try c.decodeIfPresent(Date.self, forKey: .modifiedAt) ?? createdAt
     }
 
     public var isDemo: Bool { accessMode == .demo }
@@ -72,9 +75,14 @@ public struct ServerStore: Sendable {
     }
     public func upsert(_ server: ServerConfig) {
         var list = all().filter { $0.id != server.id }
-        list.append(server)
+        var s = server; s.modifiedAt = Date()
+        list.append(s)
         save(list.sorted { $0.createdAt < $1.createdAt })
     }
+
+    /// Encodes/decodes the list for transport (iCloud key-value store, export).
+    public static func encode(_ servers: [ServerConfig]) -> Data? { try? GatewayJSON.encoder.encode(servers) }
+    public static func decode(_ data: Data) -> [ServerConfig] { (try? GatewayJSON.decoder.decode([ServerConfig].self, from: data)) ?? [] }
     public func remove(id: String) {
         save(all().filter { $0.id != id })
     }

@@ -9,6 +9,7 @@ struct UnraidDriveApp: App {
         WindowGroup {
             ServersView()
                 .environmentObject(servers)
+                .environmentObject(servers.cloud)
         }
     }
 }

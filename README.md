@@ -25,6 +25,8 @@ It talks to [`unraid-gateway`](https://github.com/sidimam/unraid-gateway), a 10 
 - **Demo mode**: a built-in sample server that works offline, in the app and in the Files app. Handy for App Store review and for trying the app before installing the container.
 - **Walkthrough** on first launch, re-openable with **?**.
 - **Secrets in the Keychain**, shared only with the extension. No analytics, no third-party servers.
+- **Optional iCloud sync** (Settings): the server list goes to iCloud Key-Value Storage and the secrets to iCloud Keychain (end-to-end encrypted), so a restored or new iPhone finds its configuration. Off by default; a restore banner appears when iCloud holds a configuration and the device has none.
+- **Connection test** with five checks (reachability, key, shares, write probe, Files location) and **edit server** without losing the Files app location.
 - **Universal**: iPhone, iPad and native visionOS from one codebase.
 
 ## Project layout
