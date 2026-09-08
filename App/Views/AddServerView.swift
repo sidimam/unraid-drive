@@ -62,7 +62,7 @@ struct AddServerView: View {
                     Text("Create the key in Unraid under Settings › Management Access › API Keys. It is stored in this device's Keychain and sent only to your gateway.")
                 }
                 Section {
-                    TextField("Unraid user (e.g. sdimambro)", text: $unraidUser)
+                    TextField("Unraid username", text: $unraidUser)
                         .textInputAutocapitalization(.never).autocorrectionDisabled().textContentType(.username)
                         .focused($focusedField, equals: .user).submitLabel(.next).onSubmit { focusedField = .pass }
                     SecretField(title: "Unraid password", text: $unraidPassword)
