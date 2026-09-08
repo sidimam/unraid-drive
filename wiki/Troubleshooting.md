@@ -28,6 +28,16 @@ You typed a wrong key 5 times: your IP is locked for 15 minutes (`LOGIN_LOCKOUT`
 
 You used the LAN URL. Add the server again with the public hostname from Step 3, or edit the tunnel. Test the hostname in Safari on the phone with Wi‑Fi off: `https://unraidfile.example.com/healthz` must show `{"status":"ok"}`.
 
+## "Unexpected response … not valid JSON … Unexpected character '<'" or "Cloudflare Access is blocking the request"
+
+The gateway answered with a **web page** instead of data. Almost always this is Cloudflare Access showing its login page because the request carried no valid service token:
+
+- the server was added in the app with **Connection: Direct** and Access was enabled afterwards → remove the server and add it again with **Connection: Cloudflare Access**, pasting `CF-Access-Client-Id` and `CF-Access-Client-Secret`;
+- the Access policy for the token has action **Allow** → it must be **Service Auth** (Allow means an interactive login; Service Auth checks the token);
+- the token expired or the policy's Service Token rule points to a different token.
+
+Quick check from a terminal: without headers `curl -I https://gw.example.com/healthz` must return `302` to `…cloudflareaccess.com`; with the two `CF-Access-Client-*` headers it must return `200` and JSON.
+
 ## Files shows "Unraid Drive" but folders are empty or spinning
 
 - Pull down to refresh.

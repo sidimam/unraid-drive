@@ -51,3 +51,20 @@ final class PathAndDecodingTests: XCTestCase {
         XCTAssertEqual(store.all().count, before.count)
     }
 }
+
+final class ProxyInterceptionTests: XCTestCase {
+    func testHTMLResponseIsReportedAsInterception() {
+        let url = URL(string: "https://x.cloudflareaccess.com/cdn-cgi/access/login/gw")!
+        let resp = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "text/html; charset=utf-8"])!
+        XCTAssertThrowsError(try GatewayClient.check(resp, Data("<!DOCTYPE html>".utf8))) { err in
+            guard case GatewayError.interceptedByProxy(let host) = err else { return XCTFail("\(err)") }
+            XCTAssertEqual(host, "x.cloudflareaccess.com")
+            XCTAssertTrue((err as? GatewayError)?.errorDescription?.contains("Cloudflare Access") == true)
+        }
+    }
+    func testJSONResponsePasses() throws {
+        let url = URL(string: "https://gw.example.com/api/v1/fs/list")!
+        let resp = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "application/json"])!
+        XCTAssertNoThrow(try GatewayClient.check(resp, Data("{}".utf8)))
+    }
+}

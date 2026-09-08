@@ -77,6 +77,8 @@ public enum GatewayError: Error, LocalizedError, Sendable {
     case network(String)
     case decoding(String)
     case graphQL([String])
+    /// The response was a web page, not JSON: a login portal (Cloudflare Access) or a proxy error page.
+    case interceptedByProxy(String)
 
     public var errorDescription: String? {
         switch self {
@@ -91,6 +93,11 @@ public enum GatewayError: Error, LocalizedError, Sendable {
         case .network(let m): return "Cannot reach the gateway: \(m)"
         case .decoding(let m): return "Unexpected response: \(m)"
         case .graphQL(let msgs): return msgs.joined(separator: "\n")
+        case .interceptedByProxy(let host):
+            if host.hasSuffix("cloudflareaccess.com") {
+                return "Cloudflare Access is blocking the request. Add this server with Connection: Cloudflare Access and a valid service token, and make sure the Access policy uses the Service Auth action."
+            }
+            return "The server answered with a web page instead of data (\(host)). A login portal or proxy is intercepting the request: check the gateway URL and the connection mode."
         }
     }
 

@@ -312,6 +312,13 @@ public actor GatewayClient {
 
     static func check(_ resp: URLResponse, _ data: Data) throws {
         guard let http = resp as? HTTPURLResponse else { throw GatewayError.network("no HTTP response") }
+        // A JSON API never answers with HTML. If it does, a login portal (Cloudflare Access) or a
+        // proxy error page intercepted the request, possibly after a redirect to another host.
+        let contentType = http.value(forHTTPHeaderField: "Content-Type")?.lowercased() ?? ""
+        let firstByte = data.first(where: { $0 != 0x20 && $0 != 0x0a && $0 != 0x0d && $0 != 0x09 })
+        if contentType.contains("text/html") || (http.statusCode < 300 && firstByte == UInt8(ascii: "<")) {
+            throw GatewayError.interceptedByProxy(http.url?.host ?? "unknown host")
+        }
         guard http.statusCode >= 300 else { return }
         let msg = (try? JSONDecoder().decode([String: String].self, from: data))?["error"] ?? HTTPURLResponse.localizedString(forStatusCode: http.statusCode)
         switch http.statusCode {
