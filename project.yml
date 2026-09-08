@@ -49,6 +49,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.sdimambro.unraid-drive
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        "ASSETCATALOG_COMPILER_APPICON_NAME[sdk=xros*]": AppIconVision
+        "ASSETCATALOG_COMPILER_APPICON_NAME[sdk=xrsimulator*]": AppIconVision
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
   UnraidDriveFileProvider:
     type: app-extension
