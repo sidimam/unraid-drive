@@ -75,7 +75,7 @@ The gateway preserves the file modification time you send and reports the server
 
 ## Where are the logs
 
-- Gateway: Docker tab → icon → **Logs**. Every request is one JSON line with method, path, status, duration and client IP.
+- Gateway: Docker tab → icon → **Logs**. One readable line per event: `TIME LEVEL  METHOD PATH → STATUS in Nms  file=… user=… ip=…`, plus explicit messages such as "login failed: Unraid rejected the username/password". The **Console** button opens a guided status check (`gw status`, `gw shares`, `gw login <user>`).
 - iOS: **Settings → Privacy & Security → Analytics** does not include extension logs; when reporting an issue, describe the exact steps and attach the gateway log lines around that time.
 
 ## Reporting a bug
