@@ -111,7 +111,6 @@ struct ServersView: View {
                 AddServerView().presentationDetents([.large])
             }
             .sheet(isPresented: $showSettings) { SettingsView() }
-            .sheet(item: $quickTestServer) { ConnectionTestView(server: $0) }
             #if os(iOS)
             .onReceive(NotificationCenter.default.publisher(for: QuickAction.notification)) { note in
                 guard let raw = note.userInfo?["action"] as? String, let action = QuickAction(rawValue: raw) else { return }
@@ -132,6 +131,11 @@ struct ServersView: View {
                 #endif
                 #if DEBUG
                 if ProcessInfo.processInfo.arguments.contains("-testConnection") { walkthroughSeen = true; quickTestServer = model.servers.first { !$0.isDemo } ?? model.servers.first }
+                // Screenshots without personal data: open the demo server (and its connection test).
+                if ProcessInfo.processInfo.arguments.contains("-openDemo"), let demo = model.servers.first(where: { $0.isDemo }) {
+                    walkthroughSeen = true; path = [demo]
+                    if ProcessInfo.processInfo.arguments.contains("-testDemo") { DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { quickTestServer = demo } }
+                }
                 #endif
                 if ProcessInfo.processInfo.arguments.contains("-openServer"), let first = model.servers.first {
                     walkthroughSeen = true
@@ -142,6 +146,7 @@ struct ServersView: View {
             }
         }
         .sheet(item: $signInServer) { AddServerView(editing: $0) }
+        .sheet(item: $quickTestServer) { ConnectionTestView(server: $0) }
         .onOpenURL { url in
             guard url.scheme == "unraiddrive", url.host == "signin" else { return }
             let id = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.first { $0.name == "server" }?.value
