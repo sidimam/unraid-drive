@@ -18,15 +18,34 @@ struct ServerDetailView: View {
         List {
             Section {
                 if let filesURL {
+                    #if os(macOS)
+                    Button { Task { await FileProviderDomains.revealInFinder(server) } } label: { Label("Open in Finder", systemImage: "folder") }
+                    #else
                     Link(destination: filesURL) { Label("Open the Files app", systemImage: "folder") }
+                    #endif
                 }
                 NavigationLink { FileBrowserView(server: server, path: "/") } label: { Label("Browse shares", systemImage: "externaldrive.connected.to.line.below") }
                 Button { testing = true } label: { Label("Test connection", systemImage: "stethoscope") }
                 Button {
                     Task { await FileProviderDomains.signal(server); resyncRequested = true }
-                } label: { Label(resyncRequested ? "Files app refresh requested" : "Refresh the Files app", systemImage: "arrow.triangle.2.circlepath") }
+                } label: {
+                    #if os(macOS)
+                    Label(resyncRequested ? "Finder refresh requested" : "Refresh the Finder location", systemImage: "arrow.triangle.2.circlepath")
+                    #else
+                    Label(resyncRequested ? "Files app refresh requested" : "Refresh the Files app", systemImage: "arrow.triangle.2.circlepath")
+                    #endif
+                }
                 .disabled(resyncRequested)
                 if !server.isDemo {
+                    #if os(macOS)
+                    Button(role: .destructive) { confirmRebuild = true } label: { Label("Rebuild the Finder location", systemImage: "arrow.counterclockwise.circle") }
+                        .confirmationDialog("Rebuild the Finder location?", isPresented: $confirmRebuild, titleVisibility: .visible) {
+                            Button("Rebuild", role: .destructive) { Task { await model.rebuildDomain(server); rebuilt = true } }
+                        } message: {
+                            Text("The Finder forgets everything it cached for this server and reads the shares again from the gateway. Files created in the Finder that were never uploaded are lost. Use it when the Finder keeps showing folders that no longer exist.")
+                        }
+                    if rebuilt { Label("Location rebuilt. Open the Finder to see the shares.", systemImage: "checkmark.circle").foregroundStyle(.secondary) }
+                    #else
                     Button(role: .destructive) { confirmRebuild = true } label: { Label("Rebuild the Files location", systemImage: "arrow.counterclockwise.circle") }
                         .confirmationDialog("Rebuild the Files location?", isPresented: $confirmRebuild, titleVisibility: .visible) {
                             Button("Rebuild", role: .destructive) { Task { await model.rebuildDomain(server); rebuilt = true } }
@@ -34,13 +53,21 @@ struct ServerDetailView: View {
                             Text("The Files app forgets everything it cached for this server and reads the shares again from the gateway. Files created in the Files app that were never uploaded are lost. Use it when Files keeps showing folders that no longer exist.")
                         }
                     if rebuilt { Label("Location rebuilt. Open the Files app to see the shares.", systemImage: "checkmark.circle").foregroundStyle(.secondary) }
+                    #endif
                 }
                 if !server.isDemo {
                     Button { editing = true } label: { Label("Edit server or credentials", systemImage: "pencil") }
                 }
             } footer: {
+                #if os(macOS)
+                Text("In the Finder sidebar, under Locations, click Unraid Drive › \(server.name). The shares are then available to every app; files download when you open them.")
+                #else
                 Text("In the Files app, tap Browse › Locations › Unraid Drive › \(server.name). The shares are then available to every app.")
+                #endif
             }
+            #if os(macOS)
+            LocationStateBanner(server: server)
+            #endif
             if server.isDemo {
                 Section { Label("Demo server: sample data stored on this device only.", systemImage: "info.circle") }
             }

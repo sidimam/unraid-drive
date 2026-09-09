@@ -18,9 +18,9 @@ struct SecretField: View {
                 }
             }
             .focused($focused)
-            .textInputAutocapitalization(.never)
-            .autocorrectionDisabled()
+            .noAutocapitalization()
             .textContentType(.password)
+            .autocorrectionDisabled()
             .font(monospaced ? .callout.monospaced() : .body)
             Button {
                 revealed.toggle()

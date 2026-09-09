@@ -8,6 +8,7 @@
 - [4 · Cloudflare Access](Step-4-Protect-with-Cloudflare-Access)
 - [5 · Add the server](Step-5-Add-the-server-in-the-app)
 - [6 · Files app](Step-6-Using-the-Files-app)
+- [7 · On the Mac](Step-7-Unraid-Drive-on-the-Mac)
 - [Alternatives](Alternatives-to-Cloudflare)
 - [Troubleshooting](Troubleshooting)
 - [Security](Security)

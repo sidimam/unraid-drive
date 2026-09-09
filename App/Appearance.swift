@@ -1,5 +1,8 @@
 import SwiftUI
 import UnraidGatewayKit
+#if os(macOS)
+import AppKit
+#endif
 
 /// User-selectable colour scheme: follow the system, or force light/dark.
 enum Appearance: String, CaseIterable, Identifiable {
@@ -32,6 +35,13 @@ enum Appearance: String, CaseIterable, Identifiable {
     /// `.preferredColorScheme` is not re-applied to sheets that are already on screen, so the
     /// override goes on the windows themselves: it takes effect immediately everywhere.
     func applyToWindows() {
+        #if os(macOS)
+        switch self {
+        case .system: NSApp.appearance = nil
+        case .light: NSApp.appearance = NSAppearance(named: .aqua)
+        case .dark: NSApp.appearance = NSAppearance(named: .darkAqua)
+        }
+        #else
         let style: UIUserInterfaceStyle
         switch self {
         case .system: style = .unspecified
@@ -42,6 +52,7 @@ enum Appearance: String, CaseIterable, Identifiable {
             guard let ws = scene as? UIWindowScene else { continue }
             for w in ws.windows { w.overrideUserInterfaceStyle = style }
         }
+        #endif
     }
 }
 
@@ -161,6 +172,53 @@ enum NavigationBarStyle {
         let orange = UIColor(red: 1.0, green: 0.55, blue: 0.18, alpha: 1)
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: orange]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: orange]
+        #endif
+    }
+}
+
+extension View {
+    /// `.navigationBarTitleDisplayMode` does not exist on macOS; no-op there.
+    @ViewBuilder func inlineNavigationTitle() -> some View {
+        #if os(macOS)
+        self
+        #else
+        self.navigationBarTitleDisplayMode(.inline)
+        #endif
+    }
+}
+
+extension View {
+    /// Keyboard-related modifiers that only exist on touch platforms.
+    @ViewBuilder func noAutocapitalization() -> some View {
+        #if os(macOS)
+        self
+        #else
+        self.textInputAutocapitalization(.never)
+        #endif
+    }
+    @ViewBuilder func wordsAutocapitalization() -> some View {
+        #if os(macOS)
+        self
+        #else
+        self.textInputAutocapitalization(.words)
+        #endif
+    }
+    @ViewBuilder func urlKeyboard() -> some View {
+        #if os(macOS)
+        self
+        #else
+        self.keyboardType(.URL)
+        #endif
+    }
+}
+
+extension View {
+    /// Sheets have no intrinsic size on macOS: give them one (no-op elsewhere).
+    @ViewBuilder func sheetFrame() -> some View {
+        #if os(macOS)
+        self.frame(minWidth: 600, idealWidth: 640, minHeight: 480, idealHeight: 560)
+        #else
+        self
         #endif
     }
 }

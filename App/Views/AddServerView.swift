@@ -47,11 +47,11 @@ struct AddServerView: View {
                     }
                 }
                 Section(header: SectionTitle("Server")) {
-                    TextField("Name", text: $name).textInputAutocapitalization(.words)
+                    TextField("Name", text: $name).wordsAutocapitalization()
                         .focused($focusedField, equals: .name).submitLabel(.next)
                         .onSubmit { focusedField = .url }
                     TextField("Gateway URL (https://nas.example.com)", text: $urlText)
-                        .keyboardType(.URL).textInputAutocapitalization(.never).autocorrectionDisabled()
+                        .urlKeyboard().noAutocapitalization().autocorrectionDisabled()
                         .focused($focusedField, equals: .url).submitLabel(.next)
                         .onSubmit { focusedField = .apiKey }
                 }
@@ -63,7 +63,7 @@ struct AddServerView: View {
                 }
                 Section {
                     TextField("Unraid username", text: $unraidUser)
-                        .textInputAutocapitalization(.never).autocorrectionDisabled().textContentType(.username)
+                        .noAutocapitalization().autocorrectionDisabled().textContentType(.username)
                         .focused($focusedField, equals: .user).submitLabel(.next).onSubmit { focusedField = .pass }
                     SecretField(title: "Unraid password", text: $unraidPassword)
                         .focused($focusedField, equals: .pass)
@@ -76,7 +76,7 @@ struct AddServerView: View {
                     }.pickerStyle(.segmented)
                     if mode == .cloudflare {
                         TextField("CF-Access-Client-Id", text: $cfClientID)
-                            .textInputAutocapitalization(.never).autocorrectionDisabled().font(.callout.monospaced())
+                            .noAutocapitalization().autocorrectionDisabled().font(.callout.monospaced())
                             .focused($focusedField, equals: .cfID)
                         SecretField(title: "CF-Access-Client-Secret", text: $cfClientSecret, monospaced: true)
                             .focused($focusedField, equals: .cfSecret)
@@ -123,14 +123,14 @@ struct AddServerView: View {
                 }
             }
             .navigationTitle(editing == nil ? "Add server" : "Edit server")
-            .navigationBarTitleDisplayMode(.inline)
+            .inlineNavigationTitle()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(busy ? "Connecting…" : (editing == nil ? "Connect" : "Save")) { Task { await connect() } }
                         .disabled(busy || !canConnect)
                 }
-#if !os(visionOS)
+#if os(iOS)
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
                     Button("Done") { focusedField = nil }
@@ -139,6 +139,7 @@ struct AddServerView: View {
             }
             .interactiveDismissDisabled(busy)
         }
+        .sheetFrame()
     }
 
     /// Accept whatever the user pasted from the Cloudflare dashboard: a bare value, a

@@ -66,6 +66,10 @@ With gateway 0.5 or newer and app build 14 or newer, the gateway keeps an index 
 
 Files draws the icon of the app that owns the location, but iOS caches app icons by bundle id and icon name and that cache survives uninstalling the app. Build 16 ships the icon under a new asset name (`AppIconDrive`), so iOS fetches it again on the next install. If an older build still shows the previous icon, restart the iPhone: the icon cache is rebuilt at boot. Note that Files renders third-party location icons as a blue-tinted glyph (the "tinted" variant of the app icon), not in full colour.
 
+## Mac: "has not signed in" / greyed-out location / plain folder icon
+
+See [Step 7 — Unraid Drive on the Mac](Step-7-Unraid-Drive-on-the-Mac#troubleshooting-on-the-mac): missing credentials on that Mac (click **Sign in…** or open the app), extension not enabled in System Settings › Login Items & Extensions › File Providers, or the Finder's icon cache (relaunch the Finder).
+
 ## Files says "Sync paused" (or a share you removed from the container is still listed)
 
 iOS pauses a location after a network error, for example while the container restarts during an update, and then shows the cached listing until something wakes it up. Nothing is lost.

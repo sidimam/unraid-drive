@@ -13,6 +13,7 @@ This wiki is a complete, step-by-step guide. Follow the pages in order; every st
 5. [Step 4 (optional) — Protect it with Cloudflare Access](Step-4-Protect-with-Cloudflare-Access)
 6. [Step 5 — Add the server in the app](Step-5-Add-the-server-in-the-app)
 7. [Step 6 — Use your shares in the Files app](Step-6-Using-the-Files-app)
+8. [Step 7 — Unraid Drive on the Mac](Step-7-Unraid-Drive-on-the-Mac)
 8. [Alternatives to Cloudflare](Alternatives-to-Cloudflare)
 9. [Troubleshooting](Troubleshooting)
 10. [Security notes](Security)

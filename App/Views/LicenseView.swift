@@ -13,6 +13,6 @@ struct LicenseView: View {
             Text(text).font(.system(.footnote, design: .monospaced)).frame(maxWidth: .infinity, alignment: .leading).padding()
         }
         .navigationTitle("License")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationTitle()
     }
 }

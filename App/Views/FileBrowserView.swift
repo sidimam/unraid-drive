@@ -38,7 +38,7 @@ struct FileBrowserView: View {
         }
         .overlay { if loading { ProgressView() } }
         .navigationTitle(path == "/" ? "Shares" : GatewayPath.name(path))
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationTitle()
         .refreshable { await load() }
         .task { await load() }
         .quickLookPreview($preview)

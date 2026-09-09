@@ -106,6 +106,7 @@ public struct KeychainStore: Sendable {
             kSecAttrAccount as String: account,
             kSecAttrAccessGroup as String: AppGroup.identifier,
             kSecAttrSynchronizable as String: synchronizable,
+            kSecUseDataProtectionKeychain as String: true,
         ]
     }
 
@@ -133,6 +134,7 @@ public struct KeychainStore: Sendable {
             kSecAttrAccount as String: account,
             kSecAttrAccessGroup as String: AppGroup.identifier,
             kSecAttrSynchronizable as String: kSecAttrSynchronizableAny,
+            kSecUseDataProtectionKeychain as String: true,
             kSecReturnData as String: true,
             kSecMatchLimit as String: kSecMatchLimitOne,
         ]

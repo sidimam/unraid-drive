@@ -28,24 +28,38 @@ struct WalkthroughView: View {
     ]
     @State private var index = 0
 
+    private func page(_ p: Page) -> some View {
+        VStack(spacing: 20) {
+            Image(systemName: p.icon).font(.system(size: 64)).foregroundStyle(.tint).padding(.top, 24)
+            Text(p.title).font(.title2.bold()).multilineTextAlignment(.center)
+            Text(p.text).multilineTextAlignment(.center).foregroundStyle(.secondary).padding(.horizontal, 24)
+            if let (label, url) = p.link { Link(label, destination: url).font(.callout) }
+            Spacer()
+        }.padding()
+    }
+
     var body: some View {
         NavigationStack {
             VStack {
-                TabView(selection: $index) {
-                    ForEach(Array(pages.enumerated()), id: \.offset) { i, p in
-                        VStack(spacing: 20) {
-                            Image(systemName: p.icon).font(.system(size: 64)).foregroundStyle(.tint).padding(.top, 24)
-                            Text(p.title).font(.title2.bold()).multilineTextAlignment(.center)
-                            Text(p.text).multilineTextAlignment(.center).foregroundStyle(.secondary).padding(.horizontal, 24)
-                            if let (label, url) = p.link { Link(label, destination: url).font(.callout) }
-                            Spacer()
-                        }.tag(i).padding()
+                #if os(macOS)
+                page(pages[index]).id(index).frame(minWidth: 480, minHeight: 300)
+                HStack(spacing: 6) {
+                    ForEach(0..<pages.count, id: \.self) { i in
+                        Circle().fill(i == index ? Color.accentColor : Color.secondary.opacity(0.35)).frame(width: 7, height: 7)
                     }
+                }
+                #else
+                TabView(selection: $index) {
+                    ForEach(Array(pages.enumerated()), id: \.offset) { i, p in page(p).tag(i) }
                 }
                 .tabViewStyle(.page(indexDisplayMode: .always))
                 .indexViewStyle(.page(backgroundDisplayMode: .always))
+                #endif
 
                 HStack {
+                    #if os(macOS)
+                    if index > 0 { Button("Back") { withAnimation { index -= 1 } } }
+                    #endif
                     if let onTryDemo {
                         Button("Try the demo") { onTryDemo(); dismiss() }.buttonStyle(.bordered)
                     }
@@ -56,8 +70,9 @@ struct WalkthroughView: View {
                 }.padding()
             }
             .navigationTitle("Welcome")
-            .navigationBarTitleDisplayMode(.inline)
+            .inlineNavigationTitle()
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Skip") { dismiss() } } }
         }
+        .sheetFrame()
     }
 }

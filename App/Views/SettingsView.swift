@@ -1,9 +1,16 @@
 import SwiftUI
+#if os(macOS)
+import ServiceManagement
+#endif
 import UnraidGatewayKit
 
 /// App settings, laid out like aMule Remote: one "App settings" group (theme, language, icon colour),
 /// iCloud sync, and an "App info" group with version, author, license and links.
 struct SettingsView: View {
+    #if os(macOS)
+    @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
+    @AppStorage(DockPolicy.key, store: AppGroup.defaults) private var menuBarOnly = false
+    #endif
     @EnvironmentObject private var model: ServersModel
     @EnvironmentObject private var cloud: CloudSync
     @Environment(\.dismiss) private var dismiss
@@ -35,6 +42,13 @@ struct SettingsView: View {
                         IconColorPicker(selection: $iconColor)
                     }
                     .onChange(of: iconColor) { _, v in AppIconColor.apply(v) }
+                    #endif
+                    #if os(macOS)
+                    Toggle(isOn: Binding(get: { launchAtLogin }, set: { v in
+                        do { if v { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() } } catch {}
+                        launchAtLogin = SMAppService.mainApp.status == .enabled })) { Label("Launch at login", systemImage: "power") }
+                    Toggle(isOn: $menuBarOnly) { Label("Menu bar only (hide Dock icon)", systemImage: "menubar.rectangle") }
+                        .onChange(of: menuBarOnly) { _, _ in DockPolicy.apply() }
                     #endif
                 } header: { SectionTitle("App settings") } footer: {
                     Text("System follows the device settings for theme and language. A forced language applies to this app only; a few system-provided texts follow at the next launch. The icon colour applies to iPhone and iPad; Apple Vision Pro keeps the layered icon.")
@@ -77,8 +91,9 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.inline)
+            .inlineNavigationTitle()
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
         }
+        .sheetFrame()
     }
 }

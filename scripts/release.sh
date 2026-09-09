@@ -2,7 +2,7 @@
 set -o pipefail
 cd "$(dirname "$0")/.."
 ISSUER="${ASC_ISSUER:?set ASC_ISSUER to the App Store Connect issuer id}"
-for PLAT in iOS visionOS; do
+for PLAT in ${PLATFORMS:-iOS visionOS macOS}; do
   echo "=== archive $PLAT"
   rm -rf build/UnraidDrive-$PLAT.xcarchive build/export-$PLAT
   xcodebuild archive -project UnraidDrive.xcodeproj -scheme UnraidDrive -destination "generic/platform=$PLAT" \
@@ -13,9 +13,10 @@ for PLAT in iOS visionOS; do
       -exportPath build/export-$PLAT -allowProvisioningUpdates 2>&1 | grep -E "error:|EXPORT" && break
     sleep 10
   done
-  ls build/export-$PLAT/*.ipa || exit 1
+  if [ "$PLAT" = macOS ]; then PKG=$(ls build/export-$PLAT/*.pkg | head -1); else PKG=build/export-$PLAT/UnraidDrive.ipa; fi
+  ls "$PKG" || exit 1
   echo "=== upload $PLAT"
-  T=ios; [ "$PLAT" = visionOS ] && T=visionos
-  xcrun altool --upload-app -f build/export-$PLAT/UnraidDrive.ipa -t $T --apiKey Z9NY29WQ4M --apiIssuer "$ISSUER" 2>&1 | grep -v "^$" | tail -5
+  T=ios; [ "$PLAT" = visionOS ] && T=visionos; [ "$PLAT" = macOS ] && T=macos
+  xcrun altool --upload-app -f "$PKG" -t $T --apiKey Z9NY29WQ4M --apiIssuer "$ISSUER" 2>&1 | grep -v "^$" | tail -5
 done
 echo "=== RELEASE DONE"

@@ -166,6 +166,12 @@ enum FileProviderDomains {
     /// reliable across iOS versions, so this opens Files' Browse view; the server is listed
     /// under Locations › Unraid Drive.
     static func filesAppURL(_ server: ServerConfig) async -> URL? {
+        #if os(macOS)
+        // On the Mac the location is a folder in the Finder sidebar: open it directly.
+        guard let mgr = NSFileProviderManager(for: domain(for: server)) else { return nil }
+        return try? await mgr.getUserVisibleURL(for: .rootContainer)
+        #else
         URL(string: "shareddocuments://")
+        #endif
     }
 }

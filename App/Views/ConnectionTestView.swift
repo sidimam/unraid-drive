@@ -20,8 +20,15 @@ struct ConnectionTestView: View {
         Step(id: "auth", title: "API key accepted"),
         Step(id: "shares", title: "Shares listed"),
         Step(id: "write", title: "Write access"),
-        Step(id: "files", title: "Files app location registered"),
+        Step(id: "files", title: Self.locationTitle),
     ]
+    static var locationTitle: LocalizedStringKey {
+        #if os(macOS)
+        "Finder location registered"
+        #else
+        "Files app location registered"
+        #endif
+    }
     @State private var running = false
 
     var body: some View {
@@ -48,7 +55,7 @@ struct ConnectionTestView: View {
                 }
             }
             .navigationTitle("Test connection")
-            .navigationBarTitleDisplayMode(.inline)
+            .inlineNavigationTitle()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Close") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) {
@@ -57,6 +64,7 @@ struct ConnectionTestView: View {
             }
             .task { await run() }
         }
+        .sheetFrame()
     }
 
     private func label(_ m: AccessMode) -> String {
@@ -163,7 +171,11 @@ struct ConnectionTestView: View {
             if domains.contains(where: { $0.identifier.rawValue == server.id }) {
                 // Also wake the domain up: after a network error iOS keeps it paused until asked.
                 await FileProviderDomains.signal(server)
+                #if os(macOS)
+                set("files", .ok(String(localized: "Finder › Unraid Drive – \(server.name) · refresh requested")))
+                #else
                 set("files", .ok(String(localized: "Files › Unraid Drive › \(server.name) · refresh requested")))
+                #endif
             } else {
                 try await FileProviderDomains.add(server)
                 set("files", .ok(String(localized: "registered now")))

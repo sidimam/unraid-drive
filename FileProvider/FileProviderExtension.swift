@@ -136,8 +136,9 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
                 let entry = try await client.stat(path)
                 // Give the local copy the server's timestamp so Files shows the real date.
                 try? FileManager.default.setAttributes([.modificationDate: entry.mtime], ofItemAtPath: dest.path)
+                self.log(path, .download, bytes: entry.size)
                 completionHandler(dest, await self.makeItem(entry), nil)
-            } catch { completionHandler(nil, nil, Self.mapError(error)) }
+            } catch { self.log(path, .download, error: error); completionHandler(nil, nil, Self.mapError(error)) }
         }
     }
 
@@ -164,8 +165,10 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
                     entry = try await client.upload(fileURL: src, to: path, overwrite: options.contains(.mayAlreadyExist),
                                                     mtime: itemTemplate.contentModificationDate ?? nil)
                 }
+                self.log(path, entry.isDirectory ? .folder : .create, bytes: entry.size)
                 completionHandler(await self.makeItem(entry), [], false, nil)
             } catch {
+                self.log(path, itemTemplate.contentType == .folder ? .folder : .create, error: error)
                 // The parent is gone on the server (typically a share removed from the container):
                 // let the working set delete it locally rather than retrying this item forever.
                 if case GatewayError.notFound = error { self.nudgeWorkingSet() }
@@ -188,16 +191,18 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
                         _ = try await client.move(path, to: newPath, overwrite: false)
                         await self.index.move(from: path, to: newPath)
                         path = newPath
+                        self.log(path, .move)
                     }
                 }
                 if changedFields.contains(.contents), let newContents {
-                    _ = try await client.upload(fileURL: newContents, to: path, overwrite: true, mtime: item.contentModificationDate ?? nil)
+                    let e = try await client.upload(fileURL: newContents, to: path, overwrite: true, mtime: item.contentModificationDate ?? nil)
+                    self.log(path, .upload, bytes: e.size)
                 } else if changedFields.contains(.contentModificationDate) {
                     // Metadata-only touch: nothing to store server-side; report current state.
                 }
                 let entry = try await client.stat(path)
                 completionHandler(await self.makeItem(entry), [], false, nil)
-            } catch { completionHandler(nil, [], false, Self.mapError(error)) }
+            } catch { self.log(path, changedFields.contains(.contents) ? .upload : .move, error: error); completionHandler(nil, [], false, Self.mapError(error)) }
         }
     }
 
@@ -209,12 +214,19 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
             do {
                 try await self.requireClient().delete(path, recursive: true)
                 await self.index.remove(path: path)
+                self.log(path, .delete)
                 completionHandler(nil)
             } catch GatewayError.notFound {
                 await self.index.remove(path: path)
                 completionHandler(nil)
-            } catch { completionHandler(Self.mapError(error)) }
+            } catch { self.log(path, .delete, error: error); completionHandler(Self.mapError(error)) }
         }
+    }
+
+    /// Records the operation for the app's sync-activity view (Mac menu bar).
+    private func log(_ path: String, _ kind: ActivityEvent.Kind, bytes: Int64? = nil, error: Error? = nil) {
+        ActivityLog.append(ActivityEvent(serverID: domain.identifier.rawValue, path: path, kind: kind, bytes: bytes,
+                                         error: error.map { Self.mapError($0).localizedDescription }))
     }
 
     func enumerator(for containerItemIdentifier: NSFileProviderItemIdentifier, request: NSFileProviderRequest) throws -> NSFileProviderEnumerator {

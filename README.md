@@ -1,10 +1,10 @@
 <p align="center">
-  <img src="App/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png" width="128" alt="Unraid Drive">
+  <img src="App/Resources/Assets.xcassets/AppIconDrive.appiconset/icon.png" width="128" alt="Unraid Drive">
 </p>
 
 # Unraid Drive
 
-**Your Unraid shares in the Files app on iPhone, iPad and Apple Vision Pro — at home or on 5G, no VPN.**
+**Your Unraid shares in the Files app on iPhone, iPad and Apple Vision Pro, and in the Finder on the Mac — at home or on 5G, no VPN.**
 
 Unraid Drive is a native SwiftUI app with a **File Provider extension**: your Unraid shares appear in the Files app next to iCloud Drive, so every app that can open the Files picker can read and write files on your NAS. A small read-only dashboard shows the array, shares, the gateway container and notifications.
 
@@ -33,7 +33,8 @@ It talks to [`unraid-gateway`](https://github.com/sidimam/unraid-gateway), a 10 
 - **Secrets in the Keychain**, shared only with the extension. No analytics, no third-party servers.
 - **Optional iCloud sync** (Settings): the server list goes to iCloud Key-Value Storage and the secrets to iCloud Keychain (end-to-end encrypted), so a restored or new iPhone finds its configuration. Off by default; a restore banner appears when iCloud holds a configuration and the device has none.
 - **Connection test** with five checks (reachability, key, shares, write probe, Files location) and **edit server** without losing the Files app location.
-- **Universal**: iPhone, iPad and native visionOS from one codebase.
+- **Universal**: iPhone, iPad, native visionOS and macOS from one codebase.
+- **On the Mac, like the big cloud drives**: every server is a location in the Finder sidebar (`~/Library/CloudStorage/UnraidDrive-<server>`, files download on demand, the Finder shows the sync badges), with a menu bar panel — Home (open the folder, sync status, pause/resume), Activity (every download, upload, rename and deletion recorded by the extension), Notifications (unread Unraid notifications), and a gear menu with Preferences, Offline files (space used locally, free it up), Error list, About, Launch at login and Quit. The location must be enabled once in System Settings › General › Login Items & Extensions › File Providers; the app shows a banner until it is.
 
 ## Project layout
 
@@ -41,10 +42,11 @@ It talks to [`unraid-gateway`](https://github.com/sidimam/unraid-gateway), a 10 
 UnraidDrive/
 ├── project.yml                  XcodeGen spec (run `xcodegen generate`)
 ├── App/                         SwiftUI app (servers, dashboard, browser, walkthrough)
-├── FileProvider/                File Provider extension (items, enumerators, stable ID index)
+├── FileProvider/                File Provider extension (items, enumerators, stable ID index,
+│                                activity log; macOS: sidebar symbol + extension icon)
 ├── Packages/UnraidGatewayKit/   Shared Swift package: gateway client, models, Keychain,
 │                                dashboard query, offline demo gateway (URLProtocol)
-├── Screenshots/                 App Store screenshots (iPhone 6.9", iPad 13", visionOS)
+├── Screenshots/                 App Store screenshots (iPhone 6.9", iPad 13", visionOS, Mac)
 └── wiki/                        Source of the GitHub wiki pages
 ```
 
@@ -66,10 +68,12 @@ xcodebuild -project UnraidDrive.xcodeproj -scheme UnraidDrive \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
 xcodebuild -project UnraidDrive.xcodeproj -scheme UnraidDrive \
   -destination 'generic/platform=visionOS Simulator' build
+xcodebuild -project UnraidDrive.xcodeproj -scheme UnraidDrive \
+  -destination 'platform=macOS' build        # copy "Unraid Drive.app" to ~/Applications to test the Finder location
 cd Packages/UnraidGatewayKit && swift test
 ```
 
-Launch argument `-openServer` opens the first configured server directly (used for screenshot automation).
+Launch arguments (Debug): `-openServer` opens the first configured server; `-seedDemo` adds the demo server; `-rebuildDomains` re-registers every location; on the Mac `-panelPreview` shows the menu bar panel in a window (screenshots).
 
 ## How the File Provider works
 
@@ -80,7 +84,7 @@ Launch argument `-openServer` opens the first configured server directly (used f
 
 ## Roadmap
 
-- [ ] macOS (File Provider for Finder)
+- [x] macOS (File Provider for Finder, menu bar panel)
 - [ ] Thumbnails via a gateway endpoint
 - [ ] Container start/stop from the dashboard (ADMIN key)
 - [ ] Per-share read-only flag surfaced in the UI
