@@ -30,9 +30,13 @@ final class ServersModel: ObservableObject {
     /// does not survive. The two then disagree: stale entries can never be removed and re-enumerated
     /// items look like new local files. Once per installation, remove and re-add each location so
     /// the system starts from a clean database that matches the fresh index.
+    /// Bump when the app icon changes: the Files app shows the icon it saw when the location was
+    /// registered, so the locations are re-registered once for every new icon generation.
+    static let iconGeneration = 2
+
     func rebuildDomainsOncePerInstall() async {
         for s in servers where !s.isDemo {
-            let key = "fp.rebuilt." + s.id
+            let key = "fp.rebuilt.g\(Self.iconGeneration)." + s.id
             guard !AppGroup.defaults.bool(forKey: key) else { continue }
             await FileProviderDomains.rebuild(s)
             AppGroup.defaults.set(true, forKey: key)
@@ -52,7 +56,7 @@ final class ServersModel: ObservableObject {
     /// Explicit rebuild from the UI (discards local changes not yet uploaded).
     func rebuildDomain(_ server: ServerConfig) async {
         await FileProviderDomains.rebuild(server)
-        AppGroup.defaults.set(true, forKey: "fp.rebuilt." + server.id)
+        AppGroup.defaults.set(true, forKey: "fp.rebuilt.g\(Self.iconGeneration)." + server.id)
     }
 
     func reload() { servers = store.all() }

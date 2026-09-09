@@ -62,6 +62,10 @@ Quick check from a terminal: without headers `curl -I https://gw.example.com/hea
 
 With gateway 0.5 or newer and app build 14 or newer, the gateway keeps an index of the shares and the app asks it for the changes since its last sync. Changes made through the app or the web UI are visible immediately; changes made over SMB or by other containers are picked up by the gateway's directory scan (every 5 minutes by default, `INDEX_DIR_SCAN`) and by the full scan (every 6 hours, `INDEX_FULL_SCAN`), or as soon as somebody opens that folder in the app. Opening the folder in Files always shows the current content.
 
+## Files still shows the old icon next to the location
+
+Files keeps the icon it saw when the location was registered. The app re-registers its locations once whenever its icon changes (build 15 and later); to force it, use **Rebuild the Files location** on the server page, or remove and re-add the server.
+
 ## Files says "Sync paused" (or a share you removed from the container is still listed)
 
 iOS pauses a location after a network error, for example while the container restarts during an update, and then shows the cached listing until something wakes it up. Nothing is lost.
