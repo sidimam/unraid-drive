@@ -3,7 +3,7 @@
   icon-light-source.png  (Unraid bars → line → network drive, light background)
 
 Outputs under App/Resources/Assets.xcassets:
-  AppIcon.appiconset/{icon,icon_dark,icon_tinted}.png            default colours
+  AppIconDrive.appiconset/{icon,icon_dark,icon_tinted}.png       default colours (set renamed in build 16 so iOS/Files drop the cached old icon)
   AppIcon-<key>.appiconset/…                                    hue-shifted alternates (bars only)
   AppIconVision.solidimagestack/{Back,Middle,Front}.png          visionOS layers (background / drive / bars)
 Run: python3 scripts/make_icons.py   (needs Pillow)
@@ -99,7 +99,7 @@ def main():
     light = square(load("icon-light-source.png"))
     dark = darken(light)
     for key, (label, hue) in VARIANTS.items():
-        d = os.path.join(OUT, "AppIcon.appiconset" if key == "default" else f"AppIcon-{key}.appiconset")
+        d = os.path.join(OUT, "AppIconDrive.appiconset" if key == "default" else f"AppIcon-{key}.appiconset")
         os.makedirs(d, exist_ok=True)
         l = light if hue is None else recolor(light, hue)
         k = dark if hue is None else recolor(dark, hue)

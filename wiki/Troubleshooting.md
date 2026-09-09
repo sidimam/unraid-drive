@@ -64,7 +64,7 @@ With gateway 0.5 or newer and app build 14 or newer, the gateway keeps an index 
 
 ## Files still shows the old icon next to the location
 
-Files keeps the icon it saw when the location was registered. The app re-registers its locations once whenever its icon changes (build 15 and later); to force it, use **Rebuild the Files location** on the server page, or remove and re-add the server.
+Files draws the icon of the app that owns the location, but iOS caches app icons by bundle id and icon name and that cache survives uninstalling the app. Build 16 ships the icon under a new asset name (`AppIconDrive`), so iOS fetches it again on the next install. If an older build still shows the previous icon, restart the iPhone: the icon cache is rebuilt at boot. Note that Files renders third-party location icons as a blue-tinted glyph (the "tinted" variant of the app icon), not in full colour.
 
 ## Files says "Sync paused" (or a share you removed from the container is still listed)
 
