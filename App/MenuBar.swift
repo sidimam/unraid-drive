@@ -165,6 +165,8 @@ struct MenuBarPanel: View {
     @AppStorage(Appearance.key, store: AppGroup.defaults) private var appearance = Appearance.system.rawValue
     @AppStorage(AppIconColor.storageKey, store: AppGroup.defaults) private var iconColor = "default"
     @State private var notifications: [String: Dashboard.Notifications.Overview.Counts] = [:]
+    @State private var refreshing = false
+    @State private var lastRefresh: Date?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -382,8 +384,22 @@ struct MenuBarPanel: View {
         HStack {
             Button { showMainWindow() } label: { Label("Open Unraid Drive", systemImage: "macwindow") }
             Spacer()
-            Button { Task { await model.signalAllDomains(); await refresh() } } label: { Label("Refresh", systemImage: "arrow.clockwise") }
-                .disabled(model.servers.isEmpty)
+            if refreshing {
+                ProgressView().controlSize(.small)
+                Text("Refreshing…").foregroundStyle(.secondary)
+            } else if let t = lastRefresh {
+                Text("Checked at \(t.formatted(date: .omitted, time: .standard))").foregroundStyle(.secondary)
+            }
+            Button {
+                Task {
+                    refreshing = true
+                    await model.signalAllDomains()           // ask the system to re-enumerate every location
+                    try? await Task.sleep(for: .milliseconds(600))
+                    await refresh(); lastRefresh = Date(); refreshing = false
+                }
+            } label: { Label("Refresh", systemImage: "arrow.clockwise") }
+                .disabled(model.servers.isEmpty || refreshing)
+                .help(Text("Asks the Finder to re-read every location from the gateway and reloads status, activity and notifications."))
         }
         .buttonStyle(.borderless).font(.callout)
     }
