@@ -79,6 +79,7 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
                         if let e = try? await client.stat(d) { updated.append(await ext.makeItem(e)) }
                     }
                 }
+                deleted += await ext.index.takeRetired()
                 if !updated.isEmpty { observer.didUpdate(updated) }
                 if !deleted.isEmpty { observer.didDeleteItems(withIdentifiers: deleted) }
                 if page.truncated, let next = page.next {
@@ -130,6 +131,8 @@ final class WorkingSetEnumerator: NSObject, NSFileProviderEnumerator {
                 if page.reset {
                     if since == 0 {
                         // First sync: nothing to replay, directory listings populate the tree.
+                        let retired = await ext.index.takeRetired()
+                        if !retired.isEmpty { observer.didDeleteItems(withIdentifiers: retired) }
                         observer.finishEnumeratingChanges(upTo: Self.anchor(seq: page.seq), moreComing: false)
                     } else {
                         // The journal no longer covers our anchor: the system re-enumerates everything.
@@ -153,6 +156,7 @@ final class WorkingSetEnumerator: NSObject, NSFileProviderEnumerator {
                         }
                     }
                 }
+                deleted += await ext.index.takeRetired()
                 if !updated.isEmpty { observer.didUpdate(updated) }
                 if !deleted.isEmpty { observer.didDeleteItems(withIdentifiers: deleted) }
                 observer.finishEnumeratingChanges(upTo: Self.anchor(seq: page.seq), moreComing: page.truncated)

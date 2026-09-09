@@ -128,6 +128,7 @@ struct ConnectionTestView: View {
         let shares: [FSEntry]
         do {
             shares = try await client.list("/").entries
+            await model.adoptServerIDsIfNeeded(server, entries: shares)
             if shares.isEmpty { set("shares", .failed(login.user == nil ? String(localized: "No shares mounted in the container") : String(localized: "Your Unraid user has no access to any mounted share"))) ; return }
             let perms = login.shares ?? [:]
             let labels = shares.map { share -> String in

@@ -198,6 +198,7 @@ struct ServerDetailView: View {
         do {
             dashboard = try await client.graphQL(Dashboard.query, as: Dashboard.self)
             error = nil
+            if let root = try? await client.list("/") { await model.adoptServerIDsIfNeeded(server, entries: root.entries) }
         } catch {
             self.error = error.localizedDescription
         }

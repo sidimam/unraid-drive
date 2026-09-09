@@ -39,6 +39,16 @@ final class ServersModel: ObservableObject {
         }
     }
 
+    /// First contact with a gateway that hands out stable ids (0.5+): rebuild the Files location
+    /// once so items switch from local identifiers to server ids without duplicates.
+    func adoptServerIDsIfNeeded(_ server: ServerConfig, entries: [FSEntry]) async {
+        guard !server.isDemo, entries.contains(where: { $0.itemID != nil }) else { return }
+        let key = "fp.serverIDs." + server.id
+        guard !AppGroup.defaults.bool(forKey: key) else { return }
+        await FileProviderDomains.rebuild(server)
+        AppGroup.defaults.set(true, forKey: key)
+    }
+
     /// Explicit rebuild from the UI (discards local changes not yet uploaded).
     func rebuildDomain(_ server: ServerConfig) async {
         await FileProviderDomains.rebuild(server)

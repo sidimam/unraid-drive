@@ -14,7 +14,11 @@ actor ItemIndex {
     private struct Snapshot: Codable {
         var idToPath: [String: String] = [:]
         var listings: [String: [String]] = [:]
+        var retired: [String] = []
     }
+    /// Locally generated identifiers superseded by server ids: reported as deletions so the
+    /// system drops the duplicates it would otherwise keep.
+    private var retired: Set<String> = []
 
     private let fileURL: URL
     private var idToPath: [String: String] = [:]
@@ -31,6 +35,7 @@ actor ItemIndex {
         if let data = try? Data(contentsOf: fileURL), let snap = try? JSONDecoder().decode(Snapshot.self, from: data) {
             idToPath = snap.idToPath
             listings = snap.listings
+            retired = Set(snap.retired)
             for (id, p) in snap.idToPath { pathToID[p] = id }
         }
     }
@@ -50,7 +55,10 @@ actor ItemIndex {
     /// Caches a server id ↔ path pair (and drops a stale mapping for the same path).
     func remember(id: String, path: String) {
         let p = GatewayPath.clean(path)
-        if let old = pathToID[p], old != id { idToPath[old] = nil }
+        if let old = pathToID[p], old != id {
+            idToPath[old] = nil
+            if UUID(uuidString: old) != nil { retired.insert(old) } // a legacy local id
+        }
         if let oldPath = idToPath[id], oldPath != p { pathToID[oldPath] = nil }
         idToPath[id] = p
         pathToID[p] = id
@@ -127,6 +135,13 @@ actor ItemIndex {
         return out
     }
 
+    /// Legacy identifiers to report as deleted (cleared once taken).
+    func takeRetired() -> [NSFileProviderItemIdentifier] {
+        let out = retired.map { NSFileProviderItemIdentifier($0) }
+        if !out.isEmpty { retired.removeAll(); markDirty() }
+        return out
+    }
+
     // MARK: Persistence
 
     private func markDirty() {
@@ -142,7 +157,7 @@ actor ItemIndex {
         saveTask = nil
         guard dirty else { return }
         dirty = false
-        let snap = Snapshot(idToPath: idToPath, listings: listings)
+        let snap = Snapshot(idToPath: idToPath, listings: listings, retired: Array(retired))
         if let data = try? JSONEncoder().encode(snap) {
             try? data.write(to: fileURL, options: .atomic)
         }
