@@ -8,6 +8,7 @@ struct SettingsView: View {
     @State private var busy = false
     @AppStorage(Appearance.key, store: AppGroup.defaults) private var appearance = Appearance.system.rawValue
     @AppStorage(AppLanguage.key, store: AppGroup.defaults) private var language = AppLanguage.system.rawValue
+    @AppStorage(AppIconColor.storageKey, store: AppGroup.defaults) private var iconColor = "default"
 
     var body: some View {
         NavigationStack {
@@ -21,7 +22,11 @@ struct SettingsView: View {
                         ForEach(AppLanguage.allCases) { l in Text(l.label).tag(l.rawValue) }
                     }
                     .onChange(of: language) { _, v in (AppLanguage(rawValue: v) ?? .system).applySystemOverride() }
-                } header: { Text("Appearance") } footer: {
+                    #if os(iOS)
+                    LabeledContent("App icon") { IconColorPicker(selection: $iconColor) }
+                        .onChange(of: iconColor) { _, v in AppIconColor.apply(v) }
+                    #endif
+                } header: { SectionTitle("Appearance") } footer: {
                     Text("System follows the device settings. A forced language applies to this app only; a few system-provided texts follow at the next launch.")
                 }
                 Section {
@@ -34,7 +39,7 @@ struct SettingsView: View {
                         Button("Sync now") { Task { busy = true; _ = await cloud.pull(); cloud.push(); busy = false } }.disabled(busy)
                     }
                     if let e = cloud.lastError { Label(e, systemImage: "exclamationmark.triangle").foregroundStyle(.red) }
-                } header: { Text("iCloud") } footer: {
+                } header: { SectionTitle("iCloud") } footer: {
                     Text("When on, the server list (names, URLs, connection mode) is stored in your iCloud account and the API keys and Cloudflare tokens in iCloud Keychain, end-to-end encrypted. After restoring or replacing your iPhone, the app finds its configuration again. When off, everything stays on this device only. The demo server is never synced.")
                 }
                 if !cloud.enabled && cloud.remoteServerCount > 0 {
@@ -46,7 +51,7 @@ struct SettingsView: View {
                         Text("A configuration saved by this app is present in your iCloud account. Restoring turns sync on.")
                     }
                 }
-                Section("About") {
+                Section(header: SectionTitle("About")) {
                     LabeledContent("Version", value: "\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""))")
                     Link(destination: URL(string: "https://github.com/sidimam/unraid-drive/wiki")!) { Label("Setup guide (wiki)", systemImage: "book") }
                     Link(destination: URL(string: "https://github.com/sidimam/unraid-drive/issues")!) { Label("Report a problem", systemImage: "ladybug") }

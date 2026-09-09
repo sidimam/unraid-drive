@@ -68,7 +68,7 @@ struct ServerDetailView: View {
     }
 
     @ViewBuilder private func systemSection(_ d: Dashboard) -> some View {
-        Section("System") {
+        Section(header: SectionTitle("System")) {
             LabeledContent("Hostname", value: d.info?.os?.hostname ?? "—")
             LabeledContent("Unraid", value: d.info?.os?.release ?? "—")
             if let cpu = d.info?.cpu { LabeledContent("CPU", value: cpuLine(cpu)) }
@@ -99,7 +99,7 @@ struct ServerDetailView: View {
     }
 
     @ViewBuilder private func arraySection(_ d: Dashboard) -> some View {
-        Section("Array") {
+        Section(header: SectionTitle("Array")) {
             LabeledContent("State") {
                 Text(d.array?.state ?? "—").foregroundStyle(d.array?.state == "STARTED" ? .green : .orange)
             }
@@ -117,7 +117,7 @@ struct ServerDetailView: View {
     }
 
     @ViewBuilder private func sharesSection(_ d: Dashboard) -> some View {
-        Section("Shares") {
+        Section(header: SectionTitle("Shares")) {
             ForEach((d.shares ?? []).filter { $0.used != nil }, id: \.name) { s in
                 shareRow(s)
             }

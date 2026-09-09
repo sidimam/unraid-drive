@@ -32,7 +32,7 @@ struct ConnectionTestView: View {
                     LabeledContent("URL", value: server.url.absoluteString).font(.callout)
                     LabeledContent("Connection", value: label(server.accessMode))
                 }
-                Section("Checks") {
+                Section(header: SectionTitle("Checks")) {
                     ForEach(steps) { s in
                         HStack(alignment: .top, spacing: 12) {
                             icon(s.state).frame(width: 22)
@@ -44,7 +44,7 @@ struct ConnectionTestView: View {
                     }
                 }
                 if let hint = hint {
-                    Section("What to do") { Text(hint).font(.callout) }
+                    Section(header: SectionTitle("What to do")) { Text(hint).font(.callout) }
                 }
             }
             .navigationTitle("Test connection")

@@ -64,7 +64,9 @@ iOS pauses a location after a network error, for example while the container res
 
 1. Open the Unraid Drive app: since build 7 it nudges every location whenever it comes to the foreground, and the server page has **Refresh the Files app**. **Test connection** does the same in its last check. Since build 8 the extension also re-reads the list of shares on every sync pass, so a share you unmapped from the container disappears from Files (together with anything cached below it) instead of producing endless "Error" retries. Since build 10 the app also rebuilds each location once per installation: after a reinstall (or a restore from iCloud) iOS keeps the old cached tree for the same server while the extension's own index is gone, so the two disagree and every share shows "Error ↑" with the location paused. The rebuild removes the location and registers it again. You can trigger it yourself from the server page with **Rebuild the Files location** (files created in Files but never uploaded are lost).
 
-"Sync paused" at the bottom of a folder means that some item in this location cannot be uploaded; fix or delete that item (or rebuild the location) and the status goes back to "Synced".
+"Sync paused" at the bottom of a folder means that some item in this location cannot be uploaded, or that the gateway was unreachable the last time iOS tried; fix or delete that item (or rebuild the location) and the status goes back to "Synced".
+
+A gateway that restarts every night (Unraid's *Appdata Backup* plugin stops and starts containers, *CA Auto Update* recreates them) makes the location pause each time iOS happens to sync during the restart. Since build 13 the app refreshes its locations in the background about once an hour, so they recover on their own. You can also exclude `unraid-gateway` from Appdata Backup: it has no appdata to back up.
 2. In Files, pull down in the Unraid Drive folder.
 3. Still paused? Toggle Airplane mode (or Wi-Fi) off and on: iOS re-checks paused locations when the network changes.
 4. Last resort: in the app remove the server and add it again. The Files location is recreated from scratch.

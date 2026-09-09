@@ -87,3 +87,73 @@ struct AppLocaleModifier: ViewModifier {
             .environment(\.layoutDirection, rtl ? .rightToLeft : .leftToRight)
     }
 }
+
+/// Alternate app icons (same artwork, different bar colour). "default" is the Unraid orange → red.
+struct AppIconColor: Identifiable, Equatable {
+    let key: String
+    let label: LocalizedStringKey
+    let tint: Color
+    var id: String { key }
+    static let storageKey = "iconColor"
+
+    static let all: [AppIconColor] = [
+        .init(key: "default", label: "Unraid", tint: Color(red: 1.00, green: 0.55, blue: 0.18)),
+        .init(key: "rosso", label: "Red", tint: Color(red: 0.86, green: 0.22, blue: 0.22)),
+        .init(key: "blu", label: "Blue", tint: Color(red: 0.24, green: 0.45, blue: 0.90)),
+        .init(key: "teal", label: "Teal", tint: Color(red: 0.10, green: 0.65, blue: 0.65)),
+        .init(key: "viola", label: "Purple", tint: Color(red: 0.52, green: 0.34, blue: 0.90)),
+        .init(key: "grafite", label: "Graphite", tint: Color(red: 0.55, green: 0.58, blue: 0.62)),
+    ]
+
+    /// Switches the Home Screen icon (iOS/iPadOS; visionOS keeps its layered icon).
+    static func apply(_ key: String) {
+        #if os(iOS)
+        DispatchQueue.main.async {
+            guard UIApplication.shared.supportsAlternateIcons else { return }
+            let name = key == "default" ? nil : "AppIcon-\(key)"
+            if UIApplication.shared.alternateIconName != name {
+                UIApplication.shared.setAlternateIconName(name)
+            }
+        }
+        #endif
+    }
+}
+
+/// Row of coloured dots to pick the icon colour.
+struct IconColorPicker: View {
+    @Binding var selection: String
+    var body: some View {
+        HStack(spacing: 12) {
+            ForEach(AppIconColor.all) { c in
+                Button { selection = c.key } label: {
+                    ZStack {
+                        Circle().fill(c.tint).frame(width: 30, height: 30)
+                        if selection == c.key { Image(systemName: "checkmark").font(.system(size: 13, weight: .bold)).foregroundStyle(.white) }
+                    }
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text(c.label))
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(.vertical, 2)
+    }
+}
+
+/// Section header in the Unraid colour instead of the default grey.
+struct SectionTitle: View {
+    let key: LocalizedStringKey
+    init(_ key: LocalizedStringKey) { self.key = key }
+    var body: some View { Text(key).foregroundStyle(Color.accentColor) }
+}
+
+/// Navigation titles in the Unraid colour (UIKit-drawn, so styled through the appearance proxy).
+enum NavigationBarStyle {
+    static func apply() {
+        #if os(iOS)
+        let orange = UIColor(red: 1.0, green: 0.55, blue: 0.18, alpha: 1)
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: orange]
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: orange]
+        #endif
+    }
+}

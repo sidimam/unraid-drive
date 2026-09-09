@@ -46,7 +46,7 @@ struct AddServerView: View {
                             .font(.callout)
                     }
                 }
-                Section("Server") {
+                Section(header: SectionTitle("Server")) {
                     TextField("Name", text: $name).textInputAutocapitalization(.words)
                         .focused($focusedField, equals: .name).submitLabel(.next)
                         .onSubmit { focusedField = .url }
@@ -58,7 +58,7 @@ struct AddServerView: View {
                 Section {
                     SecretField(title: "Unraid API key", text: $apiKey)
                         .focused($focusedField, equals: .apiKey)
-                } header: { Text("Authentication") } footer: {
+                } header: { SectionTitle("Authentication") } footer: {
                     Text("Create the key in Unraid under Settings › Management Access › API Keys. It is stored in this device's Keychain and sent only to your gateway.")
                 }
                 Section {
@@ -67,7 +67,7 @@ struct AddServerView: View {
                         .focused($focusedField, equals: .user).submitLabel(.next).onSubmit { focusedField = .pass }
                     SecretField(title: "Unraid password", text: $unraidPassword)
                         .focused($focusedField, equals: .pass)
-                } header: { Text("Unraid user (optional)") } footer: {
+                } header: { SectionTitle("Unraid user (optional)") } footer: {
                     Text("With a user, the gateway applies that user's share permissions exactly as over SMB: only the shares the user may read appear, and read-only shares stay read-only. Leave empty to use the container mounts as they are. Some gateways require it.")
                 }
                 Section {
@@ -81,7 +81,7 @@ struct AddServerView: View {
                         SecretField(title: "CF-Access-Client-Secret", text: $cfClientSecret, monospaced: true)
                             .focused($focusedField, equals: .cfSecret)
                     }
-                } header: { Text("Connection") } footer: {
+                } header: { SectionTitle("Connection") } footer: {
                     if mode == .cloudflare {
                         Text("For gateways published through a Cloudflare Tunnel and protected by Zero Trust. Create a Service Token in Cloudflare Zero Trust › Access controls › Service credentials and add a policy with action Service Auth to the application. You can paste the lines exactly as Cloudflare shows them, labels included. The app sends the token with every request, like Unraid Deck.")
                     } else {
@@ -92,7 +92,7 @@ struct AddServerView: View {
                     Section { Label(error, systemImage: "exclamationmark.triangle").foregroundStyle(.red) }
                 }
                 if let result {
-                    Section("Connected") {
+                    Section(header: SectionTitle("Connected")) {
                         LabeledContent("Identity", value: result.identity.name ?? "api key")
                         LabeledContent("Roles", value: (result.identity.roles ?? []).joined(separator: ", "))
                         if let u = result.user { LabeledContent("Unraid user", value: u) }
