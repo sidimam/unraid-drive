@@ -49,7 +49,7 @@ Repeat 5.2 for every Unraid server you have. Each one becomes its own location i
 
 The gear icon on the server list opens **Settings**. The *Appearance* section has a **System / Light / Dark** theme switch and a **Language** picker. The app ships in English, Italian, Spanish, French, German, Simplified Chinese and Arabic; with *System* (the default) it follows the language of your iPhone, exactly like the installer does. Forcing a language changes the interface immediately; a few texts provided by iOS itself (error messages from the network stack, formatters) switch at the next launch.
 
-The same section has the **App icon** colour dots (Unraid orange, red, blue, teal, purple, graphite). The icon is a Files-style folder holding the three Unraid bars, on purpose different from the unraid-gateway container icon, and it follows the iOS light, dark and tinted Home Screen styles. Interface accents, headers and titles use the Unraid orange from unraid.net.
+The same section has the **App icon** colour dots (Unraid orange, red, blue, teal, purple, graphite). The icon shows the three Unraid bars feeding a network drive, on purpose different from the unraid-gateway container icon (bars, arrow and gateway arch), and it follows the iOS light, dark and tinted Home Screen styles. Interface accents, headers and titles use the Unraid orange from unraid.net.
 
 ## 5.6 Keep the configuration after a restore (iCloud sync)
 

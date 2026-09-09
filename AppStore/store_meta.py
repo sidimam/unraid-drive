@@ -21,6 +21,8 @@ FUNZIONI
 • Nessun account, nessuna analisi, nessun server di terzi: l’app parla solo con il tuo gateway.
 • Look Unraid: accenti arancione Unraid, icona in sei colori con varianti chiara, scura e tinta.
 • Aggiornamento in background: le posizioni in File restano sincronizzate anche dopo un riavvio del gateway.
+• Motore di sincronizzazione come i grandi cloud (con unraid-gateway 0.5+): id stabili e journal delle modifiche, così rinomine, spostamenti ed eliminazioni fatti ovunque sul NAS arrivano nell’app File in pochi minuti senza scansioni.
+• Azioni rapide dalla Home: Apri l’app File, Test di connessione, Aggiungi server.
 
 REQUISITI
 Un server Unraid (7.2 o successivo) con il container gratuito unraid-gateway e un modo per raggiungerlo in HTTPS da fuori casa (consigliato Cloudflare Tunnel). Guida passo passo completa nella wiki indicata sotto.
@@ -47,6 +49,8 @@ FUNCIONES
 • Sin cuentas, sin analíticas, sin servidores de terceros: la app solo habla con tu gateway.
 • Estilo Unraid: acentos en naranja Unraid, icono en seis colores con variantes clara, oscura y tintada.
 • Actualización en segundo plano: las ubicaciones en Archivos siguen sincronizadas tras un reinicio del gateway.
+• Motor de sincronización como los grandes servicios en la nube (con unraid-gateway 0.5+): ids estables y diario de cambios, así los renombrados, movimientos y borrados hechos en el NAS llegan a Archivos en minutos sin escanear los recursos.
+• Acciones rápidas en la pantalla de inicio: Abrir Archivos, Probar conexión, Añadir servidor.
 
 REQUISITOS
 Un servidor Unraid (7.2 o posterior) con el contenedor gratuito unraid-gateway y una forma de alcanzarlo por HTTPS desde fuera de casa (se recomienda Cloudflare Tunnel). Guía paso a paso completa en la wiki enlazada abajo.
@@ -73,6 +77,8 @@ FONCTIONS
 • Aucun compte, aucune analyse, aucun serveur tiers : l’app ne parle qu’à votre passerelle.
 • Style Unraid : accents orange Unraid, icône en six couleurs avec variantes claire, sombre et teintée.
 • Actualisation en arrière-plan : les emplacements Fichiers restent synchronisés même après un redémarrage de la passerelle.
+• Moteur de synchronisation à la manière des grands clouds (avec unraid-gateway 0.5+) : identifiants stables et journal des changements, les renommages, déplacements et suppressions faits sur le NAS arrivent dans Fichiers en quelques minutes sans parcourir les partages.
+• Actions rapides sur l’écran d’accueil : Ouvrir Fichiers, Tester la connexion, Ajouter un serveur.
 
 PRÉREQUIS
 Un serveur Unraid (7.2 ou plus récent) avec le conteneur gratuit unraid-gateway et un moyen de l’atteindre en HTTPS depuis l’extérieur (Cloudflare Tunnel recommandé). Guide complet pas à pas dans le wiki ci-dessous.
@@ -99,6 +105,8 @@ FUNKTIONEN
 • Keine Konten, keine Analysen, keine Drittserver: Die App spricht nur mit deinem Gateway.
 • Unraid-Look: Akzente in Unraid-Orange, App-Symbol in sechs Farben mit heller, dunkler und getönter Variante.
 • Hintergrundaktualisierung: Die Orte in Dateien bleiben auch nach einem Neustart des Gateways synchron.
+• Synchronisierung wie bei den großen Cloud-Diensten (mit unraid-gateway 0.5+): stabile Objekt-IDs und ein Änderungsjournal, sodass Umbenennungen, Verschiebungen und Löschungen auf dem NAS binnen Minuten in der Dateien-App erscheinen, ohne die Freigaben zu durchsuchen.
+• Schnellaktionen auf dem Home-Bildschirm: Dateien öffnen, Verbindung testen, Server hinzufügen.
 
 VORAUSSETZUNGEN
 Ein Unraid-Server (7.2 oder neuer) mit dem kostenlosen Container unraid-gateway und ein Weg, ihn von außen per HTTPS zu erreichen (Cloudflare Tunnel empfohlen). Vollständige Schritt-für-Schritt-Anleitung im unten verlinkten Wiki.
@@ -125,6 +133,8 @@ Unraid Drive ist ein unabhängiges Projekt und nicht mit Lime Technology / Unrai
 • 无账户、无分析、无第三方服务器：应用只与你的网关通信。
 • Unraid 风格：Unraid 橙色强调色，六种颜色的应用图标，支持浅色、深色和着色变体。
 • 后台刷新：网关重启后，“文件”中的位置仍保持同步。
+• 与主流云盘一致的同步引擎（配合 unraid-gateway 0.5+）：稳定的项目 ID 和变更日志，在 NAS 上任意位置进行的重命名、移动和删除都会在几分钟内出现在“文件”应用中，无需扫描共享。
+• 主屏幕快捷操作：打开“文件”、测试连接、添加服务器。
 
 要求
 一台运行免费容器 unraid-gateway 的 Unraid 服务器（7.2 或更新版本），以及一种可从家庭网络外通过 HTTPS 访问它的方式（推荐 Cloudflare Tunnel）。完整的分步指南见下方 wiki 链接。
@@ -151,6 +161,8 @@ Unraid Drive 是独立项目，与 Lime Technology / Unraid 无关。"""),
 • لا حسابات ولا تحليلات ولا خوادم خارجية: يتواصل التطبيق مع بوابتك فقط.
 • مظهر Unraid: لمسات برتقالية بلون Unraid، وأيقونة بستة ألوان مع متغيرات فاتحة وداكنة وملوّنة.
 • تحديث في الخلفية: تبقى المواقع في تطبيق الملفات متزامنة حتى بعد إعادة تشغيل البوابة.
+• محرك مزامنة مثل خدمات التخزين السحابي الكبيرة (مع unraid-gateway 0.5+): معرّفات ثابتة وسجل تغييرات، فتصل عمليات إعادة التسمية والنقل والحذف على NAS إلى تطبيق الملفات خلال دقائق دون فحص المجلدات.
+• إجراءات سريعة من الشاشة الرئيسية: فتح تطبيق الملفات، اختبار الاتصال، إضافة خادم.
 
 المتطلبات
 خادم Unraid (‏7.2 أو أحدث) يشغّل الحاوية المجانية unraid-gateway، وطريقة للوصول إليه عبر HTTPS من خارج المنزل (يُنصح بـ Cloudflare Tunnel). دليل كامل خطوة بخطوة في الويكي المرتبط أدناه.

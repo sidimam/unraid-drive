@@ -1,159 +1,120 @@
 #!/usr/bin/env python3
-"""Generates the Unraid Drive app icons: a network drive whose front vents are the three Unraid bars.
+"""Builds the Unraid Drive icon set from the author's artwork in Design/:
+  icon-light-source.png  (Unraid bars → line → network drive, light background)
 
-Outputs, under App/Resources/Assets.xcassets:
-  AppIcon.appiconset/{icon,icon_dark,icon_tinted}.png            default (Unraid orange → red)
-  AppIcon-<key>.appiconset/{icon,icon_dark,icon_tinted}.png      alternate colours
-  AppIconVision.solidimagestack/{Back,Middle,Front}.png          visionOS layers (default colour)
+Outputs under App/Resources/Assets.xcassets:
+  AppIcon.appiconset/{icon,icon_dark,icon_tinted}.png            default colours
+  AppIcon-<key>.appiconset/…                                    hue-shifted alternates (bars only)
+  AppIconVision.solidimagestack/{Back,Middle,Front}.png          visionOS layers (background / drive / bars)
 Run: python3 scripts/make_icons.py   (needs Pillow)
 """
 import json, os
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageChops
 
-S = 1024          # output size
-SS = 4            # supersampling
-N = S * SS
-OUT = os.path.join(os.path.dirname(__file__), "..", "App", "Resources", "Assets.xcassets")
+HERE = os.path.dirname(__file__)
+DESIGN = os.path.join(HERE, "..", "Design")
+OUT = os.path.join(HERE, "..", "App", "Resources", "Assets.xcassets")
+S = 1024
 
-# key: (label, bar gradient top, bar gradient bottom)
+# key: (label, hue for the bars on PIL's 0-255 hue scale; None = original orange, "grey" = desaturate)
 VARIANTS = {
-    "default":  ("Unraid",     (0xFF, 0x8C, 0x2F), (0xE2, 0x28, 0x28)),
-    "rosso":    ("Rosso",      (0xF0, 0x50, 0x50), (0xA8, 0x1C, 0x1C)),
-    "blu":      ("Blu",        (0x4F, 0x8E, 0xFF), (0x1B, 0x4D, 0xB8)),
-    "teal":     ("Verde acqua",(0x2F, 0xC4, 0xC4), (0x0B, 0x7C, 0x7C)),
-    "viola":    ("Viola",      (0xA0, 0x74, 0xFF), (0x5A, 0x2F, 0xB8)),
-    "grafite":  ("Grafite",    (0xD0, 0xD4, 0xD8), (0x7B, 0x83, 0x8B)),
+    "default": ("Unraid", None),
+    "rosso":   ("Rosso", 253),
+    "blu":     ("Blu", 152),
+    "teal":    ("Verde acqua", 122),
+    "viola":   ("Viola", 186),
+    "grafite": ("Grafite", "grey"),
 }
 
-def lerp(a, b, t): return tuple(int(a[i] + (b[i] - a[i]) * t) for i in range(3))
+def load(name):
+    return Image.open(os.path.join(DESIGN, name)).convert("RGB")
 
-def vgradient(size, top, bottom):
-    img = Image.new("RGBA", size)
-    px = img.load()
-    for y in range(size[1]):
-        c = lerp(top, bottom, y / max(size[1] - 1, 1))
-        for x in range(size[0]): px[x, y] = c + (255,)
-    return img
+def square(im, crop=0.0):
+    w, h = im.size
+    side = min(w, h); l = (w - side) // 2; t = (h - side) // 2
+    im = im.crop((l, t, l + side, t + side))
+    if crop:
+        c = int(side * crop)
+        im = im.crop((c, c, side - c, side - c))
+    return im.resize((S, S), Image.LANCZOS)
 
-def rounded_mask(size, radius):
-    m = Image.new("L", size, 0)
-    ImageDraw.Draw(m).rounded_rectangle([0, 0, size[0] - 1, size[1] - 1], radius=radius, fill=255)
-    return m
+def bars_mask(rgb):
+    """Soft mask of the orange/yellow artwork: saturated warm pixels."""
+    h, s, v = rgb.convert("HSV").split()
+    warm = h.point(lambda x: 255 if (x < 50 or x > 241) else 0)          # hue 0-70° or >340°
+    sat = s.point(lambda x: 0 if x < 64 else min(255, (x - 64) * 5))      # ramps in above 25 % saturation
+    bright = v.point(lambda x: 255 if x > 64 else 0)
+    return ImageChops.multiply(ImageChops.multiply(warm, sat), bright)
 
-def background(dark: bool):
-    top, bottom = ((0x2B, 0x2A, 0x29), (0x15, 0x14, 0x14)) if not dark else ((0x1A, 0x1A, 0x1A), (0x05, 0x05, 0x05))
-    return vgradient((N, N), top, bottom)
-
-STYLE = "fused"  # "fused": bars rise through the drive body; "silhouette": one merged body outline with the bars inside; "vents": small front vents
-
-def drive_layer(color=(255, 255, 255, 255), scale=1.0):
-    """Network drive outline: sloped top, front face with a LED, network lead and plug below.
-    Returns the layer and the drive geometry used by bars_layer."""
-    L = Image.new("RGBA", (N, N), (0, 0, 0, 0))
-    d = ImageDraw.Draw(L)
-    k = scale; cx = N / 2
-    stroke = int(0.040 * N * k)
-    def P(x, y): return (cx + (x - 0.5) * N * k, N / 2 + (y - 0.5) * N * k)
-    fx0, fy0 = P(0.21, 0.49); fx1, fy1 = P(0.79, 0.66)
-    if STYLE == "silhouette":
-        body = [P(0.31, 0.17), P(0.69, 0.17), P(0.79, 0.49), P(0.79, 0.66), P(0.21, 0.66), P(0.21, 0.49)]
-        d.polygon(body, outline=color, width=stroke)
-        d.line([P(0.21, 0.49), P(0.79, 0.49)], fill=color, width=int(stroke * 0.55))
+def recolor(rgb, target):
+    h, s, v = rgb.convert("HSV").split()
+    if target == "grey":
+        s2 = s.point(lambda x: x // 10); h2 = h
+        v = v.point(lambda x: int(x * 0.62))          # graphite: mid grey, not white
     else:
-        top = [P(0.31, 0.17), P(0.69, 0.17), P(0.79, 0.49), P(0.21, 0.49)]
-        d.polygon(top, outline=color, width=stroke)
-        d.rounded_rectangle([fx0, fy0, fx1, fy1], radius=int(0.02 * N * k), outline=color, width=stroke)
-    lx, ly = P(0.30, 0.575); r = 0.026 * N * k
-    d.ellipse([lx - r, ly - r, lx + r, ly + r], outline=color, width=int(stroke * 0.8))
-    sx, sy0 = P(0.50, 0.66); _, sy1 = P(0.50, 0.77)
-    d.line([(sx, sy0), (sx, sy1)], fill=color, width=stroke)
-    lx0, ly2 = P(0.16, 0.82); lx1, _ = P(0.84, 0.82)
-    d.line([(lx0, ly2), (lx1, ly2)], fill=color, width=stroke)
-    for x in (lx0, lx1):
-        d.ellipse([x - stroke / 2, ly2 - stroke / 2, x + stroke / 2, ly2 + stroke / 2], fill=color)
-    px0, py0 = P(0.42, 0.765); px1, py1 = P(0.58, 0.875)
-    d.rounded_rectangle([px0, py0, px1, py1], radius=int(0.015 * N * k), fill=(0, 0, 0, 0), outline=color, width=stroke)
-    geom = dict(P=P, k=k, face=(fx0, fy0, fx1 - fx0, fy1 - fy0), stroke=stroke)
-    return L, geom
+        h2 = Image.new("L", h.size, int(target)); s2 = s
+    new = Image.merge("HSV", (h2, s2, v)).convert("RGB")
+    return Image.composite(new, rgb, bars_mask(rgb))
 
-def bars_layer(top, bottom, geom, mono=False):
-    """The Unraid mark (three bars, middle one tallest) fused with the drive."""
-    L = Image.new("RGBA", (N, N), (0, 0, 0, 0))
-    P, k = geom["P"], geom["k"]
-    fx0, fy0, fw, fh = geom["face"]
-    if STYLE in ("fused", "silhouette"):
-        # Bars rise out of the drive body through the sloped top, like the Unraid logo
-        # standing on the NAS; they end above the LED line inside the front face.
-        cx = N / 2
-        bar_w = 0.075 * N * k; gap = 0.045 * N * k
-        base_y = fy0 + fh * 0.72
-        heights = (0.30, 0.44, 0.22)           # fraction of N*k, Unraid-like proportions
-        xs = (cx - bar_w * 1.5 - gap, cx - bar_w / 2, cx + bar_w / 2 + gap)
-        for bx, hh in zip(xs, heights):
-            bh = hh * N * k
-            g = vgradient((int(bar_w), int(bh)), top, bottom) if not mono else Image.new("RGBA", (int(bar_w), int(bh)), (235, 235, 235, 255))
-            m = rounded_mask((int(bar_w), int(bh)), int(bar_w / 2))
-            L.paste(g, (int(bx), int(base_y - bh)), m)
-        if STYLE == "silhouette":
-            # keep the bars inside the body: clip with the body polygon shrunk by the stroke
-            pts = [P(0.31, 0.17), P(0.69, 0.17), P(0.79, 0.49), P(0.79, 0.66), P(0.21, 0.66), P(0.21, 0.49)]
-            cx0 = sum(x for x, _ in pts) / len(pts); cy0 = sum(y for _, y in pts) / len(pts)
-            f = 1 - (geom["stroke"] * 1.1) / (0.29 * N * k)
-            inner = [(cx0 + (x - cx0) * f, cy0 + (y - cy0) * f) for x, y in pts]
-            clip = Image.new("L", (N, N), 0)
-            ImageDraw.Draw(clip).polygon(inner, fill=255)
-            L.putalpha(Image.composite(L.split()[3], Image.new("L", (N, N), 0), clip))
-    else:
-        cy = fy0 + fh / 2
-        bar_w = 0.045 * N * k; gap = 0.028 * N * k
-        cx = fx0 + fw * 0.68
-        heights = (0.56, 0.74, 0.44)
-        xs = (cx - bar_w * 1.5 - gap, cx - bar_w / 2, cx + bar_w / 2 + gap)
-        for bx, fhh in zip(xs, heights):
-            bh = fhh * fh
-            g = vgradient((int(bar_w), int(bh)), top, bottom) if not mono else Image.new("RGBA", (int(bar_w), int(bh)), (235, 235, 235, 255))
-            m = rounded_mask((int(bar_w), int(bh)), int(bar_w / 2))
-            L.paste(g, (int(bx), int(cy - bh / 2)), m)
-    if not mono:
-        glow = L.filter(ImageFilter.GaussianBlur(int(0.012 * N)))
-        base = Image.new("RGBA", (N, N), (0, 0, 0, 0)); base.alpha_composite(glow); base.alpha_composite(L)
-        return base
-    return L
+def darken(light):
+    """Dark-appearance icon from the light artwork: dark background, the drive turned light grey
+    (its shading inverted), bars untouched."""
+    art = artwork_mask(light); bars = bars_mask(light)
+    drive = ImageChops.subtract(art, bars)
+    h, s, v = light.convert("HSV").split()
+    v_inv = v.point(lambda x: int(255 - (255 - x) * 0.0 - x * 0.0 + (255 - x) * 0.65 + 60) if False else min(255, 255 - x + 95))
+    light_drive = Image.merge("HSV", (h, s.point(lambda x: x // 3), v_inv)).convert("RGB")
+    with_drive = Image.composite(light_drive, light, drive)
+    w, hgt = light.size
+    bg = Image.new("RGB", (w, hgt)); px = bg.load()
+    top, bottom = (0x30, 0x35, 0x3D), (0x19, 0x1C, 0x22)
+    for y in range(hgt):
+        t = y / (hgt - 1); c = tuple(int(top[i] + (bottom[i] - top[i]) * t) for i in range(3))
+        for x in range(w): px[x, y] = c
+    return Image.composite(with_drive, bg, art)
 
-def compose(layers, size=S):
-    img = Image.new("RGBA", (N, N), (0, 0, 0, 0))
-    for l in layers: img.alpha_composite(l)
-    return img.resize((size, size), Image.LANCZOS)
+def artwork_mask(rgb):
+    """Everything that is not background (soft edge)."""
+    bg = rgb.crop((2, 2, 10, 10)).resize((1, 1), Image.BOX).getpixel((0, 0))
+    diff = ImageChops.difference(rgb, Image.new("RGB", rgb.size, bg)).convert("L")
+    return diff.point(lambda x: 0 if x < 14 else min(255, (x - 14) * 6))
+
+def tinted(rgb_light):
+    """Grayscale artwork on a transparent background (iOS applies the tint)."""
+    grey = rgb_light.convert("L").point(lambda x: int(255 - (255 - x) * 0.9))
+    out = Image.merge("RGBA", (grey, grey, grey, artwork_mask(rgb_light)))
+    return out
+
+def vision_layers(light):
+    art = artwork_mask(light); bars = bars_mask(light)
+    drive = ImageChops.subtract(art, bars)
+    r, g, b = light.split()
+    bg = light.crop((2, 2, 10, 10)).resize((1, 1), Image.BOX).getpixel((0, 0))
+    return Image.new("RGB", light.size, bg), Image.merge("RGBA", (r, g, b, drive)), Image.merge("RGBA", (r, g, b, bars))
 
 def write_json(path, obj):
     with open(path, "w") as f: json.dump(obj, f, indent=2); f.write("\n")
 
-def appiconset(name, top, bottom):
-    d = os.path.join(OUT, f"{name}.appiconset"); os.makedirs(d, exist_ok=True)
-    drive, face = drive_layer()
-    compose([background(False), bars_layer(top, bottom, face), drive]).convert("RGB").save(os.path.join(d, "icon.png"))
-    compose([background(True), bars_layer(top, bottom, face), drive]).convert("RGB").save(os.path.join(d, "icon_dark.png"))
-    # tinted: grayscale artwork on transparent background, the system supplies the colour
-    tinted = compose([bars_layer(top, bottom, face, mono=True), drive_layer(color=(200, 200, 200, 255))[0]])
-    tinted = Image.merge("RGBA", (*[tinted.convert("L")] * 3, tinted.split()[3]))
-    tinted.save(os.path.join(d, "icon_tinted.png"))
-    write_json(os.path.join(d, "Contents.json"), {"images": [
-        {"filename": "icon.png", "idiom": "universal", "platform": "ios", "size": "1024x1024"},
-        {"appearances": [{"appearance": "luminosity", "value": "dark"}], "filename": "icon_dark.png", "idiom": "universal", "platform": "ios", "size": "1024x1024"},
-        {"appearances": [{"appearance": "luminosity", "value": "tinted"}], "filename": "icon_tinted.png", "idiom": "universal", "platform": "ios", "size": "1024x1024"},
-    ], "info": {"author": "xcode", "version": 1}})
-
-def vision_layers(top, bottom):
+def main():
+    light = square(load("icon-light-source.png"))
+    dark = darken(light)
+    for key, (label, hue) in VARIANTS.items():
+        d = os.path.join(OUT, "AppIcon.appiconset" if key == "default" else f"AppIcon-{key}.appiconset")
+        os.makedirs(d, exist_ok=True)
+        l = light if hue is None else recolor(light, hue)
+        k = dark if hue is None else recolor(dark, hue)
+        l.save(os.path.join(d, "icon.png")); k.save(os.path.join(d, "icon_dark.png")); tinted(l).save(os.path.join(d, "icon_tinted.png"))
+        write_json(os.path.join(d, "Contents.json"), {"images": [
+            {"filename": "icon.png", "idiom": "universal", "platform": "ios", "size": "1024x1024"},
+            {"appearances": [{"appearance": "luminosity", "value": "dark"}], "filename": "icon_dark.png", "idiom": "universal", "platform": "ios", "size": "1024x1024"},
+            {"appearances": [{"appearance": "luminosity", "value": "tinted"}], "filename": "icon_tinted.png", "idiom": "universal", "platform": "ios", "size": "1024x1024"},
+        ], "info": {"author": "xcode", "version": 1}})
     base = os.path.join(OUT, "AppIconVision.solidimagestack")
-    drive, face = drive_layer(scale=0.78)
-    compose([background(False)]).convert("RGB").save(os.path.join(base, "Back.solidimagestacklayer", "Content.imageset", "Back.png"))
-    compose([bars_layer(top, bottom, face)]).save(os.path.join(base, "Middle.solidimagestacklayer", "Content.imageset", "Middle.png"))
-    compose([drive]).save(os.path.join(base, "Front.solidimagestacklayer", "Content.imageset", "Front.png"))
+    back, drive, bars = vision_layers(light)
+    back.save(os.path.join(base, "Back.solidimagestacklayer", "Content.imageset", "Back.png"))
+    drive.save(os.path.join(base, "Middle.solidimagestacklayer", "Content.imageset", "Middle.png"))
+    bars.save(os.path.join(base, "Front.solidimagestacklayer", "Content.imageset", "Front.png"))
+    print("icons written to", os.path.abspath(OUT))
 
 if __name__ == "__main__":
-    for key, (label, top, bottom) in VARIANTS.items():
-        appiconset("AppIcon" if key == "default" else f"AppIcon-{key}", top, bottom)
-    vision_layers(*VARIANTS["default"][1:])
-    # a copy for README / App Store / kit
-    os.makedirs(os.path.join(OUT, "..", "..", "..", "Screenshots"), exist_ok=True)
-    print("icons written to", os.path.abspath(OUT))
+    main()
