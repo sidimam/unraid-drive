@@ -6,6 +6,8 @@ META = {
  keywords="unraid,nas,file,file provider,share,smb,cloudflare,docker,server,server casa",
  description="""Unraid Drive porta le share del tuo server Unraid nell’app File, accanto a iCloud Drive: su iPhone, iPad e Apple Vision Pro, a casa o fuori, senza VPN.
 
+IMPORTANTE: l’app da sola non fa nulla. Sul server Unraid serve un servizio come il container gratuito e open source unraid-gateway (istruzioni nella wiki): è lui che espone le share all’app.
+
 COME FUNZIONA
 Installa sul tuo server Unraid il piccolo container open source unraid-gateway, crea una chiave API Unraid, pubblica il gateway con Cloudflare Tunnel o con un qualsiasi reverse proxy e aggiungilo nell’app. Le tue share compaiono tra le Posizioni dell’app File: apri, salva, sposta, rinomina ed elimina file da qualsiasi app che usa il selettore di File.
 
@@ -36,6 +38,8 @@ Unraid Drive è un progetto indipendente e non è affiliato a Lime Technology / 
  promo="Tus recursos compartidos de Unraid en la app Archivos, donde estés, sin VPN.",
  keywords="unraid,nas,archivos,file provider,recursos,smb,cloudflare,docker,servidor,servidor casero",
  description="""Unraid Drive lleva los recursos compartidos de tu servidor Unraid a la app Archivos, junto a iCloud Drive: en iPhone, iPad y Apple Vision Pro, en casa o fuera, sin VPN.
+
+IMPORTANTE: la app por sí sola no hace nada. En el servidor Unraid hace falta un servicio como el contenedor gratuito y de código abierto unraid-gateway (instrucciones en la wiki): es el que expone los recursos compartidos a la app.
 
 CÓMO FUNCIONA
 Instala en tu servidor Unraid el pequeño contenedor de código abierto unraid-gateway, crea una clave API de Unraid, publica el gateway con Cloudflare Tunnel o cualquier proxy inverso y añádelo en la app. Tus recursos aparecen en Ubicaciones de la app Archivos: abre, guarda, mueve, renombra y elimina archivos desde cualquier app que use el selector de Archivos.
@@ -68,6 +72,8 @@ Unraid Drive es un proyecto independiente y no está afiliado a Lime Technology 
  keywords="unraid,nas,fichiers,file provider,partages,smb,cloudflare,docker,serveur,serveur maison",
  description="""Unraid Drive place les partages de votre serveur Unraid dans l’app Fichiers, à côté d’iCloud Drive : sur iPhone, iPad et Apple Vision Pro, à la maison ou en déplacement, sans VPN.
 
+IMPORTANT : l’app seule ne fait rien. Le serveur Unraid doit exécuter un service tel que le conteneur gratuit et open source unraid-gateway (instructions dans le wiki) : c’est lui qui expose les partages à l’app.
+
 COMMENT ÇA MARCHE
 Installez sur votre serveur Unraid le petit conteneur open source unraid-gateway, créez une clé API Unraid, publiez la passerelle avec Cloudflare Tunnel ou n’importe quel reverse proxy, puis ajoutez-la dans l’app. Vos partages apparaissent dans les Emplacements de l’app Fichiers : ouvrez, enregistrez, déplacez, renommez et supprimez des fichiers depuis toute app utilisant le sélecteur Fichiers.
 
@@ -98,6 +104,8 @@ Unraid Drive est un projet indépendant, non affilié à Lime Technology / Unrai
  promo="Deine Unraid-Freigaben in der Dateien-App, überall, ohne VPN.",
  keywords="unraid,nas,dateien,file provider,freigaben,smb,cloudflare,docker,server,heimserver",
  description="""Unraid Drive bringt die Freigaben deines Unraid-Servers in die Dateien-App, neben iCloud Drive: auf iPhone, iPad und Apple Vision Pro, zu Hause oder unterwegs, ohne VPN.
+
+WICHTIG: Die App allein tut nichts. Auf dem Unraid-Server muss ein Dienst wie der kostenlose Open-Source-Container unraid-gateway laufen (Anleitung im Wiki): Er stellt der App die Freigaben bereit.
 
 SO FUNKTIONIERT ES
 Installiere den kleinen Open-Source-Container unraid-gateway auf deinem Unraid-Server, erstelle einen Unraid-API-Schlüssel, veröffentliche das Gateway über Cloudflare Tunnel oder einen beliebigen Reverse Proxy und füge es in der App hinzu. Deine Freigaben erscheinen unter Orte in der Dateien-App: Öffne, sichere, verschiebe, benenne um und lösche Dateien aus jeder App, die die Dateien-Auswahl nutzt.
@@ -130,6 +138,8 @@ Unraid Drive ist ein unabhängiges Projekt und nicht mit Lime Technology / Unrai
  keywords="unraid,nas,文件,file provider,共享,smb,cloudflare,docker,服务器,家庭服务器",
  description="""Unraid Drive 把你 Unraid 服务器上的共享文件夹带入“文件”应用，与 iCloud 云盘并列：在 iPhone、iPad 和 Apple Vision Pro 上，在家或外出时都可使用，无需 VPN。
 
+重要提示：本应用本身无法独立工作。Unraid 服务器上需要运行类似 unraid-gateway 的服务（免费开源容器，说明见 wiki），由它向应用提供共享。
+
 工作原理
 在 Unraid 服务器上安装小巧的开源容器 unraid-gateway，创建一个 Unraid API 密钥，通过 Cloudflare Tunnel 或任意反向代理发布网关，然后在应用中添加它。你的共享会出现在“文件”应用的“位置”中：可以从任何使用“文件”选择器的应用打开、存储、移动、重命名和删除文件。
 
@@ -160,6 +170,8 @@ Unraid Drive 是独立项目，与 Lime Technology / Unraid 无关。"""),
  promo="مجلدات Unraid المشتركة في تطبيق الملفات، في أي مكان، دون VPN.",
  keywords="unraid,nas,ملفات,file provider,مجلدات,smb,cloudflare,docker,خادم,خادم منزلي",
  description="""يضع Unraid Drive المجلدات المشتركة لخادم Unraid الخاص بك في تطبيق الملفات بجوار iCloud Drive: على iPhone وiPad وApple Vision Pro، في المنزل أو أثناء التنقل، دون VPN.
+
+مهم: التطبيق وحده لا يعمل. يحتاج خادم Unraid إلى خدمة مثل حاوية unraid-gateway المجانية مفتوحة المصدر (التعليمات في الويكي): فهي التي تعرض المشاركات للتطبيق.
 
 كيف يعمل
 ثبّت الحاوية الصغيرة مفتوحة المصدر unraid-gateway على خادم Unraid، وأنشئ مفتاح API لـ Unraid، وانشر البوابة عبر Cloudflare Tunnel أو أي وكيل عكسي، ثم أضفها في التطبيق. تظهر مجلداتك المشتركة ضمن المواقع في تطبيق الملفات: افتح الملفات واحفظها وانقلها وأعد تسميتها واحذفها من أي تطبيق يستخدم منتقي الملفات.
