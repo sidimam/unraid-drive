@@ -100,6 +100,11 @@ struct UnraidDriveApp: App {
         let args = CommandLine.arguments
         if args.contains("-seedDemo"), !servers.hasDemo { await servers.addDemo() }
         if args.contains("-rebuildDomains") { for s in servers.servers { await FileProviderDomains.rebuild(s) } }
+        #if os(macOS)
+        if args.contains("-evictAll") {   // test hook for the "Free up space" path
+            for s in servers.servers { let n = await MaterializedItems.evictAll(for: FileProviderDomains.domain(for: s)); NSLog("evicted %d items for %@", n, s.name) }
+        }
+        #endif
         guard let i = args.firstIndex(of: "-seedServer"), args.count > i + 2, let url = URL(string: args[i + 1]) else { return }
         guard !servers.servers.contains(where: { $0.url == url }) else { return }
         _ = try? await servers.add(name: "Local test", url: url, apiKey: args[i + 2], cloudflare: nil)

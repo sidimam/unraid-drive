@@ -462,10 +462,7 @@ struct StorageView: View {
     }
     private func evict(_ s: ServerConfig) async {
         working = true; defer { working = false }
-        guard let mgr = NSFileProviderManager(for: FileProviderDomains.domain(for: s)) else { return }
-        for item in await MaterializedItems.list(for: FileProviderDomains.domain(for: s)) where item.contentType != .folder {
-            try? await mgr.evictItem(identifier: item.itemIdentifier)
-        }
+        _ = await MaterializedItems.evictAll(for: FileProviderDomains.domain(for: s))
         await measure()
     }
 }
@@ -480,6 +477,16 @@ enum MaterializedItems {
             enumerator.enumerateItems(for: observer, startingAt: NSFileProviderPage(NSFileProviderPage.initialPageSortedByName as Data))
         }
     }
+    /// Evicts every materialised file of the domain (folders stay); returns how many were evicted.
+    static func evictAll(for domain: NSFileProviderDomain) async -> Int {
+        guard let mgr = NSFileProviderManager(for: domain) else { return 0 }
+        var n = 0
+        for item in await list(for: domain) where item.contentType != .folder && item.itemIdentifier != .rootContainer {
+            do { try await mgr.evictItem(identifier: item.itemIdentifier); n += 1 } catch { NSLog("evict %@: %@", item.filename, error.localizedDescription) }
+        }
+        return n
+    }
+
     private final class Observer: NSObject, NSFileProviderEnumerationObserver {
         var items: [NSFileProviderItem] = []
         let done: ([NSFileProviderItem]) -> Void
