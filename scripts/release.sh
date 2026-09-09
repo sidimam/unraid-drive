@@ -2,11 +2,12 @@
 set -o pipefail
 cd "$(dirname "$0")/.."
 ISSUER="${ASC_ISSUER:?set ASC_ISSUER to the App Store Connect issuer id}"
-for PLAT in ${PLATFORMS:-iOS visionOS macOS}; do
+for PLAT in ${=PLATFORMS:-iOS visionOS macOS}; do   # PLATFORMS="iOS macOS" to restrict
   echo "=== archive $PLAT"
   rm -rf build/UnraidDrive-$PLAT.xcarchive build/export-$PLAT
   xcodebuild archive -project UnraidDrive.xcodeproj -scheme UnraidDrive -destination "generic/platform=$PLAT" \
-    -archivePath build/UnraidDrive-$PLAT.xcarchive -derivedDataPath build/dd-$PLAT -allowProvisioningUpdates 2>&1 | grep -E "error:|ARCHIVE" || exit 1
+    -archivePath build/UnraidDrive-$PLAT.xcarchive -derivedDataPath build/dd-$PLAT -allowProvisioningUpdates 2>&1 | grep -E "error:|ARCHIVE"
+  [ -d build/UnraidDrive-$PLAT.xcarchive ] || { echo "archive $PLAT failed"; exit 1; }
   for try in 1 2 3; do
     echo "=== export $PLAT (try $try)"
     xcodebuild -exportArchive -archivePath build/UnraidDrive-$PLAT.xcarchive -exportOptionsPlist ExportOptions.plist \
