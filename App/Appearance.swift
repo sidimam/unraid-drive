@@ -123,8 +123,13 @@ struct AppIconColor: Identifiable, Equatable {
         .init(key: "grafite", label: "Graphite", tint: Color(red: 0.55, green: 0.58, blue: 0.62)),
     ]
 
-    /// Switches the Home Screen icon (iOS/iPadOS; visionOS keeps its layered icon).
+    /// Switches the Home Screen icon (iOS/iPadOS) or the Dock/app icon (macOS); visionOS keeps its layered icon.
     static func apply(_ key: String) {
+        #if os(macOS)
+        DispatchQueue.main.async {
+            NSApplication.shared.applicationIconImage = key == "default" ? nil : NSImage(named: "MacIcon-\(key)")
+        }
+        #endif
         #if os(iOS)
         DispatchQueue.main.async {
             guard UIApplication.shared.supportsAlternateIcons else { return }

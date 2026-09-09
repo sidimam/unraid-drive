@@ -8370,46 +8370,6 @@
         }
       }
     },
-    "Menu bar only (hide Dock icon)": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Solo barra dei menu (nascondi icona nel Dock)"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Solo barra de menús (ocultar icono del Dock)"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Barre des menus uniquement (masquer l’icône du Dock)"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nur Menüleiste (Dock-Symbol ausblenden)"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "仅菜单栏（隐藏程序坞图标）"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "شريط القوائم فقط (إخفاء أيقونة Dock)"
-          }
-        }
-      }
-    },
     "Credentials missing on this Mac": {
       "localizations": {
         "it": {
@@ -8606,6 +8566,166 @@
           "stringUnit": {
             "state": "translated",
             "value": "Finder › Unraid Drive – %@ · تم طلب التحديث"
+          }
+        }
+      }
+    },
+    "Freeing…": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liberazione…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liberando…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Libération…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wird freigegeben …"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在释放…"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ التحرير…"
+          }
+        }
+      }
+    },
+    "Folders and files with changes still uploading are kept.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le cartelle e i file con modifiche ancora in caricamento restano."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se conservan las carpetas y los archivos con cambios aún en subida."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les dossiers et les fichiers dont l’envoi est en cours sont conservés."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ordner und Dateien mit noch laufendem Upload bleiben erhalten."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文件夹以及仍在上传更改的文件会被保留。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تُحتفظ بالمجلدات والملفات التي لا يزال رفع تغييراتها جاريًا."
+          }
+        }
+      }
+    },
+    "Show only in the menu bar": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostra solo nella barra dei menu"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar solo en la barra de menús"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher uniquement dans la barre des menus"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur in der Menüleiste anzeigen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "仅显示在菜单栏"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إظهار في شريط القوائم فقط"
+          }
+        }
+      }
+    },
+    "System follows the Mac settings for theme and language. A forced language applies to this app only; a few system-provided texts follow at the next launch. The icon colour applies to the Dock icon while the app runs.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistema segue le impostazioni del Mac per tema e lingua. Una lingua forzata vale solo per questa app; alcuni testi di sistema si adeguano al prossimo avvio. Il colore dell’icona si applica all’icona nel Dock mentre l’app è in esecuzione."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistema sigue los ajustes del Mac para el tema y el idioma. Un idioma forzado solo se aplica a esta app; algunos textos del sistema cambian en el próximo inicio. El color del icono se aplica al icono del Dock mientras la app se ejecuta."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Système suit les réglages du Mac pour le thème et la langue. Une langue forcée ne s’applique qu’à cette app ; quelques textes système suivent au prochain lancement. La couleur de l’icône s’applique à l’icône du Dock pendant l’exécution de l’app."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System folgt den Mac-Einstellungen für Design und Sprache. Eine erzwungene Sprache gilt nur für diese App; einige Systemtexte folgen beim nächsten Start. Die Symbolfarbe gilt für das Dock-Symbol, solange die App läuft."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“系统”跟随 Mac 的主题和语言设置。强制语言仅适用于本应用；部分系统文本在下次启动时生效。图标颜色在应用运行期间应用于程序坞图标。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يتبع «النظام» إعدادات Mac للمظهر واللغة. تنطبق اللغة المفروضة على هذا التطبيق فقط؛ وتتغيّر بعض نصوص النظام عند التشغيل التالي. يُطبَّق لون الأيقونة على أيقونة Dock أثناء تشغيل التطبيق."
           }
         }
       }

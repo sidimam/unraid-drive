@@ -26,10 +26,10 @@ packages:
 targets:
   UnraidDrive:
     type: application
-    supportedDestinations: [iOS, visionOS, macOS]
+    supportedDestinations: [iOS, visionOS]
     sources:
       - path: App
-        excludes: ["Info.plist"]
+        excludes: ["Info.plist", "Info-macOS.plist", "UnraidDrive-macOS.entitlements"]
     dependencies:
       - package: UnraidGatewayKit
       - target: UnraidDriveFileProvider
@@ -75,23 +75,68 @@ targets:
         "ASSETCATALOG_COMPILER_APPICON_NAME[sdk=xros*]": AppIconVision
         "ASSETCATALOG_COMPILER_APPICON_NAME[sdk=xrsimulator*]": AppIconVision
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
-        "INFOPLIST_FILE[sdk=macosx*]": App/Info-macOS.plist
-        "PRODUCT_NAME[sdk=macosx*]": "Unraid Drive"
-        "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": App/UnraidDrive-macOS.entitlements
-        "ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]": AppIconMac
-        "ENABLE_HARDENED_RUNTIME[sdk=macosx*]": YES
-        "LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]": "$(inherited) @executable_path/../Frameworks"
   UnraidDriveFileProvider:
     type: app-extension
-    supportedDestinations: [iOS, visionOS, macOS]
+    supportedDestinations: [iOS, visionOS]
     sources:
       - path: FileProvider
-        excludes: ["Info.plist"]
+        excludes: ["Info.plist", "Info-macOS.plist", "Resources", "UnraidDriveFileProvider-macOS.entitlements"]
     dependencies:
       - package: UnraidGatewayKit
       - sdk: FileProvider.framework
     info:
       path: FileProvider/Info.plist
+      properties:
+        CFBundleDisplayName: Unraid Drive
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.fileprovider-nonui
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).FileProviderExtension
+          NSExtensionFileProviderSupportsEnumeration: true
+          NSExtensionFileProviderDocumentGroup: group.com.sdimambro.unraid-drive
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+    entitlements:
+      path: FileProvider/UnraidDriveFileProvider.entitlements
+      properties:
+        com.apple.security.application-groups: [group.com.sdimambro.unraid-drive]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.sdimambro.unraid-drive.fileprovider
+  UnraidDriveMac:
+    type: application
+    platform: macOS
+    sources:
+      - path: App
+        excludes: ["Info.plist", "Info-macOS.plist", "UnraidDrive.entitlements"]
+    dependencies:
+      - package: UnraidGatewayKit
+      - target: UnraidDriveFileProviderMac
+    entitlements:
+      path: App/UnraidDrive-macOS.entitlements
+    settings:
+      base:
+        INFOPLIST_FILE: App/Info-macOS.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.sdimambro.unraid-drive
+        PRODUCT_NAME: Unraid Drive
+        PRODUCT_MODULE_NAME: UnraidDrive
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIconMac
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
+        ENABLE_HARDENED_RUNTIME: YES
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks"
+  UnraidDriveFileProviderMac:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: FileProvider
+        excludes: ["Info.plist", "Info-macOS.plist", "UnraidDriveFileProvider.entitlements"]
+    dependencies:
+      - package: UnraidGatewayKit
+      - sdk: FileProvider.framework
+    info:
+      path: FileProvider/Info-macOS.plist
       properties:
         CFBundleDisplayName: Unraid Drive
         CFBundleName: Unraid Drive
@@ -109,16 +154,25 @@ targets:
         NSAppTransportSecurity:
           NSAllowsLocalNetworking: true
     entitlements:
-      path: FileProvider/UnraidDriveFileProvider.entitlements
-      properties:
-        com.apple.security.application-groups: [group.com.sdimambro.unraid-drive]
+      path: FileProvider/UnraidDriveFileProvider-macOS.entitlements
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.sdimambro.unraid-drive.fileprovider
-        "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": FileProvider/UnraidDriveFileProvider-macOS.entitlements
-        "ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]": FPIcon
-        "ENABLE_HARDENED_RUNTIME[sdk=macosx*]": YES
+        PRODUCT_NAME: UnraidDriveFileProvider
+        PRODUCT_MODULE_NAME: UnraidDriveFileProvider
+        ASSETCATALOG_COMPILER_APPICON_NAME: FPIcon
+        ENABLE_HARDENED_RUNTIME: YES
 schemes:
+  UnraidDriveMac:
+    build:
+      targets:
+        UnraidDriveMac: all
+        UnraidDriveFileProviderMac: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets: []
   UnraidDrive:
     build:
       targets:

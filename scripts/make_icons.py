@@ -111,6 +111,14 @@ def mac_icon(light):
     canvas.alpha_composite(art, (inset, inset))
     return canvas
 
+def write_mac_icon_images(light):
+    """Coloured variants of the Mac icon as plain images (the app swaps NSApp.applicationIconImage)."""
+    for key, (label, hue) in VARIANTS.items():
+        if key == "default": continue
+        d = os.path.join(OUT, f"MacIcon-{key}.imageset"); os.makedirs(d, exist_ok=True)
+        mac_icon(recolor(light, hue)).resize((512, 512), Image.LANCZOS).save(os.path.join(d, "icon.png"))
+        write_json(os.path.join(d, "Contents.json"), {"images": [{"filename": "icon.png", "idiom": "universal", "scale": "1x"}, {"idiom": "universal", "scale": "2x"}, {"idiom": "universal", "scale": "3x"}], "info": {"author": "xcode", "version": 1}})
+
 def write_mac_iconset(light):
     d = os.path.join(OUT, "AppIconMac.appiconset"); os.makedirs(d, exist_ok=True)
     big = mac_icon(light); images = []
@@ -171,6 +179,7 @@ def main():
     light = square(load("icon-light-source.png"))
     dark = darken(light)
     write_mac_iconset(light)
+    write_mac_icon_images(light)
     write_menubar_icon(light)
     write_fp_icon(light)
     for key, (label, hue) in VARIANTS.items():

@@ -162,6 +162,8 @@ struct MenuBarPanel: View {
     @State private var paused = FileProviderDomains.paused
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @AppStorage(DockPolicy.key, store: AppGroup.defaults) private var menuBarOnly = false
+    @AppStorage(Appearance.key, store: AppGroup.defaults) private var appearance = Appearance.system.rawValue
+    @AppStorage(AppIconColor.storageKey, store: AppGroup.defaults) private var iconColor = "default"
     @State private var notifications: [String: Dashboard.Notifications.Overview.Counts] = [:]
 
     var body: some View {
@@ -189,6 +191,8 @@ struct MenuBarPanel: View {
         .tint(Color("AccentColor"))
         .task { await refresh() }
         .onChange(of: menuBarOnly) { _, _ in DockPolicy.apply() }
+        .onChange(of: appearance) { _, v in (Appearance(rawValue: v) ?? .system).applyToWindows() }
+        .onChange(of: iconColor) { _, v in AppIconColor.apply(v) }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in Task { await refresh() } }
     }
 
@@ -216,7 +220,13 @@ struct MenuBarPanel: View {
             Link("Send feedback", destination: URL(string: "https://github.com/sidimam/unraid-drive/issues")!)
             Divider()
             Toggle(isOn: Binding(get: { launchAtLogin }, set: { setLaunchAtLogin($0) })) { Text("Launch at login") }
-            Toggle(isOn: $menuBarOnly) { Text("Menu bar only (hide Dock icon)") }
+            Toggle(isOn: $menuBarOnly) { Text("Show only in the menu bar") }
+            Picker("Theme", selection: $appearance) {
+                ForEach(Appearance.allCases) { a in Label(a.label, systemImage: a.icon).tag(a.rawValue) }
+            }
+            Picker("Icon colour", selection: $iconColor) {
+                ForEach(AppIconColor.all) { c in Text(c.label).tag(c.key) }
+            }
             Divider()
             Button("Quit Unraid Drive") { NSApp.terminate(nil) }.keyboardShortcut("q")
         } label: { Image(systemName: "gearshape").font(.title2) }
@@ -435,6 +445,7 @@ struct StorageView: View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Storage on this Mac").font(.title2.weight(.semibold)).foregroundStyle(Color.accentColor)
             Text("Files you open are kept on disk so they open instantly next time; the system removes them when space runs low. Free the space now if you prefer.").foregroundStyle(.secondary)
+            Text("Folders and files with changes still uploading are kept.").font(.callout).foregroundStyle(.secondary)
             ForEach(model.servers) { s in
                 let u = usage[s.id]
                 HStack {
@@ -444,7 +455,7 @@ struct StorageView: View {
                         Text(u.map { "\($0.count) files · \(ByteCountFormatter.string(fromByteCount: $0.bytes, countStyle: .file))" } ?? "Calculating…").font(.callout).foregroundStyle(.secondary)
                     }
                     Spacer()
-                    Button("Free up space") { Task { await evict(s) } }.disabled(working || (u?.count ?? 0) == 0)
+                    Button(working ? "Freeing…" : "Free up space") { Task { await evict(s) } }.disabled(working || (u?.count ?? 0) == 0)
                 }
                 .padding(12).background(RoundedRectangle(cornerRadius: 12).fill(Color(nsColor: .controlBackgroundColor)))
             }
@@ -456,8 +467,18 @@ struct StorageView: View {
 
     private func measure() async {
         for s in model.servers {
-            let items = await MaterializedItems.list(for: FileProviderDomains.domain(for: s))
-            usage[s.id] = (items.count, items.reduce(0) { $0 + ($1.documentSize??.int64Value ?? 0) })
+            let domain = FileProviderDomains.domain(for: s)
+            let files = await MaterializedItems.list(for: domain).filter { $0.contentType != .folder && $0.itemIdentifier != .rootContainer }
+            var bytes: Int64 = 0
+            let mgr = NSFileProviderManager(for: domain)
+            for item in files {
+                // Size on disk of the local copy (documentSize is not reported for materialised items).
+                if let url = try? await mgr?.getUserVisibleURL(for: item.itemIdentifier),
+                   let v = try? url.resourceValues(forKeys: [.totalFileAllocatedSizeKey, .fileSizeKey]) {
+                    bytes += Int64(v.totalFileAllocatedSize ?? v.fileSize ?? 0)
+                } else if let n = item.documentSize??.int64Value { bytes += n }
+            }
+            usage[s.id] = (files.count, bytes)
         }
     }
     private func evict(_ s: ServerConfig) async {

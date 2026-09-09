@@ -36,7 +36,7 @@ struct SettingsView: View {
                         ForEach(AppLanguage.allCases) { l in Text(l.label).tag(l.rawValue) }
                     } label: { Label("Language", systemImage: "globe") }
                     .onChange(of: language) { _, v in (AppLanguage(rawValue: v) ?? .system).applySystemOverride() }
-                    #if os(iOS)
+                    #if os(iOS) || os(macOS)
                     VStack(alignment: .leading, spacing: 8) {
                         Label("Icon colour", systemImage: "paintpalette")
                         IconColorPicker(selection: $iconColor)
@@ -47,11 +47,15 @@ struct SettingsView: View {
                     Toggle(isOn: Binding(get: { launchAtLogin }, set: { v in
                         do { if v { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() } } catch {}
                         launchAtLogin = SMAppService.mainApp.status == .enabled })) { Label("Launch at login", systemImage: "power") }
-                    Toggle(isOn: $menuBarOnly) { Label("Menu bar only (hide Dock icon)", systemImage: "menubar.rectangle") }
+                    Toggle(isOn: $menuBarOnly) { Label("Show only in the menu bar", systemImage: "menubar.rectangle") }
                         .onChange(of: menuBarOnly) { _, _ in DockPolicy.apply() }
                     #endif
                 } header: { SectionTitle("App settings") } footer: {
+                    #if os(macOS)
+                    Text("System follows the Mac settings for theme and language. A forced language applies to this app only; a few system-provided texts follow at the next launch. The icon colour applies to the Dock icon while the app runs.")
+                    #else
                     Text("System follows the device settings for theme and language. A forced language applies to this app only; a few system-provided texts follow at the next launch. The icon colour applies to iPhone and iPad; Apple Vision Pro keeps the layered icon.")
+                    #endif
                 }
 
                 Section {
