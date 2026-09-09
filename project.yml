@@ -115,6 +115,11 @@ targets:
       - target: UnraidDriveFileProviderMac
     entitlements:
       path: App/UnraidDrive-macOS.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.network.client: true
+        com.apple.security.application-groups: [group.com.sdimambro.unraid-drive]
+        com.apple.developer.ubiquity-kvstore-identifier: $(TeamIdentifierPrefix)$(CFBundleIdentifier)
     settings:
       base:
         INFOPLIST_FILE: App/Info-macOS.plist
@@ -155,6 +160,10 @@ targets:
           NSAllowsLocalNetworking: true
     entitlements:
       path: FileProvider/UnraidDriveFileProvider-macOS.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.network.client: true
+        com.apple.security.application-groups: [group.com.sdimambro.unraid-drive]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.sdimambro.unraid-drive.fileprovider

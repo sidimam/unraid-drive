@@ -227,3 +227,15 @@ extension View {
         #endif
     }
 }
+
+extension View {
+    /// macOS Forms default to the columnar style, which squeezes long labels against the edge;
+    /// the grouped style matches the iOS layout.
+    @ViewBuilder func groupedFormStyle() -> some View {
+        #if os(macOS)
+        self.formStyle(.grouped)
+        #else
+        self
+        #endif
+    }
+}

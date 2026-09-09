@@ -112,6 +112,7 @@ struct AddServerView: View {
                     }
                 }
             }
+            .groupedFormStyle()
             .modifier(KeyboardDismissal())
             .onChange(of: cfClientID) { _, v in normaliseCloudflare(from: v, isSecretField: false) }
             .onChange(of: cfClientSecret) { _, v in normaliseCloudflare(from: v, isSecretField: true) }

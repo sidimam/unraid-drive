@@ -94,6 +94,7 @@ struct SettingsView: View {
                     Text("Unraid Drive is an independent open-source project and is not affiliated with Lime Technology / Unraid. Unraid is a trademark of Lime Technology, Inc. The app talks only to your own gateway: no accounts, no analytics, no third-party servers.")
                 }
             }
+            .groupedFormStyle()
             .navigationTitle("Settings")
             .inlineNavigationTitle()
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
