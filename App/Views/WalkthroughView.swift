@@ -46,7 +46,7 @@ struct WalkthroughView: View {
                 .indexViewStyle(.page(backgroundDisplayMode: .always))
 
                 HStack {
-                    if let onTryDemo, index == pages.count - 1 {
+                    if let onTryDemo {
                         Button("Try the demo") { onTryDemo(); dismiss() }.buttonStyle(.bordered)
                     }
                     Spacer()

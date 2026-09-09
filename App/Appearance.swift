@@ -21,6 +21,13 @@ enum Appearance: String, CaseIterable, Identifiable {
         case .dark: return .dark
         }
     }
+    var icon: String {
+        switch self {
+        case .system: return "circle.lefthalf.filled"
+        case .light: return "sun.max"
+        case .dark: return "moon"
+        }
+    }
 
     /// `.preferredColorScheme` is not re-applied to sheets that are already on screen, so the
     /// override goes on the windows themselves: it takes effect immediately everywhere.

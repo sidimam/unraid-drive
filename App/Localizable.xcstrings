@@ -362,46 +362,6 @@
         }
       }
     },
-    "About": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "حول"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Über"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Acerca de"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "À propos"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Informazioni"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "关于"
-          }
-        }
-      }
-    },
     "Add another server": {
       "localizations": {
         "ar": {
@@ -522,82 +482,82 @@
         }
       }
     },
-    "App icon": {
+    "App info": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "أيقونة التطبيق"
+            "value": "معلومات التطبيق"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "App-Symbol"
+            "value": "App-Info"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Icono de la app"
+            "value": "Información de la app"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Icône de l’app"
+            "value": "Infos de l’app"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Icona dell’app"
+            "value": "Informazioni app"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "应用图标"
+            "value": "应用信息"
           }
         }
       }
     },
-    "Appearance": {
+    "App settings": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "المظهر"
+            "value": "إعدادات التطبيق"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Darstellung"
+            "value": "App-Einstellungen"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apariencia"
+            "value": "Ajustes de la app"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apparence"
+            "value": "Réglages de l’app"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aspetto"
+            "value": "Impostazioni app"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "外观"
+            "value": "应用设置"
           }
         }
       }
@@ -679,6 +639,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "认证"
+          }
+        }
+      }
+    },
+    "Author": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المؤلف"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autor"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autor"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auteur"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autore"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "作者"
           }
         }
       }
@@ -1922,6 +1922,46 @@
         }
       }
     },
+    "Icon colour": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لون الأيقونة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Symbolfarbe"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color del icono"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couleur de l’icône"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colore icona"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "图标颜色"
+          }
+        }
+      }
+    },
     "Identity": {
       "localizations": {
         "ar": {
@@ -2118,6 +2158,86 @@
           "stringUnit": {
             "state": "translated",
             "value": "上次同步"
+          }
+        }
+      }
+    },
+    "License": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الرخصة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lizenz"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Licencia"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Licence"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Licenza"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "许可证"
+          }
+        }
+      }
+    },
+    "License (MIT)": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الرخصة (MIT)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lizenz (MIT)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Licencia (MIT)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Licence (MIT)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Licenza (MIT)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "许可证（MIT）"
           }
         }
       }
@@ -2672,6 +2792,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "直接通过 HTTPS 访问网关：局域网地址、带证书的反向代理，或未启用 Access 的 Cloudflare Tunnel 主机名。"
+          }
+        }
+      }
+    },
+    "Privacy policy": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سياسة الخصوصية"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datenschutzerklärung"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Política de privacidad"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Politique de confidentialité"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informativa sulla privacy"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "隐私政策"
           }
         }
       }
@@ -3618,6 +3778,46 @@
         }
       }
     },
+    "Source code": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الشيفرة المصدرية"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quellcode"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Código fuente"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code source"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Codice sorgente"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "源代码"
+          }
+        }
+      }
+    },
     "State": {
       "localizations": {
         "ar": {
@@ -3772,42 +3972,42 @@
         }
       }
     },
-    "System follows the device settings. A forced language applies to this app only; a few system-provided texts follow at the next launch.": {
+    "System follows the device settings for theme and language. A forced language applies to this app only; a few system-provided texts follow at the next launch. The icon colour applies to iPhone and iPad; Apple Vision Pro keeps the layered icon.": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "«النظام» يتبع إعدادات الجهاز. اللغة المفروضة تنطبق على هذا التطبيق فقط؛ بعض النصوص التي يوفرها النظام تتغير عند التشغيل التالي."
+            "value": "«النظام» يتبع إعدادات الجهاز للسمة واللغة. اللغة المفروضة تنطبق على هذا التطبيق فقط؛ بعض نصوص النظام تتغير عند التشغيل التالي. لون الأيقونة ينطبق على iPhone وiPad؛ يحتفظ Apple Vision Pro بالأيقونة الطبقية."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "System folgt den Geräteeinstellungen. Eine erzwungene Sprache gilt nur für diese App; einige vom System gelieferte Texte folgen beim nächsten Start."
+            "value": "System folgt den Geräteeinstellungen für Design und Sprache. Eine erzwungene Sprache gilt nur für diese App; einige vom System gelieferte Texte folgen beim nächsten Start. Die Symbolfarbe gilt für iPhone und iPad; Apple Vision Pro behält das Ebenen-Symbol."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sistema sigue los ajustes del dispositivo. Un idioma forzado solo afecta a esta app; algunos textos del sistema cambian en el próximo inicio."
+            "value": "Sistema sigue los ajustes del dispositivo para tema e idioma. Un idioma forzado solo afecta a esta app; algunos textos del sistema cambian en el próximo inicio. El color del icono se aplica a iPhone y iPad; Apple Vision Pro mantiene el icono por capas."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Système suit les réglages de l’appareil. Une langue forcée ne s’applique qu’à cette app ; quelques textes fournis par le système suivent au prochain lancement."
+            "value": "Système suit les réglages de l’appareil pour le thème et la langue. Une langue forcée ne s’applique qu’à cette app ; quelques textes fournis par le système suivent au prochain lancement. La couleur de l’icône s’applique à l’iPhone et à l’iPad ; l’Apple Vision Pro garde l’icône en couches."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sistema segue le impostazioni del dispositivo. Una lingua forzata vale solo per questa app; alcuni testi forniti dal sistema si adeguano al prossimo avvio."
+            "value": "Sistema segue le impostazioni del dispositivo per tema e lingua. Una lingua forzata vale solo per questa app; alcuni testi forniti dal sistema si adeguano al prossimo avvio. Il colore dell’icona vale per iPhone e iPad; Apple Vision Pro mantiene l’icona a livelli."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "“跟随系统”遵循设备设置。强制语言仅作用于本应用；少数由系统提供的文本会在下次启动时生效。"
+            "value": "“跟随系统”遵循设备的主题和语言设置。强制语言仅作用于本应用；少数系统文本会在下次启动时生效。图标颜色适用于 iPhone 和 iPad；Apple Vision Pro 保留分层图标。"
           }
         }
       }
@@ -4335,6 +4535,46 @@
         }
       }
     },
+    "Unraid Drive is an independent open-source project and is not affiliated with Lime Technology / Unraid. Unraid is a trademark of Lime Technology, Inc. The app talks only to your own gateway: no accounts, no analytics, no third-party servers.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive مشروع مستقل مفتوح المصدر وغير تابع لـ Lime Technology / Unraid. ‏Unraid علامة تجارية لشركة Lime Technology, Inc. يتواصل التطبيق مع بوابتك فقط: لا حسابات ولا تحليلات ولا خوادم خارجية."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive ist ein unabhängiges Open-Source-Projekt und nicht mit Lime Technology / Unraid verbunden. Unraid ist eine Marke von Lime Technology, Inc. Die App spricht nur mit deinem Gateway: keine Konten, keine Analysen, keine Drittserver."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive es un proyecto independiente de código abierto y no está afiliado a Lime Technology / Unraid. Unraid es una marca de Lime Technology, Inc. La app solo habla con tu gateway: sin cuentas, sin analíticas, sin servidores de terceros."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive est un projet open source indépendant, non affilié à Lime Technology / Unraid. Unraid est une marque de Lime Technology, Inc. L’app ne parle qu’à votre passerelle : aucun compte, aucune analyse, aucun serveur tiers."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive è un progetto open source indipendente e non è affiliato a Lime Technology / Unraid. Unraid è un marchio di Lime Technology, Inc. L’app parla solo con il tuo gateway: nessun account, nessuna analisi, nessun server di terzi."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive 是独立的开源项目，与 Lime Technology / Unraid 无关。Unraid 是 Lime Technology, Inc. 的商标。本应用只与你的网关通信：无账户、无分析、无第三方服务器。"
+          }
+        }
+      }
+    },
     "Unraid password": {
       "localizations": {
         "ar": {
@@ -4531,34 +4771,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "未读通知"
-          }
-        }
-      }
-    },
-    "Version": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "الإصدار"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Versión"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Versione"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "版本"
           }
         }
       }
@@ -4960,6 +5172,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "刚刚注册"
+          }
+        }
+      }
+    },
+    "unraid-gateway (server side)": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "unraid-gateway (جهة الخادم)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "unraid-gateway (Serverseite)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "unraid-gateway (lado servidor)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "unraid-gateway (côté serveur)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "unraid-gateway (lato server)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "unraid-gateway（服务器端）"
           }
         }
       }

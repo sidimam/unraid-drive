@@ -19,6 +19,8 @@ FUNZIONI
 • Tema Sistema/Chiaro/Scuro e interfaccia in 7 lingue.
 • Server demo per provare tutto offline.
 • Nessun account, nessuna analisi, nessun server di terzi: l’app parla solo con il tuo gateway.
+• Look Unraid: accenti arancione Unraid, icona in sei colori con varianti chiara, scura e tinta.
+• Aggiornamento in background: le posizioni in File restano sincronizzate anche dopo un riavvio del gateway.
 
 REQUISITI
 Un server Unraid (7.2 o successivo) con il container gratuito unraid-gateway e un modo per raggiungerlo in HTTPS da fuori casa (consigliato Cloudflare Tunnel). Guida passo passo completa nella wiki indicata sotto.
@@ -43,6 +45,8 @@ FUNCIONES
 • Tema Sistema/Claro/Oscuro e interfaz en 7 idiomas.
 • Servidor demo para probarlo todo sin conexión.
 • Sin cuentas, sin analíticas, sin servidores de terceros: la app solo habla con tu gateway.
+• Estilo Unraid: acentos en naranja Unraid, icono en seis colores con variantes clara, oscura y tintada.
+• Actualización en segundo plano: las ubicaciones en Archivos siguen sincronizadas tras un reinicio del gateway.
 
 REQUISITOS
 Un servidor Unraid (7.2 o posterior) con el contenedor gratuito unraid-gateway y una forma de alcanzarlo por HTTPS desde fuera de casa (se recomienda Cloudflare Tunnel). Guía paso a paso completa en la wiki enlazada abajo.
@@ -67,6 +71,8 @@ FONCTIONS
 • Thème Système/Clair/Sombre et interface en 7 langues.
 • Serveur démo pour tout essayer hors ligne.
 • Aucun compte, aucune analyse, aucun serveur tiers : l’app ne parle qu’à votre passerelle.
+• Style Unraid : accents orange Unraid, icône en six couleurs avec variantes claire, sombre et teintée.
+• Actualisation en arrière-plan : les emplacements Fichiers restent synchronisés même après un redémarrage de la passerelle.
 
 PRÉREQUIS
 Un serveur Unraid (7.2 ou plus récent) avec le conteneur gratuit unraid-gateway et un moyen de l’atteindre en HTTPS depuis l’extérieur (Cloudflare Tunnel recommandé). Guide complet pas à pas dans le wiki ci-dessous.
@@ -91,6 +97,8 @@ FUNKTIONEN
 • Design System/Hell/Dunkel und Oberfläche in 7 Sprachen.
 • Demo-Server, um alles offline auszuprobieren.
 • Keine Konten, keine Analysen, keine Drittserver: Die App spricht nur mit deinem Gateway.
+• Unraid-Look: Akzente in Unraid-Orange, App-Symbol in sechs Farben mit heller, dunkler und getönter Variante.
+• Hintergrundaktualisierung: Die Orte in Dateien bleiben auch nach einem Neustart des Gateways synchron.
 
 VORAUSSETZUNGEN
 Ein Unraid-Server (7.2 oder neuer) mit dem kostenlosen Container unraid-gateway und ein Weg, ihn von außen per HTTPS zu erreichen (Cloudflare Tunnel empfohlen). Vollständige Schritt-für-Schritt-Anleitung im unten verlinkten Wiki.
@@ -115,6 +123,8 @@ Unraid Drive ist ein unabhängiges Projekt und nicht mit Lime Technology / Unrai
 • 跟随系统/浅色/深色主题，界面支持 7 种语言。
 • 演示服务器，可离线体验全部功能。
 • 无账户、无分析、无第三方服务器：应用只与你的网关通信。
+• Unraid 风格：Unraid 橙色强调色，六种颜色的应用图标，支持浅色、深色和着色变体。
+• 后台刷新：网关重启后，“文件”中的位置仍保持同步。
 
 要求
 一台运行免费容器 unraid-gateway 的 Unraid 服务器（7.2 或更新版本），以及一种可从家庭网络外通过 HTTPS 访问它的方式（推荐 Cloudflare Tunnel）。完整的分步指南见下方 wiki 链接。
@@ -139,6 +149,8 @@ Unraid Drive 是独立项目，与 Lime Technology / Unraid 无关。"""),
 • سمة النظام/فاتح/داكن وواجهة بسبع لغات.
 • خادم تجريبي لتجربة كل شيء دون اتصال.
 • لا حسابات ولا تحليلات ولا خوادم خارجية: يتواصل التطبيق مع بوابتك فقط.
+• مظهر Unraid: لمسات برتقالية بلون Unraid، وأيقونة بستة ألوان مع متغيرات فاتحة وداكنة وملوّنة.
+• تحديث في الخلفية: تبقى المواقع في تطبيق الملفات متزامنة حتى بعد إعادة تشغيل البوابة.
 
 المتطلبات
 خادم Unraid (‏7.2 أو أحدث) يشغّل الحاوية المجانية unraid-gateway، وطريقة للوصول إليه عبر HTTPS من خارج المنزل (يُنصح بـ Cloudflare Tunnel). دليل كامل خطوة بخطوة في الويكي المرتبط أدناه.

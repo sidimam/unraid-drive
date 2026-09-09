@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generates the Unraid Drive app icons: a Files-style folder holding the three Unraid bars.
+"""Generates the Unraid Drive app icons: a network drive whose front vents are the three Unraid bars.
 
 Outputs, under App/Resources/Assets.xcassets:
   AppIcon.appiconset/{icon,icon_dark,icon_tinted}.png            default (Unraid orange → red)
@@ -44,41 +44,50 @@ def background(dark: bool):
     top, bottom = ((0x2B, 0x2A, 0x29), (0x15, 0x14, 0x14)) if not dark else ((0x1A, 0x1A, 0x1A), (0x05, 0x05, 0x05))
     return vgradient((N, N), top, bottom)
 
-def folder_layer(color=(255, 255, 255, 255), scale=1.0):
-    """Files-style folder outline (tab + body drawn as one shape), centred."""
-    w = 0.66 * N * scale; h = 0.50 * N * scale
-    x0 = (N - w) / 2; y0 = (N - h) / 2 + 0.03 * N
-    stroke = int(0.045 * N * scale)
-    r = int(0.075 * N * scale)
-    tab_w = 0.40 * w; tab_top = y0; body_top = y0 + 0.10 * h
-    def union(inset):
-        m = Image.new("L", (N, N), 0); d = ImageDraw.Draw(m)
-        d.rounded_rectangle([x0 + inset, body_top + inset, x0 + w - inset, y0 + h - inset], radius=max(r - inset, 1), fill=255)
-        d.rounded_rectangle([x0 + inset, tab_top + inset, x0 + tab_w - inset, body_top + r], radius=max(int(r * 0.6) - inset, 1), fill=255)
-        return m
-    outer, inner = union(0), union(stroke)
-    outline = Image.eval(Image.composite(Image.new("L", (N, N), 0), outer, inner), lambda v: v)
+def drive_layer(color=(255, 255, 255, 255), scale=1.0):
+    """Network drive outline: sloped top, front face with a LED, network lead and plug below."""
     L = Image.new("RGBA", (N, N), (0, 0, 0, 0))
-    L.paste(Image.new("RGBA", (N, N), color), (0, 0), outline)
-    return L, (x0, body_top, w, h - 0.10 * h)
+    d = ImageDraw.Draw(L)
+    k = scale; cx = N / 2
+    stroke = int(0.040 * N * k)
+    def P(x, y): return (cx + (x - 0.5) * N * k, N / 2 + (y - 0.5) * N * k)
+    # top (sloped body)
+    top = [P(0.31, 0.17), P(0.69, 0.17), P(0.79, 0.49), P(0.21, 0.49)]
+    d.polygon(top, outline=color, width=stroke)
+    # front face
+    fx0, fy0 = P(0.21, 0.49); fx1, fy1 = P(0.79, 0.66)
+    d.rounded_rectangle([fx0, fy0, fx1, fy1], radius=int(0.02 * N * k), outline=color, width=stroke)
+    # LED
+    lx, ly = P(0.31, 0.575); r = 0.028 * N * k
+    d.ellipse([lx - r, ly - r, lx + r, ly + r], outline=color, width=int(stroke * 0.8))
+    # network lead: stem, horizontal line, plug
+    sx, sy0 = P(0.50, 0.66); _, sy1 = P(0.50, 0.77)
+    d.line([(sx, sy0), (sx, sy1)], fill=color, width=stroke)
+    lx0, ly = P(0.16, 0.82); lx1, _ = P(0.84, 0.82)
+    d.line([(lx0, ly), (lx1, ly)], fill=color, width=stroke, joint="curve")
+    d.ellipse([lx0 - stroke / 2, ly - stroke / 2, lx0 + stroke / 2, ly + stroke / 2], fill=color)
+    d.ellipse([lx1 - stroke / 2, ly - stroke / 2, lx1 + stroke / 2, ly + stroke / 2], fill=color)
+    px0, py0 = P(0.42, 0.765); px1, py1 = P(0.58, 0.875)
+    d.rounded_rectangle([px0, py0, px1, py1], radius=int(0.015 * N * k), fill=(0, 0, 0, 0), outline=color, width=stroke)
+    # front face box for the bars (right part of the face)
+    return L, (fx0, fy0, fx1 - fx0, fy1 - fy0, k)
 
-def bars_layer(top, bottom, body, scale=1.0, mono=False):
-    """Three Unraid bars inside the folder body (heights like the Unraid logo)."""
+def bars_layer(top, bottom, face, scale=1.0, mono=False):
+    """Three Unraid bars as the drive's front vents (heights like the Unraid logo)."""
     L = Image.new("RGBA", (N, N), (0, 0, 0, 0))
-    x0, y0, w, h = body
-    cx = x0 + w / 2; cy = y0 + h / 2 + 0.02 * h
-    bar_w = 0.085 * w; gap = 0.075 * w
-    heights = (0.46, 0.62, 0.36)
+    fx0, fy0, fw, fh, k = face
+    cy = fy0 + fh / 2
+    bar_w = 0.045 * N * k; gap = 0.028 * N * k
+    cx = fx0 + fw * 0.68
+    heights = (0.56, 0.74, 0.44)
     xs = (cx - bar_w * 1.5 - gap, cx - bar_w / 2, cx + bar_w / 2 + gap)
-    for bx, fh in zip(xs, heights):
-        bh = fh * h
-        by0 = cy - bh / 2; by1 = cy + bh / 2
+    for bx, fhh in zip(xs, heights):
+        bh = fhh * fh
         g = vgradient((int(bar_w), int(bh)), top, bottom) if not mono else Image.new("RGBA", (int(bar_w), int(bh)), (235, 235, 235, 255))
         m = rounded_mask((int(bar_w), int(bh)), int(bar_w / 2))
-        L.paste(g, (int(bx), int(by0)), m)
+        L.paste(g, (int(bx), int(cy - bh / 2)), m)
     if not mono:
-        glow = L.filter(ImageFilter.GaussianBlur(int(0.012 * N)))
-        glow = Image.eval(glow, lambda v: v)  # keep as is
+        glow = L.filter(ImageFilter.GaussianBlur(int(0.010 * N)))
         base = Image.new("RGBA", (N, N), (0, 0, 0, 0)); base.alpha_composite(glow); base.alpha_composite(L)
         return base
     return L
@@ -93,11 +102,11 @@ def write_json(path, obj):
 
 def appiconset(name, top, bottom):
     d = os.path.join(OUT, f"{name}.appiconset"); os.makedirs(d, exist_ok=True)
-    folder, body = folder_layer()
-    compose([background(False), folder, bars_layer(top, bottom, body)]).convert("RGB").save(os.path.join(d, "icon.png"))
-    compose([background(True), folder, bars_layer(top, bottom, body)]).convert("RGB").save(os.path.join(d, "icon_dark.png"))
+    drive, face = drive_layer()
+    compose([background(False), drive, bars_layer(top, bottom, face)]).convert("RGB").save(os.path.join(d, "icon.png"))
+    compose([background(True), drive, bars_layer(top, bottom, face)]).convert("RGB").save(os.path.join(d, "icon_dark.png"))
     # tinted: grayscale artwork on transparent background, the system supplies the colour
-    tinted = compose([folder_layer(color=(200, 200, 200, 255))[0], bars_layer(top, bottom, body, mono=True)])
+    tinted = compose([drive_layer(color=(200, 200, 200, 255))[0], bars_layer(top, bottom, face, mono=True)])
     tinted = Image.merge("RGBA", (*[tinted.convert("L")] * 3, tinted.split()[3]))
     tinted.save(os.path.join(d, "icon_tinted.png"))
     write_json(os.path.join(d, "Contents.json"), {"images": [
@@ -108,10 +117,10 @@ def appiconset(name, top, bottom):
 
 def vision_layers(top, bottom):
     base = os.path.join(OUT, "AppIconVision.solidimagestack")
-    folder, body = folder_layer(scale=0.78)
+    drive, face = drive_layer(scale=0.78)
     compose([background(False)]).convert("RGB").save(os.path.join(base, "Back.solidimagestacklayer", "Content.imageset", "Back.png"))
-    compose([folder]).save(os.path.join(base, "Middle.solidimagestacklayer", "Content.imageset", "Middle.png"))
-    compose([bars_layer(top, bottom, body, scale=0.78)]).save(os.path.join(base, "Front.solidimagestacklayer", "Content.imageset", "Front.png"))
+    compose([drive]).save(os.path.join(base, "Middle.solidimagestacklayer", "Content.imageset", "Middle.png"))
+    compose([bars_layer(top, bottom, face)]).save(os.path.join(base, "Front.solidimagestacklayer", "Content.imageset", "Front.png"))
 
 if __name__ == "__main__":
     for key, (label, top, bottom) in VARIANTS.items():
