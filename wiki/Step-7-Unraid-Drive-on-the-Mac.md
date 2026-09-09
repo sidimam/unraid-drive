@@ -4,7 +4,7 @@ The same app runs on macOS 14 or later (Universal Purchase: one App Store downlo
 
 ## First launch
 
-1. Install Unraid Drive from the Mac App Store (or TestFlight) and open it.
+1. Install Unraid Drive: from the **Mac App Store** (universal purchase), with **Homebrew** (`brew install --cask sidimam/tap/unraid-drive`) or from the **DMG** on the [GitHub Releases](https://github.com/sidimam/unraid-drive/releases/latest) page (Developer ID signed and notarized; drag the app into Applications). Then open it.
 2. Add your server as on iOS (**+** → gateway URL, API key, optional Unraid login and Cloudflare Access token). If you enabled iCloud sync on the iPhone, the server list arrives by itself; the secrets arrive through **iCloud Keychain** — if that is off on the Mac, the app asks for the API key again (the Finder shows *"has not signed in"* with a **Sign in…** button until you do).
 3. macOS asks you once to allow the extension: **System Settings › General › Login Items & Extensions › File Providers → Unraid Drive**. The menu bar panel and the server page show a banner with a button that opens the right pane until it is enabled.
 4. Open the Finder: under **Locations** you find *Unraid Drive – ‹server name›* with the shares inside. Files download when you open them (cloud badge = on the NAS only).

@@ -36,6 +36,14 @@ It talks to [`unraid-gateway`](https://github.com/sidimam/unraid-gateway), a 10 
 - **Universal**: iPhone, iPad, native visionOS and macOS from one codebase.
 - **On the Mac, like the big cloud drives**: every server is a location in the Finder sidebar (`~/Library/CloudStorage/UnraidDrive-<server>`, files download on demand, the Finder shows the sync badges), with a menu bar panel — Home (open the folder, sync status, pause/resume), Activity (every download, upload, rename and deletion recorded by the extension), Notifications (unread Unraid notifications), and a gear menu with Preferences, Offline files (space used locally, free it up), Error list, About, Launch at login and Quit. The location must be enabled once in System Settings › General › Login Items & Extensions › File Providers; the app shows a banner until it is.
 
+## Install on the Mac
+
+- **Mac App Store** (universal purchase with the iOS app) — when the review is done.
+- **Homebrew**: `brew install --cask sidimam/tap/unraid-drive` (installs the same Developer ID signed, notarized DMG from the GitHub Releases into `/Applications`; update with `brew upgrade --cask unraid-drive`).
+- **DMG**: download `Unraid-Drive-<version>.dmg` from the [Releases](https://github.com/sidimam/unraid-drive/releases/latest), drag *Unraid Drive* into Applications. Apple Silicon or Intel, macOS 14+.
+
+After the first launch enable the extension under System Settings › General › Login Items & Extensions › File Providers ([Step 7 of the wiki](https://github.com/sidimam/unraid-drive/wiki/Step-7-Unraid-Drive-on-the-Mac)). `scripts/make_dmg.sh` builds, notarizes and staples the DMG.
+
 ## Project layout
 
 ```
@@ -100,4 +108,4 @@ MIT — see [LICENSE](LICENSE). Not affiliated with Lime Technology / Unraid; th
 
 ## Release
 
-`scripts/release.sh` archives, exports and uploads the iOS and visionOS builds to TestFlight (needs `ASC_ISSUER` in the environment and the App Store Connect API key in `~/.appstoreconnect/private_keys/`). `AppStore/store_meta.py` holds the localized App Store listing texts.
+`scripts/release.sh` archives, exports and uploads the iOS, visionOS and macOS builds to TestFlight (`PLATFORMS="macOS"` to restrict); `scripts/make_dmg.sh` produces the Developer ID DMG for GitHub Releases and the Homebrew cask (needs `ASC_ISSUER` in the environment and the App Store Connect API key in `~/.appstoreconnect/private_keys/`). `AppStore/store_meta.py` holds the localized App Store listing texts.
