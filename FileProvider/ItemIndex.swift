@@ -37,6 +37,26 @@ actor ItemIndex {
 
     // MARK: Identifiers
 
+    /// Identifier for an entry: the gateway's stable id when it provides one (gateway 0.5+),
+    /// otherwise a locally generated one that survives renames through `move`.
+    func identifier(for entry: FSEntry) -> NSFileProviderItemIdentifier {
+        if let sid = entry.itemID, !sid.isEmpty {
+            remember(id: sid, path: entry.path)
+            return NSFileProviderItemIdentifier(sid)
+        }
+        return identifier(for: entry.path)
+    }
+
+    /// Caches a server id ↔ path pair (and drops a stale mapping for the same path).
+    func remember(id: String, path: String) {
+        let p = GatewayPath.clean(path)
+        if let old = pathToID[p], old != id { idToPath[old] = nil }
+        if let oldPath = idToPath[id], oldPath != p { pathToID[oldPath] = nil }
+        idToPath[id] = p
+        pathToID[p] = id
+        markDirty()
+    }
+
     func identifier(for path: String) -> NSFileProviderItemIdentifier {
         let p = GatewayPath.clean(path)
         if p == "/" { return .rootContainer }

@@ -12,6 +12,9 @@ struct UnraidDriveApp: App {
     @AppStorage(AppLanguage.key, store: AppGroup.defaults) private var language = AppLanguage.system.rawValue
     @AppStorage(AppIconColor.storageKey, store: AppGroup.defaults) private var iconColor = "default"
     static let refreshTaskID = "com.sdimambro.unraid-drive.refresh"
+    #if os(iOS)
+    @UIApplicationDelegateAdaptor(QuickActionAppDelegate.self) private var appDelegate
+    #endif
 
     init() { NavigationBarStyle.apply() }
 

@@ -44,50 +44,78 @@ def background(dark: bool):
     top, bottom = ((0x2B, 0x2A, 0x29), (0x15, 0x14, 0x14)) if not dark else ((0x1A, 0x1A, 0x1A), (0x05, 0x05, 0x05))
     return vgradient((N, N), top, bottom)
 
+STYLE = "fused"  # "fused": bars rise through the drive body; "silhouette": one merged body outline with the bars inside; "vents": small front vents
+
 def drive_layer(color=(255, 255, 255, 255), scale=1.0):
-    """Network drive outline: sloped top, front face with a LED, network lead and plug below."""
+    """Network drive outline: sloped top, front face with a LED, network lead and plug below.
+    Returns the layer and the drive geometry used by bars_layer."""
     L = Image.new("RGBA", (N, N), (0, 0, 0, 0))
     d = ImageDraw.Draw(L)
     k = scale; cx = N / 2
     stroke = int(0.040 * N * k)
     def P(x, y): return (cx + (x - 0.5) * N * k, N / 2 + (y - 0.5) * N * k)
-    # top (sloped body)
-    top = [P(0.31, 0.17), P(0.69, 0.17), P(0.79, 0.49), P(0.21, 0.49)]
-    d.polygon(top, outline=color, width=stroke)
-    # front face
     fx0, fy0 = P(0.21, 0.49); fx1, fy1 = P(0.79, 0.66)
-    d.rounded_rectangle([fx0, fy0, fx1, fy1], radius=int(0.02 * N * k), outline=color, width=stroke)
-    # LED
-    lx, ly = P(0.31, 0.575); r = 0.028 * N * k
+    if STYLE == "silhouette":
+        body = [P(0.31, 0.17), P(0.69, 0.17), P(0.79, 0.49), P(0.79, 0.66), P(0.21, 0.66), P(0.21, 0.49)]
+        d.polygon(body, outline=color, width=stroke)
+        d.line([P(0.21, 0.49), P(0.79, 0.49)], fill=color, width=int(stroke * 0.55))
+    else:
+        top = [P(0.31, 0.17), P(0.69, 0.17), P(0.79, 0.49), P(0.21, 0.49)]
+        d.polygon(top, outline=color, width=stroke)
+        d.rounded_rectangle([fx0, fy0, fx1, fy1], radius=int(0.02 * N * k), outline=color, width=stroke)
+    lx, ly = P(0.30, 0.575); r = 0.026 * N * k
     d.ellipse([lx - r, ly - r, lx + r, ly + r], outline=color, width=int(stroke * 0.8))
-    # network lead: stem, horizontal line, plug
     sx, sy0 = P(0.50, 0.66); _, sy1 = P(0.50, 0.77)
     d.line([(sx, sy0), (sx, sy1)], fill=color, width=stroke)
-    lx0, ly = P(0.16, 0.82); lx1, _ = P(0.84, 0.82)
-    d.line([(lx0, ly), (lx1, ly)], fill=color, width=stroke, joint="curve")
-    d.ellipse([lx0 - stroke / 2, ly - stroke / 2, lx0 + stroke / 2, ly + stroke / 2], fill=color)
-    d.ellipse([lx1 - stroke / 2, ly - stroke / 2, lx1 + stroke / 2, ly + stroke / 2], fill=color)
+    lx0, ly2 = P(0.16, 0.82); lx1, _ = P(0.84, 0.82)
+    d.line([(lx0, ly2), (lx1, ly2)], fill=color, width=stroke)
+    for x in (lx0, lx1):
+        d.ellipse([x - stroke / 2, ly2 - stroke / 2, x + stroke / 2, ly2 + stroke / 2], fill=color)
     px0, py0 = P(0.42, 0.765); px1, py1 = P(0.58, 0.875)
     d.rounded_rectangle([px0, py0, px1, py1], radius=int(0.015 * N * k), fill=(0, 0, 0, 0), outline=color, width=stroke)
-    # front face box for the bars (right part of the face)
-    return L, (fx0, fy0, fx1 - fx0, fy1 - fy0, k)
+    geom = dict(P=P, k=k, face=(fx0, fy0, fx1 - fx0, fy1 - fy0), stroke=stroke)
+    return L, geom
 
-def bars_layer(top, bottom, face, scale=1.0, mono=False):
-    """Three Unraid bars as the drive's front vents (heights like the Unraid logo)."""
+def bars_layer(top, bottom, geom, mono=False):
+    """The Unraid mark (three bars, middle one tallest) fused with the drive."""
     L = Image.new("RGBA", (N, N), (0, 0, 0, 0))
-    fx0, fy0, fw, fh, k = face
-    cy = fy0 + fh / 2
-    bar_w = 0.045 * N * k; gap = 0.028 * N * k
-    cx = fx0 + fw * 0.68
-    heights = (0.56, 0.74, 0.44)
-    xs = (cx - bar_w * 1.5 - gap, cx - bar_w / 2, cx + bar_w / 2 + gap)
-    for bx, fhh in zip(xs, heights):
-        bh = fhh * fh
-        g = vgradient((int(bar_w), int(bh)), top, bottom) if not mono else Image.new("RGBA", (int(bar_w), int(bh)), (235, 235, 235, 255))
-        m = rounded_mask((int(bar_w), int(bh)), int(bar_w / 2))
-        L.paste(g, (int(bx), int(cy - bh / 2)), m)
+    P, k = geom["P"], geom["k"]
+    fx0, fy0, fw, fh = geom["face"]
+    if STYLE in ("fused", "silhouette"):
+        # Bars rise out of the drive body through the sloped top, like the Unraid logo
+        # standing on the NAS; they end above the LED line inside the front face.
+        cx = N / 2
+        bar_w = 0.075 * N * k; gap = 0.045 * N * k
+        base_y = fy0 + fh * 0.72
+        heights = (0.30, 0.44, 0.22)           # fraction of N*k, Unraid-like proportions
+        xs = (cx - bar_w * 1.5 - gap, cx - bar_w / 2, cx + bar_w / 2 + gap)
+        for bx, hh in zip(xs, heights):
+            bh = hh * N * k
+            g = vgradient((int(bar_w), int(bh)), top, bottom) if not mono else Image.new("RGBA", (int(bar_w), int(bh)), (235, 235, 235, 255))
+            m = rounded_mask((int(bar_w), int(bh)), int(bar_w / 2))
+            L.paste(g, (int(bx), int(base_y - bh)), m)
+        if STYLE == "silhouette":
+            # keep the bars inside the body: clip with the body polygon shrunk by the stroke
+            pts = [P(0.31, 0.17), P(0.69, 0.17), P(0.79, 0.49), P(0.79, 0.66), P(0.21, 0.66), P(0.21, 0.49)]
+            cx0 = sum(x for x, _ in pts) / len(pts); cy0 = sum(y for _, y in pts) / len(pts)
+            f = 1 - (geom["stroke"] * 1.1) / (0.29 * N * k)
+            inner = [(cx0 + (x - cx0) * f, cy0 + (y - cy0) * f) for x, y in pts]
+            clip = Image.new("L", (N, N), 0)
+            ImageDraw.Draw(clip).polygon(inner, fill=255)
+            L.putalpha(Image.composite(L.split()[3], Image.new("L", (N, N), 0), clip))
+    else:
+        cy = fy0 + fh / 2
+        bar_w = 0.045 * N * k; gap = 0.028 * N * k
+        cx = fx0 + fw * 0.68
+        heights = (0.56, 0.74, 0.44)
+        xs = (cx - bar_w * 1.5 - gap, cx - bar_w / 2, cx + bar_w / 2 + gap)
+        for bx, fhh in zip(xs, heights):
+            bh = fhh * fh
+            g = vgradient((int(bar_w), int(bh)), top, bottom) if not mono else Image.new("RGBA", (int(bar_w), int(bh)), (235, 235, 235, 255))
+            m = rounded_mask((int(bar_w), int(bh)), int(bar_w / 2))
+            L.paste(g, (int(bx), int(cy - bh / 2)), m)
     if not mono:
-        glow = L.filter(ImageFilter.GaussianBlur(int(0.010 * N)))
+        glow = L.filter(ImageFilter.GaussianBlur(int(0.012 * N)))
         base = Image.new("RGBA", (N, N), (0, 0, 0, 0)); base.alpha_composite(glow); base.alpha_composite(L)
         return base
     return L
@@ -103,10 +131,10 @@ def write_json(path, obj):
 def appiconset(name, top, bottom):
     d = os.path.join(OUT, f"{name}.appiconset"); os.makedirs(d, exist_ok=True)
     drive, face = drive_layer()
-    compose([background(False), drive, bars_layer(top, bottom, face)]).convert("RGB").save(os.path.join(d, "icon.png"))
-    compose([background(True), drive, bars_layer(top, bottom, face)]).convert("RGB").save(os.path.join(d, "icon_dark.png"))
+    compose([background(False), bars_layer(top, bottom, face), drive]).convert("RGB").save(os.path.join(d, "icon.png"))
+    compose([background(True), bars_layer(top, bottom, face), drive]).convert("RGB").save(os.path.join(d, "icon_dark.png"))
     # tinted: grayscale artwork on transparent background, the system supplies the colour
-    tinted = compose([drive_layer(color=(200, 200, 200, 255))[0], bars_layer(top, bottom, face, mono=True)])
+    tinted = compose([bars_layer(top, bottom, face, mono=True), drive_layer(color=(200, 200, 200, 255))[0]])
     tinted = Image.merge("RGBA", (*[tinted.convert("L")] * 3, tinted.split()[3]))
     tinted.save(os.path.join(d, "icon_tinted.png"))
     write_json(os.path.join(d, "Contents.json"), {"images": [
@@ -119,8 +147,8 @@ def vision_layers(top, bottom):
     base = os.path.join(OUT, "AppIconVision.solidimagestack")
     drive, face = drive_layer(scale=0.78)
     compose([background(False)]).convert("RGB").save(os.path.join(base, "Back.solidimagestacklayer", "Content.imageset", "Back.png"))
-    compose([drive]).save(os.path.join(base, "Middle.solidimagestacklayer", "Content.imageset", "Middle.png"))
-    compose([bars_layer(top, bottom, face)]).save(os.path.join(base, "Front.solidimagestacklayer", "Content.imageset", "Front.png"))
+    compose([bars_layer(top, bottom, face)]).save(os.path.join(base, "Middle.solidimagestacklayer", "Content.imageset", "Middle.png"))
+    compose([drive]).save(os.path.join(base, "Front.solidimagestacklayer", "Content.imageset", "Front.png"))
 
 if __name__ == "__main__":
     for key, (label, top, bottom) in VARIANTS.items():

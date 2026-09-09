@@ -95,9 +95,10 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
     }
 }
 
-/// The working set: everything the system has materialized. We report changes
-/// across the whole tree using the paginated change feed; deletions are
-/// detected by re-listing changed directories we have seen before.
+/// The working set: everything the system has materialized. With gateway 0.5+
+/// the id-based journal (`/fs/changes?seq=`) tells us exactly which items were
+/// created, modified, moved or deleted, instantly and without walking the tree.
+/// Older gateways fall back to the mtime walk of the paginated change feed.
 final class WorkingSetEnumerator: NSObject, NSFileProviderEnumerator {
     private let ext: FileProviderExtension
     init(ext: FileProviderExtension) { self.ext = ext }
@@ -107,45 +108,99 @@ final class WorkingSetEnumerator: NSObject, NSFileProviderEnumerator {
         observer.finishEnumerating(upTo: nil)
     }
 
+    /// Journal anchors are "seq:<n>"; anything else (a legacy anchor) restarts from 0.
+    private static func seq(from anchor: NSFileProviderSyncAnchor) -> Int64 {
+        guard let s = String(data: anchor.rawValue, encoding: .utf8), s.hasPrefix("seq:") else { return 0 }
+        return Int64(s.dropFirst(4)) ?? 0
+    }
+    private static func anchor(seq: Int64) -> NSFileProviderSyncAnchor { NSFileProviderSyncAnchor(Data("seq:\(seq)".utf8)) }
+
     func enumerateChanges(for observer: NSFileProviderChangeObserver, from anchor: NSFileProviderSyncAnchor) {
         Task {
-            guard let a = SyncAnchor(anchor) else { observer.finishEnumeratingWithError(NSFileProviderError(.syncAnchorExpired)); return }
             do {
                 guard let client = ext.client else { throw NSFileProviderError(.notAuthenticated) }
-                let page = try await client.changes("/", since: a.cursor, after: a.after, cursor: a.after == nil ? nil : a.cursor, limit: 5000)
+                let since = Self.seq(from: anchor)
+                let page: JournalPage
+                do {
+                    page = try await client.journal(seq: since, limit: 1000)
+                } catch let e as GatewayError where isLegacy(e) {
+                    await legacyChanges(client: client, observer: observer, anchor: anchor)
+                    return
+                }
+                if page.reset {
+                    if since == 0 {
+                        // First sync: nothing to replay, directory listings populate the tree.
+                        observer.finishEnumeratingChanges(upTo: Self.anchor(seq: page.seq), moreComing: false)
+                    } else {
+                        // The journal no longer covers our anchor: the system re-enumerates everything.
+                        observer.finishEnumeratingWithError(NSFileProviderError(.syncAnchorExpired))
+                    }
+                    return
+                }
                 var updated: [NSFileProviderItem] = []
                 var deleted: [NSFileProviderItemIdentifier] = []
-                // Shares that were unmounted from the container disappear from the root listing;
-                // report them (and therefore everything below them) as deleted.
-                if a.after == nil, let root = try? await client.list("/") {
-                    deleted += await ext.index.vanishedIdentifiers(in: "/", current: root.entries.map(\.name))
-                    await ext.index.rememberListing("/", names: root.entries.map(\.name))
-                    for e in root.entries { updated.append(await ext.makeItem(e)) }
-                }
-                for f in page.files { updated.append(await ext.makeItem(f)) }
-                var relisted = 0
-                for d in page.dirs where d != "/" {
-                    // Only directories we have listed before can have vanished children we know about.
-                    guard await ext.index.previousListing(d) != nil, relisted < 40 else { continue }
-                    relisted += 1
-                    if let listing = try? await client.list(d) {
-                        deleted += await ext.index.vanishedIdentifiers(in: d, current: listing.entries.map(\.name))
-                        await ext.index.rememberListing(d, names: listing.entries.map(\.name))
-                        if let e = try? await client.stat(d) { updated.append(await ext.makeItem(e)) }
+                for c in page.changes {
+                    switch c.kind {
+                    case .delete:
+                        deleted.append(NSFileProviderItemIdentifier(c.id))
+                        await ext.index.remove(path: c.path)
+                    case .upsert, .move:
+                        if let e = c.entry {
+                            if let old = c.oldPath { await ext.index.move(from: old, to: e.path) }
+                            updated.append(await ext.makeItem(e))
+                        } else {
+                            deleted.append(NSFileProviderItemIdentifier(c.id))
+                        }
                     }
                 }
                 if !updated.isEmpty { observer.didUpdate(updated) }
                 if !deleted.isEmpty { observer.didDeleteItems(withIdentifiers: deleted) }
-                if page.truncated, let next = page.next {
-                    observer.finishEnumeratingChanges(upTo: SyncAnchor(cursor: page.cursor, after: next).raw, moreComing: true)
-                } else {
-                    observer.finishEnumeratingChanges(upTo: SyncAnchor(cursor: page.cursor).raw, moreComing: false)
-                }
+                observer.finishEnumeratingChanges(upTo: Self.anchor(seq: page.seq), moreComing: page.truncated)
             } catch { observer.finishEnumeratingWithError(FileProviderExtension.mapError(error)) }
         }
     }
 
+    /// A gateway without the index answers `seq=` with the legacy walk payload, which fails to decode.
+    private func isLegacy(_ e: GatewayError) -> Bool {
+        if case .decoding = e { return true }
+        if case .http(let code, _) = e, code == 400 { return true }
+        return false
+    }
+
+    /// Legacy feed (gateway < 0.5): mtime walk, deletions inferred by re-listing changed directories.
+    private func legacyChanges(client: GatewayClient, observer: NSFileProviderChangeObserver, anchor: NSFileProviderSyncAnchor) async {
+        let a = SyncAnchor(anchor) ?? SyncAnchor.now
+        do {
+            let page = try await client.changes("/", since: a.cursor, after: a.after, cursor: a.after == nil ? nil : a.cursor, limit: 5000)
+            var updated: [NSFileProviderItem] = []
+            var deleted: [NSFileProviderItemIdentifier] = []
+            if a.after == nil, let root = try? await client.list("/") {
+                deleted += await ext.index.vanishedIdentifiers(in: "/", current: root.entries.map(\.name))
+                await ext.index.rememberListing("/", names: root.entries.map(\.name))
+                for e in root.entries { updated.append(await ext.makeItem(e)) }
+            }
+            for f in page.files { updated.append(await ext.makeItem(f)) }
+            var relisted = 0
+            for d in page.dirs where d != "/" {
+                guard await ext.index.previousListing(d) != nil, relisted < 40 else { continue }
+                relisted += 1
+                if let listing = try? await client.list(d) {
+                    deleted += await ext.index.vanishedIdentifiers(in: d, current: listing.entries.map(\.name))
+                    await ext.index.rememberListing(d, names: listing.entries.map(\.name))
+                    if let e = try? await client.stat(d) { updated.append(await ext.makeItem(e)) }
+                }
+            }
+            if !updated.isEmpty { observer.didUpdate(updated) }
+            if !deleted.isEmpty { observer.didDeleteItems(withIdentifiers: deleted) }
+            if page.truncated, let next = page.next {
+                observer.finishEnumeratingChanges(upTo: SyncAnchor(cursor: page.cursor, after: next).raw, moreComing: true)
+            } else {
+                observer.finishEnumeratingChanges(upTo: SyncAnchor(cursor: page.cursor).raw, moreComing: false)
+            }
+        } catch { observer.finishEnumeratingWithError(FileProviderExtension.mapError(error)) }
+    }
+
     func currentSyncAnchor(completionHandler: @escaping (NSFileProviderSyncAnchor?) -> Void) {
-        completionHandler(SyncAnchor.now.raw)
+        completionHandler(Self.anchor(seq: 0))
     }
 }

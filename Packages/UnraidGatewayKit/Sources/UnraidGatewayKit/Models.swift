@@ -11,12 +11,18 @@ public struct FSEntry: Codable, Hashable, Identifiable, Sendable {
     public var mtime: Date
     public var etag: String
     public var mode: String?
+    /// Stable server-side identifiers (gateway 0.5+). Nil with older gateways.
+    public var itemID: String?
+    public var parentID: String?
 
     public var id: String { path }
     public var isDirectory: Bool { type == .dir }
 
-    public init(name: String, path: String, type: Kind, size: Int64, mtime: Date, etag: String, mode: String? = nil) {
+    enum CodingKeys: String, CodingKey { case name, path, type, size, mtime, etag, mode, itemID = "id", parentID = "parentId" }
+
+    public init(name: String, path: String, type: Kind, size: Int64, mtime: Date, etag: String, mode: String? = nil, itemID: String? = nil, parentID: String? = nil) {
         self.name = name; self.path = path; self.type = type; self.size = size; self.mtime = mtime; self.etag = etag; self.mode = mode
+            self.itemID = itemID; self.parentID = parentID
     }
 }
 
@@ -27,7 +33,29 @@ public struct ListResponse: Codable, Sendable {
     public var entries: [FSEntry]
 }
 
-/// One page of the change feed. See the gateway README, "Change feed".
+/// The id of the data root in gateway 0.5+ journals.
+public let gatewayRootID = "root"
+
+/// One entry of the id-based change journal (gateway 0.5+): `/fs/changes?seq=`.
+public struct JournalChange: Codable, Sendable {
+    public enum Kind: String, Codable, Sendable { case upsert, delete, move }
+    public var seq: Int64
+    public var kind: Kind
+    public var id: String
+    public var path: String
+    public var oldPath: String?
+    public var entry: FSEntry?
+}
+
+/// A page of the journal. `reset` means: forget everything, enumerate again and continue from `seq`.
+public struct JournalPage: Codable, Sendable {
+    public var seq: Int64
+    public var reset: Bool
+    public var changes: [JournalChange]
+    public var truncated: Bool
+}
+
+/// One page of the legacy (mtime walk) change feed. See the gateway README, "Change feed".
 public struct ChangesPage: Codable, Sendable {
     public var path: String
     public var since: Int64

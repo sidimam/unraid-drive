@@ -41,3 +41,7 @@ Technically yes (it is a normal Docker image) but it needs an Unraid API to vali
 
 **Is the code open?**
 Yes: [unraid-gateway](https://github.com/sidimam/unraid-gateway) (Go) and [unraid-drive](https://github.com/sidimam/unraid-drive) (Swift), both MIT.
+
+## Are there Home Screen quick actions?
+
+Yes: long-press the app icon for **Open the Files app**, **Test connection** (first server) and **Add server**. Everything else happens inside the Files app itself, where Unraid Drive appears as a location.

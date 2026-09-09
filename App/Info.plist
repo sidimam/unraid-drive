@@ -31,6 +31,33 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>folder</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Open the Files app</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.sdimambro.unraid-drive.openFiles</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>stethoscope</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Test connection</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.sdimambro.unraid-drive.testConnection</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>plus</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Add server</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.sdimambro.unraid-drive.addServer</string>
+		</dict>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

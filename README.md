@@ -26,6 +26,8 @@ It talks to [`unraid-gateway`](https://github.com/sidimam/unraid-gateway), a 10 
 - **Demo mode**: a built-in sample server that works offline, in the app and in the Files app. Handy for App Store review and for trying the app before installing the container.
 - **7 languages**: English, Italian, Spanish, French, German, Simplified Chinese and Arabic (right-to-left). The app follows the device language; Settings has a language picker with a "System" option, plus a System/Light/Dark theme switch.
 - **Unraid look**: accent, headers and titles in the Unraid orange (#FF8C2F); the app icon (a Files-style folder holding the Unraid bars, distinct from the gateway icon) comes in six colours with light, dark and tinted variants. `scripts/make_icons.py` regenerates them.
+- **Sync like the big ones** (gateway 0.5+): items are addressed by the gateway's stable ids and the extension asks the gateway's change journal "what changed since sequence N" instead of walking the shares, so renames, moves and deletions made from anywhere (SMB, other containers, the app) reach the Files app within minutes and identities survive reinstalls. Older gateways still work through the legacy feed.
+- **Home Screen quick actions**: long-press the icon for Open the Files app, Test connection, Add server.
 - **Background refresh**: the app wakes its Files locations about once an hour, so a gateway restart (update, nightly backup) does not leave them paused until the next launch.
 - **Walkthrough** on first launch, re-openable with **?**.
 - **Secrets in the Keychain**, shared only with the extension. No analytics, no third-party servers.

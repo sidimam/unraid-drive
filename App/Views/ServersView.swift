@@ -11,6 +11,9 @@ struct ServersView: View {
     @AppStorage("walkthrough.seen") private var walkthroughSeen = false
     /// Navigation path; `-openServer` as a launch argument opens the first server (screenshot automation).
     @State private var path: [ServerConfig] = []
+    /// Server whose connection test was requested from a Home Screen quick action.
+    @State private var quickTestServer: ServerConfig?
+    @Environment(\.openURL) private var openURL
 
     @ViewBuilder private var restoreBanner: some View {
         if cloud.shouldOfferRestore(localServers: model.servers) {
@@ -79,6 +82,18 @@ struct ServersView: View {
                 AddServerView().presentationDetents([.large])
             }
             .sheet(isPresented: $showSettings) { SettingsView() }
+            .sheet(item: $quickTestServer) { ConnectionTestView(server: $0) }
+            #if os(iOS)
+            .onReceive(NotificationCenter.default.publisher(for: QuickAction.notification)) { note in
+                guard let raw = note.userInfo?["action"] as? String, let action = QuickAction(rawValue: raw) else { return }
+                showWalkthrough = false; showSettings = false
+                switch action {
+                case .openFiles: if let url = URL(string: "shareddocuments://") { openURL(url) }
+                case .testConnection: quickTestServer = model.servers.first { !$0.isDemo } ?? model.servers.first
+                case .addServer: adding = true
+                }
+            }
+            #endif
             .sheet(isPresented: $showWalkthrough, onDismiss: { walkthroughSeen = true }) {
                 WalkthroughView(onTryDemo: model.hasDemo ? nil : { Task { await model.addDemo() } })
             }

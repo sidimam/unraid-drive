@@ -175,6 +175,20 @@ public actor GatewayClient {
         return try decode(ChangesPage.self, data)
     }
 
+    /// Id-based change journal (gateway 0.5+). `seq` 0 = first sync.
+    public func journal(seq: Int64, limit: Int? = nil) async throws -> JournalPage {
+        var items = [URLQueryItem(name: "path", value: "/"), URLQueryItem(name: "seq", value: String(seq))]
+        if let limit { items.append(URLQueryItem(name: "limit", value: String(limit))) }
+        let (data, _) = try await authorized(get("/api/v1/fs/changes", items))
+        return try decode(JournalPage.self, data)
+    }
+
+    /// Resolves a server item id to its current entry (gateway 0.5+).
+    public func item(id: String) async throws -> FSEntry {
+        let (data, _) = try await authorized(get("/api/v1/fs/item", [URLQueryItem(name: "id", value: id)]))
+        return try decode(FSEntry.self, data)
+    }
+
     /// Runs a GraphQL query through the gateway proxy and returns the `data` object.
     public func graphQL<T: Decodable>(_ query: String, variables: [String: Any]? = nil, as type: T.Type) async throws -> T {
         var body: [String: Any] = ["query": query]

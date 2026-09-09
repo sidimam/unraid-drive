@@ -38,6 +38,16 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
 
     // MARK: - Helpers
 
+    /// Path for an identifier: from the local cache, or resolved through the gateway
+    /// (gateway 0.5+ ids survive a reinstall even though the cache does not).
+    func path(for identifier: NSFileProviderItemIdentifier) async -> String? {
+        if identifier == .rootContainer { return "/" }
+        if let p = await index.path(for: identifier) { return p }
+        guard let client, let entry = try? await client.item(id: identifier.rawValue) else { return nil }
+        await index.remember(id: identifier.rawValue, path: entry.path)
+        return entry.path
+    }
+
     /// Asks the system to enumerate the working set soon (deletions can only be reported there).
     func nudgeWorkingSet() {
         guard let mgr = NSFileProviderManager(for: domain) else { return }
@@ -69,8 +79,13 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     }
 
     func makeItem(_ entry: FSEntry) async -> FileProviderItem {
-        let id = await index.identifier(for: entry.path)
-        let parent = await index.identifier(for: GatewayPath.parent(entry.path))
+        let id = await index.identifier(for: entry)
+        let parent: NSFileProviderItemIdentifier
+        if let pid = entry.parentID, !pid.isEmpty {
+            parent = pid == gatewayRootID ? .rootContainer : NSFileProviderItemIdentifier(pid)
+        } else {
+            parent = await index.identifier(for: GatewayPath.parent(entry.path))
+        }
         // Share permissions come from the last login (per-user gateways); unknown → writable.
         var readOnly = false
         if let client, let share = entry.path.split(separator: "/").first {
@@ -98,7 +113,7 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
         run {
             if identifier == .rootContainer { completionHandler(RootItem(), nil); return }
             if identifier == .trashContainer || identifier == .workingSet { completionHandler(nil, NSFileProviderError(.noSuchItem)); return }
-            guard let path = await self.index.path(for: identifier) else { completionHandler(nil, NSFileProviderError(.noSuchItem)); return }
+            guard let path = await self.path(for: identifier) else { completionHandler(nil, NSFileProviderError(.noSuchItem)); return }
             do {
                 let entry = try await self.requireClient().stat(path)
                 completionHandler(await self.makeItem(entry), nil)
@@ -113,7 +128,7 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
                        request: NSFileProviderRequest,
                        completionHandler: @escaping (URL?, NSFileProviderItem?, Error?) -> Void) -> Progress {
         run {
-            guard let path = await self.index.path(for: itemIdentifier) else { completionHandler(nil, nil, NSFileProviderError(.noSuchItem)); return }
+            guard let path = await self.path(for: itemIdentifier) else { completionHandler(nil, nil, NSFileProviderError(.noSuchItem)); return }
             do {
                 let client = try self.requireClient()
                 let dest = self.tempDir.appendingPathComponent(UUID().uuidString)
@@ -130,7 +145,7 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
                     options: NSFileProviderCreateItemOptions = [], request: NSFileProviderRequest,
                     completionHandler: @escaping (NSFileProviderItem?, NSFileProviderItemFields, Bool, Error?) -> Void) -> Progress {
         run {
-            guard let parentPath = await self.index.path(for: itemTemplate.parentItemIdentifier) else {
+            guard let parentPath = await self.path(for: itemTemplate.parentItemIdentifier) else {
                 completionHandler(nil, [], false, NSFileProviderError(.noSuchItem)); return
             }
             if parentPath == "/" {
@@ -163,11 +178,11 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
                     contents newContents: URL?, options: NSFileProviderModifyItemOptions = [], request: NSFileProviderRequest,
                     completionHandler: @escaping (NSFileProviderItem?, NSFileProviderItemFields, Bool, Error?) -> Void) -> Progress {
         run {
-            guard var path = await self.index.path(for: item.itemIdentifier) else { completionHandler(nil, [], false, NSFileProviderError(.noSuchItem)); return }
+            guard var path = await self.path(for: item.itemIdentifier) else { completionHandler(nil, [], false, NSFileProviderError(.noSuchItem)); return }
             do {
                 let client = try self.requireClient()
                 if changedFields.contains(.filename) || changedFields.contains(.parentItemIdentifier) {
-                    guard let newParent = await self.index.path(for: item.parentItemIdentifier) else { throw NSFileProviderError(.noSuchItem) }
+                    guard let newParent = await self.path(for: item.parentItemIdentifier) else { throw NSFileProviderError(.noSuchItem) }
                     let newPath = GatewayPath.join(newParent, item.filename)
                     if newPath != path {
                         _ = try await client.move(path, to: newPath, overwrite: false)
@@ -190,7 +205,7 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
                     options: NSFileProviderDeleteItemOptions = [], request: NSFileProviderRequest,
                     completionHandler: @escaping (Error?) -> Void) -> Progress {
         run {
-            guard let path = await self.index.path(for: identifier) else { completionHandler(nil); return }
+            guard let path = await self.path(for: identifier) else { completionHandler(nil); return }
             do {
                 try await self.requireClient().delete(path, recursive: true)
                 await self.index.remove(path: path)

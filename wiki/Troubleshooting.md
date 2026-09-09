@@ -58,6 +58,10 @@ Quick check from a terminal: without headers `curl -I https://gw.example.com/hea
 - On iOS, **Settings → Unraid Drive** → make sure *Cellular Data* is allowed.
 - If it still spins, remove the server in the app and add it again; this rebuilds the local index.
 
+## Changes made on the NAS take a while to appear
+
+With gateway 0.5 or newer and app build 14 or newer, the gateway keeps an index of the shares and the app asks it for the changes since its last sync. Changes made through the app or the web UI are visible immediately; changes made over SMB or by other containers are picked up by the gateway's directory scan (every 5 minutes by default, `INDEX_DIR_SCAN`) and by the full scan (every 6 hours, `INDEX_FULL_SCAN`), or as soon as somebody opens that folder in the app. Opening the folder in Files always shows the current content.
+
 ## Files says "Sync paused" (or a share you removed from the container is still listed)
 
 iOS pauses a location after a network error, for example while the container restarts during an update, and then shows the cached listing until something wakes it up. Nothing is lost.
