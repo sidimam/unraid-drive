@@ -9,10 +9,11 @@ VERSION=$(grep -m1 'MARKETING_VERSION' project.yml | sed 's/.*"\(.*\)".*/\1/'); 
 APP="build/export-devid/Unraid Drive.app"; DMG="build/Unraid-Drive-$VERSION-$BUILD.dmg"
 if [ ! -d "$APP" ]; then
   rm -rf build/UnraidDrive-macOS.xcarchive build/export-devid
+  AUTH=(-allowProvisioningUpdates -authenticationKeyPath "$KEY" -authenticationKeyID "$KEY_ID" -authenticationKeyIssuerID "$ISSUER")
   xcodebuild archive -project UnraidDrive.xcodeproj -scheme UnraidDriveMac -destination "generic/platform=macOS" \
-    -archivePath build/UnraidDrive-macOS.xcarchive -derivedDataPath build/dd-macOS -allowProvisioningUpdates 2>&1 | grep -E "error:|ARCHIVE"
+    -archivePath build/UnraidDrive-macOS.xcarchive -derivedDataPath build/dd-macOS "${AUTH[@]}" 2>&1 | grep -E "error:|ARCHIVE"
   xcodebuild -exportArchive -archivePath build/UnraidDrive-macOS.xcarchive -exportOptionsPlist ExportOptions-DeveloperID.plist \
-    -exportPath build/export-devid -allowProvisioningUpdates 2>&1 | grep -E "error:|EXPORT"
+    -exportPath build/export-devid "${AUTH[@]}" 2>&1 | grep -E "error:|EXPORT"
   [ -d "$APP" ] || { echo "export failed"; exit 1; }
   echo "=== notarize app"
   ditto -c -k --keepParent "$APP" build/UnraidDrive-notarize.zip
@@ -23,7 +24,8 @@ echo "=== dmg"
 rm -rf build/dmg-root "$DMG"; mkdir -p build/dmg-root
 ditto "$APP" "build/dmg-root/Unraid Drive.app"; ln -s /Applications build/dmg-root/Applications
 hdiutil create -volname "Unraid Drive" -srcfolder build/dmg-root -ov -format UDZO "$DMG" | tail -1
-codesign --force --sign "Developer ID Application" --timestamp "$DMG"
+DEVID="${DEVID:-Developer ID Application: SIMONE DI MAMBRO (X5SR67A8AL)}"
+codesign --force --sign "$DEVID" --timestamp "$DMG" || { echo "dmg codesign failed"; exit 1; }
 echo "=== notarize dmg"
 xcrun notarytool submit "$DMG" --key "$KEY" --key-id "$KEY_ID" --issuer "$ISSUER" --wait | grep -E "id:|status:"
 xcrun stapler staple "$DMG" | tail -1
