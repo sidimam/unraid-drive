@@ -47,6 +47,10 @@ It talks to [`unraid-gateway`](https://github.com/sidimam/unraid-gateway), a 10 
 
 After the first launch enable the extension under System Settings › General › Login Items & Extensions › File Providers ([Step 7 of the wiki](https://github.com/sidimam/unraid-drive/wiki/Step-7-Unraid-Drive-on-the-Mac)). `scripts/make_dmg.sh` builds, notarizes and staples the DMG.
 
+## What's new
+
+See [CHANGELOG.md](CHANGELOG.md) (also in the [wiki](https://github.com/sidimam/unraid-drive/wiki/Changelog)) and the notes of each [GitHub release](https://github.com/sidimam/unraid-drive/releases).
+
 ## Project layout
 
 ```
