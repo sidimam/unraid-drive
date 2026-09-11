@@ -193,7 +193,7 @@ struct MenuBarPanel: View {
             footer.padding(10)
         }
         .frame(width: 400)
-        .tint(Color("AccentColor"))
+        .tint(AppIconColor.tint(for: iconColor))
         .task { await refresh() }
         .onChange(of: menuBarOnly) { _, _ in DockPolicy.apply() }
         .onChange(of: appearance) { _, v in (Appearance(rawValue: v) ?? .system).applyToWindows() }
@@ -204,7 +204,7 @@ struct MenuBarPanel: View {
     private var header: some View {
         HStack(spacing: 10) {
             Image(nsImage: NSApp.applicationIconImage).resizable().frame(width: 30, height: 30)
-            Text("Unraid Drive").font(.title3.weight(.semibold)).foregroundStyle(Color.accentColor)
+            Text("Unraid Drive").font(.title3.weight(.semibold)).foregroundStyle(AppIconColor.currentTint)
             Spacer()
             Button {
                 Task { paused.toggle(); await FileProviderDomains.setPaused(paused, servers: model.servers); await refresh() }
@@ -338,7 +338,7 @@ struct MenuBarPanel: View {
 
     private func activityRow(_ e: ActivityEvent) -> some View {
         HStack(spacing: 10) {
-            Image(systemName: e.symbol).font(.title3).foregroundStyle(e.failed ? .red : Color.accentColor).frame(width: 22)
+            Image(systemName: e.symbol).font(.title3).foregroundStyle(e.failed ? .red : AppIconColor.currentTint).frame(width: 22)
             VStack(alignment: .leading, spacing: 1) {
                 Text(e.name).lineLimit(1)
                 Text(e.subtitle).font(.caption).foregroundStyle(e.failed ? .red : .secondary).lineLimit(2)
@@ -417,7 +417,7 @@ struct MenuBarPanel: View {
 
     private func emptyState(_ symbol: String, _ title: LocalizedStringKey, _ text: LocalizedStringKey) -> some View {
         VStack(spacing: 8) {
-            Image(systemName: symbol).font(.system(size: 44)).foregroundStyle(Color.accentColor).padding(.top, 30)
+            Image(systemName: symbol).font(.system(size: 44)).foregroundStyle(AppIconColor.currentTint).padding(.top, 30)
             Text(title).font(.headline)
             Text(text).font(.callout).foregroundStyle(.secondary).multilineTextAlignment(.center)
         }.frame(maxWidth: .infinity).padding()
@@ -462,13 +462,13 @@ struct StorageView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Storage on this Mac").font(.title2.weight(.semibold)).foregroundStyle(Color.accentColor)
+            Text("Storage on this Mac").font(.title2.weight(.semibold)).foregroundStyle(AppIconColor.currentTint)
             Text("Files you open are kept on disk so they open instantly next time; the system removes them when space runs low. Free the space now if you prefer.").foregroundStyle(.secondary)
             Text("Folders and files with changes still uploading are kept.").font(.callout).foregroundStyle(.secondary)
             ForEach(model.servers) { s in
                 let u = usage[s.id]
                 HStack {
-                    Image(systemName: "externaldrive.connected.to.line.below").font(.title2).foregroundStyle(Color.accentColor)
+                    Image(systemName: "externaldrive.connected.to.line.below").font(.title2).foregroundStyle(AppIconColor.currentTint)
                     VStack(alignment: .leading) {
                         Text(s.name).font(.headline)
                         Text(u.map { "\($0.count) files · \(ByteCountFormatter.string(fromByteCount: $0.bytes, countStyle: .file))" } ?? "Calculating…").font(.callout).foregroundStyle(.secondary)
@@ -543,7 +543,7 @@ struct ErrorListView: View {
     @EnvironmentObject private var feed: ActivityFeed
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Error list").font(.title2.weight(.semibold)).foregroundStyle(Color.accentColor)
+            Text("Error list").font(.title2.weight(.semibold)).foregroundStyle(AppIconColor.currentTint)
             if feed.errors.isEmpty {
                 VStack(spacing: 8) {
                     Image(systemName: "checkmark.icloud.fill").font(.system(size: 56)).foregroundStyle(.green).padding(.top, 30)

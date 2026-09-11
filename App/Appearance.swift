@@ -113,6 +113,9 @@ struct AppIconColor: Identifiable, Equatable {
     let tint: Color
     var id: String { key }
     static let storageKey = "iconColor"
+    /// Tint of a colour key (the app's texts, toggles and headers follow the chosen icon colour).
+    static func tint(for key: String) -> Color { all.first { $0.key == key }?.tint ?? all[0].tint }
+    static var currentTint: Color { tint(for: AppGroup.defaults.string(forKey: storageKey) ?? "default") }
 
     static let all: [AppIconColor] = [
         .init(key: "default", label: "Unraid", tint: Color(red: 1.00, green: 0.55, blue: 0.18)),
@@ -166,17 +169,18 @@ struct IconColorPicker: View {
 /// Section header in the Unraid colour instead of the default grey.
 struct SectionTitle: View {
     let key: LocalizedStringKey
+    @AppStorage(AppIconColor.storageKey, store: AppGroup.defaults) private var iconColor = "default"
     init(_ key: LocalizedStringKey) { self.key = key }
-    var body: some View { Text(key).foregroundStyle(Color.accentColor) }
+    var body: some View { Text(key).foregroundStyle(AppIconColor.tint(for: iconColor)) }
 }
 
 /// Navigation titles in the Unraid colour (UIKit-drawn, so styled through the appearance proxy).
 enum NavigationBarStyle {
     static func apply() {
         #if os(iOS)
-        let orange = UIColor(red: 1.0, green: 0.55, blue: 0.18, alpha: 1)
-        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: orange]
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: orange]
+        let color = UIColor(AppIconColor.currentTint)
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: color]
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: color]
         #endif
     }
 }

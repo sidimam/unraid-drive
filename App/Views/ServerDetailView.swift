@@ -211,7 +211,7 @@ struct ServerDetailView: View {
     private func gauge(_ title: String, _ percent: Double) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack { Text(title); Spacer(); Text("\(Int(percent.rounded()))%").foregroundStyle(.secondary) }.font(.callout)
-            ProgressView(value: min(max(percent, 0), 100), total: 100).tint(percent > 90 ? .red : (percent > 75 ? .orange : .accentColor))
+            ProgressView(value: min(max(percent, 0), 100), total: 100).tint(percent > 90 ? .red : (percent > 75 ? .orange : AppIconColor.currentTint))
         }
     }
 

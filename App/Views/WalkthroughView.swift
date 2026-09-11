@@ -120,7 +120,7 @@ struct WalkthroughView: View {
                 page(pages[index]).id(index).frame(minWidth: 480, minHeight: 300)
                 HStack(spacing: 6) {
                     ForEach(0..<pages.count, id: \.self) { i in
-                        Circle().fill(i == index ? Color.accentColor : Color.secondary.opacity(0.35)).frame(width: 7, height: 7)
+                        Circle().fill(i == index ? AppIconColor.currentTint : Color.secondary.opacity(0.35)).frame(width: 7, height: 7)
                     }
                 }
                 #else

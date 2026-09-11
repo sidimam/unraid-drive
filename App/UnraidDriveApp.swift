@@ -35,16 +35,16 @@ struct UnraidDriveApp: App {
             Image("MenuBarIcon")
         }
         .menuBarExtraStyle(.window)
-        Window("Offline files", id: "storage") { StorageView().environmentObject(servers).modifier(AppLocaleModifier(language: AppLanguage(rawValue: language) ?? .system)).tint(Color("AccentColor")) }
+        Window("Offline files", id: "storage") { StorageView().environmentObject(servers).modifier(AppLocaleModifier(language: AppLanguage(rawValue: language) ?? .system)).tint(AppIconColor.tint(for: iconColor)) }
             .windowResizability(.contentSize)
-        Window("Error list", id: "errors") { ErrorListView().environmentObject(feed).modifier(AppLocaleModifier(language: AppLanguage(rawValue: language) ?? .system)).tint(Color("AccentColor")) }
+        Window("Error list", id: "errors") { ErrorListView().environmentObject(feed).modifier(AppLocaleModifier(language: AppLanguage(rawValue: language) ?? .system)).tint(AppIconColor.tint(for: iconColor)) }
             .windowResizability(.contentSize)
         #if DEBUG
         // `-panelPreview` launch argument: the menu bar panel in a normal window (screenshots).
         Window("Panel preview", id: "panelPreview") { MenuBarPanel().environmentObject(servers).environmentObject(feed).modifier(AppLocaleModifier(language: AppLanguage(rawValue: language) ?? .system)) }
             .windowResizability(.contentSize)
         #endif
-        Window("About Unraid Drive", id: "about") { AboutView().modifier(AppLocaleModifier(language: AppLanguage(rawValue: language) ?? .system)).tint(Color("AccentColor")) }
+        Window("About Unraid Drive", id: "about") { AboutView().modifier(AppLocaleModifier(language: AppLanguage(rawValue: language) ?? .system)).tint(AppIconColor.tint(for: iconColor)) }
             .windowResizability(.contentSize)
         #endif
     }
@@ -57,6 +57,7 @@ struct UnraidDriveApp: App {
                 .task { await seedFromLaunchArguments() }
                 .onAppear { (Appearance(rawValue: appearance) ?? .system).applyToWindows() }
                 .onChange(of: appearance) { _, v in (Appearance(rawValue: v) ?? .system).applyToWindows() }
+                .onChange(of: iconColor) { _, _ in NavigationBarStyle.apply() }
                 .onChange(of: scenePhase) { _, phase in
                     if phase == .active {
                         (Appearance(rawValue: appearance) ?? .system).applyToWindows()
@@ -66,7 +67,7 @@ struct UnraidDriveApp: App {
                     if phase == .background { Self.scheduleRefresh() }
                 }
                 .modifier(AppLocaleModifier(language: AppLanguage(rawValue: language) ?? .system))
-                .tint(Color("AccentColor"))
+                .tint(AppIconColor.tint(for: iconColor))
                 #if os(macOS)
                 .frame(minWidth: 640, minHeight: 440)
                 .handlesExternalEvents(preferring: ["signin"], allowing: ["*"])
