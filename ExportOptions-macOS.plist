@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>destination</key>
+	<string>export</string>
+	<key>installerSigningCertificate</key>
+	<string>3rd Party Mac Developer Installer</string>
+	<key>method</key>
+	<string>app-store-connect</string>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>com.sdimambro.unraid-drive</key>
+		<string>UnraidDrive Mac AppStore</string>
+		<key>com.sdimambro.unraid-drive.fileprovider</key>
+		<string>UnraidDrive FP Mac AppStore</string>
+	</dict>
+	<key>signingCertificate</key>
+	<string>3rd Party Mac Developer Application</string>
+	<key>signingStyle</key>
+	<string>manual</string>
+	<key>teamID</key>
+	<string>X5SR67A8AL</string>
+	<key>uploadSymbols</key>
+	<true/>
+</dict>
+</plist>

@@ -15,7 +15,8 @@ for PLAT in ${=PLATFORMS:-iOS visionOS macOS}; do   # PLATFORMS="iOS macOS" to r
   [ -d build/UnraidDrive-$PLAT.xcarchive ] || { echo "archive $PLAT failed"; exit 1; }
   for try in 1 2 3; do
     echo "=== export $PLAT (try $try)"
-    xcodebuild -exportArchive -archivePath build/UnraidDrive-$PLAT.xcarchive -exportOptionsPlist ExportOptions.plist \
+    EO=ExportOptions-$PLAT.plist; [ -f "$EO" ] || EO=ExportOptions.plist   # manual signing with the API-created profiles when present
+    xcodebuild -exportArchive -archivePath build/UnraidDrive-$PLAT.xcarchive -exportOptionsPlist "$EO" \
       -exportPath build/export-$PLAT "${AUTH[@]}" 2>&1 | grep -E "error:|EXPORT" && break
     sleep 10
   done
