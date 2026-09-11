@@ -30,11 +30,7 @@ FUNZIONI
 • Walkthrough a ogni aggiornamento con novità, ripristino della configurazione da iCloud e consenso alle notifiche.
 
 NOVITÀ NELLA 1.1
-• Comandi rapidi e Siri: salva gli appunti o un file in una share, prendi un file, elenca una cartella, aggiorna le posizioni, test di connessione.
-• Notifiche quando un gateway non risponde (e quando torna) e quando un file non è stato caricato o scaricato; si gestiscono dalle Impostazioni di sistema.
-• Walkthrough a ogni aggiornamento con le novità, ripristino della configurazione da iCloud e consenso alle notifiche.
-• Testi, intestazioni e controlli seguono il colore dell’icona scelto.
-• Mac: posizione nel Finder, pannello nella barra dei menu, cask Homebrew e DMG.
+Comandi rapidi e Siri, notifiche per gateway irraggiungibile e file non sincronizzati, walkthrough a ogni aggiornamento con ripristino da iCloud, colore app applicato a tutta l’interfaccia.
 
 SU MAC
 La stessa app (acquisto universale) porta le share nella barra laterale del Finder come gli altri cloud drive, con un pannello nella barra dei menu: stato della sincronizzazione, attività (download, upload, rinomine, eliminazioni), notifiche Unraid, pausa/ripresa, file offline, elenco errori, apertura al login e modalità solo barra dei menu.
@@ -73,11 +69,7 @@ FUNCIONES
 • Recorrido en cada actualización con las novedades, restauración de la configuración desde iCloud y permiso de notificaciones.
 
 NOVEDADES DE LA 1.1
-• Atajos y Siri: guarda el portapapeles o un archivo en un recurso compartido, obtén un archivo, lista una carpeta, actualiza las ubicaciones, prueba la conexión.
-• Notificaciones cuando un gateway deja de responder (y cuando vuelve) y cuando un archivo no se pudo subir o descargar; se gestionan desde los Ajustes del sistema.
-• Recorrido en cada actualización con las novedades, restauración de la configuración desde iCloud y permiso de notificaciones.
-• Textos, encabezados y controles siguen el color del icono elegido.
-• Mac: ubicación en el Finder, panel en la barra de menús, cask de Homebrew y DMG.
+Atajos y Siri, notificaciones de gateway no disponible y archivos no sincronizados, recorrido en cada actualización con restauración desde iCloud, color de la app en toda la interfaz.
 
 EN EL MAC
 La misma app (compra universal) lleva los recursos compartidos a la barra lateral del Finder como los demás cloud drives, con un panel en la barra de menús: estado de la sincronización, actividad (descargas, subidas, renombrados, eliminaciones), notificaciones de Unraid, pausa/reanudación, archivos sin conexión, lista de errores, apertura al iniciar sesión y modo solo barra de menús.
@@ -116,11 +108,7 @@ FONCTIONS
 • Visite guidée à chaque mise à jour avec les nouveautés, restauration de la configuration depuis iCloud et autorisation des notifications.
 
 NOUVEAUTÉS DE LA 1.1
-• Raccourcis et Siri : enregistrez le presse-papiers ou un fichier dans un partage, récupérez un fichier, listez un dossier, actualisez les emplacements, testez la connexion.
-• Notifications quand une passerelle ne répond plus (et quand elle revient) et quand un fichier n’a pu être envoyé ou téléchargé ; gérées depuis les Réglages système.
-• Visite guidée à chaque mise à jour avec les nouveautés, restauration de la configuration depuis iCloud et autorisation des notifications.
-• Textes, en-têtes et contrôles suivent la couleur d’icône choisie.
-• Mac : emplacement dans le Finder, panneau dans la barre des menus, cask Homebrew et DMG.
+Raccourcis et Siri, notifications de passerelle injoignable et de fichiers non synchronisés, visite guidée à chaque mise à jour avec restauration iCloud, couleur de l’app sur toute l’interface.
 
 SUR MAC
 La même app (achat universel) place les partages dans la barre latérale du Finder comme les autres cloud drives, avec un panneau dans la barre des menus : état de la synchronisation, activité (téléchargements, envois, renommages, suppressions), notifications Unraid, pause/reprise, fichiers hors ligne, liste des erreurs, ouverture à la connexion et mode barre des menus seule.
@@ -159,11 +147,7 @@ FUNKTIONEN
 • Einführung bei jedem Update mit den Neuerungen, Wiederherstellung der Konfiguration aus iCloud und Mitteilungsfreigabe.
 
 NEU IN 1.1
-• Kurzbefehle und Siri: Zwischenablage oder Datei in eine Freigabe sichern, Datei holen, Ordner auflisten, Orte aktualisieren, Verbindung testen.
-• Mitteilungen, wenn ein Gateway nicht mehr antwortet (und wenn es zurück ist) und wenn eine Datei nicht hoch- oder heruntergeladen werden konnte; verwaltet in den Systemeinstellungen.
-• Einführung bei jedem Update mit den Neuerungen, iCloud-Wiederherstellung der Konfiguration und Mitteilungsfreigabe.
-• Texte, Überschriften und Bedienelemente folgen der gewählten Symbolfarbe.
-• Mac: Finder-Ort, Menüleisten-Panel, Homebrew-Cask und DMG.
+Kurzbefehle und Siri, Mitteilungen bei nicht erreichbarem Gateway und nicht synchronisierten Dateien, Einführung bei jedem Update mit iCloud-Wiederherstellung, App-Farbe in der ganzen Oberfläche.
 
 AUF DEM MAC
 Dieselbe App (Universalkauf) bringt die Freigaben wie die anderen Cloud-Laufwerke in die Finder-Seitenleiste, mit einem Menüleisten-Panel: Synchronisierungsstatus, Aktivität (Downloads, Uploads, Umbenennungen, Löschungen), Unraid-Mitteilungen, Pause/Fortsetzen, Offline-Dateien, Fehlerliste, Start beim Anmelden und Nur-Menüleiste-Modus.
@@ -202,11 +186,7 @@ Unraid Drive ist ein unabhängiges Projekt und nicht mit Lime Technology / Unrai
 • 每次更新后的引导：新功能介绍、从 iCloud 恢复配置、通知授权。
 
 1.1 版新功能
-• 快捷指令与 Siri：将剪贴板或文件保存到共享、获取文件、列出文件夹、刷新位置、测试连接。
-• 网关停止响应（及恢复）时和文件无法上传或下载时的通知；在系统“设置”中管理。
-• 每次更新后的引导：新功能、从 iCloud 恢复配置、通知授权。
-• 文本、栏目标题和控件跟随所选图标颜色。
-• Mac：“访达”位置、菜单栏面板、Homebrew cask 和 DMG。
+快捷指令与 Siri、网关不可达及文件未同步的通知、每次更新后的引导（含 iCloud 恢复）、应用颜色应用于整个界面。
 
 在 Mac 上
 同一个应用（通用购买）像其他云盘一样把共享放入“访达”边栏，并提供菜单栏面板：同步状态、活动（下载、上传、重命名、删除）、Unraid 通知、暂停/恢复、离线文件、错误列表、登录时启动以及仅菜单栏模式。
@@ -245,11 +225,7 @@ Unraid Drive 是独立项目，与 Lime Technology / Unraid 无关。"""),
 • جولة تعريفية مع كل تحديث تعرض الجديد وتستعيد الإعدادات من iCloud وتطلب إذن الإشعارات.
 
 الجديد في 1.1
-• الاختصارات وSiri: احفظ الحافظة أو ملفًا في مشاركة، واحصل على ملف، واعرض مجلدًا، وحدّث المواقع، واختبر الاتصال.
-• إشعارات عند توقف بوابة عن الاستجابة (وعند عودتها) وعند فشل رفع ملف أو تنزيله؛ تُدار من إعدادات النظام.
-• جولة تعريفية مع كل تحديث تعرض الجديد وتستعيد الإعدادات من iCloud وتطلب إذن الإشعارات.
-• النصوص والعناوين وعناصر التحكم تتبع لون الأيقونة المختار.
-• Mac: موقع في Finder، لوحة شريط القوائم، cask لـ Homebrew وملف DMG.
+الاختصارات وSiri، إشعارات عند تعذّر الوصول إلى البوابة أو عدم مزامنة الملفات، جولة تعريفية مع كل تحديث تشمل الاستعادة من iCloud، لون التطبيق في كامل الواجهة.
 
 على Mac
 التطبيق نفسه (شراء موحّد) يضع المشاركات في الشريط الجانبي لـ Finder مثل بقية خدمات التخزين السحابي، مع لوحة في شريط القوائم: حالة المزامنة، النشاط (التنزيلات والرفع وإعادة التسمية والحذف)، إشعارات Unraid، الإيقاف المؤقت/الاستئناف، الملفات دون اتصال، قائمة الأخطاء، التشغيل عند تسجيل الدخول ووضع شريط القوائم فقط.
