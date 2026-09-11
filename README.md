@@ -48,7 +48,8 @@ It talks to [`unraid-gateway`](https://github.com/sidimam/unraid-gateway), a 10 
 - **Secrets in the Keychain**, shared only with the extension. No analytics, no third-party servers.
 - **Optional iCloud sync** (Settings): the server list goes to iCloud Key-Value Storage and the secrets to iCloud Keychain (end-to-end encrypted), so a restored or new iPhone finds its configuration. Off by default; a restore banner appears when iCloud holds a configuration and the device has none.
 - **Connection test** with five checks (reachability, key, shares, write probe, Files location) and **edit server** without losing the Files app location.
-- **Universal**: iPhone, iPad, native visionOS and macOS from one codebase.
+- **Universal**: iPhone, iPad, native visionOS, macOS and Apple TV from one codebase.
+- **Apple TV**: media browser through the gateway with the user's own permissions — photos, music and video played natively, dashboard; pairing by a 6-digit code from iPhone/iPad/Mac (credentials travel AES-GCM encrypted through iCloud Key-Value Storage). See [Step 8](https://github.com/sidimam/unraid-drive/wiki/Step-8-Unraid-Drive-on-Apple-TV).
 - **On the Mac, like the big cloud drives**: every server is a location in the Finder sidebar (`~/Library/CloudStorage/UnraidDrive-<server>`, files download on demand, the Finder shows the sync badges), with a menu bar panel — Home (open the folder, sync status, pause/resume), Activity (every download, upload, rename and deletion recorded by the extension), Notifications (unread Unraid notifications), and a gear menu with Preferences, Offline files (space used locally, free it up), Error list, About, Launch at login and Quit. The location must be enabled once in System Settings › General › Login Items & Extensions › File Providers; the app shows a banner until it is.
 
 ## Install on the Mac
