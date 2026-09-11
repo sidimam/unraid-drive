@@ -172,6 +172,59 @@ def write_fp_icon(light):
             images.append({"filename": name, "idiom": "mac", "scale": f"{scale}x", "size": f"{pt}x{pt}"})
     write_json(os.path.join(d, "Contents.json"), {"images": images, "info": {"author": "xcode", "version": 1}})
 
+def write_tv_brandassets(light):
+    """tvOS: layered app icon (400x240 @1x/@2x), App Store icon (1280x768) and Top Shelf images."""
+    from PIL import ImageDraw
+    art = artwork_mask(light); bars = bars_mask(light); drive = ImageChops.subtract(art, bars)
+    r, g, b = light.split()
+    bg_rgb = light.crop((2, 2, 10, 10)).resize((1, 1), Image.BOX).getpixel((0, 0))
+    def layer(mask, w, h):
+        """Artwork layer centred on a w×h transparent canvas, artwork height = 78 % of h."""
+        side = int(h * 0.78)
+        rgba = Image.merge("RGBA", (r, g, b, mask)).resize((side, side), Image.LANCZOS)
+        out = Image.new("RGBA", (w, h), (0, 0, 0, 0)); out.alpha_composite(rgba, ((w - side) // 2, (h - side) // 2)); return out
+    def back(w, h):
+        im = Image.new("RGB", (w, h)); px = im.load()
+        top, bottom = bg_rgb, tuple(max(0, c - 22) for c in bg_rgb)
+        for y in range(h):
+            t = y / (h - 1); c = tuple(int(top[i] + (bottom[i] - top[i]) * t) for i in range(3))
+            for x in range(w): px[x, y] = c
+        return im
+    root = os.path.join(OUT, "AppIconTV.brandassets"); os.makedirs(root, exist_ok=True)
+    assets = []
+    # App Icon (imagestack, 400x240 / 800x480)
+    stack = os.path.join(root, "App Icon.imagestack"); os.makedirs(stack, exist_ok=True)
+    layers = []
+    for name, maker in (("Front", lambda w, h: layer(bars, w, h)), ("Middle", lambda w, h: layer(drive, w, h)), ("Back", lambda w, h: back(w, h).convert("RGBA"))):
+        d = os.path.join(stack, f"{name}.imagestacklayer", "Content.imageset"); os.makedirs(d, exist_ok=True)
+        imgs = []
+        for scale in (1, 2):
+            fn = f"{name.lower()}@{scale}x.png"; maker(400 * scale, 240 * scale).save(os.path.join(d, fn)); imgs.append({"filename": fn, "idiom": "tv", "scale": f"{scale}x"})
+        write_json(os.path.join(d, "Contents.json"), {"images": imgs, "info": {"author": "xcode", "version": 1}})
+        write_json(os.path.join(stack, f"{name}.imagestacklayer", "Contents.json"), {"info": {"author": "xcode", "version": 1}})
+        layers.append({"filename": f"{name}.imagestacklayer"})
+    write_json(os.path.join(stack, "Contents.json"), {"layers": layers, "info": {"author": "xcode", "version": 1}})
+    assets.append({"filename": "App Icon.imagestack", "idiom": "tv", "role": "primary-app-icon", "size": "400x240"})
+    # App Icon - App Store (imagestack 1280x768)
+    stack = os.path.join(root, "App Icon - App Store.imagestack"); os.makedirs(stack, exist_ok=True); layers = []
+    for name, maker in (("Front", lambda w, h: layer(bars, w, h)), ("Middle", lambda w, h: layer(drive, w, h)), ("Back", lambda w, h: back(w, h).convert("RGBA"))):
+        d = os.path.join(stack, f"{name}.imagestacklayer", "Content.imageset"); os.makedirs(d, exist_ok=True)
+        fn = f"{name.lower()}.png"; maker(1280, 768).save(os.path.join(d, fn))
+        write_json(os.path.join(d, "Contents.json"), {"images": [{"filename": fn, "idiom": "tv", "scale": "1x"}], "info": {"author": "xcode", "version": 1}})
+        write_json(os.path.join(stack, f"{name}.imagestacklayer", "Contents.json"), {"info": {"author": "xcode", "version": 1}})
+        layers.append({"filename": f"{name}.imagestacklayer"})
+    write_json(os.path.join(stack, "Contents.json"), {"layers": layers, "info": {"author": "xcode", "version": 1}})
+    assets.append({"filename": "App Icon - App Store.imagestack", "idiom": "tv", "role": "primary-app-icon", "size": "1280x768"})
+    # Top Shelf images: artwork on the gradient, centred
+    for name, w, h, role in (("Top Shelf Image", 1920, 720, "top-shelf-image"), ("Top Shelf Image Wide", 2320, 720, "top-shelf-image-wide")):
+        d = os.path.join(root, f"{name}.imageset"); os.makedirs(d, exist_ok=True); imgs = []
+        for scale in (1, 2):
+            W, H = w * scale, h * scale; im = back(W, H).convert("RGBA"); im.alpha_composite(layer(art, W, H))
+            fn = f"{name.lower().replace(' ', '_')}@{scale}x.png"; im.convert("RGB").save(os.path.join(d, fn)); imgs.append({"filename": fn, "idiom": "tv", "scale": f"{scale}x"})
+        write_json(os.path.join(d, "Contents.json"), {"images": imgs, "info": {"author": "xcode", "version": 1}})
+        assets.append({"filename": f"{name}.imageset", "idiom": "tv", "role": role, "size": f"{w}x{h}"})
+    write_json(os.path.join(root, "Contents.json"), {"assets": assets, "info": {"author": "xcode", "version": 1}})
+
 def write_json(path, obj):
     with open(path, "w") as f: json.dump(obj, f, indent=2); f.write("\n")
 
@@ -182,6 +235,7 @@ def main():
     write_mac_icon_images(light)
     write_menubar_icon(light)
     write_fp_icon(light)
+    write_tv_brandassets(light)
     for key, (label, hue) in VARIANTS.items():
         d = os.path.join(OUT, "AppIconDrive.appiconset" if key == "default" else f"AppIcon-{key}.appiconset")
         os.makedirs(d, exist_ok=True)

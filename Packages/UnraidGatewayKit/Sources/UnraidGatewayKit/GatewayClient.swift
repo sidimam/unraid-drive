@@ -112,6 +112,15 @@ public actor GatewayClient {
         return try decode(FSEntry.self, data)
     }
 
+    /// Authorized GET for a file's content, for players that stream by themselves (AVPlayer on tvOS):
+    /// carries the session token and the extra headers (Cloudflare Access). The gateway supports HTTP ranges.
+    public func mediaRequest(_ path: String) async throws -> URLRequest {
+        var req = get("/api/v1/fs/content", [URLQueryItem(name: "path", value: path)])
+        req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
+        for (k, v) in extraHeaders { req.setValue(v, forHTTPHeaderField: k) }
+        return req
+    }
+
     /// Downloads a file to a temporary location owned by the caller.
     public func download(_ path: String, to destination: URL) async throws -> FSEntry {
         let req = get("/api/v1/fs/content", [URLQueryItem(name: "path", value: path)])

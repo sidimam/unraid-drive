@@ -11609,6 +11609,1126 @@
           }
         }
       }
+    },
+    "Servers": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Servidores"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serveurs"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服务器"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الخوادم"
+          }
+        }
+      }
+    },
+    "Pair with iPhone, iPad or Mac": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abbina con iPhone, iPad o Mac"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emparejar con iPhone, iPad o Mac"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jumeler avec un iPhone, iPad ou Mac"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mit iPhone, iPad oder Mac koppeln"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "与 iPhone、iPad 或 Mac 配对"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإقران مع iPhone أو iPad أو Mac"
+          }
+        }
+      }
+    },
+    "Waiting for your other device…": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In attesa dell’altro dispositivo…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esperando al otro dispositivo…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En attente de votre autre appareil…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warte auf dein anderes Gerät …"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在等待你的其他设备…"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "في انتظار جهازك الآخر…"
+          }
+        }
+      }
+    },
+    "Add a server from another device": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi un server da un altro dispositivo"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir un servidor desde otro dispositivo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter un serveur depuis un autre appareil"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server von einem anderen Gerät hinzufügen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从其他设备添加服务器"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إضافة خادم من جهاز آخر"
+          }
+        }
+      }
+    },
+    "Open Unraid Drive on your iPhone, iPad or Mac, go to Settings › Pair an Apple TV and enter this code. The server and its credentials arrive here encrypted with the code; the TV then connects through your unraid-gateway with your own permissions.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apri Unraid Drive su iPhone, iPad o Mac, vai in Impostazioni › Abbina una Apple TV e inserisci questo codice. Server e credenziali arrivano qui cifrati con il codice; la TV si collega poi tramite il tuo unraid-gateway con i tuoi permessi."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre Unraid Drive en tu iPhone, iPad o Mac, ve a Ajustes › Emparejar un Apple TV e introduce este código. El servidor y sus credenciales llegan aquí cifrados con el código; el TV se conecta luego a través de tu unraid-gateway con tus permisos."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez Unraid Drive sur votre iPhone, iPad ou Mac, allez dans Réglages › Jumeler une Apple TV et saisissez ce code. Le serveur et ses identifiants arrivent ici chiffrés avec le code ; la TV se connecte ensuite via votre unraid-gateway avec vos permissions."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne Unraid Drive auf iPhone, iPad oder Mac, gehe zu Einstellungen › Apple TV koppeln und gib diesen Code ein. Server und Zugangsdaten kommen mit dem Code verschlüsselt hier an; der TV verbindet sich dann über dein unraid-gateway mit deinen Berechtigungen."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 iPhone、iPad 或 Mac 上打开 Unraid Drive，进入“设置”›“配对 Apple TV”并输入此代码。服务器及其凭据会以该代码加密后送达；随后 Apple TV 通过你的 unraid-gateway 以你的权限连接。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "افتح Unraid Drive على iPhone أو iPad أو Mac، ثم انتقل إلى الإعدادات › إقران Apple TV وأدخل هذا الرمز. يصل الخادم وبيانات اعتماده هنا مشفّرة بالرمز؛ ثم يتصل التلفاز عبر unraid-gateway بصلاحياتك."
+          }
+        }
+      }
+    },
+    "New code": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuovo codice"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuevo código"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouveau code"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neuer Code"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新代码"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رمز جديد"
+          }
+        }
+      }
+    },
+    "Try the demo instead": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prova invece la demo"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Probar la demo en su lugar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essayer plutôt la démo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stattdessen die Demo ausprobieren"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "改为试用演示"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جرّب العرض التجريبي بدلًا من ذلك"
+          }
+        }
+      }
+    },
+    "Paired: %@": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abbinato: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emparejado: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jumelé : %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gekoppelt: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已配对：%@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم الإقران: %@"
+          }
+        }
+      }
+    },
+    "Received data could not be decrypted. Check the code and try again.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I dati ricevuti non si possono decifrare. Controlla il codice e riprova."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudieron descifrar los datos recibidos. Comprueba el código y vuelve a intentarlo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les données reçues n’ont pu être déchiffrées. Vérifiez le code et réessayez."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die empfangenen Daten konnten nicht entschlüsselt werden. Prüfe den Code und versuche es erneut."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法解密收到的数据。请检查代码后重试。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر فك تشفير البيانات المستلمة. تحقق من الرمز وحاول مجددًا."
+          }
+        }
+      }
+    },
+    "Dashboard": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dashboard"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Panel"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tableau de bord"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dashboard"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "仪表盘"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لوحة المعلومات"
+          }
+        }
+      }
+    },
+    "Remove this server from the TV": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rimuovi questo server dalla TV"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitar este servidor del TV"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirer ce serveur de la TV"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diesen Server vom TV entfernen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从 Apple TV 移除此服务器"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إزالة هذا الخادم من التلفاز"
+          }
+        }
+      }
+    },
+    "Remove %@?": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rimuovere %@?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Quitar %@?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirer %@ ?"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ entfernen?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要移除 %@ 吗？"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إزالة %@؟"
+          }
+        }
+      }
+    },
+    "Remove": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rimuovi"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirer"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entfernen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "移除"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إزالة"
+          }
+        }
+      }
+    },
+    "Files stay on the NAS. The TV plays photos, music and video in the formats supported by Apple TV (MP4, MOV, M4V, HEVC, AAC, MP3, JPEG, HEIC); other files are listed but cannot be opened here.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I file restano sul NAS. La TV riproduce foto, musica e video nei formati supportati da Apple TV (MP4, MOV, M4V, HEVC, AAC, MP3, JPEG, HEIC); gli altri file sono elencati ma non si aprono qui."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los archivos se quedan en el NAS. El TV reproduce fotos, música y vídeo en los formatos compatibles con Apple TV (MP4, MOV, M4V, HEVC, AAC, MP3, JPEG, HEIC); los demás archivos se listan pero no se pueden abrir aquí."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les fichiers restent sur le NAS. La TV lit photos, musique et vidéos dans les formats pris en charge par l’Apple TV (MP4, MOV, M4V, HEVC, AAC, MP3, JPEG, HEIC) ; les autres fichiers sont listés mais ne s’ouvrent pas ici."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Dateien bleiben auf dem NAS. Der TV zeigt Fotos, Musik und Videos in den von Apple TV unterstützten Formaten (MP4, MOV, M4V, HEVC, AAC, MP3, JPEG, HEIC); andere Dateien werden aufgelistet, lassen sich hier aber nicht öffnen."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文件保留在 NAS 上。Apple TV 播放其支持格式的照片、音乐和视频（MP4、MOV、M4V、HEVC、AAC、MP3、JPEG、HEIC）；其他文件会列出但无法在此打开。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تبقى الملفات على NAS. يعرض التلفاز الصور والموسيقى والفيديو بالصيغ التي يدعمها Apple TV (MP4، MOV، M4V، HEVC، AAC، MP3، JPEG، HEIC)؛ وتُدرج الملفات الأخرى دون إمكانية فتحها هنا."
+          }
+        }
+      }
+    },
+    "Cannot load this folder": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile caricare questa cartella"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se puede cargar esta carpeta"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de charger ce dossier"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Ordner kann nicht geladen werden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法加载此文件夹"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر تحميل هذا المجلد"
+          }
+        }
+      }
+    },
+    "Empty folder": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cartella vuota"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carpeta vacía"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dossier vide"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leerer Ordner"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "空文件夹"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مجلد فارغ"
+          }
+        }
+      }
+    },
+    "Credentials for this server are missing on the TV. Pair it again from your iPhone, iPad or Mac.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sulla TV mancano le credenziali di questo server. Ripeti l’abbinamento da iPhone, iPad o Mac."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faltan las credenciales de este servidor en el TV. Vuelve a emparejarlo desde tu iPhone, iPad o Mac."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les identifiants de ce serveur manquent sur la TV. Refaites le jumelage depuis votre iPhone, iPad ou Mac."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Zugangsdaten dieses Servers fehlen auf dem TV. Kopple ihn erneut von iPhone, iPad oder Mac."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple TV 上缺少此服务器的凭据。请从 iPhone、iPad 或 Mac 重新配对。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بيانات اعتماد هذا الخادم مفقودة على التلفاز. أعد الإقران من iPhone أو iPad أو Mac."
+          }
+        }
+      }
+    },
+    "Cannot play this file": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile riprodurre questo file"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se puede reproducir este archivo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de lire ce fichier"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Datei kann nicht wiedergegeben werden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法播放此文件"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر تشغيل هذا الملف"
+          }
+        }
+      }
+    },
+    "Cannot show this image": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile mostrare questa immagine"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se puede mostrar esta imagen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d’afficher cette image"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Bild kann nicht angezeigt werden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法显示此图像"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر عرض هذه الصورة"
+          }
+        }
+      }
+    },
+    "Unsupported image format.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formato immagine non supportato."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formato de imagen no compatible."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Format d’image non pris en charge."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht unterstütztes Bildformat."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不支持的图像格式。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صيغة صورة غير مدعومة."
+          }
+        }
+      }
+    },
+    "Dashboard unavailable": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dashboard non disponibile"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Panel no disponible"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tableau de bord indisponible"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dashboard nicht verfügbar"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "仪表盘不可用"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لوحة المعلومات غير متاحة"
+          }
+        }
+      }
+    },
+    "Used": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usato"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utilisé"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belegt"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已用"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المستخدم"
+          }
+        }
+      }
+    },
+    "Pair an Apple TV": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abbina una Apple TV"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emparejar un Apple TV"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jumeler une Apple TV"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple TV koppeln"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配对 Apple TV"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إقران Apple TV"
+          }
+        }
+      }
+    },
+    "On the Apple TV open Unraid Drive: it shows a 6-digit code. Enter it here and choose the server to send. The credentials travel encrypted with the code; the TV connects through your unraid-gateway with your own permissions.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sulla Apple TV apri Unraid Drive: mostra un codice di 6 cifre. Inseriscilo qui e scegli il server da inviare. Le credenziali viaggiano cifrate con il codice; la TV si collega tramite il tuo unraid-gateway con i tuoi permessi."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En el Apple TV abre Unraid Drive: muestra un código de 6 cifras. Introdúcelo aquí y elige el servidor a enviar. Las credenciales viajan cifradas con el código; el TV se conecta a través de tu unraid-gateway con tus permisos."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sur l’Apple TV, ouvrez Unraid Drive : elle affiche un code à 6 chiffres. Saisissez-le ici et choisissez le serveur à envoyer. Les identifiants voyagent chiffrés avec le code ; la TV se connecte via votre unraid-gateway avec vos permissions."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne auf dem Apple TV Unraid Drive: Es zeigt einen 6-stelligen Code. Gib ihn hier ein und wähle den zu sendenden Server. Die Zugangsdaten reisen mit dem Code verschlüsselt; der TV verbindet sich über dein unraid-gateway mit deinen Berechtigungen."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Apple TV 上打开 Unraid Drive：它会显示一个 6 位代码。在此输入并选择要发送的服务器。凭据以该代码加密传输；Apple TV 通过你的 unraid-gateway 以你的权限连接。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "على Apple TV افتح Unraid Drive: سيعرض رمزًا من 6 أرقام. أدخله هنا واختر الخادم المطلوب إرساله. تنتقل بيانات الاعتماد مشفّرة بالرمز؛ ويتصل التلفاز عبر unraid-gateway بصلاحياتك."
+          }
+        }
+      }
+    },
+    "Code shown on the TV": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Codice mostrato sulla TV"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Código mostrado en el TV"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code affiché sur la TV"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auf dem TV gezeigter Code"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple TV 上显示的代码"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الرمز المعروض على التلفاز"
+          }
+        }
+      }
+    },
+    "Sent. The TV picks it up within a few seconds.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inviato. La TV lo riceve entro pochi secondi."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviado. El TV lo recibe en unos segundos."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyé. La TV le récupère en quelques secondes."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesendet. Der TV übernimmt es in wenigen Sekunden."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已发送。Apple TV 会在几秒内接收。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم الإرسال. سيستلمه التلفاز خلال ثوانٍ."
+          }
+        }
+      }
+    },
+    "Send": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invia"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Senden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "发送"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إرسال"
+          }
+        }
+      }
+    },
+    "The API key of this server is missing on this device.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Su questo dispositivo manca la chiave API di questo server."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falta la clave API de este servidor en este dispositivo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La clé API de ce serveur manque sur cet appareil."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der API-Schlüssel dieses Servers fehlt auf diesem Gerät."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此设备上缺少该服务器的 API 密钥。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مفتاح API لهذا الخادم مفقود على هذا الجهاز."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

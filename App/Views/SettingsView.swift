@@ -15,6 +15,7 @@ struct SettingsView: View {
     @EnvironmentObject private var cloud: CloudSync
     @Environment(\.dismiss) private var dismiss
     @State private var busy = false
+    @State private var pairTV = false
     @AppStorage(Appearance.key, store: AppGroup.defaults) private var appearance = Appearance.system.rawValue
     @AppStorage(AppLanguage.key, store: AppGroup.defaults) private var language = AppLanguage.system.rawValue
     @AppStorage(AppIconColor.storageKey, store: AppGroup.defaults) private var iconColor = "default"
@@ -45,6 +46,9 @@ struct SettingsView: View {
                     #endif
                     Button { AppNotifications.openSystemSettings() } label: {
                         HStack { Label("Notifications", systemImage: "bell.badge"); Spacer(); Image(systemName: "chevron.right").foregroundStyle(.tertiary) }
+                    }
+                    if model.servers.contains(where: { !$0.isDemo }) {
+                        Button { pairTV = true } label: { Label("Pair an Apple TV", systemImage: "appletv") }
                     }
                     #if os(macOS)
                     Toggle(isOn: Binding(get: { launchAtLogin }, set: { v in
@@ -98,6 +102,7 @@ struct SettingsView: View {
                 }
             }
             .groupedFormStyle()
+            .sheet(isPresented: $pairTV) { PairTVView() }
             .navigationTitle("Settings")
             .inlineNavigationTitle()
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
