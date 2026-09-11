@@ -44,6 +44,24 @@ struct TVServersView: View {
     }
 }
 
+// MARK: - Buttons
+
+/// Stand-alone buttons on tvOS: with the app tint applied globally, the system style paints the
+/// focused button *and* its text in the tint, which makes the label unreadable. This style keeps
+/// the text white on the tinted focus background and dark on the resting material.
+struct TVPillButtonStyle: ButtonStyle {
+    @Environment(\.isFocused) private var focused
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.headline)
+            .padding(.horizontal, 32).padding(.vertical, 16)
+            .background(focused ? AnyShapeStyle(.tint) : AnyShapeStyle(.regularMaterial), in: Capsule())
+            .foregroundStyle(focused ? Color.white : Color.primary)
+            .scaleEffect(focused ? 1.06 : 1)
+            .animation(.easeOut(duration: 0.15), value: focused)
+    }
+}
+
 // MARK: - Pairing
 
 /// Shows a 6-digit code; the phone/Mac app sends the server and its secrets, encrypted with the
@@ -62,7 +80,7 @@ struct TVPairView: View {
             // Right after pairing: choose the shares to show on this TV (the phone's choice is the start).
             VStack(spacing: 20) {
                 TVSharesView(server: paired)
-                Button("Done") { dismiss() }.padding(.bottom, 40)
+                Button("Done") { dismiss() }.buttonStyle(TVPillButtonStyle()).padding(.bottom, 40)
             }
         } else {
             pairingView
@@ -82,6 +100,7 @@ struct TVPairView: View {
                 Button("New code") { code = TVPairing.generateCode() }
                 if !model.servers.contains(where: \.isDemo) { Button("Try the demo instead") { model.addDemo(); dismiss() } }
             }
+            .buttonStyle(TVPillButtonStyle())
         }
         .padding(60)
         .task { await poll() }
