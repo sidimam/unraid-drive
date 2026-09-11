@@ -19,7 +19,7 @@ Click the Unraid Drive glyph in the menu bar:
 - **Activity** — every download, upload, new folder, rename and deletion the extension performed, with size and time; failures are red. *Clear* empties the list.
 - **Notifications** — unread Unraid notifications (alerts and warnings) of each server.
 - **⏸ / ▶** pauses and resumes all locations (the Finder greys them out while paused).
-- **⚙ gear** — Preferences (the main window), Offline files (space used on this Mac per server, *Free up space*), Error list, About, Help, Send feedback, **Launch at login**, **Show only in the menu bar**, **Theme** (System / Light / Dark), **Icon colour**, Quit.
+- **⚙ gear** — Preferences (the main window), Offline files (space used on this Mac per server, *Free up space*), Error list, About, Help, Send feedback, **Launch at login**, **Show only in the menu bar**, **Theme** (System / Light / Dark), **App colour**, Quit.
 - **Refresh** (bottom right) asks the Finder to re-read every location from the gateway and reloads status, activity and notifications; it shows the time of the last check.
 
 *Show only in the menu bar* turns Unraid Drive into a menu-bar app: no Dock icon, the panel is the entry point and *Open Unraid Drive* brings the window back. Theme, language and icon colour are the same settings as on iOS (Preferences › App settings); on the Mac the icon colour applies to the Dock icon while the app runs.
