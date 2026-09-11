@@ -6,9 +6,18 @@ import UnraidGatewayKit
 
 struct TVRootView: View {
     @EnvironmentObject private var model: TVModel
+    /// Debug: `-tvOpen <path>` opens that folder of the demo server directly (screenshots).
+    private var debugPath: String? {
+        #if DEBUG
+        let a = ProcessInfo.processInfo.arguments
+        if let i = a.firstIndex(of: "-tvOpen"), a.count > i + 1 { return a[i + 1] }
+        #endif
+        return nil
+    }
     var body: some View {
         NavigationStack {
-            if model.servers.isEmpty { TVPairView() } else { TVServersView() }
+            if let p = debugPath, let demo = model.servers.first(where: \.isDemo) { TVBrowserView(server: demo, path: p, title: (p as NSString).lastPathComponent.isEmpty ? demo.name : (p as NSString).lastPathComponent) }
+            else if model.servers.isEmpty { TVPairView() } else { TVServersView() }
         }
     }
 }
@@ -21,7 +30,7 @@ struct TVServersView: View {
             Section {
                 ForEach(model.servers) { s in
                     NavigationLink { TVServerHome(server: s) } label: {
-                        Label { VStack(alignment: .leading) { Text(s.name).font(.headline); Text(s.isDemo ? "Sample data, offline" : (s.username.map { "\($0) · " } ?? "") + (s.url.host ?? "")).font(.caption).foregroundStyle(.secondary) } }
+                        Label { VStack(alignment: .leading) { Text(s.name).font(.headline); (s.isDemo ? Text("Sample data, offline") : Text(verbatim: (s.username.map { "\($0) · " } ?? "") + (s.url.host ?? ""))).font(.caption).foregroundStyle(.secondary) } }
                         icon: { Image(systemName: s.isDemo ? "sparkles" : "externaldrive.connected.to.line.below") }
                     }
                 }
