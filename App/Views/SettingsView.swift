@@ -55,9 +55,9 @@ struct SettingsView: View {
                     #endif
                 } header: { SectionTitle("App settings") } footer: {
                     #if os(macOS)
-                    Text("System follows the Mac settings for theme and language. A forced language applies to this app only; a few system-provided texts follow at the next launch. The icon colour applies to the Dock icon while the app runs.")
+                    Text("System follows the Mac settings for theme and language. A forced language applies to this app only; a few system-provided texts follow at the next launch. The icon colour also colours the app's titles, headers and controls, and the Dock icon while the app runs.")
                     #else
-                    Text("System follows the device settings for theme and language. A forced language applies to this app only; a few system-provided texts follow at the next launch. The icon colour applies to iPhone and iPad; Apple Vision Pro keeps the layered icon.")
+                    Text("System follows the device settings for theme and language. A forced language applies to this app only; a few system-provided texts follow at the next launch. The icon colour also colours the app's titles, headers and controls; Apple Vision Pro keeps the layered icon.")
                     #endif
                 }
 

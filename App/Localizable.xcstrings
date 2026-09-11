@@ -11489,6 +11489,86 @@
           }
         }
       }
+    },
+    "System follows the device settings for theme and language. A forced language applies to this app only; a few system-provided texts follow at the next launch. The icon colour also colours the app's titles, headers and controls; Apple Vision Pro keeps the layered icon.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistema segue le impostazioni del dispositivo per tema e lingua. Una lingua forzata vale solo per questa app; alcuni testi di sistema si adeguano al prossimo avvio. Il colore dell’icona colora anche titoli, intestazioni e controlli dell’app; Apple Vision Pro mantiene l’icona a livelli."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistema sigue los ajustes del dispositivo para el tema y el idioma. Un idioma forzado solo se aplica a esta app; algunos textos del sistema cambian en el próximo inicio. El color del icono también colorea títulos, encabezados y controles de la app; Apple Vision Pro mantiene el icono por capas."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Système suit les réglages de l’appareil pour le thème et la langue. Une langue forcée ne s’applique qu’à cette app ; quelques textes système suivent au prochain lancement. La couleur de l’icône colore aussi les titres, en-têtes et contrôles de l’app ; Apple Vision Pro conserve l’icône en couches."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System folgt den Geräteeinstellungen für Design und Sprache. Eine erzwungene Sprache gilt nur für diese App; einige Systemtexte folgen beim nächsten Start. Die Symbolfarbe färbt auch Titel, Überschriften und Bedienelemente der App; Apple Vision Pro behält das Ebenen-Symbol."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“系统”跟随设备的主题和语言设置。强制语言仅适用于本应用；部分系统文本在下次启动时生效。图标颜色同时应用于应用的标题、栏目标题和控件；Apple Vision Pro 保留分层图标。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يتبع «النظام» إعدادات الجهاز للمظهر واللغة. تنطبق اللغة المفروضة على هذا التطبيق فقط؛ وتتغيّر بعض نصوص النظام عند التشغيل التالي. يلوّن لون الأيقونة أيضًا عناوين التطبيق ورؤوس الأقسام وعناصر التحكم؛ ويحتفظ Apple Vision Pro بالأيقونة متعددة الطبقات."
+          }
+        }
+      }
+    },
+    "System follows the Mac settings for theme and language. A forced language applies to this app only; a few system-provided texts follow at the next launch. The icon colour also colours the app's titles, headers and controls, and the Dock icon while the app runs.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistema segue le impostazioni del Mac per tema e lingua. Una lingua forzata vale solo per questa app; alcuni testi di sistema si adeguano al prossimo avvio. Il colore dell’icona colora anche titoli, intestazioni e controlli dell’app e l’icona nel Dock mentre l’app è in esecuzione."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistema sigue los ajustes del Mac para el tema y el idioma. Un idioma forzado solo se aplica a esta app; algunos textos del sistema cambian en el próximo inicio. El color del icono también colorea títulos, encabezados y controles de la app y el icono del Dock mientras la app se ejecuta."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Système suit les réglages du Mac pour le thème et la langue. Une langue forcée ne s’applique qu’à cette app ; quelques textes système suivent au prochain lancement. La couleur de l’icône colore aussi les titres, en-têtes et contrôles de l’app ainsi que l’icône du Dock pendant l’exécution."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System folgt den Mac-Einstellungen für Design und Sprache. Eine erzwungene Sprache gilt nur für diese App; einige Systemtexte folgen beim nächsten Start. Die Symbolfarbe färbt auch Titel, Überschriften und Bedienelemente der App sowie das Dock-Symbol, solange die App läuft."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“系统”跟随 Mac 的主题和语言设置。强制语言仅适用于本应用；部分系统文本在下次启动时生效。图标颜色同时应用于应用的标题、栏目标题和控件，以及运行期间的程序坞图标。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يتبع «النظام» إعدادات Mac للمظهر واللغة. تنطبق اللغة المفروضة على هذا التطبيق فقط؛ وتتغيّر بعض نصوص النظام عند التشغيل التالي. يلوّن لون الأيقونة أيضًا عناوين التطبيق ورؤوس الأقسام وعناصر التحكم وأيقونة Dock أثناء تشغيل التطبيق."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
