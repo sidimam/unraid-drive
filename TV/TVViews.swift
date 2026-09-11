@@ -14,9 +14,18 @@ struct TVRootView: View {
         #endif
         return nil
     }
+    /// Debug: `-tvPlayURL <url>` opens the mpv player on any URL (no gateway needed).
+    private var debugPlayURL: URL? {
+        #if DEBUG
+        let a = ProcessInfo.processInfo.arguments
+        if let i = a.firstIndex(of: "-tvPlayURL"), a.count > i + 1 { return URL(string: a[i + 1]) }
+        #endif
+        return nil
+    }
     var body: some View {
         NavigationStack {
-            if let p = debugPath, let demo = model.servers.first(where: \.isDemo) { TVBrowserView(server: demo, path: p, title: (p as NSString).lastPathComponent.isEmpty ? demo.name : (p as NSString).lastPathComponent) }
+            if let u = debugPlayURL { TVMPVDebugPlayer(url: u) }
+            else if let p = debugPath, let demo = model.servers.first(where: \.isDemo) { TVBrowserView(server: demo, path: p, title: (p as NSString).lastPathComponent.isEmpty ? demo.name : (p as NSString).lastPathComponent) }
             else if model.servers.isEmpty { TVPairView() } else { TVServersView() }
         }
     }
@@ -144,7 +153,7 @@ struct TVServerHome: View {
             Section {
                 Button(role: .destructive) { confirmRemove = true } label: { Label("Remove this server from the TV", systemImage: "trash") }
                     .confirmationDialog("Remove \(server.name)?", isPresented: $confirmRemove) { Button("Remove", role: .destructive) { model.remove(server) } }
-            } footer: { Text("Files stay on the NAS. The TV plays photos, music and video in the formats supported by Apple TV (MP4, MOV, M4V, HEVC, AAC, MP3, JPEG, HEIC); other files are listed but cannot be opened here.") }
+            } footer: { Text("Files stay on the NAS. Photos, music and video in Apple formats (MP4, MOV, HEVC, AAC, MP3, JPEG, HEIC) play with the system player; MKV, AVI, WebM, FLAC and the other formats play with the built-in mpv player (libmpv and FFmpeg, open source). Documents are listed but cannot be opened here.") }
         }
         .navigationTitle(server.name)
     }
@@ -161,19 +170,25 @@ struct TVBrowserView: View {
     @State private var error: String?
     @State private var loading = true
     @State private var playing: FSEntry?
+    @State private var playingMPV: FSEntry?
     @State private var viewing: FSEntry?
 
+    // Native (AVFoundation) formats play with the system player; everything else goes to libmpv.
     private static let video: Set<String> = ["mp4", "m4v", "mov", "hevc", "ts", "m3u8"]
-    private static let audio: Set<String> = ["mp3", "m4a", "aac", "wav", "aiff", "flac", "caf"]
+    private static let audio: Set<String> = ["mp3", "m4a", "aac", "wav", "aiff", "caf"]
+    private static let mpvVideo: Set<String> = ["mkv", "avi", "wmv", "flv", "webm", "mpg", "mpeg", "m2ts", "mts", "vob", "ogv", "ogm", "3gp", "divx", "rm", "rmvb", "asf", "mp2", "iso"]
+    private static let mpvAudio: Set<String> = ["flac", "ogg", "oga", "opus", "wma", "ape", "mka", "dsf", "dff", "ac3", "dts", "wv", "tta", "mpc", "aif"]
     private static let image: Set<String> = ["jpg", "jpeg", "png", "heic", "heif", "gif", "tiff", "bmp", "webp"]
-    enum Media { case video, audio, image, other }
+    enum Media { case video, audio, mpvVideo, mpvAudio, image, other }
     static func media(_ e: FSEntry) -> Media {
         let ext = (e.name as NSString).pathExtension.lowercased()
-        if video.contains(ext) { return .video }; if audio.contains(ext) { return .audio }; if image.contains(ext) { return .image }; return .other
+        if video.contains(ext) { return .video }; if audio.contains(ext) { return .audio }
+        if mpvVideo.contains(ext) { return .mpvVideo }; if mpvAudio.contains(ext) { return .mpvAudio }
+        if image.contains(ext) { return .image }; return .other
     }
     static func symbol(_ e: FSEntry) -> String {
         if e.isDirectory { return "folder.fill" }
-        switch media(e) { case .video: return "film"; case .audio: return "music.note"; case .image: return "photo"; case .other: return "doc" }
+        switch media(e) { case .video, .mpvVideo: return "film"; case .audio, .mpvAudio: return "music.note"; case .image: return "photo"; case .other: return "doc" }
     }
 
     var body: some View {
@@ -198,6 +213,7 @@ struct TVBrowserView: View {
         .navigationTitle(title)
         .task { await load() }
         .fullScreenCover(item: $playing) { e in TVPlayerView(server: server, entry: e) }
+        .fullScreenCover(item: $playingMPV) { e in TVMPVPlayerView(server: server, entry: e) }
         .fullScreenCover(item: $viewing) { e in TVImageView(server: server, entry: e) }
     }
 
@@ -223,7 +239,12 @@ struct TVBrowserView: View {
     }
 
     private func open(_ e: FSEntry) {
-        switch Self.media(e) { case .video, .audio: playing = e; case .image: viewing = e; case .other: break }
+        switch Self.media(e) {
+        case .video, .audio: playing = e
+        case .mpvVideo, .mpvAudio: playingMPV = e
+        case .image: viewing = e
+        case .other: break
+        }
     }
 }
 
@@ -275,6 +296,20 @@ struct TVSharesView: View {
 
 // MARK: - Player / viewer
 
+/// Debug-only: the mpv player on an arbitrary URL.
+struct TVMPVDebugPlayer: View {
+    let url: URL
+    @State private var buffering = true
+    @State private var error: String?
+    @State private var position: Double = 0
+    var body: some View {
+        ZStack {
+            MPVPlayerRepresentable(url: url, onBuffering: { buffering = $0 }, onProgress: { position = $0; _ = $1 }, onEnd: {}, onError: { error = $0 }).ignoresSafeArea()
+            VStack { Spacer(); Text(error ?? (buffering ? "buffering…" : String(format: "%.1f s", position))).padding(8).background(.black.opacity(0.5)).padding(40) }
+        }
+    }
+}
+
 struct TVPlayerView: View {
     @EnvironmentObject private var model: TVModel
     @Environment(\.dismiss) private var dismiss
@@ -282,11 +317,19 @@ struct TVPlayerView: View {
     let entry: FSEntry
     @State private var player: AVPlayer?
     @State private var error: String?
+    @State private var useMPV = false
 
     var body: some View {
         ZStack {
-            if let player { VideoPlayer(player: player).ignoresSafeArea() }
-            else if let error { ContentUnavailableView("Cannot play this file", systemImage: "play.slash", description: Text(error)) }
+            if useMPV { TVMPVPlayerView(server: server, entry: entry) }
+            else if let player { VideoPlayer(player: player).ignoresSafeArea() }
+            else if let error {
+                VStack(spacing: 24) {
+                    ContentUnavailableView("Cannot play this file", systemImage: "play.slash", description: Text(error))
+                    Button { player?.pause(); player = nil; useMPV = true } label: { Label("Play with the built-in mpv player", systemImage: "play.rectangle") }
+                        .buttonStyle(TVPillButtonStyle())
+                }
+            }
             else { ProgressView() }
         }
         .task {
@@ -294,10 +337,72 @@ struct TVPlayerView: View {
             do {
                 let req = try await c.mediaRequest(entry.path)
                 let asset = AVURLAsset(url: req.url!, options: ["AVURLAssetHTTPHeaderFieldsKey": req.allHTTPHeaderFields ?? [:]])
-                let p = AVPlayer(playerItem: AVPlayerItem(asset: asset)); player = p; p.play()
+                let item = AVPlayerItem(asset: asset)
+                let p = AVPlayer(playerItem: item); player = p; p.play()
+                // The system player gives up on codecs it does not know: hand over to mpv.
+                for await status in item.publisher(for: \.status).values where status == .failed {
+                    error = item.error?.localizedDescription ?? String(localized: "The system player cannot decode this file.")
+                    player = nil
+                    break
+                }
             } catch { self.error = error.localizedDescription }
         }
         .onDisappear { player?.pause() }
+    }
+}
+
+/// libmpv player for everything AVFoundation cannot play. Streams through a short-lived media
+/// ticket issued by the gateway (0.6+) so no credential travels in the URL.
+struct TVMPVPlayerView: View {
+    @EnvironmentObject private var model: TVModel
+    @Environment(\.dismiss) private var dismiss
+    let server: ServerConfig
+    let entry: FSEntry
+    @State private var url: URL?
+    @State private var error: String?
+    @State private var buffering = true
+    @State private var position: Double = 0
+    @State private var duration: Double = 0
+
+    var body: some View {
+        ZStack {
+            Color.black.ignoresSafeArea()
+            if let url {
+                MPVPlayerRepresentable(url: url,
+                                       onBuffering: { buffering = $0 },
+                                       onProgress: { position = $0; duration = $1 },
+                                       onEnd: { dismiss() },
+                                       onError: { error = $0 })
+                    .ignoresSafeArea()
+            }
+            if let error {
+                ContentUnavailableView("Cannot play this file", systemImage: "play.slash", description: Text(error))
+            } else if buffering {
+                VStack(spacing: 16) { ProgressView().scaleEffect(1.5); Text(entry.name).foregroundStyle(.secondary) }
+            }
+            if error == nil, duration > 0 {
+                VStack {
+                    Spacer()
+                    HStack {
+                        Text(Self.clock(position)).monospacedDigit()
+                        ProgressView(value: min(max(position / duration, 0), 1)).tint(.white)
+                        Text(Self.clock(duration)).monospacedDigit()
+                    }
+                    .font(.caption).foregroundStyle(.white.opacity(buffering ? 0.9 : 0.35))
+                    .padding(.horizontal, 80).padding(.bottom, 40)
+                }
+            }
+        }
+        .task {
+            guard let c = model.client(for: server) else { error = String(localized: "Credentials for this server are missing on the TV. Pair it again from your iPhone, iPad or Mac."); return }
+            do { url = try await c.mediaTicketURL(entry.path) }
+            catch GatewayError.notFound { error = String(localized: "This needs unraid-gateway 0.6 or later on the server.") }
+            catch { self.error = error.localizedDescription }
+        }
+    }
+
+    static func clock(_ t: Double) -> String {
+        let s = Int(t.rounded()); return s >= 3600 ? String(format: "%d:%02d:%02d", s / 3600, s / 60 % 60, s % 60) : String(format: "%d:%02d", s / 60, s % 60)
     }
 }
 

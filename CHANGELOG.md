@@ -1,6 +1,8 @@
 # Changelog
 
-## 1.2 (build 23; Apple TV build 24) — 2026-09-11
+## 1.2 (build 23; Apple TV build 25) — 2026-09-11
+
+- **Apple TV plays everything.** Files AVFoundation cannot decode (MKV, AVI, WebM, MPEG-TS, FLAC, OGG, Opus, WMA, …) open in a built-in **mpv** player: libmpv and FFmpeg (LGPL build) through [MPVKit](https://github.com/mpvkit/MPVKit), the same engine as IINA and mpv, rendered with Metal and hardware decoding. Apple formats keep the system player; if it fails on a file, a button hands over to mpv. Play/pause and ±10 s with the Siri Remote. Streaming uses the gateway's new **media ticket** (unraid-gateway 0.6+): a signed, expiring URL for that file only, no credential in the URL.
 
 - Apple TV: the buttons on the pairing screen (New code, Try the demo, Done) are readable again when focused — the system style painted both the focused button and its text in the app colour.
 

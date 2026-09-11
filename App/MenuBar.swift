@@ -580,6 +580,7 @@ struct AboutView: View {
             Text("Unraid Drive").font(.title.weight(.semibold))
             Text("Version \(version) · File Provider").foregroundStyle(.secondary)
             Text("© 2026 Simone Di Mambro. MIT License.").font(.callout).foregroundStyle(.secondary)
+            Text("Apple TV playback of non-Apple formats: libmpv and FFmpeg (LGPL) via MPVKit.").font(.footnote).foregroundStyle(.secondary)
             Text("Your Unraid shares in the Finder, through the unraid-gateway container.").font(.callout).multilineTextAlignment(.center)
             HStack(spacing: 16) {
                 Link("Privacy", destination: URL(string: "https://github.com/sidimam/unraid-drive/blob/main/PRIVACY.md")!)

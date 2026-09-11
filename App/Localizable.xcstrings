@@ -4088,42 +4088,42 @@
         }
       }
     },
-    "Files stay on the NAS. The TV plays photos, music and video in the formats supported by Apple TV (MP4, MOV, M4V, HEVC, AAC, MP3, JPEG, HEIC); other files are listed but cannot be opened here.": {
+    "Files stay on the NAS. Photos, music and video in Apple formats (MP4, MOV, HEVC, AAC, MP3, JPEG, HEIC) play with the system player; MKV, AVI, WebM, FLAC and the other formats play with the built-in mpv player (libmpv and FFmpeg, open source). Documents are listed but cannot be opened here.": {
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تبقى الملفات على NAS. يعرض التلفاز الصور والموسيقى والفيديو بالصيغ التي يدعمها Apple TV (MP4، MOV، M4V، HEVC، AAC، MP3، JPEG، HEIC)؛ وتُدرج الملفات الأخرى دون إمكانية فتحها هنا."
+            "value": "تبقى الملفات على NAS. الصور والموسيقى والفيديو بصيغ Apple (MP4، MOV، HEVC، AAC، MP3، JPEG، HEIC) تُشغَّل بمشغّل النظام؛ أما MKV وAVI وWebM وFLAC وبقية الصيغ فتُشغَّل بمشغّل mpv المدمج (libmpv وFFmpeg، مفتوحا المصدر). المستندات تُعرض لكن لا يمكن فتحها هنا."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die Dateien bleiben auf dem NAS. Der TV zeigt Fotos, Musik und Videos in den von Apple TV unterstützten Formaten (MP4, MOV, M4V, HEVC, AAC, MP3, JPEG, HEIC); andere Dateien werden aufgelistet, lassen sich hier aber nicht öffnen."
+            "value": "Die Dateien bleiben auf dem NAS. Fotos, Musik und Videos in Apple-Formaten (MP4, MOV, HEVC, AAC, MP3, JPEG, HEIC) spielt der Systemplayer; MKV, AVI, WebM, FLAC und die übrigen Formate der integrierte mpv-Player (libmpv und FFmpeg, Open Source). Dokumente werden aufgelistet, lassen sich hier aber nicht öffnen."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Los archivos se quedan en el NAS. El TV reproduce fotos, música y vídeo en los formatos compatibles con Apple TV (MP4, MOV, M4V, HEVC, AAC, MP3, JPEG, HEIC); los demás archivos se listan pero no se pueden abrir aquí."
+            "value": "Los archivos se quedan en el NAS. Fotos, música y vídeo en formatos Apple (MP4, MOV, HEVC, AAC, MP3, JPEG, HEIC) se reproducen con el reproductor del sistema; MKV, AVI, WebM, FLAC y los demás formatos con el reproductor mpv integrado (libmpv y FFmpeg, código abierto). Los documentos se listan pero no se abren aquí."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les fichiers restent sur le NAS. La TV lit photos, musique et vidéos dans les formats pris en charge par l’Apple TV (MP4, MOV, M4V, HEVC, AAC, MP3, JPEG, HEIC) ; les autres fichiers sont listés mais ne s’ouvrent pas ici."
+            "value": "Les fichiers restent sur le NAS. Photos, musique et vidéos aux formats Apple (MP4, MOV, HEVC, AAC, MP3, JPEG, HEIC) sont lus par le lecteur système ; MKV, AVI, WebM, FLAC et les autres formats par le lecteur mpv intégré (libmpv et FFmpeg, open source). Les documents sont listés mais ne s’ouvrent pas ici."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "I file restano sul NAS. La TV riproduce foto, musica e video nei formati supportati da Apple TV (MP4, MOV, M4V, HEVC, AAC, MP3, JPEG, HEIC); gli altri file sono elencati ma non si aprono qui."
+            "value": "I file restano sul NAS. Foto, musica e video nei formati Apple (MP4, MOV, HEVC, AAC, MP3, JPEG, HEIC) si riproducono con il lettore di sistema; MKV, AVI, WebM, FLAC e gli altri formati con il lettore mpv integrato (libmpv e FFmpeg, open source). I documenti sono elencati ma non si aprono qui."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "文件保留在 NAS 上。Apple TV 播放其支持格式的照片、音乐和视频（MP4、MOV、M4V、HEVC、AAC、MP3、JPEG、HEIC）；其他文件会列出但无法在此打开。"
+            "value": "文件保留在 NAS 上。Apple 格式（MP4、MOV、HEVC、AAC、MP3、JPEG、HEIC）的照片、音乐和视频用系统播放器播放；MKV、AVI、WebM、FLAC 及其他格式用内置 mpv 播放器（libmpv 与 FFmpeg，开源）播放。文档会列出但无法在此打开。"
           }
         }
       }
@@ -7796,6 +7796,46 @@
         }
       }
     },
+    "Play with the built-in mpv player": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التشغيل بمشغّل mpv المدمج"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mit dem integrierten mpv-Player abspielen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reproducir con el reproductor mpv integrado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lire avec le lecteur mpv intégré"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riproduci con il lettore mpv integrato"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "用内置 mpv 播放器播放"
+          }
+        }
+      }
+    },
     "Preferences…": {
       "localizations": {
         "ar": {
@@ -11452,6 +11492,46 @@
         }
       }
     },
+    "The system player cannot decode this file.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يستطيع مشغّل النظام فك ترميز هذا الملف."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Systemplayer kann diese Datei nicht dekodieren."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El reproductor del sistema no puede descodificar este archivo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le lecteur système ne peut pas décoder ce fichier."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il lettore di sistema non riesce a decodificare questo file."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系统播放器无法解码此文件。"
+          }
+        }
+      }
+    },
     "Theme": {
       "localizations": {
         "ar": {
@@ -11488,6 +11568,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "主题"
+          }
+        }
+      }
+    },
+    "This needs unraid-gateway 0.6 or later on the server.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يتطلب unraid-gateway 0.6 أو أحدث على الخادم."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erfordert unraid-gateway 0.6 oder neuer auf dem Server."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requiere unraid-gateway 0.6 o posterior en el servidor."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nécessite unraid-gateway 0.6 ou ultérieur sur le serveur."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serve unraid-gateway 0.6 o successivo sul server."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "需要服务器端 unraid-gateway 0.6 或更高版本。"
           }
         }
       }

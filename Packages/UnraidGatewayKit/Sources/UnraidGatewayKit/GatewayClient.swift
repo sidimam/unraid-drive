@@ -121,6 +121,16 @@ public actor GatewayClient {
         return req
     }
 
+    /// A short-lived URL for one file that needs no headers (gateway 0.6+): for players that cannot
+    /// send the bearer token, such as libmpv on Apple TV. Read access is checked when issuing it.
+    public func mediaTicketURL(_ path: String, ttl: String = "8h") async throws -> URL {
+        struct Ticket: Decodable { var url: String; var expiresAt: Date }
+        let (data, _) = try await authorized(post("/api/v1/fs/ticket", ["path": path, "ttl": ttl]))
+        let t = try decode(Ticket.self, data)
+        guard let url = URL(string: t.url, relativeTo: baseURL)?.absoluteURL else { throw GatewayError.decoding("ticket url") }
+        return url
+    }
+
     /// Downloads a file to a temporary location owned by the caller.
     public func download(_ path: String, to destination: URL) async throws -> FSEntry {
         let req = get("/api/v1/fs/content", [URLQueryItem(name: "path", value: path)])

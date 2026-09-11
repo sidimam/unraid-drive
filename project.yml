@@ -24,6 +24,10 @@ settings:
 packages:
   UnraidGatewayKit:
     path: Packages/UnraidGatewayKit
+  # libmpv + FFmpeg (LGPL build) for Apple TV: plays what AVPlayer cannot (MKV, AVI, FLAC, …).
+  MPVKit:
+    url: https://github.com/mpvkit/MPVKit.git
+    exactVersion: 1.0.0
 targets:
   UnraidDrive:
     type: application
@@ -181,6 +185,8 @@ targets:
       - path: App/Resources/Assets.xcassets
     dependencies:
       - package: UnraidGatewayKit
+      - package: MPVKit
+        product: MPVKit
     info:
       path: TV/Info.plist
       properties:

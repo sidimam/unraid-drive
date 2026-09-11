@@ -26,6 +26,12 @@ How it works: the phone encrypts the server (URL, mode, Cloudflare token, Unraid
 
 Right after pairing, the TV shows the *Shares to show* list for the new server, pre-filled with the choice of the device that paired it. Change it later on the TV under the server › **Shares to show** (*All shares* or a tick per share). Hidden shares are not listed in *Browse shares*; the gateway still applies your Unraid user's permissions.
 
+## Formats and the mpv player
+
+Apple formats (MP4, MOV, M4V, HEVC, AAC, MP3, JPEG, HEIC) play with the system player. Everything else — MKV, AVI, WebM, MPEG-TS, VOB, FLAC, OGG, Opus, WMA and more — opens in the built-in **mpv** player (libmpv and FFmpeg, LGPL build, shipped through [MPVKit](https://github.com/mpvkit/MPVKit)): hardware decoding, embedded subtitles and audio tracks, HDR passthrough where the TV supports it. If the system player fails on an Apple-format file, a button hands it to mpv. Siri Remote: play/pause with the play button or a click, left/right ±10 s, Menu closes.
+
+mpv cannot send the gateway's authentication header, so it streams through a **media ticket**: the app asks `unraid-gateway` (0.6 or later) for a signed URL valid for that one file for a few hours; nothing secret is in the URL and a gateway restart invalidates it. Behind Cloudflare Access, exclude the `/media/*` path from the Access policy or use the gateway on the LAN, otherwise Access blocks the header-less player.
+
 ## Troubleshooting
 
 - **"Credentials for this server are missing on the TV"**: pair again from the phone; the TV keeps only local copies.

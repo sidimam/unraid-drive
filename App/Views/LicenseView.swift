@@ -11,6 +11,7 @@ struct LicenseView: View {
     var body: some View {
         ScrollView {
             Text(text).font(.system(.footnote, design: .monospaced)).frame(maxWidth: .infinity, alignment: .leading).padding()
+            Text("Third-party software: on Apple TV, formats the system cannot play are decoded by libmpv and FFmpeg (LGPL 2.1 or later) shipped through MPVKit; source code and licenses at github.com/mpvkit/MPVKit.").font(.footnote).foregroundStyle(.secondary).padding([.horizontal, .bottom])
         }
         .navigationTitle("License")
         .inlineNavigationTitle()
