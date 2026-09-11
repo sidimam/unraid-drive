@@ -12,6 +12,18 @@ It talks to [`unraid-gateway`](https://github.com/sidimam/unraid-gateway), a 10 
 
 📖 **Setup guide, step by step: the [Wiki](https://github.com/sidimam/unraid-drive/wiki).**
 
+## Download
+
+[![App Store](https://img.shields.io/badge/App%20Store-iPhone%20%C2%B7%20iPad%20%C2%B7%20Vision%20Pro%20%C2%B7%20Mac-0D96F6?logo=apple&logoColor=white)](https://apps.apple.com/app/id6809862123)
+[![Latest release](https://img.shields.io/github/v/release/sidimam/unraid-drive?label=Mac%20DMG&color=FF8C2F&logo=apple&logoColor=white)](https://github.com/sidimam/unraid-drive/releases/latest/download/Unraid-Drive-macOS.dmg)
+[![Homebrew](https://img.shields.io/badge/Homebrew-brew%20install%20--cask%20sidimam%2Ftap%2Funraid--drive-FBB040?logo=homebrew&logoColor=black)](https://github.com/sidimam/homebrew-tap)
+[![Changelog](https://img.shields.io/badge/What's%20new-CHANGELOG-lightgrey)](CHANGELOG.md)
+
+- **App Store** (universal purchase): iPhone, iPad, Apple Vision Pro and Mac — version 1.1 in review, 1.0 live on visionOS.
+- **Mac DMG**: Developer ID signed and notarized, from the [latest GitHub release](https://github.com/sidimam/unraid-drive/releases/latest).
+- **Homebrew**: `brew install --cask sidimam/tap/unraid-drive`, update with `brew upgrade --cask unraid-drive`.
+- **Server**: [unraid-gateway](https://github.com/sidimam/unraid-gateway) container (Community Applications) or `brew install sidimam/tap/unraid-gateway`.
+
 | | | |
 |---|---|---|
 | ![](Screenshots/iphone-6.9/05-files-app.png) | ![](Screenshots/iphone-6.9/03-dashboard.png) | ![](Screenshots/iphone-6.9/06-add-server.png) |
