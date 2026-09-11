@@ -1,6 +1,8 @@
 # Changelog
 
-## 1.3 (build 28) — 2026-09-11
+## 1.3 (build 29) — 2026-09-11
+
+- **Device registration** (unraid-gateway 0.9+): each installation has a stable id; adding a server, editing its credentials or pairing an Apple TV registers the device on the gateway. When the admin removes the device there, the app is signed out with a clear message and only a new *Connect* (server → Edit server or credentials) registers it again; background logins never do. Older gateways ignore the extra fields.
 
 - Every request tells the gateway which device and component is calling (`X-Unraid-Drive-Client`: app version, device family and OS, App / File Provider / Apple TV), so the gateway's new **Activity panel** (unraid-gateway 0.7+) can show who is connected and what is streaming. No identifiers beyond model family and OS version.
 

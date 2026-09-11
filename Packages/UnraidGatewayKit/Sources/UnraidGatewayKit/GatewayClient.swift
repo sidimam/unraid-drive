@@ -60,13 +60,16 @@ public actor GatewayClient {
 
     /// Validates the API key and caches the session token.
     @discardableResult
-    public func login() async throws -> LoginResponse {
+    /// Signs in. `register` is set by the user's own actions (adding a server, "connect again"):
+    /// it registers this installation on the gateway (0.9+). Background logins never register, so
+    /// a device the admin removed stays out until the user acts.
+    public func login(register: Bool = false) async throws -> LoginResponse {
         var req = URLRequest(url: url("/api/v1/auth/login"))
         req.httpMethod = "POST"
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        var body: [String: String] = ["apiKey": apiKey]
+        var body: [String: Any] = ["apiKey": apiKey, "deviceId": DeviceIdentity.id, "deviceName": Self.clientDescription, "registerDevice": register]
         if let username { body["username"] = username; body["password"] = password ?? "" }
-        req.httpBody = try JSONEncoder().encode(body)
+        req.httpBody = try JSONSerialization.data(withJSONObject: body)
         let (data, resp) = try await perform(req)
         if (resp as? HTTPURLResponse)?.statusCode == 401, username == nil,
            let msg = (try? JSONDecoder().decode([String: String].self, from: data))?["error"], msg.contains("username") {
@@ -366,6 +369,7 @@ public actor GatewayClient {
         var r = req
         for (k, v) in extraHeaders { r.setValue(v, forHTTPHeaderField: k) }
         r.setValue(Self.clientDescription, forHTTPHeaderField: Self.clientHeader)
+        r.setValue(DeviceIdentity.id, forHTTPHeaderField: "X-Unraid-Drive-Device")
         return r
     }
 
@@ -417,7 +421,13 @@ public actor GatewayClient {
             throw GatewayError.interceptedByProxy(http.url?.host ?? "unknown host")
         }
         guard http.statusCode >= 300 else { return }
-        let msg = (try? JSONDecoder().decode([String: String].self, from: data))?["error"] ?? HTTPURLResponse.localizedString(forStatusCode: http.statusCode)
+        let payload = (try? JSONDecoder().decode([String: String].self, from: data)) ?? [:]
+        let msg = payload["error"] ?? HTTPURLResponse.localizedString(forStatusCode: http.statusCode)
+        switch payload["code"] {
+        case "device_revoked": throw GatewayError.deviceRevoked
+        case "device_not_registered": throw GatewayError.deviceNotRegistered
+        default: break
+        }
         switch http.statusCode {
         case 401: throw GatewayError.unauthorized
         case 403: throw GatewayError.forbidden(msg)

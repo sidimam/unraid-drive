@@ -112,3 +112,7 @@ Open an issue on <https://github.com/sidimam/unraid-drive/issues> (app) or <http
 ## "You don't have permission" when saving into a folder that is read-write
 
 The gateway container runs as Unraid's `nobody:users`. Folders created on the NAS over SSH, with rsync or by another container as a different user (typically mode 755) are not writable by it, so the Files app / Finder reports a permission error. With unraid-gateway 0.5.5+ the Activity tab shows the gateway's explanation (folder, owner, mode). Fix on Unraid: **Tools › New Permissions** on that share, or `chmod -R ugo+rwX` the folder. Everything created through Unraid Drive already gets Unraid's standard permissions.
+
+## "This device was removed from the gateway"
+
+Someone removed this installation from the gateway's device list (web UI › Devices, or `gw devices rm`). Open the server in Unraid Drive, choose **Edit server or credentials** and **Connect**: that registers the device again (the gateway sends a notification). Test connection alone does not register.

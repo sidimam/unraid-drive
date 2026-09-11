@@ -321,6 +321,86 @@
         }
       }
     },
+    "This device is not registered on the gateway. Open the server, choose Edit server or credentials and connect again to register it.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هذا الجهاز غير مسجّل في البوابة. افتح الخادم واختر تعديل الخادم أو بيانات الاعتماد ثم اتصل مرة أخرى لتسجيله."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Gerät ist am Gateway nicht registriert. Öffne den Server, wähle Server oder Zugangsdaten bearbeiten und verbinde dich erneut, um es zu registrieren."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este dispositivo no está registrado en el gateway. Abre el servidor, elige Editar servidor o credenciales y conecta de nuevo para registrarlo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cet appareil n’est pas enregistré sur la passerelle. Ouvrez le serveur, choisissez Modifier le serveur ou les identifiants et reconnectez-vous pour l’enregistrer."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo dispositivo non è registrato sul gateway. Apri il server, scegli Modifica server o credenziali e collegati di nuovo per registrarlo."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此设备未在网关上注册。打开服务器，选择“编辑服务器或凭据”并重新连接以注册它。"
+          }
+        }
+      }
+    },
+    "This device was removed from the gateway. Open the server, choose Edit server or credentials and connect again to register it.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمت إزالة هذا الجهاز من البوابة. افتح الخادم واختر تعديل الخادم أو بيانات الاعتماد ثم اتصل مرة أخرى لتسجيله."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Gerät wurde vom Gateway entfernt. Öffne den Server, wähle Server oder Zugangsdaten bearbeiten und verbinde dich erneut, um es zu registrieren."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este dispositivo se eliminó del gateway. Abre el servidor, elige Editar servidor o credenciales y conecta de nuevo para registrarlo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cet appareil a été retiré de la passerelle. Ouvrez le serveur, choisissez Modifier le serveur ou les identifiants et reconnectez-vous pour l’enregistrer."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo dispositivo è stato rimosso dal gateway. Apri il server, scegli Modifica server o credenziali e collegati di nuovo per registrarlo."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此设备已从网关移除。打开服务器，选择“编辑服务器或凭据”并重新连接以注册它。"
+          }
+        }
+      }
+    },
     "This gateway requires an Unraid username and password in addition to the API key.": {
       "localizations": {
         "ar": {

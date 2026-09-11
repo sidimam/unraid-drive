@@ -47,6 +47,8 @@ final class TVModel: ObservableObject {
         if let u = p.username, let pw = p.password { try keychain.set(username: u, password: pw, for: p.server.id) }
         var s = p.server; s.username = p.username
         store.upsert(s); reload()
+        // Pairing is the user's own action: register this Apple TV on the gateway.
+        if let c = client(for: s) { Task { _ = try? await c.login(register: true) } }
     }
 }
 

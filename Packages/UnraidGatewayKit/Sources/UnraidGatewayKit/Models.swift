@@ -122,6 +122,10 @@ public enum GatewayError: Error, LocalizedError, Sendable {
     case graphQL([String])
     /// The response was a web page, not JSON: a login portal (Cloudflare Access) or a proxy error page.
     case interceptedByProxy(String)
+    /// The gateway removed this installation from its device list: only a new sign-in registers it again.
+    case deviceRevoked
+    /// This installation is not registered on the gateway and the login did not ask to register it.
+    case deviceNotRegistered
 
     public var errorDescription: String? {
         switch self {
@@ -137,6 +141,8 @@ public enum GatewayError: Error, LocalizedError, Sendable {
         case .network(let m): return String(localized: "Cannot reach the gateway: \(m)", bundle: .module)
         case .decoding(let m): return String(localized: "Unexpected response: \(m)", bundle: .module)
         case .graphQL(let msgs): return msgs.joined(separator: "\n")
+        case .deviceRevoked: return String(localized: "This device was removed from the gateway. Open the server, choose Edit server or credentials and connect again to register it.", bundle: .module)
+        case .deviceNotRegistered: return String(localized: "This device is not registered on the gateway. Open the server, choose Edit server or credentials and connect again to register it.", bundle: .module)
         case .interceptedByProxy(let host):
             if host.hasSuffix("cloudflareaccess.com") {
                 return String(localized: "Cloudflare Access is blocking the request. Add this server with Connection: Cloudflare Access and a valid service token, and make sure the Access policy uses the Service Auth action.", bundle: .module)
@@ -146,8 +152,10 @@ public enum GatewayError: Error, LocalizedError, Sendable {
     }
 
     public var isAuthFailure: Bool {
-        if case .unauthorized = self { return true }
-        return false
+        switch self {
+        case .unauthorized, .deviceRevoked, .deviceNotRegistered: return true
+        default: return false
+        }
     }
 }
 

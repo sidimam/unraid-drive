@@ -84,7 +84,7 @@ final class ServersModel: ObservableObject {
     /// registers its File Provider domain so it shows up in the Files app.
     func add(name: String, url: URL, apiKey: String, cloudflare: CloudflareServiceToken?, user: (username: String, password: String)? = nil) async throws -> LoginResponse {
         let client = GatewayClient(baseURL: url, apiKey: apiKey, username: user?.username, password: user?.password, extraHeaders: cloudflare?.headers ?? [:])
-        let login = try await client.login()
+        let login = try await client.login(register: true)
         var server = ServerConfig(name: name, url: url, accessMode: cloudflare == nil ? .direct : .cloudflareAccess)
         server.username = user?.username
         try keychain.set(apiKey: apiKey, for: server.id, synchronizable: cloud.enabled)
@@ -101,7 +101,7 @@ final class ServersModel: ObservableObject {
     /// keeping its id so the Files app location survives.
     func update(_ server: ServerConfig, name: String, url: URL, apiKey: String, cloudflare: CloudflareServiceToken?, user: (username: String, password: String)? = nil) async throws -> LoginResponse {
         let client = GatewayClient(baseURL: url, apiKey: apiKey, username: user?.username, password: user?.password, extraHeaders: cloudflare?.headers ?? [:])
-        let login = try await client.login()
+        let login = try await client.login(register: true)
         var updated = server
         updated.name = name; updated.url = url; updated.accessMode = cloudflare == nil ? .direct : .cloudflareAccess
         updated.username = user?.username

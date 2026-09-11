@@ -94,7 +94,7 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     static func mapError(_ error: Error) -> Error {
         if let e = error as? GatewayError {
             switch e {
-            case .unauthorized, .locked: return NSFileProviderError(.notAuthenticated)
+            case .unauthorized, .locked, .deviceRevoked, .deviceNotRegistered: return NSFileProviderError(.notAuthenticated)
             case .notFound: return NSFileProviderError(.noSuchItem)
             case .conflict: return NSFileProviderError(.filenameCollision)
             case .network, .interceptedByProxy: return NSFileProviderError(.serverUnreachable)
