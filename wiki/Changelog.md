@@ -2,6 +2,10 @@
 
 All notable changes to Unraid Drive. The server side has its own changelog in [unraid-gateway](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
 
+## 1.3 (build 31) — 2026-09-11
+
+- **Mac: crash when playing MKV, AVI and the other mpv formats — fixed.** The notarized app (Developer ID DMG and the App Store build alike) was killed by the hardened runtime as soon as a video loaded: mpv's built-in Lua scripts (stats overlay, console, ytdl hook, auto profiles) run on LuaJIT, whose generated code the kernel refuses (`SIGKILL — Code Signature Invalid` in `load_builtin`). The player now starts mpv with `load-scripts=no` (plus stats overlay, OSD console, auto profiles, OSC and ytdl off) on every platform; the app draws its own controls, so nothing is lost. Verified with the real MKV and AVI from the NAS on Mac, iPhone and Apple TV.
+
 ## 1.3 (build 30) — 2026-09-11
 
 - **Restore comes first.** On a new or reinstalled device the walkthrough opens with the configuration found in iCloud (server names listed), restores it — server list from iCloud, API keys, Cloudflare service tokens and Unraid passwords from iCloud Keychain — and then **registers the device on every gateway again** (`login(register: true)`), waiting up to two minutes for the secrets to arrive; one status line per server (registered / waiting / error).

@@ -102,6 +102,8 @@ The gateway preserves the file modification time you send and reports the server
 
 ## "Cannot play this file" (mpv) on Apple TV, iPhone, iPad or Mac
 
+**On the Mac, builds 27–30 crashed** (the app simply vanished) the moment an MKV, AVI or another mpv format started: the hardened runtime killed mpv's LuaJIT scripts. Build 31 turns those scripts off; update from the Releases page or `brew upgrade --cask unraid-drive`.
+
 Since build 30 the app fetches the first byte of the file with its own headers before starting mpv and prints what answered instead of the video:
 
 - *A web page answered instead of the file (host): usually a Cloudflare Access login* — the Cloudflare service token is missing or wrong on this device (on Apple TV: pair again from the phone).

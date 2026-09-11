@@ -102,11 +102,17 @@ final class MPVViewController: MPVPlatformViewController {
         var wid = Int64(Int(bitPattern: Unmanaged.passUnretained(metalLayer).toOpaque()))
         check(mpv_set_option(handle, "wid", MPV_FORMAT_INT64, &wid))
         for (k, v) in [
+            // No Lua: mpv's built-in scripts (stats, console, ytdl_hook, auto profiles) run on LuaJIT,
+            // whose generated code is killed by the hardened runtime on macOS ("Code Signature Invalid"
+            // in load_builtin) — the notarized app crashed as soon as a file was loaded. The app draws
+            // its own controls, so nothing is lost.
+            ("load-scripts", "no"), ("load-stats-overlay", "no"), ("load-osd-console", "no"),
+            ("load-auto-profiles", "no"), ("osc", "no"), ("ytdl", "no"),
             ("vo", "gpu-next"), ("gpu-api", "vulkan"), ("gpu-context", "moltenvk"),
             ("hwdec", "videotoolbox"), ("video-rotate", "no"),
             ("keep-open", "no"), ("idle", "yes"),
             ("cache", "yes"), ("demuxer-max-bytes", "150MiB"), ("demuxer-readahead-secs", "20"),
-            ("network-timeout", "30"), ("user-agent", "UnraidDrive-tvOS"),
+            ("network-timeout", "30"), ("user-agent", "UnraidDrive"),
             ("subs-match-os-language", "yes"), ("subs-fallback", "yes"),
             ("audio-channels", "auto-safe"), ("volume-max", "100"),
         ] { check(mpv_set_option_string(handle, k, v)) }

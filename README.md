@@ -65,6 +65,8 @@ After the first launch enable the extension under System Settings › General �
 
 ## What's new
 
+**1.3 (build 31):** Mac — fixed the crash when playing MKV, AVI and the other mpv formats (the notarized app was killed by the hardened runtime as soon as the video loaded: mpv's LuaJIT scripts are now off on every platform).
+
 **1.3 (build 30):** restore first — a new or reinstalled device finds the configuration saved in iCloud, restores it and registers itself on the gateways again (same device id after a reinstall, thanks to iCloud); Apple TV shows what waits in iCloud and receives every server with one pairing code; the real reason when a video cannot stream (Cloudflare Access login, revoked device, gateway error) instead of "unrecognized file format", streams on media tickets that outlive the session token; Rename and New folder on Apple TV.
 
 **1.3 (build 29):** a Files-style explorer inside the app on every device (list/icons, sort, search, info, new folder, upload, rename, copy/cut/paste, move, share, delete), Quick Look plus mpv (MKV, AVI, WebM, FLAC…), EPUB, CBZ and ZIP viewers; on Apple TV also text/NFO/CSV and PDF viewers, Infuse/VLC hand-off, and mpv behind Cloudflare Access. **1.2 (build 23):** choose which shares to show (Files, Finder, Shortcuts, Apple TV); permission errors carry the gateway's explanation (folder, owner, mode, fix; unraid-gateway 0.5.5+). **1.1 (build 20/21):** Shortcuts and Siri actions, notifications when the gateway is unreachable or a file could not sync, walkthrough at every update with iCloud restore, app colour applied to the whole app, Apple TV app. Full history in [CHANGELOG.md](CHANGELOG.md); server side in the [unraid-gateway changelog](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
