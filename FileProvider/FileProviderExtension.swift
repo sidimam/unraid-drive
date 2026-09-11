@@ -69,7 +69,10 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
             case .network, .interceptedByProxy: return NSFileProviderError(.serverUnreachable)
             // Cloudflare answers 502/503/504 while the container restarts: transient, not a sync failure.
             case .http(let code, _) where (502...504).contains(code): return NSFileProviderError(.serverUnreachable)
-            case .forbidden: return NSError(domain: NSCocoaErrorDomain, code: NSFileWriteNoPermissionError)
+            // Keep the gateway's explanation (folder, owner, mode, fix) next to the system's generic text.
+            case .forbidden(let reason):
+                return NSError(domain: NSCocoaErrorDomain, code: NSFileWriteNoPermissionError,
+                               userInfo: reason.isEmpty ? nil : [NSLocalizedFailureReasonErrorKey: reason])
             case .http(let code, _) where code == 507: return NSError(domain: NSCocoaErrorDomain, code: NSFileWriteOutOfSpaceError)
             default: return NSFileProviderError(.cannotSynchronize)
             }
@@ -226,7 +229,16 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     /// Records the operation for the app's sync-activity view (Mac menu bar).
     private func log(_ path: String, _ kind: ActivityEvent.Kind, bytes: Int64? = nil, error: Error? = nil) {
         ActivityLog.append(ActivityEvent(serverID: domain.identifier.rawValue, path: path, kind: kind, bytes: bytes,
-                                         error: error.map { Self.mapError($0).localizedDescription }))
+                                         error: error.map { Self.describe(Self.mapError($0)) }))
+    }
+
+    /// Human-readable text for the activity log: the system message plus the gateway's reason when there is one.
+    static func describe(_ error: Error) -> String {
+        let ns = error as NSError
+        if let reason = ns.userInfo[NSLocalizedFailureReasonErrorKey] as? String, !reason.isEmpty {
+            return ns.localizedDescription + " — " + reason
+        }
+        return ns.localizedDescription
     }
 
     func enumerator(for containerItemIdentifier: NSFileProviderItemIdentifier, request: NSFileProviderRequest) throws -> NSFileProviderEnumerator {

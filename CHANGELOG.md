@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Activity log and error list keep the gateway's explanation of a "permission denied" (folder, owner, mode and the fix) next to the system message (needs unraid-gateway 0.5.5+).
+
 All notable changes to Unraid Drive. The server side has its own changelog in [unraid-gateway](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
 
 ## 1.1 (build 20) — 2026-09-11
