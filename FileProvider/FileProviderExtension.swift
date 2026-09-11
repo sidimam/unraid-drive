@@ -18,6 +18,7 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     let tempDir: URL
 
     required init(domain: NSFileProviderDomain) {
+        GatewayClient.component = "File Provider"
         self.domain = domain
         let serverID = domain.identifier.rawValue
         if let server = ServerStore().server(id: serverID), let c = GatewayClientFactory.client(for: server) {

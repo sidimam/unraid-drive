@@ -1,6 +1,8 @@
 # Changelog
 
-## 1.3 (build 27) — 2026-09-11
+## 1.3 (build 28) — 2026-09-11
+
+- Every request tells the gateway which device and component is calling (`X-Unraid-Drive-Client`: app version, device family and OS, App / File Provider / Apple TV), so the gateway's new **Activity panel** (unraid-gateway 0.7+) can show who is connected and what is streaming. No identifiers beyond model family and OS version.
 
 - **A real file explorer in the app, on every device.** *Browse shares* is now a Files-style explorer on iPhone, iPad, Vision Pro, Mac and Apple TV: list or icons, sort by name/kind/date/size, search in the folder, Info sheet (type, size, date, path, permissions), and on iPhone/iPad/Mac/Vision Pro the usual operations through the gateway with your Unraid permissions — new folder, upload from the Files picker, rename, **copy / cut / paste** between folders (the explorer's own clipboard, the gateway copies or moves on the NAS), move and copy with a folder picker, share/export a copy, delete (swipe or long press). On Apple TV: copy, cut, paste and delete from the long-press menu.
 - **Opens far more files.** Quick Look for images, PDF, text, Office and Apple documents; **mpv** (libmpv + FFmpeg, LGPL, via MPVKit) for MKV, AVI, WebM, MPEG-TS, FLAC, OGG, Opus, WMA and the other formats AVFoundation cannot play, on iPhone, iPad, Mac and Apple TV; built-in readers for **EPUB** (text), **CBZ comics** and **ZIP** listings everywhere; on Apple TV also a text/NFO/Markdown/CSV viewer and a PDF page viewer (no PDFKit there).

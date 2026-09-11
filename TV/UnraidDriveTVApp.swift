@@ -20,6 +20,7 @@ final class TVModel: ObservableObject {
     private let store = ServerStore()
     private let keychain = KeychainStore()
     init() {
+        GatewayClient.component = "Apple TV"
         reload()
         let args = ProcessInfo.processInfo.arguments
         if args.contains("-seedDemo"), !servers.contains(where: \.isDemo) { addDemo() }

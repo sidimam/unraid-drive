@@ -118,6 +118,7 @@ public actor GatewayClient {
         var req = get("/api/v1/fs/content", [URLQueryItem(name: "path", value: path)])
         req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
         for (k, v) in extraHeaders { req.setValue(v, forHTTPHeaderField: k) }
+        req.setValue(Self.clientDescription, forHTTPHeaderField: Self.clientHeader)
         return req
     }
 
@@ -364,7 +365,42 @@ public actor GatewayClient {
     private func decorate(_ req: URLRequest) -> URLRequest {
         var r = req
         for (k, v) in extraHeaders { r.setValue(v, forHTTPHeaderField: k) }
+        r.setValue(Self.clientDescription, forHTTPHeaderField: Self.clientHeader)
         return r
+    }
+
+    /// Header that tells the gateway which device and app component is calling; shown in the
+    /// gateway's Activity panel. Free text, no identifiers beyond model and OS version.
+    public static let clientHeader = "X-Unraid-Drive-Client"
+    /// "App", "File Provider", "Apple TV"…: set once by each process.
+    nonisolated(unsafe) public static var component = "App"
+    public static var clientDescription: String {
+        let info = Bundle.main.infoDictionary
+        let version = (info?["CFBundleShortVersionString"] as? String) ?? "?"
+        let build = (info?["CFBundleVersion"] as? String) ?? "?"
+        return "Unraid Drive \(version) (\(build)) · \(deviceDescription) · \(component)"
+    }
+    private static var deviceDescription: String {
+        #if os(macOS)
+        let host = Host.current().localizedName ?? "Mac"
+        return "\(host) · macOS \(ProcessInfo.processInfo.operatingSystemVersionString.replacingOccurrences(of: "Version ", with: ""))"
+        #elseif os(tvOS)
+        return "Apple TV · tvOS \(ProcessInfo.processInfo.operatingSystemVersion.majorVersion).\(ProcessInfo.processInfo.operatingSystemVersion.minorVersion)"
+        #elseif os(visionOS)
+        return "Apple Vision Pro · visionOS \(ProcessInfo.processInfo.operatingSystemVersion.majorVersion).\(ProcessInfo.processInfo.operatingSystemVersion.minorVersion)"
+        #else
+        var sys = utsname(); uname(&sys)
+        let model = withUnsafePointer(to: &sys.machine) { $0.withMemoryRebound(to: CChar.self, capacity: 256) { String(cString: $0) } }
+        let v = ProcessInfo.processInfo.operatingSystemVersion
+        return "\(Self.marketingName(model)) · iOS \(v.majorVersion).\(v.minorVersion)"
+        #endif
+    }
+    /// Turns "iPhone17,1" into a readable family; exact marketing names change every year, so keep it generic.
+    private static func marketingName(_ id: String) -> String {
+        if id.hasPrefix("iPad") { return "iPad" }
+        if id.hasPrefix("iPhone") { return "iPhone" }
+        if id.hasPrefix("Mac") || id == "x86_64" || id == "arm64" { return "iPad app on Mac" }
+        return id
     }
 
     private func decode<T: Decodable>(_ type: T.Type, _ data: Data) throws -> T {
