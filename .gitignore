@@ -6,3 +6,4 @@ build/
 .swiftpm/
 *.xcworkspace
 .DS_Store
+__pycache__/
