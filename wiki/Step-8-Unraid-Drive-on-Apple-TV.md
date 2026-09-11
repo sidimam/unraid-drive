@@ -28,7 +28,7 @@ Right after pairing, the TV shows the *Shares to show* list for the new server, 
 
 ## The file explorer
 
-*Browse shares* is a proper explorer: list or grid (button at the top right), sort by name, date or size, item count, and an **Info** screen per file (long-press the touch surface). Folders open in place; files open in the right viewer: photos, the system player for Apple formats, mpv for everything else, a text viewer for TXT/NFO/Markdown/JSON/CSV/subtitles and other plain-text files, a page viewer for **PDF**, a reader for **EPUB** (text) and **CBZ** comics, and a listing for **ZIP** archives. What the TV cannot open (Office documents, unknown types) shows its details and, when Infuse or VLC are installed on the Apple TV, an **Open in Infuse / Open in VLC** button that hands the file to that app through the gateway's signed media link.
+*Browse shares* is a proper explorer: list or grid (button at the top right), sort by name, date or size, item count, and a long-press menu per item with **Info**, **Open**, **Copy**, **Cut**, **Paste into folder** and **Delete** (a *Paste* button appears at the top of a folder when something was copied or cut). Folders open in place; files open in the right viewer: photos, the system player for Apple formats, mpv for everything else, a text viewer for TXT/NFO/Markdown/JSON/CSV/subtitles and other plain-text files, a page viewer for **PDF**, a reader for **EPUB** (text) and **CBZ** comics, and a listing for **ZIP** archives. What the TV cannot open (Office documents, unknown types) shows its details and, when Infuse or VLC are installed on the Apple TV, an **Open in Infuse / Open in VLC** button that hands the file to that app through the gateway's signed media link.
 
 ## Formats and the mpv player
 
