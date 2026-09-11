@@ -229,7 +229,7 @@ struct MenuBarPanel: View {
             Picker("Theme", selection: $appearance) {
                 ForEach(Appearance.allCases) { a in Label(a.label, systemImage: a.icon).tag(a.rawValue) }
             }
-            Picker("Icon colour", selection: $iconColor) {
+            Picker("App colour", selection: $iconColor) {
                 ForEach(AppIconColor.all) { c in Text(c.label).tag(c.key) }
             }
             Divider()

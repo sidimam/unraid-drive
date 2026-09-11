@@ -38,7 +38,7 @@ struct SettingsView: View {
                     .onChange(of: language) { _, v in (AppLanguage(rawValue: v) ?? .system).applySystemOverride() }
                     #if os(iOS) || os(macOS)
                     VStack(alignment: .leading, spacing: 8) {
-                        Label("Icon colour", systemImage: "paintpalette")
+                        Label("App colour", systemImage: "paintpalette")
                         IconColorPicker(selection: $iconColor)
                     }
                     .onChange(of: iconColor) { _, v in AppIconColor.apply(v) }
