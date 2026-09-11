@@ -2847,6 +2847,46 @@
         }
       }
     },
+    "Credentials not available yet. After an iCloud restore they arrive through iCloud Keychain within a minute; try again.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بيانات الاعتماد غير متاحة بعد. بعد الاستعادة من iCloud تصل عبر سلسلة مفاتيح iCloud خلال دقيقة؛ أعد المحاولة."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zugangsdaten noch nicht verfügbar. Nach einer iCloud-Wiederherstellung kommen sie innerhalb einer Minute über den iCloud-Schlüsselbund; bitte erneut versuchen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Credenciales aún no disponibles. Tras una restauración de iCloud llegan por el Llavero de iCloud en un minuto; reintenta."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identifiants pas encore disponibles. Après une restauration iCloud ils arrivent par le trousseau iCloud en une minute ; réessayez."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Credenziali non ancora disponibili. Dopo un ripristino da iCloud arrivano tramite il Portachiavi iCloud entro un minuto: riprova."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "凭据尚不可用。iCloud 恢复后它们会在一分钟内通过 iCloud 钥匙串到达，请重试。"
+          }
+        }
+      }
+    },
     "Dark": {
       "localizations": {
         "ar": {
@@ -11448,6 +11488,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "主题"
+          }
+        }
+      }
+    },
+    "Try again": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أعد المحاولة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erneut versuchen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reintentar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réessayer"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riprova"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重试"
           }
         }
       }

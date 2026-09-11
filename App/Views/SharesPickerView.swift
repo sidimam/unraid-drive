@@ -26,6 +26,7 @@ struct SharesToggleList: View {
             HStack { ProgressView(); Text("Loading shares…") }
         } else if let error {
             Label(error, systemImage: "exclamationmark.triangle").foregroundStyle(.red)
+            Button { loading = true; Task { await load() } } label: { Label("Try again", systemImage: "arrow.clockwise") }
         } else if shares.isEmpty {
             Text("No shares are visible for this user.").foregroundStyle(.secondary)
         }
@@ -47,7 +48,11 @@ struct SharesToggleList: View {
     }
 
     private func load() async {
-        guard let client = model.client(for: server) else { error = String(localized: "API key missing"); loading = false; return }
+        guard let client = model.client(for: server) else {
+            // Right after an iCloud restore the secrets may still be on their way through iCloud Keychain.
+            error = String(localized: "Credentials not available yet. After an iCloud restore they arrive through iCloud Keychain within a minute; try again.")
+            loading = false; return
+        }
         do {
             let listed = try await client.list("/").entries.filter(\.isDirectory).map(\.name)
             // Shares chosen earlier that the gateway no longer exposes stay listed so they can be unticked.

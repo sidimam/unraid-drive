@@ -63,7 +63,7 @@ After the first launch enable the extension under System Settings â€º General â€
 
 ## What's new
 
-**1.2 (build 22):** choose which shares to show (Files, Finder, Shortcuts, Apple TV); permission errors carry the gateway's explanation (folder, owner, mode, fix; unraid-gateway 0.5.5+). **1.1 (build 20/21):** Shortcuts and Siri actions, notifications when the gateway is unreachable or a file could not sync, walkthrough at every update with iCloud restore, app colour applied to the whole app, Apple TV app. Full history in [CHANGELOG.md](CHANGELOG.md); server side in the [unraid-gateway changelog](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
+**1.2 (build 23):** choose which shares to show (Files, Finder, Shortcuts, Apple TV); permission errors carry the gateway's explanation (folder, owner, mode, fix; unraid-gateway 0.5.5+). **1.1 (build 20/21):** Shortcuts and Siri actions, notifications when the gateway is unreachable or a file could not sync, walkthrough at every update with iCloud restore, app colour applied to the whole app, Apple TV app. Full history in [CHANGELOG.md](CHANGELOG.md); server side in the [unraid-gateway changelog](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
 
 ## Project layout
 
