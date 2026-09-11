@@ -27,6 +27,7 @@ enum ExternalPlayer: CaseIterable {
 /// The file explorer: list or grid, sorting, details, and an opener per file kind.
 struct TVBrowserView: View {
     @EnvironmentObject private var model: TVModel
+    @ObservedObject private var clipboard = ExplorerClipboard.shared
     let server: ServerConfig
     let path: String
     let title: String
@@ -35,6 +36,8 @@ struct TVBrowserView: View {
     @State private var loading = true
     @State private var opened: FSEntry?
     @State private var info: FSEntry?
+    @State private var deleting: FSEntry?
+    @State private var busy: String?
     @AppStorage("tv.explorer.grid") private var grid = false
     @AppStorage("tv.explorer.sort") private var sortKey = "name"
 
@@ -55,6 +58,9 @@ struct TVBrowserView: View {
                 Text(path == "/" ? server.name : path).font(.callout).foregroundStyle(.secondary).lineLimit(1)
                 Spacer()
                 if !entries.isEmpty { Text("\(entries.count) items").font(.callout).foregroundStyle(.secondary) }
+                if let c = clipboard.pasteable(into: path, server: server) {
+                    Button { Task { await paste(into: path) } } label: { Label(c.cut ? "Paste (move) \(c.entry.name)" : "Paste \(c.entry.name)", systemImage: "doc.on.clipboard") }
+                }
                 Menu {
                     Picker("Sort by", selection: $sortKey) {
                         Text("Name").tag("name"); Text("Date").tag("date"); Text("Size").tag("size")
@@ -75,6 +81,25 @@ struct TVBrowserView: View {
         .task { await load() }
         .fullScreenCover(item: $opened) { e in TVFileOpener(server: server, entry: e) }
         .sheet(item: $info) { e in TVFileInfoView(server: server, entry: e) { info = nil; opened = e } }
+        .confirmationDialog("Delete?", isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } }), titleVisibility: .visible) {
+            Button(role: .destructive) { if let d = deleting { Task { await remove(d) } } } label: { Text("Delete \(deleting?.name ?? "")") }
+        } message: { Text("The file is removed from the NAS. There is no trash on the gateway.") }
+        .overlay(alignment: .bottom) {
+            if let busy { HStack { ProgressView(); Text(busy) }.padding(16).background(.regularMaterial, in: Capsule()).padding(40) }
+        }
+    }
+
+    private func paste(into folder: String) async {
+        guard let c = model.client(for: server) else { return }
+        busy = String(localized: "Pasting…"); defer { busy = nil }
+        if let err = await clipboard.paste(into: folder, server: server, client: c) { error = err }
+        await load()
+    }
+
+    private func remove(_ e: FSEntry) async {
+        guard let c = model.client(for: server) else { return }
+        busy = e.name; defer { busy = nil }
+        do { try await c.delete(e.path); await load() } catch { self.error = error.localizedDescription }
     }
 
     private var listView: some View {
@@ -125,6 +150,14 @@ struct TVBrowserView: View {
     @ViewBuilder private func contextItems(_ e: FSEntry) -> some View {
         Button { info = e } label: { Label("Info", systemImage: "info.circle") }
         if !e.isDirectory { Button { open(e) } label: { Label("Open", systemImage: "arrow.up.right.square") } }
+        if GatewayPath.depth(e.path) > 1 {
+            Button { clipboard.copy(e, server: server) } label: { Label("Copy", systemImage: "doc.on.doc") }
+            Button { clipboard.cut(e, server: server) } label: { Label("Cut", systemImage: "scissors") }
+            if e.isDirectory, let c = clipboard.pasteable(into: e.path, server: server) {
+                Button { Task { await paste(into: e.path) } } label: { Label(c.cut ? "Paste (move) into folder" : "Paste into folder", systemImage: "doc.on.clipboard") }
+            }
+            Button(role: .destructive) { deleting = e } label: { Label("Delete", systemImage: "trash") }
+        }
     }
 
     private func tile(_ e: FSEntry) -> some View {

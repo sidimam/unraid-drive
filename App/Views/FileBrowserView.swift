@@ -10,6 +10,7 @@ import UnraidGatewayKit
 /// app / Finder location; this is the same tree without leaving the app.
 struct FileBrowserView: View {
     @EnvironmentObject private var model: ServersModel
+    @ObservedObject private var clipboard = ExplorerClipboard.shared
     let server: ServerConfig
     let path: String
     @State private var entries: [FSEntry] = []
@@ -119,6 +120,11 @@ struct FileBrowserView: View {
                 Menu {
                     Button { newFolderName = ""; newFolder = true } label: { Label("New folder", systemImage: "folder.badge.plus") }
                     Button { importing = true } label: { Label("Upload files…", systemImage: "square.and.arrow.up") }
+                    if let c = clipboard.pasteable(into: path, server: server) {
+                        Divider()
+                        Button { Task { await paste(into: path) } } label: { Label(c.cut ? "Paste (move) \(c.entry.name)" : "Paste \(c.entry.name)", systemImage: "doc.on.clipboard") }
+                            .keyboardShortcut("v", modifiers: .command)
+                    }
                 } label: { Label("Add", systemImage: "plus") }
             }
         }
@@ -193,6 +199,14 @@ struct FileBrowserView: View {
             Button { Task { await share(e) } } label: { Label("Share…", systemImage: "square.and.arrow.up") }
         }
         Button { info = e } label: { Label("Info", systemImage: "info.circle") }
+        if GatewayPath.depth(e.path) > 1 {
+            Divider()
+            Button { clipboard.copy(e, server: server) } label: { Label("Copy", systemImage: "doc.on.doc") }
+            if !readOnly { Button { clipboard.cut(e, server: server) } label: { Label("Cut", systemImage: "scissors") } }
+            if e.isDirectory, !readOnly, let c = clipboard.pasteable(into: e.path, server: server) {
+                Button { Task { await paste(into: e.path) } } label: { Label(c.cut ? "Paste (move) into folder" : "Paste into folder", systemImage: "doc.on.clipboard") }
+            }
+        }
         if !readOnly && GatewayPath.depth(e.path) > 1 {
             Divider()
             Button { renameName = e.name; renaming = e } label: { Label("Rename", systemImage: "pencil") }
@@ -272,6 +286,13 @@ struct FileBrowserView: View {
             if copy { _ = try await client.copy(e.path, to: dest) } else { _ = try await client.move(e.path, to: dest) }
             await load()
         } catch { self.error = error.localizedDescription }
+    }
+
+    private func paste(into folder: String) async {
+        guard let client = model.client(for: server) else { return }
+        busy = String(localized: "Pasting…"); defer { busy = nil }
+        if let err = await clipboard.paste(into: folder, server: server, client: client) { error = err }
+        await load()
     }
 
     private func remove(_ e: FSEntry) async {
