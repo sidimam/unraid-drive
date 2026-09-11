@@ -38,7 +38,9 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
 
     func enumerateItems(for observer: NSFileProviderEnumerationObserver, startingAt page: NSFileProviderPage) {
         Task {
-            guard let path = await ext.index.path(for: container) else { observer.finishEnumeratingWithError(NSFileProviderError(.noSuchItem)); return }
+            // A folder inside a share the user hid is gone as far as the system is concerned: only
+            // then can it delete the (non-empty) share folder from the Files app / Finder.
+            guard let path = await ext.index.path(for: container), ext.isVisible(path) else { observer.finishEnumeratingWithError(NSFileProviderError(.noSuchItem)); return }
             do {
                 guard let client = ext.client else { throw NSFileProviderError(.notAuthenticated) }
                 let entries = ext.visibleEntries(try await client.list(path).entries, in: path)
@@ -56,7 +58,7 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
 
     func enumerateChanges(for observer: NSFileProviderChangeObserver, from anchor: NSFileProviderSyncAnchor) {
         Task {
-            guard let path = await ext.index.path(for: container) else { observer.finishEnumeratingWithError(NSFileProviderError(.noSuchItem)); return }
+            guard let path = await ext.index.path(for: container), ext.isVisible(path) else { observer.finishEnumeratingWithError(NSFileProviderError(.noSuchItem)); return }
             guard let a = SyncAnchor(anchor) else { observer.finishEnumeratingWithError(NSFileProviderError(.syncAnchorExpired)); return }
             do {
                 guard let client = ext.client else { throw NSFileProviderError(.notAuthenticated) }
@@ -68,11 +70,13 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
                 // recreated, which the change feed (mtime based) cannot see, so the root is
                 // always re-listed: it is a handful of entries and costs one millisecond.
                 let dirChanged = path == "/" || page.dirs.contains(path)
-                if dirChanged {
-                    let entries = ext.visibleEntries(try await client.list(path).entries, in: path)
-                    deleted = await ext.index.vanishedIdentifiers(in: path, current: entries.map(\.name))
-                    for e in entries { updated.append(await ext.makeItem(e)) }
-                    await ext.index.rememberListing(path, names: entries.map(\.name))
+                if path == "/" {
+                    await ext.reconcileRoot(client: client, updated: &updated, deleted: &deleted)
+                } else if dirChanged {
+                    let listing = try await client.list(path)
+                    deleted = await ext.index.vanishedIdentifiers(in: path, current: listing.entries.map(\.name))
+                    for e in listing.entries { updated.append(await ext.makeItem(e)) }
+                    await ext.index.rememberListing(path, names: listing.entries.map(\.name))
                 } else {
                     for f in page.files where GatewayPath.parent(f.path) == path && ext.isVisible(f.path) { updated.append(await ext.makeItem(f)) }
                     for d in page.dirs where GatewayPath.parent(d) == path && ext.isVisible(d) {

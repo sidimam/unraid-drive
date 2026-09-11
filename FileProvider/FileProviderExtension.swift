@@ -64,14 +64,17 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     /// Finder even when no directory enumerator is active.
     func reconcileRoot(client: GatewayClient, updated: inout [NSFileProviderItem], deleted: inout [NSFileProviderItemIdentifier]) async {
         guard let root = try? await client.list("/") else { return }
-        let entries = visibleEntries(root.entries, in: "/")
-        let hidden = root.entries.count - entries.count
-        let gone = await index.vanishedIdentifiers(in: "/", current: entries.map(\.name))
-        await index.rememberListing("/", names: entries.map(\.name))
-        for e in entries { updated.append(await makeItem(e)) }
+        var shown: [FSEntry] = [], hidden: [FSEntry] = []
+        for e in root.entries { if isVisible(e.path) { shown.append(e) } else { hidden.append(e) } }
+        let gone = await index.vanishedIdentifiers(in: "/", current: shown.map(\.name))
+        await index.rememberListing("/", names: shown.map(\.name))
+        for e in shown { updated.append(await makeItem(e)) }
+        // Shares the user hid are reported as deleted on every pass: idempotent for the system, and
+        // it also repairs a location that still lists a share hidden before this pass ran.
+        for e in hidden { deleted.append(await index.identifier(for: e)) }
         deleted += gone
-        if hidden > 0 || !gone.isEmpty {
-            fpLog.notice("root: \(entries.count) shares shown, \(hidden) hidden by selection, \(gone.count) removed")
+        if !hidden.isEmpty || !gone.isEmpty {
+            fpLog.notice("root: \(shown.count) shares shown, \(hidden.count) hidden by selection, \(gone.count) unmounted")
         }
     }
 
@@ -143,7 +146,10 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
         run {
             if identifier == .rootContainer { completionHandler(RootItem(), nil); return }
             if identifier == .trashContainer || identifier == .workingSet { completionHandler(nil, NSFileProviderError(.noSuchItem)); return }
-            guard let path = await self.path(for: identifier) else { completionHandler(nil, NSFileProviderError(.noSuchItem)); return }
+            guard let path = await self.path(for: identifier), self.isVisible(path) else {
+                // Unknown, or inside a share the user hid: to the system it no longer exists.
+                completionHandler(nil, NSFileProviderError(.noSuchItem)); return
+            }
             do {
                 let entry = try await self.requireClient().stat(path)
                 completionHandler(await self.makeItem(entry), nil)
@@ -158,7 +164,7 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
                        request: NSFileProviderRequest,
                        completionHandler: @escaping (URL?, NSFileProviderItem?, Error?) -> Void) -> Progress {
         run {
-            guard let path = await self.path(for: itemIdentifier) else { completionHandler(nil, nil, NSFileProviderError(.noSuchItem)); return }
+            guard let path = await self.path(for: itemIdentifier), self.isVisible(path) else { completionHandler(nil, nil, NSFileProviderError(.noSuchItem)); return }
             do {
                 let client = try self.requireClient()
                 let dest = self.tempDir.appendingPathComponent(UUID().uuidString)
