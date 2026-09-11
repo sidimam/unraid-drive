@@ -1,6 +1,12 @@
 import SwiftUI
-import UIKit
 import Libmpv
+#if canImport(UIKit)
+import UIKit
+public typealias MPVPlatformViewController = UIViewController
+#else
+import AppKit
+public typealias MPVPlatformViewController = NSViewController
+#endif
 
 // Playback of formats AVFoundation does not handle (MKV, AVI, WebM, FLAC, …) through libmpv
 // and FFmpeg — the engine behind IINA and mpv — shipped as the LGPL build of MPVKit.
@@ -23,27 +29,34 @@ protocol MPVPlayerEvents: AnyObject {
     func mpvFailed(_ message: String)
 }
 
-final class MPVViewController: UIViewController {
+final class MPVViewController: MPVPlatformViewController {
     let url: URL
+    let headers: [String: String]
     weak var events: MPVPlayerEvents?
     private let metalLayer = MPVMetalLayer()
     private var mpv: OpaquePointer?
     private let queue = DispatchQueue(label: "mpv.events", qos: .userInitiated)
 
-    init(url: URL) { self.url = url; super.init(nibName: nil, bundle: nil) }
+    init(url: URL, headers: [String: String] = [:]) { self.url = url; self.headers = headers; super.init(nibName: nil, bundle: nil) }
     required init?(coder: NSCoder) { fatalError("not supported") }
 
+    #if canImport(UIKit)
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
         metalLayer.frame = view.bounds
-        metalLayer.contentsScale = UIScreen.main.scale
+        metalLayer.contentsScale = view.traitCollection.displayScale
         metalLayer.framebufferOnly = true
         metalLayer.backgroundColor = UIColor.black.cgColor
         view.layer.addSublayer(metalLayer)
         setupMpv()
         command("loadfile", [url.absoluteString, "replace"])
+        #if os(tvOS)
         installRemoteHandlers()
+        #else
+        let tap = UITapGestureRecognizer(target: self, action: #selector(onPlayPause))
+        view.addGestureRecognizer(tap)
+        #endif
     }
 
     override func viewDidLayoutSubviews() {
@@ -55,6 +68,29 @@ final class MPVViewController: UIViewController {
         super.viewWillDisappear(animated)
         shutdown()
     }
+    #else
+    override func loadView() { view = NSView(); view.wantsLayer = true }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.layer?.backgroundColor = NSColor.black.cgColor
+        metalLayer.frame = view.bounds
+        metalLayer.contentsScale = NSScreen.main?.backingScaleFactor ?? 2
+        metalLayer.framebufferOnly = true
+        metalLayer.backgroundColor = NSColor.black.cgColor
+        view.layer?.addSublayer(metalLayer)
+        setupMpv()
+        command("loadfile", [url.absoluteString, "replace"])
+    }
+    override func viewDidLayout() {
+        super.viewDidLayout()
+        metalLayer.frame = view.bounds
+        metalLayer.contentsScale = view.window?.backingScaleFactor ?? 2
+    }
+    override func viewWillDisappear() {
+        super.viewWillDisappear()
+        shutdown()
+    }
+    #endif
 
     deinit { shutdown() }
 
@@ -74,6 +110,11 @@ final class MPVViewController: UIViewController {
             ("subs-match-os-language", "yes"), ("subs-fallback", "yes"),
             ("audio-channels", "auto-safe"), ("volume-max", "100"),
         ] { check(mpv_set_option_string(handle, k, v)) }
+        if !headers.isEmpty {
+            // Same headers as URLSession: Authorization bearer and, if any, the Cloudflare Access token.
+            let fields = headers.map { "\($0.key): \($0.value)" }.joined(separator: ",")
+            check(mpv_set_option_string(handle, "http-header-fields", fields))
+        }
         #if DEBUG
         check(mpv_request_log_messages(handle, "warn"))
         #else
@@ -151,11 +192,21 @@ final class MPVViewController: UIViewController {
         #endif
     }
 
-    // MARK: Siri Remote
+    // MARK: Controls
 
     func togglePause() { command("cycle", ["pause"]) }
     func seek(_ seconds: Double) { command("seek", [String(seconds), "relative"]) }
+    var isPaused: Bool {
+        guard let handle = mpv else { return true }
+        var flag: Int32 = 0
+        mpv_get_property(handle, "pause", MPV_FORMAT_FLAG, &flag)
+        return flag != 0
+    }
 
+    #if canImport(UIKit)
+    @objc private func onPlayPause() { togglePause() }
+    #endif
+    #if os(tvOS)
     private func installRemoteHandlers() {
         let playPause = UITapGestureRecognizer(target: self, action: #selector(onPlayPause))
         playPause.allowedPressTypes = [NSNumber(value: UIPress.PressType.playPause.rawValue), NSNumber(value: UIPress.PressType.select.rawValue)]
@@ -167,14 +218,24 @@ final class MPVViewController: UIViewController {
         right.allowedPressTypes = [NSNumber(value: UIPress.PressType.rightArrow.rawValue)]
         view.addGestureRecognizer(right)
     }
-    @objc private func onPlayPause() { togglePause() }
     @objc private func onLeft() { seek(-10) }
     @objc private func onRight() { seek(10) }
+    #endif
+}
+
+/// Lets SwiftUI overlays drive the player (play/pause, seek).
+@MainActor final class MPVHandle: ObservableObject {
+    weak var controller: MPVViewController?
+    func togglePause() { controller?.togglePause() }
+    func seek(_ s: Double) { controller?.seek(s) }
 }
 
 /// SwiftUI wrapper; reports buffering, progress, end and errors.
+#if canImport(UIKit)
 struct MPVPlayerRepresentable: UIViewControllerRepresentable {
     let url: URL
+    var headers: [String: String] = [:]
+    var handle: MPVHandle? = nil
     var onBuffering: (Bool) -> Void = { _ in }
     var onProgress: (Double, Double) -> Void = { _, _ in }
     var onEnd: () -> Void = {}
@@ -182,18 +243,41 @@ struct MPVPlayerRepresentable: UIViewControllerRepresentable {
 
     func makeCoordinator() -> Coordinator { Coordinator(self) }
     func makeUIViewController(context: Context) -> MPVViewController {
-        let vc = MPVViewController(url: url)
+        let vc = MPVViewController(url: url, headers: headers)
         vc.events = context.coordinator
+        handle?.controller = vc
         return vc
     }
     func updateUIViewController(_ vc: MPVViewController, context: Context) { context.coordinator.parent = self }
+    typealias Coordinator = MPVCoordinator
+}
+#else
+struct MPVPlayerRepresentable: NSViewControllerRepresentable {
+    let url: URL
+    var headers: [String: String] = [:]
+    var handle: MPVHandle? = nil
+    var onBuffering: (Bool) -> Void = { _ in }
+    var onProgress: (Double, Double) -> Void = { _, _ in }
+    var onEnd: () -> Void = {}
+    var onError: (String) -> Void = { _ in }
 
-    @MainActor final class Coordinator: MPVPlayerEvents {
-        var parent: MPVPlayerRepresentable
-        init(_ p: MPVPlayerRepresentable) { parent = p }
-        func mpvBuffering(_ b: Bool) { parent.onBuffering(b) }
-        func mpvProgress(position: Double, duration: Double) { parent.onProgress(position, duration) }
-        func mpvEnded() { parent.onEnd() }
-        func mpvFailed(_ m: String) { parent.onError(m) }
+    func makeCoordinator() -> Coordinator { Coordinator(self) }
+    func makeNSViewController(context: Context) -> MPVViewController {
+        let vc = MPVViewController(url: url, headers: headers)
+        vc.events = context.coordinator
+        handle?.controller = vc
+        return vc
     }
+    func updateNSViewController(_ vc: MPVViewController, context: Context) { context.coordinator.parent = self }
+    typealias Coordinator = MPVCoordinator
+}
+#endif
+
+@MainActor final class MPVCoordinator: MPVPlayerEvents {
+    var parent: MPVPlayerRepresentable
+    init(_ p: MPVPlayerRepresentable) { parent = p }
+    func mpvBuffering(_ b: Bool) { parent.onBuffering(b) }
+    func mpvProgress(position: Double, duration: Double) { parent.onProgress(position, duration) }
+    func mpvEnded() { parent.onEnd() }
+    func mpvFailed(_ m: String) { parent.onError(m) }
 }

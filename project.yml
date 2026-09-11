@@ -17,8 +17,10 @@ settings:
     DEVELOPMENT_TEAM: X5SR67A8AL
     CODE_SIGN_STYLE: Automatic
     TARGETED_DEVICE_FAMILY: "1,2,7"
-    MARKETING_VERSION: "1.2"
-    CURRENT_PROJECT_VERSION: "25"
+    MARKETING_VERSION: "1.3"
+    # MPVKit ships arm64-only slices for the visionOS simulator.
+    "EXCLUDED_ARCHS[sdk=xrsimulator*]": x86_64
+    CURRENT_PROJECT_VERSION: "26"
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     SWIFT_STRICT_CONCURRENCY: minimal
 packages:
@@ -33,9 +35,12 @@ targets:
     type: application
     supportedDestinations: [iOS, visionOS]
     sources:
+      - path: Shared
       - path: App
         excludes: ["Info.plist", "Info-macOS.plist", "UnraidDrive-macOS.entitlements"]
     dependencies:
+      - package: MPVKit
+        product: MPVKit
       - package: UnraidGatewayKit
       - target: UnraidDriveFileProvider
     info:
@@ -113,9 +118,12 @@ targets:
     type: application
     platform: macOS
     sources:
+      - path: Shared
       - path: App
         excludes: ["Info.plist", "Info-macOS.plist", "UnraidDrive.entitlements"]
     dependencies:
+      - package: MPVKit
+        product: MPVKit
       - package: UnraidGatewayKit
       - target: UnraidDriveFileProviderMac
     entitlements:
@@ -181,6 +189,7 @@ targets:
     platform: tvOS
     sources:
       - path: TV
+      - path: Shared
       - path: App/Localizable.xcstrings
       - path: App/Resources/Assets.xcassets
     dependencies:

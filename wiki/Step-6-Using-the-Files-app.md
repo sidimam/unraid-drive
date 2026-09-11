@@ -36,6 +36,10 @@ If a share you expect is missing, check the server page › **Shares to show** i
 
 If you add files on the NAS via SMB or another device, the Files app picks them up when you open or pull-refresh the folder, and periodically in the background through the gateway's change feed. On very large shares (hundreds of thousands of files) the first full sync of a folder tree can take a minute; subsequent checks are incremental.
 
+## The explorer inside the app
+
+*Browse shares* on the server page is a Files-style explorer of the same tree: list or icons (menu at the top right), sort by name, kind, date or size, search in the folder, an **Info** sheet per item (type, size, date, path, your permissions on that share). Long-press (or right-click on the Mac) for **Open**, **Quick Look**, **Play with mpv**, **Share…**, **Rename**, **Move…**, **Copy to…** and **Delete**; the **+** menu creates a folder or uploads files from the Files picker. Everything goes through the gateway with your Unraid permissions; shares marked read-only offer no editing. Quick Look shows images, PDF, text, Office and Apple documents; MKV, AVI, WebM, FLAC and the other formats AVFoundation cannot play open in the built-in **mpv** player (libmpv + FFmpeg, LGPL); EPUB books, CBZ comics and ZIP archives have readers of their own. On Apple Vision Pro the mpv player is not available: use Quick Look or the Files app there.
+
 ## Limits and good practice
 
 - **Root and share level are read-only.** You cannot create files directly under *Unraid Drive → server*; open a share first. You also cannot rename or delete a share from Files: shares are mount points managed in the container settings.

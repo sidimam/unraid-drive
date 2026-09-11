@@ -22,16 +22,15 @@ FUNZIONI
 • Server demo per provare tutto offline.
 • Nessun account, nessuna analisi, nessun server di terzi: l’app parla solo con il tuo gateway.
 • Look Unraid: accenti arancione Unraid, icona in sei colori con varianti chiara, scura e tinta.
-• Aggiornamento in background: le posizioni in File restano sincronizzate anche dopo un riavvio del gateway.
 • Motore di sincronizzazione come i grandi cloud (con unraid-gateway 0.5+): id stabili e journal delle modifiche, così rinomine, spostamenti ed eliminazioni fatti ovunque sul NAS arrivano nell’app File in pochi minuti senza scansioni.
-• Azioni rapide dalla Home: Apri l’app File, Test di connessione, Aggiungi server.
 • Comandi rapidi e Siri: salva gli appunti o un file in una share, scarica un file, elenca una cartella, aggiorna le posizioni, test di connessione.
 • Notifiche: avviso quando il gateway non è raggiungibile (e quando torna) e quando un file non è stato caricato o scaricato; si gestiscono dalle impostazioni di sistema.
 • Walkthrough a ogni aggiornamento con novità, ripristino della configurazione da iCloud e consenso alle notifiche.
 • Scegli quali share mostrare: dopo la connessione e in ogni momento nei dettagli del server, spunta le share da vedere in File, nel Finder, nei Comandi rapidi e su Apple TV; la scelta viaggia con la configurazione iCloud.
+• Explorer di file nell’app in stile File, su tutti i dispositivi: elenco o icone, ordinamento, ricerca, informazioni, nuova cartella, caricamento, rinomina, sposta, copia, condividi, elimina; Quick Look più lettore mpv (MKV, AVI, WebM, FLAC…), lettori EPUB, fumetti CBZ e archivi ZIP.
 
-NOVITÀ NELLA 1.2
-Scegli quali share mostrare (File, Finder, Comandi rapidi, Apple TV), errori di permesso spiegati dal gateway con cartella, proprietario e rimedio, app Apple TV.
+NOVITÀ NELLA 1.3
+Explorer di file in stile File su tutti i dispositivi con lettore mpv, EPUB, CBZ e ZIP; su Apple TV visualizzatori testo/PDF, apertura in Infuse/VLC e mpv anche dietro Cloudflare Access; scelta delle share da mostrare.
 
 SU MAC
 La stessa app (acquisto universale) porta le share nella barra laterale del Finder come gli altri cloud drive, con un pannello nella barra dei menu: stato della sincronizzazione, attività (download, upload, rinomine, eliminazioni), notifiche Unraid, pausa/ripresa, file offline, elenco errori, apertura al login e modalità solo barra dei menu.
@@ -61,17 +60,15 @@ FUNCIONES
 • Tema Sistema/Claro/Oscuro e interfaz en 7 idiomas.
 • Servidor demo para probarlo todo sin conexión.
 • Sin cuentas, sin analíticas, sin servidores de terceros: la app solo habla con tu gateway.
-• Estilo Unraid: acentos en naranja Unraid, icono en seis colores con variantes clara, oscura y tintada.
-• Actualización en segundo plano: las ubicaciones en Archivos siguen sincronizadas tras un reinicio del gateway.
 • Motor de sincronización como los grandes servicios en la nube (con unraid-gateway 0.5+): ids estables y diario de cambios, así los renombrados, movimientos y borrados hechos en el NAS llegan a Archivos en minutos sin escanear los recursos.
-• Acciones rápidas en la pantalla de inicio: Abrir Archivos, Probar conexión, Añadir servidor.
 • Atajos y Siri: guarda el portapapeles o un archivo en un recurso compartido, descarga un archivo, lista una carpeta, actualiza las ubicaciones, prueba la conexión.
 • Notificaciones: aviso cuando el gateway no responde (y cuando vuelve) y cuando un archivo no se pudo subir o descargar; se gestionan desde los ajustes del sistema.
 • Recorrido en cada actualización con las novedades, restauración de la configuración desde iCloud y permiso de notificaciones.
 • Elige qué recursos compartidos mostrar: tras conectar y en cualquier momento en los detalles del servidor, marca los que quieres ver en Archivos, el Finder, Atajos y el Apple TV; la elección viaja con la configuración de iCloud.
+• Explorador de archivos en la app al estilo de Archivos, en todos los dispositivos: lista o iconos, orden, búsqueda, información, nueva carpeta, subida, renombrar, mover, copiar, compartir, eliminar; Vista rápida más reproductor mpv (MKV, AVI, WebM, FLAC…), lectores de EPUB, cómics CBZ y archivos ZIP.
 
-NOVEDADES DE LA 1.2
-Elige qué recursos compartidos mostrar (Archivos, Finder, Atajos, Apple TV), errores de permisos explicados por el gateway con carpeta, propietario y solución, app para Apple TV.
+NOVEDADES DE LA 1.3
+Explorador de archivos al estilo de Archivos en todos los dispositivos con reproductor mpv, EPUB, CBZ y ZIP; en Apple TV visores de texto/PDF, apertura en Infuse/VLC y mpv también tras Cloudflare Access; elección de recursos compartidos que mostrar.
 
 EN EL MAC
 La misma app (compra universal) lleva los recursos compartidos a la barra lateral del Finder como los demás cloud drives, con un panel en la barra de menús: estado de la sincronización, actividad (descargas, subidas, renombrados, eliminaciones), notificaciones de Unraid, pausa/reanudación, archivos sin conexión, lista de errores, apertura al iniciar sesión y modo solo barra de menús.
@@ -96,22 +93,19 @@ FONCTIONS
 • Accès par utilisateur : saisissez votre utilisateur et mot de passe Unraid et voyez exactement les partages qu’Unraid vous accorde, en lecture seule là où Unraid le prévoit.
 • Modes de connexion : HTTPS direct ou Cloudflare Access avec service token.
 • Tableau de bord : état et remplissage de la grappe, contrôle de parité, températures des disques, partages, conteneur de la passerelle, notifications, CPU et mémoire.
-• Test de connexion avec diagnostics clairs ; modifiez le serveur sans perdre vos emplacements Fichiers.
 • Synchronisation iCloud facultative de la configuration pour des restaurations sans effort.
-• Thème Système/Clair/Sombre et interface en 7 langues.
 • Serveur démo pour tout essayer hors ligne.
 • Aucun compte, aucune analyse, aucun serveur tiers : l’app ne parle qu’à votre passerelle.
-• Style Unraid : accents orange Unraid, icône en six couleurs avec variantes claire, sombre et teintée.
 • Actualisation en arrière-plan : les emplacements Fichiers restent synchronisés même après un redémarrage de la passerelle.
 • Moteur de synchronisation à la manière des grands clouds (avec unraid-gateway 0.5+) : identifiants stables et journal des changements, les renommages, déplacements et suppressions faits sur le NAS arrivent dans Fichiers en quelques minutes sans parcourir les partages.
-• Actions rapides sur l’écran d’accueil : Ouvrir Fichiers, Tester la connexion, Ajouter un serveur.
 • Raccourcis et Siri : enregistrez le presse-papiers ou un fichier dans un partage, téléchargez un fichier, listez un dossier, actualisez les emplacements, testez la connexion.
 • Notifications : alerte quand la passerelle est injoignable (et quand elle revient) et quand un fichier n’a pu être envoyé ou téléchargé ; gérées depuis les réglages système.
 • Visite guidée à chaque mise à jour avec les nouveautés, restauration de la configuration depuis iCloud et autorisation des notifications.
 • Choisissez les partages à afficher : après la connexion et à tout moment dans les détails du serveur, cochez ceux à voir dans Fichiers, le Finder, Raccourcis et sur l’Apple TV ; le choix suit la configuration iCloud.
+• Explorateur de fichiers dans l’app, façon Fichiers, sur tous les appareils : liste ou icônes, tri, recherche, infos, nouveau dossier, envoi, renommer, déplacer, copier, partager, supprimer ; Coup d’œil plus lecteur mpv (MKV, AVI, WebM, FLAC…), lecteurs EPUB, BD CBZ et archives ZIP.
 
-NOUVEAUTÉS DE LA 1.2
-Choix des partages à afficher (Fichiers, Finder, Raccourcis, Apple TV), erreurs de permission expliquées par la passerelle avec dossier, propriétaire et solution, app Apple TV.
+NOUVEAUTÉS DE LA 1.3
+Explorateur de fichiers façon Fichiers sur tous les appareils avec lecteur mpv, EPUB, CBZ et ZIP ; sur Apple TV, visionneuses texte/PDF, ouverture dans Infuse/VLC et mpv aussi derrière Cloudflare Access ; choix des partages à afficher.
 
 SUR MAC
 La même app (achat universel) place les partages dans la barre latérale du Finder comme les autres cloud drives, avec un panneau dans la barre des menus : état de la synchronisation, activité (téléchargements, envois, renommages, suppressions), notifications Unraid, pause/reprise, fichiers hors ligne, liste des erreurs, ouverture à la connexion et mode barre des menus seule.
@@ -142,16 +136,15 @@ FUNKTIONEN
 • Demo-Server, um alles offline auszuprobieren.
 • Keine Konten, keine Analysen, keine Drittserver: Die App spricht nur mit deinem Gateway.
 • Unraid-Look: Akzente in Unraid-Orange, App-Symbol in sechs Farben mit heller, dunkler und getönter Variante.
-• Hintergrundaktualisierung: Die Orte in Dateien bleiben auch nach einem Neustart des Gateways synchron.
 • Synchronisierung wie bei den großen Cloud-Diensten (mit unraid-gateway 0.5+): stabile Objekt-IDs und ein Änderungsjournal, sodass Umbenennungen, Verschiebungen und Löschungen auf dem NAS binnen Minuten in der Dateien-App erscheinen, ohne die Freigaben zu durchsuchen.
-• Schnellaktionen auf dem Home-Bildschirm: Dateien öffnen, Verbindung testen, Server hinzufügen.
 • Kurzbefehle und Siri: Zwischenablage oder Datei in eine Freigabe sichern, Datei laden, Ordner auflisten, Orte aktualisieren, Verbindung testen.
 • Mitteilungen: Hinweis, wenn das Gateway nicht erreichbar ist (und wenn es zurück ist) und wenn eine Datei nicht hoch- oder heruntergeladen werden konnte; verwaltet in den Systemeinstellungen.
 • Einführung bei jedem Update mit den Neuerungen, Wiederherstellung der Konfiguration aus iCloud und Mitteilungsfreigabe.
 • Wähle, welche Freigaben angezeigt werden: nach dem Verbinden und jederzeit in den Serverdetails hakst du die Freigaben für Dateien, Finder, Kurzbefehle und Apple TV ab; die Auswahl reist mit der iCloud-Konfiguration.
+• Datei-Explorer in der App im Stil von „Dateien“, auf allen Geräten: Liste oder Symbole, Sortierung, Suche, Info, neuer Ordner, Hochladen, Umbenennen, Bewegen, Kopieren, Teilen, Löschen; Übersicht plus mpv-Player (MKV, AVI, WebM, FLAC …), Reader für EPUB, CBZ-Comics und ZIP-Archive.
 
-NEU IN 1.2
-Auswahl der angezeigten Freigaben (Dateien, Finder, Kurzbefehle, Apple TV), vom Gateway erklärte Berechtigungsfehler mit Ordner, Besitzer und Lösung, Apple-TV-App.
+NEU IN 1.3
+Datei-Explorer im Stil von „Dateien“ auf allen Geräten mit mpv-Player, EPUB, CBZ und ZIP; auf Apple TV Text-/PDF-Anzeige, Öffnen in Infuse/VLC und mpv auch hinter Cloudflare Access; Auswahl der angezeigten Freigaben.
 
 AUF DEM MAC
 Dieselbe App (Universalkauf) bringt die Freigaben wie die anderen Cloud-Laufwerke in die Finder-Seitenleiste, mit einem Menüleisten-Panel: Synchronisierungsstatus, Aktivität (Downloads, Uploads, Umbenennungen, Löschungen), Unraid-Mitteilungen, Pause/Fortsetzen, Offline-Dateien, Fehlerliste, Start beim Anmelden und Nur-Menüleiste-Modus.
@@ -182,16 +175,15 @@ Unraid Drive ist ein unabhängiges Projekt und nicht mit Lime Technology / Unrai
 • 演示服务器，可离线体验全部功能。
 • 无账户、无分析、无第三方服务器：应用只与你的网关通信。
 • Unraid 风格：Unraid 橙色强调色，六种颜色的应用图标，支持浅色、深色和着色变体。
-• 后台刷新：网关重启后，“文件”中的位置仍保持同步。
 • 与主流云盘一致的同步引擎（配合 unraid-gateway 0.5+）：稳定的项目 ID 和变更日志，在 NAS 上任意位置进行的重命名、移动和删除都会在几分钟内出现在“文件”应用中，无需扫描共享。
-• 主屏幕快捷操作：打开“文件”、测试连接、添加服务器。
 • 快捷指令与 Siri：将剪贴板或文件保存到共享、下载文件、列出文件夹、刷新位置、测试连接。
 • 通知：网关不可达（及恢复）时和文件无法上传或下载时提醒；在系统设置中管理。
 • 每次更新后的引导：新功能介绍、从 iCloud 恢复配置、通知授权。
 • 选择要显示的共享：连接后以及随时在服务器详情中勾选要在“文件”、“访达”、快捷指令和 Apple TV 中看到的共享；选择随 iCloud 配置同步。
+• 应用内“文件”风格的文件浏览器，支持所有设备：列表或图标、排序、搜索、简介、新建文件夹、上传、重命名、移动、拷贝、共享、删除；快速查看加 mpv 播放器（MKV、AVI、WebM、FLAC…），以及 EPUB、CBZ 漫画和 ZIP 阅读器。
 
-1.2 版新功能
-选择要显示的共享（“文件”、“访达”、快捷指令、Apple TV）；网关给出的权限错误说明包含文件夹、所有者和解决方法；Apple TV 应用。
+1.3 版新功能
+所有设备上的“文件”风格文件浏览器，带 mpv 播放器及 EPUB、CBZ、ZIP 阅读器；Apple TV 上还有文本/PDF 查看器、在 Infuse/VLC 中打开，以及 Cloudflare Access 后的 mpv；可选择要显示的共享。
 
 在 Mac 上
 同一个应用（通用购买）像其他云盘一样把共享放入“访达”边栏，并提供菜单栏面板：同步状态、活动（下载、上传、重命名、删除）、Unraid 通知、暂停/恢复、离线文件、错误列表、登录时启动以及仅菜单栏模式。
@@ -224,14 +216,14 @@ Unraid Drive 是独立项目，与 Lime Technology / Unraid 无关。"""),
 • مظهر Unraid: لمسات برتقالية بلون Unraid، وأيقونة بستة ألوان مع متغيرات فاتحة وداكنة وملوّنة.
 • تحديث في الخلفية: تبقى المواقع في تطبيق الملفات متزامنة حتى بعد إعادة تشغيل البوابة.
 • محرك مزامنة مثل خدمات التخزين السحابي الكبيرة (مع unraid-gateway 0.5+): معرّفات ثابتة وسجل تغييرات، فتصل عمليات إعادة التسمية والنقل والحذف على NAS إلى تطبيق الملفات خلال دقائق دون فحص المجلدات.
-• إجراءات سريعة من الشاشة الرئيسية: فتح تطبيق الملفات، اختبار الاتصال، إضافة خادم.
 • الاختصارات وSiri: احفظ الحافظة أو ملفًا في مشاركة، نزّل ملفًا، اعرض مجلدًا، حدّث المواقع، اختبر الاتصال.
 • الإشعارات: تنبيه عند تعذّر الوصول إلى البوابة (وعند عودتها) وعند فشل رفع ملف أو تنزيله؛ تُدار من إعدادات النظام.
 • جولة تعريفية مع كل تحديث تعرض الجديد وتستعيد الإعدادات من iCloud وتطلب إذن الإشعارات.
 • اختر المشاركات التي تريد عرضها: بعد الاتصال وفي أي وقت من تفاصيل الخادم، حدّد المشاركات التي تظهر في الملفات وFinder والاختصارات وApple TV؛ ينتقل الاختيار مع إعدادات iCloud.
+• مستعرض ملفات داخل التطبيق بأسلوب «الملفات» على كل الأجهزة: قائمة أو أيقونات، ترتيب، بحث، معلومات، مجلد جديد، رفع، إعادة تسمية، نقل، نسخ، مشاركة، حذف؛ نظرة سريعة مع مشغّل mpv (MKV وAVI وWebM وFLAC…) وقارئات EPUB وقصص CBZ وأرشيفات ZIP.
 
-الجديد في 1.2
-اختيار المشاركات المعروضة (الملفات وFinder والاختصارات وApple TV)، وأخطاء صلاحيات يشرحها البوابة مع المجلد والمالك والحل، وتطبيق Apple TV.
+الجديد في 1.3
+مستعرض ملفات بأسلوب «الملفات» على كل الأجهزة مع مشغّل mpv وقارئات EPUB وCBZ وZIP؛ على Apple TV عارضات نص/PDF وفتح في Infuse/VLC وmpv خلف Cloudflare Access أيضًا؛ اختيار المشاركات المعروضة.
 
 على Mac
 التطبيق نفسه (شراء موحّد) يضع المشاركات في الشريط الجانبي لـ Finder مثل بقية خدمات التخزين السحابي، مع لوحة في شريط القوائم: حالة المزامنة، النشاط (التنزيلات والرفع وإعادة التسمية والحذف)، إشعارات Unraid، الإيقاف المؤقت/الاستئناف، الملفات دون اتصال، قائمة الأخطاء، التشغيل عند تسجيل الدخول ووضع شريط القوائم فقط.
@@ -249,13 +241,13 @@ for l, m in META.items():
 
 # "What's New" for the 1.1 update (build 19). Limit 4000.
 WHATS_NEW = {
-'en-US': "• Choose which shares to show: after connecting, and any time in the server's details, tick the shares you want in Files, the Finder, Shortcuts and on Apple TV. The choice syncs with your iCloud configuration.\n• Permission errors now carry the gateway's explanation (folder, owner, mode and the fix) in the activity log and error list (unraid-gateway 0.5.5+).\n• Apple TV: browse and play your shares on the TV, paired with a 6-digit code.",
-'it': '• Scegli quali share mostrare: dopo la connessione, e in ogni momento nei dettagli del server, spunta le share che vuoi in File, nel Finder, nei Comandi rapidi e su Apple TV. La scelta si sincronizza con la configurazione iCloud.\n• Gli errori di permesso riportano la spiegazione del gateway (cartella, proprietario, modo e rimedio) nel registro attività e nella lista errori (unraid-gateway 0.5.5+).\n• Apple TV: sfoglia e riproduci le share sulla TV, abbinata con un codice di 6 cifre.',
-'es-ES': '• Elige qué recursos compartidos mostrar: tras conectar, y en cualquier momento en los detalles del servidor, marca los que quieres en Archivos, el Finder, Atajos y el Apple TV. La elección se sincroniza con la configuración de iCloud.\n• Los errores de permisos incluyen la explicación del gateway (carpeta, propietario, modo y solución) en el registro de actividad y la lista de errores (unraid-gateway 0.5.5+).\n• Apple TV: explora y reproduce tus recursos compartidos en el TV, emparejado con un código de 6 cifras.',
-'fr-FR': '• Choisissez les partages à afficher : après la connexion, et à tout moment dans les détails du serveur, cochez ceux que vous voulez dans Fichiers, le Finder, Raccourcis et sur l’Apple TV. Le choix se synchronise avec la configuration iCloud.\n• Les erreurs de permission portent l’explication de la passerelle (dossier, propriétaire, mode et solution) dans le journal d’activité et la liste des erreurs (unraid-gateway 0.5.5+).\n• Apple TV : parcourez et lisez vos partages sur la TV, jumelée avec un code à 6 chiffres.',
-'de-DE': '• Wähle, welche Freigaben angezeigt werden: nach dem Verbinden und jederzeit in den Serverdetails hakst du die Freigaben für Dateien, Finder, Kurzbefehle und Apple TV ab. Die Auswahl synchronisiert sich mit der iCloud-Konfiguration.\n• Berechtigungsfehler enthalten die Erklärung des Gateways (Ordner, Besitzer, Modus und Lösung) im Aktivitätsprotokoll und in der Fehlerliste (unraid-gateway 0.5.5+).\n• Apple TV: Freigaben auf dem TV durchsuchen und wiedergeben, gekoppelt mit einem 6-stelligen Code.',
-'zh-Hans': '• 选择要显示的共享：连接后以及随时在服务器详情中，勾选想在“文件”、“访达”、快捷指令和 Apple TV 中看到的共享。选择随 iCloud 配置同步。\n• 权限错误在活动记录和错误列表中附带网关的说明（文件夹、所有者、权限模式和解决方法）（需 unraid-gateway 0.5.5+）。\n• Apple TV：在电视上浏览并播放共享，用 6 位代码配对。',
-'ar-SA': '• اختر المشاركات التي تريد عرضها: بعد الاتصال وفي أي وقت من تفاصيل الخادم، حدّد المشاركات التي تريدها في الملفات وFinder والاختصارات وApple TV. يتزامن الاختيار مع إعدادات iCloud.\n• تحمل أخطاء الصلاحيات شرح البوابة (المجلد والمالك والوضع والحل) في سجل النشاط وقائمة الأخطاء (unraid-gateway 0.5.5+).\n• Apple TV: استعرض مشاركاتك وشغّلها على التلفاز بعد الاقتران برمز من 6 أرقام.',
+'en-US': '• A Files-style explorer inside the app on iPhone, iPad, Vision Pro and Mac: list or icons, sort, search, Info, new folder, upload, rename, move, copy, share, delete — through the gateway with your Unraid permissions.\n• Opens far more files: Quick Look plus a built-in mpv player (MKV, AVI, WebM, FLAC…), and readers for EPUB books, CBZ comics and ZIP archives.\n• Apple TV: file explorer with text/NFO/CSV and PDF viewers, Open in Infuse/VLC, mpv working behind Cloudflare Access.\n• Choose which shares to show, synced with iCloud.',
+'it': '• Explorer di file in stile File dentro l’app su iPhone, iPad, Vision Pro e Mac: elenco o icone, ordinamento, ricerca, Info, nuova cartella, caricamento, rinomina, sposta, copia, condividi, elimina — tramite il gateway con i tuoi permessi Unraid.\n• Apre molti più file: Quick Look più il lettore mpv integrato (MKV, AVI, WebM, FLAC…), e lettori per libri EPUB, fumetti CBZ e archivi ZIP.\n• Apple TV: explorer con visualizzatori testo/NFO/CSV e PDF, Apri in Infuse/VLC, mpv funzionante anche dietro Cloudflare Access.\n• Scegli quali share mostrare, sincronizzato con iCloud.',
+'es-ES': '• Explorador de archivos al estilo de Archivos dentro de la app en iPhone, iPad, Vision Pro y Mac: lista o iconos, orden, búsqueda, Información, nueva carpeta, subida, renombrar, mover, copiar, compartir, eliminar — a través del gateway con tus permisos de Unraid.\n• Abre muchos más archivos: Vista rápida más el reproductor mpv integrado (MKV, AVI, WebM, FLAC…), y lectores de libros EPUB, cómics CBZ y archivos ZIP.\n• Apple TV: explorador con visores de texto/NFO/CSV y PDF, Abrir en Infuse/VLC, mpv funcionando también tras Cloudflare Access.\n• Elige qué recursos compartidos mostrar, sincronizado con iCloud.',
+'fr-FR': '• Explorateur de fichiers façon Fichiers dans l’app sur iPhone, iPad, Vision Pro et Mac : liste ou icônes, tri, recherche, Infos, nouveau dossier, envoi, renommer, déplacer, copier, partager, supprimer — via la passerelle avec vos permissions Unraid.\n• Ouvre bien plus de fichiers : Coup d’œil plus le lecteur mpv intégré (MKV, AVI, WebM, FLAC…), et des lecteurs pour livres EPUB, BD CBZ et archives ZIP.\n• Apple TV : explorateur avec visionneuses texte/NFO/CSV et PDF, Ouvrir dans Infuse/VLC, mpv fonctionnant aussi derrière Cloudflare Access.\n• Choix des partages à afficher, synchronisé avec iCloud.',
+'de-DE': '• Datei-Explorer im Stil von „Dateien“ in der App auf iPhone, iPad, Vision Pro und Mac: Liste oder Symbole, Sortierung, Suche, Info, neuer Ordner, Hochladen, Umbenennen, Bewegen, Kopieren, Teilen, Löschen – über das Gateway mit deinen Unraid-Berechtigungen.\n• Öffnet viel mehr Dateien: Übersicht plus integrierter mpv-Player (MKV, AVI, WebM, FLAC …) sowie Reader für EPUB-Bücher, CBZ-Comics und ZIP-Archive.\n• Apple TV: Explorer mit Text-/NFO-/CSV- und PDF-Anzeige, Öffnen in Infuse/VLC, mpv auch hinter Cloudflare Access.\n• Auswahl der angezeigten Freigaben, mit iCloud synchronisiert.',
+'zh-Hans': '• iPhone、iPad、Vision Pro 和 Mac 上应用内的“文件”风格浏览器：列表或图标、排序、搜索、简介、新建文件夹、上传、重命名、移动、拷贝、共享、删除——通过网关并遵循你的 Unraid 权限。\n• 可打开更多文件：快速查看加内置 mpv 播放器（MKV、AVI、WebM、FLAC…），以及 EPUB 电子书、CBZ 漫画和 ZIP 压缩包阅读器。\n• Apple TV：带文本/NFO/CSV 和 PDF 查看器的浏览器、在 Infuse/VLC 中打开、mpv 在 Cloudflare Access 后也可用。\n• 选择要显示的共享，与 iCloud 同步。',
+'ar-SA': '• مستعرض ملفات بأسلوب «الملفات» داخل التطبيق على iPhone وiPad وVision Pro وMac: قائمة أو أيقونات، ترتيب، بحث، معلومات، مجلد جديد، رفع، إعادة تسمية، نقل، نسخ، مشاركة، حذف — عبر البوابة وبصلاحيات Unraid الخاصة بك.\n• يفتح ملفات أكثر بكثير: نظرة سريعة مع مشغّل mpv مدمج (MKV وAVI وWebM وFLAC…) وقارئات لكتب EPUB وقصص CBZ وأرشيفات ZIP.\n• Apple TV: مستعرض مع عارضات نص/NFO/CSV وPDF، وفتح في Infuse/VLC، وmpv يعمل خلف Cloudflare Access أيضًا.\n• اختيار المشاركات المعروضة مع مزامنة iCloud.',
 }
 for l, t in WHATS_NEW.items():
     assert len(t) <= 4000, (l, "whatsNew", len(t))

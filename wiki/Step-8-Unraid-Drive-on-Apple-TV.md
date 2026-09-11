@@ -26,11 +26,15 @@ How it works: the phone encrypts the server (URL, mode, Cloudflare token, Unraid
 
 Right after pairing, the TV shows the *Shares to show* list for the new server, pre-filled with the choice of the device that paired it. Change it later on the TV under the server › **Shares to show** (*All shares* or a tick per share). Hidden shares are not listed in *Browse shares*; the gateway still applies your Unraid user's permissions.
 
+## The file explorer
+
+*Browse shares* is a proper explorer: list or grid (button at the top right), sort by name, date or size, item count, and an **Info** screen per file (long-press the touch surface). Folders open in place; files open in the right viewer: photos, the system player for Apple formats, mpv for everything else, a text viewer for TXT/NFO/Markdown/JSON/CSV/subtitles and other plain-text files, a page viewer for **PDF**, a reader for **EPUB** (text) and **CBZ** comics, and a listing for **ZIP** archives. What the TV cannot open (Office documents, unknown types) shows its details and, when Infuse or VLC are installed on the Apple TV, an **Open in Infuse / Open in VLC** button that hands the file to that app through the gateway's signed media link.
+
 ## Formats and the mpv player
 
 Apple formats (MP4, MOV, M4V, HEVC, AAC, MP3, JPEG, HEIC) play with the system player. Everything else — MKV, AVI, WebM, MPEG-TS, VOB, FLAC, OGG, Opus, WMA and more — opens in the built-in **mpv** player (libmpv and FFmpeg, LGPL build, shipped through [MPVKit](https://github.com/mpvkit/MPVKit)): hardware decoding, embedded subtitles and audio tracks, HDR passthrough where the TV supports it. If the system player fails on an Apple-format file, a button hands it to mpv. Siri Remote: play/pause with the play button or a click, left/right ±10 s, Menu closes.
 
-mpv cannot send the gateway's authentication header, so it streams through a **media ticket**: the app asks `unraid-gateway` (0.6 or later) for a signed URL valid for that one file for a few hours; nothing secret is in the URL and a gateway restart invalidates it. Behind Cloudflare Access, exclude the `/media/*` path from the Access policy or use the gateway on the LAN, otherwise Access blocks the header-less player.
+The built-in mpv sends the same headers as the app (bearer token and, if you use it, the Cloudflare Access service token), so it works wherever the app works. Only the hand-off to **Infuse or VLC** needs a header-less link: the app asks `unraid-gateway` (0.6 or later) for a signed **media ticket** valid for that one file for a few hours (nothing secret in the URL, invalidated by a gateway restart). Behind Cloudflare Access, exclude the `/media/*` path from the Access policy for those external players, or use the gateway on the LAN.
 
 ## Troubleshooting
 

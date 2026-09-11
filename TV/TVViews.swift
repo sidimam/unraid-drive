@@ -22,9 +22,20 @@ struct TVRootView: View {
         #endif
         return nil
     }
+    /// Debug: `-tvOpenFile <path>` opens that demo file in its viewer directly.
+    private var debugFile: String? {
+        #if DEBUG
+        let a = ProcessInfo.processInfo.arguments
+        if let i = a.firstIndex(of: "-tvOpenFile"), a.count > i + 1 { return a[i + 1] }
+        #endif
+        return nil
+    }
     var body: some View {
         NavigationStack {
             if let u = debugPlayURL { TVMPVDebugPlayer(url: u) }
+            else if let f = debugFile, let demo = model.servers.first(where: \.isDemo) {
+                TVFileOpener(server: demo, entry: FSEntry(name: (f as NSString).lastPathComponent, path: f, type: .file, size: 0, mtime: Date(), etag: ""))
+            }
             else if let p = debugPath, let demo = model.servers.first(where: \.isDemo) { TVBrowserView(server: demo, path: p, title: (p as NSString).lastPathComponent.isEmpty ? demo.name : (p as NSString).lastPathComponent) }
             else if model.servers.isEmpty { TVPairView() } else { TVServersView() }
         }
@@ -159,95 +170,6 @@ struct TVServerHome: View {
     }
 }
 
-// MARK: - Browser
-
-struct TVBrowserView: View {
-    @EnvironmentObject private var model: TVModel
-    let server: ServerConfig
-    let path: String
-    let title: String
-    @State private var entries: [FSEntry] = []
-    @State private var error: String?
-    @State private var loading = true
-    @State private var playing: FSEntry?
-    @State private var playingMPV: FSEntry?
-    @State private var viewing: FSEntry?
-
-    // Native (AVFoundation) formats play with the system player; everything else goes to libmpv.
-    private static let video: Set<String> = ["mp4", "m4v", "mov", "hevc", "ts", "m3u8"]
-    private static let audio: Set<String> = ["mp3", "m4a", "aac", "wav", "aiff", "caf"]
-    private static let mpvVideo: Set<String> = ["mkv", "avi", "wmv", "flv", "webm", "mpg", "mpeg", "m2ts", "mts", "vob", "ogv", "ogm", "3gp", "divx", "rm", "rmvb", "asf", "mp2", "iso"]
-    private static let mpvAudio: Set<String> = ["flac", "ogg", "oga", "opus", "wma", "ape", "mka", "dsf", "dff", "ac3", "dts", "wv", "tta", "mpc", "aif"]
-    private static let image: Set<String> = ["jpg", "jpeg", "png", "heic", "heif", "gif", "tiff", "bmp", "webp"]
-    enum Media { case video, audio, mpvVideo, mpvAudio, image, other }
-    static func media(_ e: FSEntry) -> Media {
-        let ext = (e.name as NSString).pathExtension.lowercased()
-        if video.contains(ext) { return .video }; if audio.contains(ext) { return .audio }
-        if mpvVideo.contains(ext) { return .mpvVideo }; if mpvAudio.contains(ext) { return .mpvAudio }
-        if image.contains(ext) { return .image }; return .other
-    }
-    static func symbol(_ e: FSEntry) -> String {
-        if e.isDirectory { return "folder.fill" }
-        switch media(e) { case .video, .mpvVideo: return "film"; case .audio, .mpvAudio: return "music.note"; case .image: return "photo"; case .other: return "doc" }
-    }
-
-    var body: some View {
-        Group {
-            if let error { ContentUnavailableView("Cannot load this folder", systemImage: "exclamationmark.triangle", description: Text(error)) }
-            else if loading && entries.isEmpty { ProgressView() }
-            else if entries.isEmpty { ContentUnavailableView("Empty folder", systemImage: "folder") }
-            else {
-                ScrollView {
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 40), count: 5), spacing: 40) {
-                        ForEach(entries) { e in
-                            if e.isDirectory {
-                                NavigationLink { TVBrowserView(server: server, path: e.path, title: e.name) } label: { tile(e) }.buttonStyle(.card)
-                            } else {
-                                Button { open(e) } label: { tile(e) }.buttonStyle(.card).disabled(Self.media(e) == .other)
-                            }
-                        }
-                    }.padding(60)
-                }
-            }
-        }
-        .navigationTitle(title)
-        .task { await load() }
-        .fullScreenCover(item: $playing) { e in TVPlayerView(server: server, entry: e) }
-        .fullScreenCover(item: $playingMPV) { e in TVMPVPlayerView(server: server, entry: e) }
-        .fullScreenCover(item: $viewing) { e in TVImageView(server: server, entry: e) }
-    }
-
-    private func tile(_ e: FSEntry) -> some View {
-        VStack(spacing: 12) {
-            Image(systemName: Self.symbol(e)).font(.system(size: 64)).foregroundStyle(e.isDirectory ? AnyShapeStyle(.tint) : AnyShapeStyle(.primary)).frame(height: 90)
-            Text(e.name).font(.callout).lineLimit(2).multilineTextAlignment(.center)
-            if !e.isDirectory { Text(ByteCountFormatter.string(fromByteCount: e.size, countStyle: .file)).font(.caption2).foregroundStyle(.secondary) }
-        }.frame(width: 300, height: 220).padding(12)
-    }
-
-    private func load() async {
-        guard let c = model.client(for: server) else { error = String(localized: "Credentials for this server are missing on the TV. Pair it again from your iPhone, iPad or Mac."); loading = false; return }
-        do {
-            let cfg = model.current(server)
-            entries = try await c.list(path).entries
-                .filter { path != "/" || cfg.isVisible(path: $0.path) }
-                .sorted { ($0.isDirectory ? 0 : 1, $0.name.lowercased()) < ($1.isDirectory ? 0 : 1, $1.name.lowercased()) }
-            error = nil
-        }
-        catch { self.error = error.localizedDescription }
-        loading = false
-    }
-
-    private func open(_ e: FSEntry) {
-        switch Self.media(e) {
-        case .video, .audio: playing = e
-        case .mpvVideo, .mpvAudio: playingMPV = e
-        case .image: viewing = e
-        case .other: break
-        }
-    }
-}
-
 // MARK: - Shares to show
 
 struct TVSharesView: View {
@@ -351,14 +273,15 @@ struct TVPlayerView: View {
     }
 }
 
-/// libmpv player for everything AVFoundation cannot play. Streams through a short-lived media
-/// ticket issued by the gateway (0.6+) so no credential travels in the URL.
+/// libmpv player for everything AVFoundation cannot play. Streams the gateway URL with the app's own
+/// headers (mpv's http-header-fields), so Cloudflare Access and the bearer token keep working.
 struct TVMPVPlayerView: View {
     @EnvironmentObject private var model: TVModel
     @Environment(\.dismiss) private var dismiss
     let server: ServerConfig
     let entry: FSEntry
     @State private var url: URL?
+    @State private var headers: [String: String] = [:]
     @State private var error: String?
     @State private var buffering = true
     @State private var position: Double = 0
@@ -368,7 +291,7 @@ struct TVMPVPlayerView: View {
         ZStack {
             Color.black.ignoresSafeArea()
             if let url {
-                MPVPlayerRepresentable(url: url,
+                MPVPlayerRepresentable(url: url, headers: headers,
                                        onBuffering: { buffering = $0 },
                                        onProgress: { position = $0; duration = $1 },
                                        onEnd: { dismiss() },
@@ -395,8 +318,9 @@ struct TVMPVPlayerView: View {
         }
         .task {
             guard let c = model.client(for: server) else { error = String(localized: "Credentials for this server are missing on the TV. Pair it again from your iPhone, iPad or Mac."); return }
-            do { url = try await c.mediaTicketURL(entry.path) }
-            catch GatewayError.notFound { error = String(localized: "This needs unraid-gateway 0.6 or later on the server.") }
+            // mpv sends the same headers as the app (bearer token, Cloudflare Access service token), so it
+            // works wherever the app works — no header-less link needed.
+            do { let req = try await c.mediaRequest(entry.path); headers = req.allHTTPHeaderFields ?? [:]; url = req.url }
             catch { self.error = error.localizedDescription }
         }
     }

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3 (build 26) — 2026-09-11
+
+- **A real file explorer in the app, on every device.** *Browse shares* is now a Files-style explorer on iPhone, iPad, Vision Pro, Mac and Apple TV: list or icons, sort by name/kind/date/size, search in the folder, Info sheet (type, size, date, path, permissions), and on iPhone/iPad/Mac/Vision Pro the usual operations through the gateway with your Unraid permissions — new folder, upload from the Files picker, rename, move and copy with a folder picker, share/export a copy, delete (swipe or long press).
+- **Opens far more files.** Quick Look for images, PDF, text, Office and Apple documents; **mpv** (libmpv + FFmpeg, LGPL, via MPVKit) for MKV, AVI, WebM, MPEG-TS, FLAC, OGG, Opus, WMA and the other formats AVFoundation cannot play, on iPhone, iPad, Mac and Apple TV; built-in readers for **EPUB** (text), **CBZ comics** and **ZIP** listings everywhere; on Apple TV also a text/NFO/Markdown/CSV viewer and a PDF page viewer (no PDFKit there).
+- **Apple TV:** mpv now sends the same headers as the app (bearer token and Cloudflare Access service token), so it works behind Cloudflare Access too — this is what made MKV/AVI fail with "cannot play" on TVs whose gateway sits behind Access. Files the TV cannot open show their details and, when Infuse or VLC are installed, an *Open in Infuse / VLC* button (through the gateway's signed media link; behind Cloudflare Access the /media path must be excluded from the Access policy).
+- Kit: `FileKind`, `ZipArchive` (stored + deflate) and `EPUBBook` shared by all apps, with unit tests.
+
 ## 1.2 (build 23; Apple TV build 25) — 2026-09-11
 
 - **Apple TV plays everything.** Files AVFoundation cannot decode (MKV, AVI, WebM, MPEG-TS, FLAC, OGG, Opus, WMA, …) open in a built-in **mpv** player: libmpv and FFmpeg (LGPL build) through [MPVKit](https://github.com/mpvkit/MPVKit), the same engine as IINA and mpv, rendered with Metal and hardware decoding. Apple formats keep the system player; if it fails on a file, a button hands over to mpv. Play/pause and ±10 s with the Siri Remote. Streaming uses the gateway's new **media ticket** (unraid-gateway 0.6+): a signed, expiring URL for that file only, no credential in the URL.
