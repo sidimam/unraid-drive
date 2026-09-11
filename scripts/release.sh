@@ -10,8 +10,8 @@ for PLAT in ${=PLATFORMS:-iOS visionOS macOS tvOS}; do   # PLATFORMS="iOS macOS"
   echo "=== archive $PLAT"
   rm -rf build/UnraidDrive-$PLAT.xcarchive build/export-$PLAT
   SCHEME=UnraidDrive; [ "$PLAT" = macOS ] && SCHEME=UnraidDriveMac; [ "$PLAT" = tvOS ] && SCHEME=UnraidDriveTV
-  # tvOS has no development profile (no Apple TV registered): archive straight with the App Store profile.
-  EXTRA=(); [ "$PLAT" = tvOS ] && EXTRA=(CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=X5SR67A8AL CODE_SIGN_IDENTITY="Apple Distribution" PROVISIONING_PROFILE_SPECIFIER="UnraidDrive tvOS AppStore")
+  # tvOS: the Release configuration of UnraidDriveTV signs manually with the App Store profile (project.yml).
+  EXTRA=()
   xcodebuild archive -project UnraidDrive.xcodeproj -scheme $SCHEME -destination "generic/platform=$PLAT" \
     -archivePath build/UnraidDrive-$PLAT.xcarchive -derivedDataPath build/dd-$PLAT "${AUTH[@]}" "${EXTRA[@]}" 2>&1 | grep -E "error:|ARCHIVE"
   [ -d build/UnraidDrive-$PLAT.xcarchive ] || { echo "archive $PLAT failed"; exit 1; }
