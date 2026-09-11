@@ -9,7 +9,7 @@ VERSION=$(grep -m1 'MARKETING_VERSION' project.yml | sed 's/.*"\(.*\)".*/\1/'); 
 APP="build/export-devid/Unraid Drive.app"; DMG="build/Unraid-Drive-$VERSION-$BUILD.dmg"
 if [ ! -d "$APP" ]; then
   rm -rf build/UnraidDrive-macOS.xcarchive build/export-devid
-  AUTH=(-allowProvisioningUpdates -authenticationKeyPath "$KEY" -authenticationKeyID "$KEY_ID" -authenticationKeyIssuerID "$ISSUER")
+  AUTH=(-allowProvisioningUpdates)   # Developer ID Application certificate is in the login keychain
   xcodebuild archive -project UnraidDrive.xcodeproj -scheme UnraidDriveMac -destination "generic/platform=macOS" \
     -archivePath build/UnraidDrive-macOS.xcarchive -derivedDataPath build/dd-macOS "${AUTH[@]}" 2>&1 | grep -E "error:|ARCHIVE"
   xcodebuild -exportArchive -archivePath build/UnraidDrive-macOS.xcarchive -exportOptionsPlist ExportOptions-DeveloperID.plist \

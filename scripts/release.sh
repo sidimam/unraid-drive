@@ -2,9 +2,10 @@
 set -o pipefail
 cd "$(dirname "$0")/.."
 ISSUER="${ASC_ISSUER:?set ASC_ISSUER to the App Store Connect issuer id}"
-KEY="${ASC_KEY:-$HOME/.appstoreconnect/private_keys/AuthKey_Z9NY29WQ4M.p8}"
-# Cloud signing through the App Store Connect API key: no Xcode account session needed.
-AUTH=(-allowProvisioningUpdates -authenticationKeyPath "$KEY" -authenticationKeyID Z9NY29WQ4M -authenticationKeyIssuerID "$ISSUER")
+# Signing: the Xcode account session handles iOS/visionOS (cloud-managed Apple Distribution certificate);
+# macOS needs the local "3rd Party Mac Developer Application/Installer" certificates (kit: MacDistribution/).
+# The API key has no cloud-signing permission, so it is used only by altool.
+AUTH=(-allowProvisioningUpdates)
 for PLAT in ${=PLATFORMS:-iOS visionOS macOS}; do   # PLATFORMS="iOS macOS" to restrict
   echo "=== archive $PLAT"
   rm -rf build/UnraidDrive-$PLAT.xcarchive build/export-$PLAT
