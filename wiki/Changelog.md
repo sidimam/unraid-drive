@@ -10,6 +10,7 @@ All notable changes to Unraid Drive. The server side has its own changelog in [u
 - **Video that does not start — the real reason.** Before mpv opens a file (Apple TV, iPhone, iPad, Mac) the app fetches its first byte with the same headers: a Cloudflare Access login page, a `401`, a revoked device or a gateway error are now reported as such instead of mpv's *unrecognized file format*. Streams use a **media ticket** (gateway 0.6+), so playback and seeking keep working after the session token expires; headers stay for Cloudflare Access.
 - **Apple TV explorer:** *Rename* and *New folder* (on-screen keyboard), next to Copy, Cut, Paste, Delete (with confirmation) and Info.
 - Apple TV registers with the name you gave it (Settings › General › About) so the gateway's Devices card tells the TVs apart.
+- Build scripts: archives, intermediates and exports live outside the repository (`DD_ROOT`, default `~/Library/Caches/UnraidDrive-build`), because a checkout inside Google Drive gets extended attributes on the build products and CodeSign refuses them.
 
 ## 1.3 (build 29) — 2026-09-11
 
