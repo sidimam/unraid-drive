@@ -7,7 +7,10 @@ cd "$(dirname "$0")/.."
 ISSUER="${ASC_ISSUER:?set ASC_ISSUER}"; KEY="${ASC_KEY:?set ASC_KEY to the .p8 path}"; KEY_ID="${ASC_KEY_ID:-Z9NY29WQ4M}"
 VERSION=$(grep -m1 'MARKETING_VERSION' project.yml | sed 's/.*"\(.*\)".*/\1/'); BUILD=$(grep -m1 'CURRENT_PROJECT_VERSION' project.yml | sed 's/.*"\(.*\)".*/\1/')
 APP="build/export-devid/Unraid Drive.app"; DMG="build/Unraid-Drive-$VERSION-$BUILD.dmg"
-if [ ! -d "$APP" ]; then
+# Reuse an exported app only if it is this very build (a stale export would ship the previous version).
+EXPORTED=$( [ -d "$APP" ] && /usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$APP/Contents/Info.plist" 2>/dev/null || echo none )
+if [ "$EXPORTED" != "$BUILD" ]; then
+  echo "=== archive + export build $BUILD (exported: $EXPORTED)"
   rm -rf build/UnraidDrive-macOS.xcarchive build/export-devid
   AUTH=(-allowProvisioningUpdates)   # Developer ID Application certificate is in the login keychain
   xcodebuild archive -project UnraidDrive.xcodeproj -scheme UnraidDriveMac -destination "generic/platform=macOS" \

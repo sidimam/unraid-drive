@@ -1,6 +1,7 @@
 import Foundation
 import FileProvider
 import UnraidGatewayKit
+import os
 
 /// Owns the server list and keeps File Provider domains in sync with it.
 @MainActor
@@ -120,6 +121,25 @@ final class ServersModel: ObservableObject {
         reload()
         return login
     }
+
+    /// Stores which shares to show for a server (nil = all), syncs it and tells the Files app /
+    /// Finder location to re-read its root so hidden shares disappear and re-enabled ones return.
+    func setSelectedShares(_ server: ServerConfig, _ shares: [String]?) async {
+        guard var s = store.server(id: server.id) else {
+            Logger(subsystem: "com.sdimambro.unraid-drive", category: "shares").error("setSelectedShares: server \(server.id, privacy: .public) not in store")
+            return
+        }
+        Logger(subsystem: "com.sdimambro.unraid-drive", category: "shares").notice("setSelectedShares \(server.id, privacy: .public) → \(shares?.joined(separator: ",") ?? "all", privacy: .public)")
+        s.selectedShares = shares
+        s.modifiedAt = Date()
+        store.upsert(s)
+        reload()
+        cloud.push()
+        await FileProviderDomains.signal(s)
+    }
+
+    /// Current configuration of a server (views often hold a copy that predates a change).
+    func current(_ server: ServerConfig) -> ServerConfig { servers.first { $0.id == server.id } ?? server }
 
     /// Adds the built-in demo server (no network, sample files).
     func addDemo() async {

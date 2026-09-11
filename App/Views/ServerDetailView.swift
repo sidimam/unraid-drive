@@ -25,6 +25,11 @@ struct ServerDetailView: View {
                     #endif
                 }
                 NavigationLink { FileBrowserView(server: server, path: "/") } label: { Label("Browse shares", systemImage: "externaldrive.connected.to.line.below") }
+                NavigationLink { SharesPickerView(server: server) } label: {
+                    LabeledContent { Text(model.current(server).selectedShares == nil ? String(localized: "All shares") : String(localized: "\(model.current(server).selectedShares?.count ?? 0) shares")) } label: {
+                        Label("Shares to show", systemImage: "externaldrive.badge.checkmark")
+                    }
+                }
                 Button { testing = true } label: { Label("Test connection", systemImage: "stethoscope") }
                 Button {
                     Task { await FileProviderDomains.signal(server); resyncRequested = true }

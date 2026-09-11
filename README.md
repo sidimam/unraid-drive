@@ -48,6 +48,7 @@ It talks to [`unraid-gateway`](https://github.com/sidimam/unraid-gateway), a 10 
 - **Secrets in the Keychain**, shared only with the extension. No analytics, no third-party servers.
 - **Optional iCloud sync** (Settings): the server list goes to iCloud Key-Value Storage and the secrets to iCloud Keychain (end-to-end encrypted), so a restored or new iPhone finds its configuration. Off by default; a restore banner appears when iCloud holds a configuration and the device has none.
 - **Connection test** with five checks (reachability, key, shares, write probe, Files location) and **edit server** without losing the Files app location.
+- **Choose which shares to show** (1.2): after connecting, in the walkthrough, from Settings › Shares to show or in the server's details, tick the shares you want in Files, the Finder, Shortcuts and on Apple TV. The gateway already limits the list to what your Unraid user may see; this filter is yours, like the folder selection of Google Drive/OneDrive, and travels with the iCloud configuration.
 - **Universal**: iPhone, iPad, native visionOS, macOS and Apple TV from one codebase.
 - **Apple TV**: media browser through the gateway with the user's own permissions — photos, music and video played natively, dashboard; pairing by a 6-digit code from iPhone/iPad/Mac (credentials travel AES-GCM encrypted through iCloud Key-Value Storage). See [Step 8](https://github.com/sidimam/unraid-drive/wiki/Step-8-Unraid-Drive-on-Apple-TV).
 - **On the Mac, like the big cloud drives**: every server is a location in the Finder sidebar (`~/Library/CloudStorage/UnraidDrive-<server>`, files download on demand, the Finder shows the sync badges), with a menu bar panel — Home (open the folder, sync status, pause/resume), Activity (every download, upload, rename and deletion recorded by the extension), Notifications (unread Unraid notifications), and a gear menu with Preferences, Offline files (space used locally, free it up), Error list, About, Launch at login and Quit. The location must be enabled once in System Settings › General › Login Items & Extensions › File Providers; the app shows a banner until it is.
@@ -62,7 +63,7 @@ After the first launch enable the extension under System Settings › General �
 
 ## What's new
 
-See [CHANGELOG.md](CHANGELOG.md) (also in the [wiki](https://github.com/sidimam/unraid-drive/wiki/Changelog)) and the notes of each [GitHub release](https://github.com/sidimam/unraid-drive/releases).
+**1.2 (build 22):** choose which shares to show (Files, Finder, Shortcuts, Apple TV); permission errors carry the gateway's explanation (folder, owner, mode, fix; unraid-gateway 0.5.5+). **1.1 (build 20/21):** Shortcuts and Siri actions, notifications when the gateway is unreachable or a file could not sync, walkthrough at every update with iCloud restore, app colour applied to the whole app, Apple TV app. Full history in [CHANGELOG.md](CHANGELOG.md); server side in the [unraid-gateway changelog](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
 
 ## Project layout
 

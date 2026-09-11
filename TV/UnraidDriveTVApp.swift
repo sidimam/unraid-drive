@@ -19,11 +19,26 @@ final class TVModel: ObservableObject {
     @Published private(set) var servers: [ServerConfig] = []
     private let store = ServerStore()
     private let keychain = KeychainStore()
-    init() { reload(); if ProcessInfo.processInfo.arguments.contains("-seedDemo"), !servers.contains(where: \.isDemo) { addDemo() } }
+    init() {
+        reload()
+        let args = ProcessInfo.processInfo.arguments
+        if args.contains("-seedDemo"), !servers.contains(where: \.isDemo) { addDemo() }
+        // Debug: `-tvSelectShares documents,media` limits the demo server to those shares (screenshots/tests).
+        if let i = args.firstIndex(of: "-tvSelectShares"), args.count > i + 1 {
+            setSelectedShares(ServerConfig.demo, args[i + 1].split(separator: ",").map(String.init))
+        }
+    }
     func reload() { servers = store.all() }
     func client(for s: ServerConfig) -> GatewayClient? { GatewayClientFactory.client(for: s, keychain: keychain) }
     func addDemo() { store.upsert(ServerConfig.demo); reload() }
     func remove(_ s: ServerConfig) { keychain.remove(for: s.id); store.remove(id: s.id); reload() }
+    func current(_ s: ServerConfig) -> ServerConfig { servers.first { $0.id == s.id } ?? s }
+    /// Shares to show on this TV (nil = all). Local to the TV; the pairing brings the phone's choice as a start.
+    func setSelectedShares(_ s: ServerConfig, _ shares: [String]?) {
+        guard var c = store.server(id: s.id) else { return }
+        c.selectedShares = shares; c.modifiedAt = Date()
+        store.upsert(c); reload()
+    }
     /// Stores a paired server with its secrets (local to this TV: tvOS has no iCloud Keychain).
     func adopt(_ p: PairingPayload) throws {
         try keychain.set(apiKey: p.apiKey, for: p.server.id)

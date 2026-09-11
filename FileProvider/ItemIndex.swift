@@ -129,6 +129,7 @@ actor ItemIndex {
             let p = GatewayPath.join(dir, name)
             if let id = pathToID[p] {
                 out.append(NSFileProviderItemIdentifier(id))
+                retired.insert(id)
                 remove(path: p)
             }
         }

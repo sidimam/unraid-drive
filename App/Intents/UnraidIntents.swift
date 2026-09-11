@@ -152,9 +152,11 @@ struct ListFolderIntent: AppIntent {
     static var parameterSummary: some ParameterSummary { Summary("List \(\.$folder) on \(\.$server)") }
 
     func perform() async throws -> some IntentResult & ReturnsValue<[String]> {
-        let (_, client) = try Gateway.client(server)
-        let page = try await client.list(Gateway.normalize(folder))
-        return .result(value: page.entries.map { $0.isDirectory ? $0.name + "/" : $0.name })
+        let (config, client) = try Gateway.client(server)
+        let path = Gateway.normalize(folder)
+        let page = try await client.list(path)
+        let entries = path == "/" ? page.entries.filter { config.isVisible(path: $0.path) } : page.entries
+        return .result(value: entries.map { $0.isDirectory ? $0.name + "/" : $0.name })
     }
 }
 

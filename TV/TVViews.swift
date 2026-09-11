@@ -54,9 +54,22 @@ struct TVPairView: View {
     @State private var code = TVPairing.generateCode()
     @State private var status: LocalizedStringKey = "Waiting for your other device…"
     @State private var done = false
+    @State private var paired: ServerConfig?
     private let kvs = NSUbiquitousKeyValueStore.default
 
     var body: some View {
+        if let paired {
+            // Right after pairing: choose the shares to show on this TV (the phone's choice is the start).
+            VStack(spacing: 20) {
+                TVSharesView(server: paired)
+                Button("Done") { dismiss() }.padding(.bottom, 40)
+            }
+        } else {
+            pairingView
+        }
+    }
+
+    private var pairingView: some View {
         VStack(spacing: 28) {
             Image(systemName: "appletv").font(.system(size: 80)).foregroundStyle(.tint)
             Text("Add a server from another device").font(.title)
@@ -89,7 +102,7 @@ struct TVPairView: View {
             try model.adopt(payload)
             kvs.removeObject(forKey: TVPairing.kvsKey(code)); kvs.synchronize()
             done = true; status = "Paired: \(payload.server.name)"
-            Task { try? await Task.sleep(for: .seconds(1.5)); dismiss() }
+            paired = model.current(payload.server)
         } catch {
             status = "Received data could not be decrypted. Check the code and try again."
         }
@@ -107,6 +120,7 @@ struct TVServerHome: View {
             Section {
                 NavigationLink { TVBrowserView(server: server, path: "/", title: server.name) } label: { Label("Browse shares", systemImage: "folder") }
                 NavigationLink { TVDashboardView(server: server) } label: { Label("Dashboard", systemImage: "gauge.with.dots.needle.33percent") }
+                NavigationLink { TVSharesView(server: server) } label: { Label("Shares to show", systemImage: "externaldrive.badge.checkmark") }
             }
             Section {
                 Button(role: .destructive) { confirmRemove = true } label: { Label("Remove this server from the TV", systemImage: "trash") }
@@ -178,13 +192,65 @@ struct TVBrowserView: View {
 
     private func load() async {
         guard let c = model.client(for: server) else { error = String(localized: "Credentials for this server are missing on the TV. Pair it again from your iPhone, iPad or Mac."); loading = false; return }
-        do { entries = try await c.list(path).entries.sorted { ($0.isDirectory ? 0 : 1, $0.name.lowercased()) < ($1.isDirectory ? 0 : 1, $1.name.lowercased()) }; error = nil }
+        do {
+            let cfg = model.current(server)
+            entries = try await c.list(path).entries
+                .filter { path != "/" || cfg.isVisible(path: $0.path) }
+                .sorted { ($0.isDirectory ? 0 : 1, $0.name.lowercased()) < ($1.isDirectory ? 0 : 1, $1.name.lowercased()) }
+            error = nil
+        }
         catch { self.error = error.localizedDescription }
         loading = false
     }
 
     private func open(_ e: FSEntry) {
         switch Self.media(e) { case .video, .audio: playing = e; case .image: viewing = e; case .other: break }
+    }
+}
+
+// MARK: - Shares to show
+
+struct TVSharesView: View {
+    @EnvironmentObject private var model: TVModel
+    let server: ServerConfig
+    @State private var shares: [String] = []
+    @State private var error: String?
+    @State private var loading = true
+    private var current: ServerConfig { model.current(server) }
+    private var allSelected: Bool { current.selectedShares == nil }
+
+    var body: some View {
+        List {
+            Section {
+                Toggle("All shares", isOn: Binding(get: { allSelected }, set: { on in model.setSelectedShares(server, on ? nil : shares) }))
+                if loading { HStack { ProgressView(); Text("Loading shares…") } }
+                else if let error { Label(error, systemImage: "exclamationmark.triangle").foregroundStyle(.red) }
+                else if shares.isEmpty { Text("No shares are visible for this user.").foregroundStyle(.secondary) }
+                ForEach(shares, id: \.self) { share in
+                    Toggle(isOn: Binding(get: { current.showsShare(share) }, set: { on in toggle(share, on) })) { Label(share, systemImage: "externaldrive") }
+                        .disabled(allSelected)
+                }
+            } footer: { Text("Only the selected shares are shown on this TV. Your Unraid user's permissions still apply on the gateway.") }
+        }
+        .navigationTitle("Shares to show")
+        .task { await load() }
+    }
+
+    private func toggle(_ share: String, _ on: Bool) {
+        var selected = current.selectedShares ?? shares
+        selected.removeAll { $0.lowercased() == share.lowercased() }
+        if on { selected.append(share) }
+        model.setSelectedShares(server, shares.filter { s in selected.contains { $0.lowercased() == s.lowercased() } })
+    }
+
+    private func load() async {
+        guard let c = model.client(for: server) else { error = String(localized: "Credentials for this server are missing on the TV. Pair it again from your iPhone, iPad or Mac."); loading = false; return }
+        do {
+            let listed = try await c.list("/").entries.filter(\.isDirectory).map(\.name)
+            let stale = (current.selectedShares ?? []).filter { s in !listed.contains { $0.lowercased() == s.lowercased() } }
+            shares = listed + stale; error = nil
+        } catch { self.error = error.localizedDescription }
+        loading = false
     }
 }
 

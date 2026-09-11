@@ -44,6 +44,7 @@ struct SettingsView: View {
                     }
                     .onChange(of: iconColor) { _, v in AppIconColor.apply(v) }
                     #endif
+                    NavigationLink { SharesSettingsView() } label: { Label("Shares to show", systemImage: "externaldrive.badge.checkmark") }
                     Button { AppNotifications.openSystemSettings() } label: {
                         HStack { Label("Notifications", systemImage: "bell.badge"); Spacer(); Image(systemName: "chevron.right").foregroundStyle(.tertiary) }
                     }

@@ -139,9 +139,12 @@ struct ConnectionTestView: View {
             await model.adoptServerIDsIfNeeded(server, entries: shares)
             if shares.isEmpty { set("shares", .failed(login.user == nil ? String(localized: "No shares mounted in the container") : String(localized: "Your Unraid user has no access to any mounted share"))) ; return }
             let perms = login.shares ?? [:]
+            let cfg = model.current(server)
             let labels = shares.map { share -> String in
-                if let p = perms[share.name] { return "\(share.name) (\(p))" }
-                return share.name
+                var label = share.name
+                if let p = perms[share.name] { label += " (\(p))" }
+                if !cfg.showsShare(share.name) { label += " · " + String(localized: "hidden") }
+                return label
             }
             set("shares", .ok(labels.joined(separator: ", ")))
         } catch {

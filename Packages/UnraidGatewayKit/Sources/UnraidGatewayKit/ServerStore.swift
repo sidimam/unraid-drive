@@ -36,6 +36,9 @@ public struct ServerConfig: Codable, Hashable, Identifiable, Sendable {
     public var modifiedAt: Date
     /// Unraid user name shown in the UI (the password lives in the Keychain).
     public var username: String?
+    /// Shares the user chose to see (Files app, Finder, Shortcuts, Apple TV). `nil` = every share the
+    /// gateway exposes to this user. Names are the top-level folders of the gateway, case-insensitive.
+    public var selectedShares: [String]?
 
     public init(id: String = UUID().uuidString, name: String, url: URL, createdAt: Date = Date(), accessMode: AccessMode = .direct, modifiedAt: Date = Date()) {
         self.id = id; self.name = name; self.url = url; self.createdAt = createdAt; self.accessMode = accessMode; self.modifiedAt = modifiedAt
@@ -50,6 +53,21 @@ public struct ServerConfig: Codable, Hashable, Identifiable, Sendable {
         accessMode = try c.decodeIfPresent(AccessMode.self, forKey: .accessMode) ?? .direct
         modifiedAt = try c.decodeIfPresent(Date.self, forKey: .modifiedAt) ?? createdAt
         username = try c.decodeIfPresent(String.self, forKey: .username)
+        selectedShares = try c.decodeIfPresent([String].self, forKey: .selectedShares)
+    }
+
+    /// True when the share (a top-level gateway folder) is among the ones to show.
+    public func showsShare(_ name: String) -> Bool {
+        guard let selectedShares else { return true }
+        let n = name.lowercased()
+        return selectedShares.contains { $0.lowercased() == n }
+    }
+
+    /// True for the root and for every path inside a shown share.
+    public func isVisible(path: String) -> Bool {
+        let parts = path.split(separator: "/", omittingEmptySubsequences: true)
+        guard let first = parts.first else { return true }
+        return showsShare(String(first))
     }
 
     public var isDemo: Bool { accessMode == .demo }

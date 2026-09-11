@@ -17,6 +17,7 @@ struct AddServerView: View {
     @State private var busy = false
     @State private var error: String?
     @State private var result: LoginResponse?
+    @State private var pickSharesFor: ServerConfig?
     @FocusState private var focusedField: Field?
     enum Field: Hashable { case name, url, apiKey, cfID, cfSecret, user, pass }
 
@@ -125,6 +126,9 @@ struct AddServerView: View {
             }
             .navigationTitle(editing == nil ? "Add server" : "Edit server")
             .inlineNavigationTitle()
+            .navigationDestination(isPresented: Binding(get: { pickSharesFor != nil }, set: { if !$0 { pickSharesFor = nil } })) {
+                if let s = pickSharesFor { SharesPickerView(server: s, onDone: { dismiss() }) }
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) {
@@ -174,7 +178,12 @@ struct AddServerView: View {
             }
             result = login
             try? await Task.sleep(for: .milliseconds(600))
-            dismiss()
+            if editing == nil, let added = model.servers.first(where: { $0.url == url && !$0.isDemo }) {
+                // New server: let the user pick the shares to show before closing.
+                pickSharesFor = added
+            } else {
+                dismiss()
+            }
         } catch {
             self.error = error.localizedDescription
         }

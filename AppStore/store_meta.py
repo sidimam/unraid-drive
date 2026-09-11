@@ -28,9 +28,10 @@ FUNZIONI
 • Comandi rapidi e Siri: salva gli appunti o un file in una share, scarica un file, elenca una cartella, aggiorna le posizioni, test di connessione.
 • Notifiche: avviso quando il gateway non è raggiungibile (e quando torna) e quando un file non è stato caricato o scaricato; si gestiscono dalle impostazioni di sistema.
 • Walkthrough a ogni aggiornamento con novità, ripristino della configurazione da iCloud e consenso alle notifiche.
+• Scegli quali share mostrare: dopo la connessione e in ogni momento nei dettagli del server, spunta le share da vedere in File, nel Finder, nei Comandi rapidi e su Apple TV; la scelta viaggia con la configurazione iCloud.
 
-NOVITÀ NELLA 1.1
-Comandi rapidi e Siri, notifiche per gateway irraggiungibile e file non sincronizzati, walkthrough a ogni aggiornamento con ripristino da iCloud, colore app applicato a tutta l’interfaccia.
+NOVITÀ NELLA 1.2
+Scegli quali share mostrare (File, Finder, Comandi rapidi, Apple TV), errori di permesso spiegati dal gateway con cartella, proprietario e rimedio, app Apple TV.
 
 SU MAC
 La stessa app (acquisto universale) porta le share nella barra laterale del Finder come gli altri cloud drive, con un pannello nella barra dei menu: stato della sincronizzazione, attività (download, upload, rinomine, eliminazioni), notifiche Unraid, pausa/ripresa, file offline, elenco errori, apertura al login e modalità solo barra dei menu.
@@ -67,9 +68,10 @@ FUNCIONES
 • Atajos y Siri: guarda el portapapeles o un archivo en un recurso compartido, descarga un archivo, lista una carpeta, actualiza las ubicaciones, prueba la conexión.
 • Notificaciones: aviso cuando el gateway no responde (y cuando vuelve) y cuando un archivo no se pudo subir o descargar; se gestionan desde los ajustes del sistema.
 • Recorrido en cada actualización con las novedades, restauración de la configuración desde iCloud y permiso de notificaciones.
+• Elige qué recursos compartidos mostrar: tras conectar y en cualquier momento en los detalles del servidor, marca los que quieres ver en Archivos, el Finder, Atajos y el Apple TV; la elección viaja con la configuración de iCloud.
 
-NOVEDADES DE LA 1.1
-Atajos y Siri, notificaciones de gateway no disponible y archivos no sincronizados, recorrido en cada actualización con restauración desde iCloud, color de la app en toda la interfaz.
+NOVEDADES DE LA 1.2
+Elige qué recursos compartidos mostrar (Archivos, Finder, Atajos, Apple TV), errores de permisos explicados por el gateway con carpeta, propietario y solución, app para Apple TV.
 
 EN EL MAC
 La misma app (compra universal) lleva los recursos compartidos a la barra lateral del Finder como los demás cloud drives, con un panel en la barra de menús: estado de la sincronización, actividad (descargas, subidas, renombrados, eliminaciones), notificaciones de Unraid, pausa/reanudación, archivos sin conexión, lista de errores, apertura al iniciar sesión y modo solo barra de menús.
@@ -106,9 +108,10 @@ FONCTIONS
 • Raccourcis et Siri : enregistrez le presse-papiers ou un fichier dans un partage, téléchargez un fichier, listez un dossier, actualisez les emplacements, testez la connexion.
 • Notifications : alerte quand la passerelle est injoignable (et quand elle revient) et quand un fichier n’a pu être envoyé ou téléchargé ; gérées depuis les réglages système.
 • Visite guidée à chaque mise à jour avec les nouveautés, restauration de la configuration depuis iCloud et autorisation des notifications.
+• Choisissez les partages à afficher : après la connexion et à tout moment dans les détails du serveur, cochez ceux à voir dans Fichiers, le Finder, Raccourcis et sur l’Apple TV ; le choix suit la configuration iCloud.
 
-NOUVEAUTÉS DE LA 1.1
-Raccourcis et Siri, notifications de passerelle injoignable et de fichiers non synchronisés, visite guidée à chaque mise à jour avec restauration iCloud, couleur de l’app sur toute l’interface.
+NOUVEAUTÉS DE LA 1.2
+Choix des partages à afficher (Fichiers, Finder, Raccourcis, Apple TV), erreurs de permission expliquées par la passerelle avec dossier, propriétaire et solution, app Apple TV.
 
 SUR MAC
 La même app (achat universel) place les partages dans la barre latérale du Finder comme les autres cloud drives, avec un panneau dans la barre des menus : état de la synchronisation, activité (téléchargements, envois, renommages, suppressions), notifications Unraid, pause/reprise, fichiers hors ligne, liste des erreurs, ouverture à la connexion et mode barre des menus seule.
@@ -145,9 +148,10 @@ FUNKTIONEN
 • Kurzbefehle und Siri: Zwischenablage oder Datei in eine Freigabe sichern, Datei laden, Ordner auflisten, Orte aktualisieren, Verbindung testen.
 • Mitteilungen: Hinweis, wenn das Gateway nicht erreichbar ist (und wenn es zurück ist) und wenn eine Datei nicht hoch- oder heruntergeladen werden konnte; verwaltet in den Systemeinstellungen.
 • Einführung bei jedem Update mit den Neuerungen, Wiederherstellung der Konfiguration aus iCloud und Mitteilungsfreigabe.
+• Wähle, welche Freigaben angezeigt werden: nach dem Verbinden und jederzeit in den Serverdetails hakst du die Freigaben für Dateien, Finder, Kurzbefehle und Apple TV ab; die Auswahl reist mit der iCloud-Konfiguration.
 
-NEU IN 1.1
-Kurzbefehle und Siri, Mitteilungen bei nicht erreichbarem Gateway und nicht synchronisierten Dateien, Einführung bei jedem Update mit iCloud-Wiederherstellung, App-Farbe in der ganzen Oberfläche.
+NEU IN 1.2
+Auswahl der angezeigten Freigaben (Dateien, Finder, Kurzbefehle, Apple TV), vom Gateway erklärte Berechtigungsfehler mit Ordner, Besitzer und Lösung, Apple-TV-App.
 
 AUF DEM MAC
 Dieselbe App (Universalkauf) bringt die Freigaben wie die anderen Cloud-Laufwerke in die Finder-Seitenleiste, mit einem Menüleisten-Panel: Synchronisierungsstatus, Aktivität (Downloads, Uploads, Umbenennungen, Löschungen), Unraid-Mitteilungen, Pause/Fortsetzen, Offline-Dateien, Fehlerliste, Start beim Anmelden und Nur-Menüleiste-Modus.
@@ -184,9 +188,10 @@ Unraid Drive ist ein unabhängiges Projekt und nicht mit Lime Technology / Unrai
 • 快捷指令与 Siri：将剪贴板或文件保存到共享、下载文件、列出文件夹、刷新位置、测试连接。
 • 通知：网关不可达（及恢复）时和文件无法上传或下载时提醒；在系统设置中管理。
 • 每次更新后的引导：新功能介绍、从 iCloud 恢复配置、通知授权。
+• 选择要显示的共享：连接后以及随时在服务器详情中勾选要在“文件”、“访达”、快捷指令和 Apple TV 中看到的共享；选择随 iCloud 配置同步。
 
-1.1 版新功能
-快捷指令与 Siri、网关不可达及文件未同步的通知、每次更新后的引导（含 iCloud 恢复）、应用颜色应用于整个界面。
+1.2 版新功能
+选择要显示的共享（“文件”、“访达”、快捷指令、Apple TV）；网关给出的权限错误说明包含文件夹、所有者和解决方法；Apple TV 应用。
 
 在 Mac 上
 同一个应用（通用购买）像其他云盘一样把共享放入“访达”边栏，并提供菜单栏面板：同步状态、活动（下载、上传、重命名、删除）、Unraid 通知、暂停/恢复、离线文件、错误列表、登录时启动以及仅菜单栏模式。
@@ -223,9 +228,10 @@ Unraid Drive 是独立项目，与 Lime Technology / Unraid 无关。"""),
 • الاختصارات وSiri: احفظ الحافظة أو ملفًا في مشاركة، نزّل ملفًا، اعرض مجلدًا، حدّث المواقع، اختبر الاتصال.
 • الإشعارات: تنبيه عند تعذّر الوصول إلى البوابة (وعند عودتها) وعند فشل رفع ملف أو تنزيله؛ تُدار من إعدادات النظام.
 • جولة تعريفية مع كل تحديث تعرض الجديد وتستعيد الإعدادات من iCloud وتطلب إذن الإشعارات.
+• اختر المشاركات التي تريد عرضها: بعد الاتصال وفي أي وقت من تفاصيل الخادم، حدّد المشاركات التي تظهر في الملفات وFinder والاختصارات وApple TV؛ ينتقل الاختيار مع إعدادات iCloud.
 
-الجديد في 1.1
-الاختصارات وSiri، إشعارات عند تعذّر الوصول إلى البوابة أو عدم مزامنة الملفات، جولة تعريفية مع كل تحديث تشمل الاستعادة من iCloud، لون التطبيق في كامل الواجهة.
+الجديد في 1.2
+اختيار المشاركات المعروضة (الملفات وFinder والاختصارات وApple TV)، وأخطاء صلاحيات يشرحها البوابة مع المجلد والمالك والحل، وتطبيق Apple TV.
 
 على Mac
 التطبيق نفسه (شراء موحّد) يضع المشاركات في الشريط الجانبي لـ Finder مثل بقية خدمات التخزين السحابي، مع لوحة في شريط القوائم: حالة المزامنة، النشاط (التنزيلات والرفع وإعادة التسمية والحذف)، إشعارات Unraid، الإيقاف المؤقت/الاستئناف، الملفات دون اتصال، قائمة الأخطاء، التشغيل عند تسجيل الدخول ووضع شريط القوائم فقط.
@@ -243,13 +249,13 @@ for l, m in META.items():
 
 # "What's New" for the 1.1 update (build 19). Limit 4000.
 WHATS_NEW = {
-"en-US": "• Shortcuts and Siri: save the clipboard or a file to a share, get a file, list a folder, refresh the locations, test the connection.\n• Notifications when a gateway stops answering (and when it is back) and when a file could not be uploaded or downloaded; managed from the system Settings.\n• Walkthrough at every update with what's new, iCloud restore of your configuration and the notification permission.\n• Texts, headers and controls follow the icon colour you choose.\n• Mac: Finder location, menu bar panel, Homebrew cask and DMG.",
-"it": "• Comandi rapidi e Siri: salva gli appunti o un file in una share, prendi un file, elenca una cartella, aggiorna le posizioni, test di connessione.\n• Notifiche quando un gateway non risponde (e quando torna) e quando un file non è stato caricato o scaricato; si gestiscono dalle Impostazioni di sistema.\n• Walkthrough a ogni aggiornamento con le novità, ripristino della configurazione da iCloud e consenso alle notifiche.\n• Testi, intestazioni e controlli seguono il colore dell’icona scelto.\n• Mac: posizione nel Finder, pannello nella barra dei menu, cask Homebrew e DMG.",
-"es-ES": "• Atajos y Siri: guarda el portapapeles o un archivo en un recurso compartido, obtén un archivo, lista una carpeta, actualiza las ubicaciones, prueba la conexión.\n• Notificaciones cuando un gateway deja de responder (y cuando vuelve) y cuando un archivo no se pudo subir o descargar; se gestionan desde los Ajustes del sistema.\n• Recorrido en cada actualización con las novedades, restauración de la configuración desde iCloud y permiso de notificaciones.\n• Textos, encabezados y controles siguen el color del icono elegido.\n• Mac: ubicación en el Finder, panel en la barra de menús, cask de Homebrew y DMG.",
-"fr-FR": "• Raccourcis et Siri : enregistrez le presse-papiers ou un fichier dans un partage, récupérez un fichier, listez un dossier, actualisez les emplacements, testez la connexion.\n• Notifications quand une passerelle ne répond plus (et quand elle revient) et quand un fichier n’a pu être envoyé ou téléchargé ; gérées depuis les Réglages système.\n• Visite guidée à chaque mise à jour avec les nouveautés, restauration de la configuration depuis iCloud et autorisation des notifications.\n• Textes, en-têtes et contrôles suivent la couleur d’icône choisie.\n• Mac : emplacement dans le Finder, panneau dans la barre des menus, cask Homebrew et DMG.",
-"de-DE": "• Kurzbefehle und Siri: Zwischenablage oder Datei in eine Freigabe sichern, Datei holen, Ordner auflisten, Orte aktualisieren, Verbindung testen.\n• Mitteilungen, wenn ein Gateway nicht mehr antwortet (und wenn es zurück ist) und wenn eine Datei nicht hoch- oder heruntergeladen werden konnte; verwaltet in den Systemeinstellungen.\n• Einführung bei jedem Update mit den Neuerungen, iCloud-Wiederherstellung der Konfiguration und Mitteilungsfreigabe.\n• Texte, Überschriften und Bedienelemente folgen der gewählten Symbolfarbe.\n• Mac: Finder-Ort, Menüleisten-Panel, Homebrew-Cask und DMG.",
-"zh-Hans": "• 快捷指令与 Siri：将剪贴板或文件保存到共享、获取文件、列出文件夹、刷新位置、测试连接。\n• 网关停止响应（及恢复）时和文件无法上传或下载时的通知；在系统“设置”中管理。\n• 每次更新后的引导：新功能、从 iCloud 恢复配置、通知授权。\n• 文本、栏目标题和控件跟随所选图标颜色。\n• Mac：“访达”位置、菜单栏面板、Homebrew cask 和 DMG。",
-"ar-SA": "• الاختصارات وSiri: احفظ الحافظة أو ملفًا في مشاركة، واحصل على ملف، واعرض مجلدًا، وحدّث المواقع، واختبر الاتصال.\n• إشعارات عند توقف بوابة عن الاستجابة (وعند عودتها) وعند فشل رفع ملف أو تنزيله؛ تُدار من إعدادات النظام.\n• جولة تعريفية مع كل تحديث تعرض الجديد وتستعيد الإعدادات من iCloud وتطلب إذن الإشعارات.\n• النصوص والعناوين وعناصر التحكم تتبع لون الأيقونة المختار.\n• Mac: موقع في Finder، لوحة شريط القوائم، cask لـ Homebrew وملف DMG.",
+'en-US': "• Choose which shares to show: after connecting, and any time in the server's details, tick the shares you want in Files, the Finder, Shortcuts and on Apple TV. The choice syncs with your iCloud configuration.\n• Permission errors now carry the gateway's explanation (folder, owner, mode and the fix) in the activity log and error list (unraid-gateway 0.5.5+).\n• Apple TV: browse and play your shares on the TV, paired with a 6-digit code.",
+'it': '• Scegli quali share mostrare: dopo la connessione, e in ogni momento nei dettagli del server, spunta le share che vuoi in File, nel Finder, nei Comandi rapidi e su Apple TV. La scelta si sincronizza con la configurazione iCloud.\n• Gli errori di permesso riportano la spiegazione del gateway (cartella, proprietario, modo e rimedio) nel registro attività e nella lista errori (unraid-gateway 0.5.5+).\n• Apple TV: sfoglia e riproduci le share sulla TV, abbinata con un codice di 6 cifre.',
+'es-ES': '• Elige qué recursos compartidos mostrar: tras conectar, y en cualquier momento en los detalles del servidor, marca los que quieres en Archivos, el Finder, Atajos y el Apple TV. La elección se sincroniza con la configuración de iCloud.\n• Los errores de permisos incluyen la explicación del gateway (carpeta, propietario, modo y solución) en el registro de actividad y la lista de errores (unraid-gateway 0.5.5+).\n• Apple TV: explora y reproduce tus recursos compartidos en el TV, emparejado con un código de 6 cifras.',
+'fr-FR': '• Choisissez les partages à afficher : après la connexion, et à tout moment dans les détails du serveur, cochez ceux que vous voulez dans Fichiers, le Finder, Raccourcis et sur l’Apple TV. Le choix se synchronise avec la configuration iCloud.\n• Les erreurs de permission portent l’explication de la passerelle (dossier, propriétaire, mode et solution) dans le journal d’activité et la liste des erreurs (unraid-gateway 0.5.5+).\n• Apple TV : parcourez et lisez vos partages sur la TV, jumelée avec un code à 6 chiffres.',
+'de-DE': '• Wähle, welche Freigaben angezeigt werden: nach dem Verbinden und jederzeit in den Serverdetails hakst du die Freigaben für Dateien, Finder, Kurzbefehle und Apple TV ab. Die Auswahl synchronisiert sich mit der iCloud-Konfiguration.\n• Berechtigungsfehler enthalten die Erklärung des Gateways (Ordner, Besitzer, Modus und Lösung) im Aktivitätsprotokoll und in der Fehlerliste (unraid-gateway 0.5.5+).\n• Apple TV: Freigaben auf dem TV durchsuchen und wiedergeben, gekoppelt mit einem 6-stelligen Code.',
+'zh-Hans': '• 选择要显示的共享：连接后以及随时在服务器详情中，勾选想在“文件”、“访达”、快捷指令和 Apple TV 中看到的共享。选择随 iCloud 配置同步。\n• 权限错误在活动记录和错误列表中附带网关的说明（文件夹、所有者、权限模式和解决方法）（需 unraid-gateway 0.5.5+）。\n• Apple TV：在电视上浏览并播放共享，用 6 位代码配对。',
+'ar-SA': '• اختر المشاركات التي تريد عرضها: بعد الاتصال وفي أي وقت من تفاصيل الخادم، حدّد المشاركات التي تريدها في الملفات وFinder والاختصارات وApple TV. يتزامن الاختيار مع إعدادات iCloud.\n• تحمل أخطاء الصلاحيات شرح البوابة (المجلد والمالك والوضع والحل) في سجل النشاط وقائمة الأخطاء (unraid-gateway 0.5.5+).\n• Apple TV: استعرض مشاركاتك وشغّلها على التلفاز بعد الاقتران برمز من 6 أرقام.',
 }
 for l, t in WHATS_NEW.items():
     assert len(t) <= 4000, (l, "whatsNew", len(t))

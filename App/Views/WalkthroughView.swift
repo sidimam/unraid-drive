@@ -16,7 +16,7 @@ struct WalkthroughView: View {
     static var shouldShow: Bool { UserDefaults.standard.string(forKey: seenBuildKey) != currentBuild }
     static func markSeen() { UserDefaults.standard.set(currentBuild, forKey: seenBuildKey) }
 
-    private enum Kind { case info, icloud, notifications }
+    private enum Kind { case info, icloud, notifications, shares }
     private struct Page: Identifiable {
         let id = UUID()
         let kind: Kind
@@ -31,9 +31,11 @@ struct WalkthroughView: View {
             Page(kind: .info, icon: "externaldrive.connected.to.line.below", title: "Your Unraid shares in Files and in the Finder",
                  text: "Unraid Drive adds your Unraid shares to the Files app on iPhone, iPad and Vision Pro and to the Finder sidebar on the Mac, next to iCloud Drive. Open, save, move and share files from any app, at home or away, over HTTPS."),
             Page(kind: .info, icon: "sparkles", title: "What's new in this version",
-                 text: "Walkthrough with iCloud restore and notifications, Shortcuts and Siri actions (save the clipboard or a file to a share, download, list, refresh), notifications when the gateway is unreachable or a file could not sync, menu bar panel on the Mac."),
+                 text: "Choose which shares to show: after connecting, and any time in the server's details, tick the shares you want in the Files app, the Finder, Shortcuts and on Apple TV. Clearer permission errors from the gateway."),
             Page(kind: .icloud, icon: "icloud", title: "Your configuration in iCloud",
                  text: "One backup shared by iPhone, iPad, Vision Pro and Mac: the server list in iCloud and the secrets in iCloud Keychain, end-to-end encrypted. You can turn it on later in Settings › iCloud."),
+            Page(kind: .shares, icon: "externaldrive.badge.checkmark", title: "Choose the shares to show",
+                 text: "For each server, tick the shares you want in the Files app, the Finder, Shortcuts and on Apple TV. You can change this any time in Settings › Shares to show."),
             Page(kind: .notifications, icon: "bell.badge", title: "Stay informed",
                  text: "Unraid Drive can tell you when a gateway is unreachable and when a file could not be uploaded or downloaded. You choose what to allow in the system Settings at any time."),
             Page(kind: .info, icon: "shippingbox", title: "1 · Install the gateway",
@@ -64,10 +66,28 @@ struct WalkthroughView: View {
             switch p.kind {
             case .icloud: icloudControls
             case .notifications: notificationControls
+            case .shares: sharesControls
             case .info: EmptyView()
             }
             Spacer()
         }.padding()
+    }
+
+    @ViewBuilder private var sharesControls: some View {
+        if model.servers.isEmpty {
+            Text("Add a server first: you will choose its shares right after connecting.").font(.footnote).foregroundStyle(.secondary).multilineTextAlignment(.center)
+        } else {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(model.servers) { s in
+                        Text(s.name).font(.headline).padding(.top, 8)
+                        SharesToggleList(server: s)
+                    }
+                }
+                .padding(.horizontal, 24)
+            }
+            .frame(maxHeight: 320)
+        }
     }
 
     @ViewBuilder private var icloudControls: some View {

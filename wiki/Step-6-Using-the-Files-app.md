@@ -9,6 +9,8 @@
 
 On iPad and Vision Pro you can also drag **Unraid Drive** into the sidebar favourites.
 
+If a share you expect is missing, check the server page › **Shares to show** in the app: hidden shares are simply not listed here (see [Step 5.9](Step-5-Add-the-server-in-the-app#59-choose-which-shares-to-show)).
+
 ## Everyday operations
 
 | You want to… | Do this |

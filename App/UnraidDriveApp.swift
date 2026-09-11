@@ -101,6 +101,11 @@ struct UnraidDriveApp: App {
         #if DEBUG
         let args = CommandLine.arguments
         if args.contains("-seedDemo"), !servers.hasDemo { await servers.addDemo() }
+        // `-selectShares <serverID>:<share,share>` (or `<serverID>:all`) stores a share selection (tests).
+        if let i = args.firstIndex(of: "-selectShares"), args.count > i + 1, let s = servers.servers.first(where: { $0.id == args[i + 1].split(separator: ":")[0] }) {
+            let spec = args[i + 1].split(separator: ":", maxSplits: 1).map(String.init)
+            await servers.setSelectedShares(s, spec.count > 1 && spec[1] != "all" ? spec[1].split(separator: ",").map(String.init) : nil)
+        }
         if args.contains("-rebuildDomains") { for s in servers.servers { await FileProviderDomains.rebuild(s) } }
         if args.contains("-testIntent") {
             do {

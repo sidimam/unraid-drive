@@ -46,7 +46,11 @@ struct FileBrowserView: View {
 
     private func load() async {
         guard let client = model.client(for: server) else { error = "API key missing"; loading = false; return }
-        do { entries = try await client.list(path).entries; error = nil } catch { self.error = error.localizedDescription }
+        do {
+            let listed = try await client.list(path).entries
+            entries = path == "/" ? listed.filter { model.current(server).isVisible(path: $0.path) } : listed
+            error = nil
+        } catch { self.error = error.localizedDescription }
         loading = false
     }
 

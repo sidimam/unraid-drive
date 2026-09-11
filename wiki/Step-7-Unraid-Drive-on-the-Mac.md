@@ -24,6 +24,8 @@ Click the Unraid Drive glyph in the menu bar:
 
 *Show only in the menu bar* turns Unraid Drive into a menu-bar app: no Dock icon, the panel is the entry point and *Open Unraid Drive* brings the window back. Theme, language and icon colour are the same settings as on iOS (Preferences › App settings); on the Mac the icon colour applies to the Dock icon while the app runs.
 
+The Finder location lists only the shares ticked under the server page › **Shares to show** (Preferences… from the menu bar panel opens the app). Hiding a share removes it from the sidebar folder; ticking it again brings it back.
+
 ## Everyday operations
 
 | You want to… | Do this |

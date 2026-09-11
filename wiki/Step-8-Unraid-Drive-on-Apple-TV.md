@@ -22,6 +22,10 @@ How it works: the phone encrypts the server (URL, mode, Cloudflare token, Unraid
 | Dashboard | array state and usage, parity check, CPU/memory, unread notifications |
 | Remove | Server page › *Remove this server from the TV* (files stay on the NAS) |
 
+## Shares to show
+
+Right after pairing, the TV shows the *Shares to show* list for the new server, pre-filled with the choice of the device that paired it. Change it later on the TV under the server › **Shares to show** (*All shares* or a tick per share). Hidden shares are not listed in *Browse shares*; the gateway still applies your Unraid user's permissions.
+
 ## Troubleshooting
 
 - **"Credentials for this server are missing on the TV"**: pair again from the phone; the TV keeps only local copies.

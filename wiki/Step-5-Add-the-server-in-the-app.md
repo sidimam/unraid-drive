@@ -72,6 +72,10 @@ Swipe left on it in the list → **Delete**. This removes the Files app location
 → Next: [Step 6 — Use your shares in the Files app](Step-6-Using-the-Files-app)
 
 
+## 5.9 Choose which shares to show
+
+Right after a server connects, the app shows the list of shares the gateway exposes to your Unraid user and lets you tick the ones you want. The walkthrough shown after every update has the same step for all your servers, and you can change the choice at any time from **Settings › Shares to show** or from the server page › **Shares to show** (the *All shares* switch restores everything). Only the ticked shares appear in the Files app, in the Finder on the Mac, in the Shortcuts actions and on Apple TV; the others are hidden, not removed — files stay on the NAS and the gateway keeps enforcing your Unraid permissions. The selection is stored with the server, so it follows the iCloud configuration to your other devices and is handed to an Apple TV when you pair it (the TV then has its own *Shares to show* screen). A share you hide disappears from the Files/Finder location within seconds; if it does not, use *Refresh the Files app / Finder location*.
+
 ## Walkthrough, iCloud and notifications (build 18)
 
 At the first launch and after every update the app opens a short walkthrough: the features and what's new, an **iCloud** step and a **notifications** step, then the four setup steps. Every step can be skipped.

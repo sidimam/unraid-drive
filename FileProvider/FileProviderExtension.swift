@@ -48,6 +48,33 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
         return entry.path
     }
 
+    /// The user's share selection, read fresh each time (it changes from the app while we run).
+    func isVisible(_ path: String) -> Bool {
+        ServerStore().server(id: domain.identifier.rawValue)?.isVisible(path: path) ?? true
+    }
+
+    /// Root listings only show the shares the user selected; hidden ones vanish like unmounted shares.
+    func visibleEntries(_ entries: [FSEntry], in path: String) -> [FSEntry] {
+        guard path == "/" else { return entries }
+        return entries.filter { isVisible($0.path) }
+    }
+
+    /// Re-lists the root and reports shares that vanished (unmounted or hidden by the user) as
+    /// deletions and the visible ones as updates, so a changed selection reaches the Files app /
+    /// Finder even when no directory enumerator is active.
+    func reconcileRoot(client: GatewayClient, updated: inout [NSFileProviderItem], deleted: inout [NSFileProviderItemIdentifier]) async {
+        guard let root = try? await client.list("/") else { return }
+        let entries = visibleEntries(root.entries, in: "/")
+        let hidden = root.entries.count - entries.count
+        let gone = await index.vanishedIdentifiers(in: "/", current: entries.map(\.name))
+        await index.rememberListing("/", names: entries.map(\.name))
+        for e in entries { updated.append(await makeItem(e)) }
+        deleted += gone
+        if hidden > 0 || !gone.isEmpty {
+            fpLog.notice("root: \(entries.count) shares shown, \(hidden) hidden by selection, \(gone.count) removed")
+        }
+    }
+
     /// Asks the system to enumerate the working set soon (deletions can only be reported there).
     func nudgeWorkingSet() {
         guard let mgr = NSFileProviderManager(for: domain) else { return }

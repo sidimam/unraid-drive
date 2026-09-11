@@ -1,7 +1,10 @@
 # Changelog
 
-## Unreleased
+## 1.2 (build 22) — 2026-09-11
+
+- **Choose which shares to show.** After connecting a server, in the walkthrough (a *Choose the shares to show* step lists every server), from Settings › *Shares to show* and from the server's details, tick the shares you want in the Files app, the Finder, Shortcuts and on Apple TV. The gateway still lists only what your Unraid user may see; this is a further filter, like the folder selection of Google Drive or OneDrive. Stored with the server, so it travels with the iCloud configuration and with the Apple TV pairing; hidden shares disappear from the Files/Finder location and come back when re-ticked. Apple TV has its own *Shares to show* per server.
 - Activity log and error list keep the gateway's explanation of a "permission denied" (folder, owner, mode and the fix) next to the system message (needs unraid-gateway 0.5.5+).
+- Walkthrough "What's new" updated.
 
 All notable changes to Unraid Drive. The server side has its own changelog in [unraid-gateway](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
 

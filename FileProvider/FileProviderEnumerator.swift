@@ -41,11 +41,11 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
             guard let path = await ext.index.path(for: container) else { observer.finishEnumeratingWithError(NSFileProviderError(.noSuchItem)); return }
             do {
                 guard let client = ext.client else { throw NSFileProviderError(.notAuthenticated) }
-                let listing = try await client.list(path)
+                let entries = ext.visibleEntries(try await client.list(path).entries, in: path)
                 var items: [FileProviderItem] = []
-                for e in listing.entries { items.append(await ext.makeItem(e)) }
-                let vanished = await ext.index.vanishedIdentifiers(in: path, current: listing.entries.map(\.name))
-                await ext.index.rememberListing(path, names: listing.entries.map(\.name))
+                for e in entries { items.append(await ext.makeItem(e)) }
+                let vanished = await ext.index.vanishedIdentifiers(in: path, current: entries.map(\.name))
+                await ext.index.rememberListing(path, names: entries.map(\.name))
                 observer.didEnumerate(items)
                 observer.finishEnumerating(upTo: nil)
                 // A plain listing cannot delete items; the working set can. Wake it up.
@@ -69,13 +69,13 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
                 // always re-listed: it is a handful of entries and costs one millisecond.
                 let dirChanged = path == "/" || page.dirs.contains(path)
                 if dirChanged {
-                    let listing = try await client.list(path)
-                    deleted = await ext.index.vanishedIdentifiers(in: path, current: listing.entries.map(\.name))
-                    for e in listing.entries { updated.append(await ext.makeItem(e)) }
-                    await ext.index.rememberListing(path, names: listing.entries.map(\.name))
+                    let entries = ext.visibleEntries(try await client.list(path).entries, in: path)
+                    deleted = await ext.index.vanishedIdentifiers(in: path, current: entries.map(\.name))
+                    for e in entries { updated.append(await ext.makeItem(e)) }
+                    await ext.index.rememberListing(path, names: entries.map(\.name))
                 } else {
-                    for f in page.files where GatewayPath.parent(f.path) == path { updated.append(await ext.makeItem(f)) }
-                    for d in page.dirs where GatewayPath.parent(d) == path {
+                    for f in page.files where GatewayPath.parent(f.path) == path && ext.isVisible(f.path) { updated.append(await ext.makeItem(f)) }
+                    for d in page.dirs where GatewayPath.parent(d) == path && ext.isVisible(d) {
                         if let e = try? await client.stat(d) { updated.append(await ext.makeItem(e)) }
                     }
                 }
@@ -131,7 +131,11 @@ final class WorkingSetEnumerator: NSObject, NSFileProviderEnumerator {
                 if page.reset {
                     if since == 0 {
                         // First sync: nothing to replay, directory listings populate the tree.
-                        let retired = await ext.index.takeRetired()
+                        var updated: [NSFileProviderItem] = []
+                        var retired: [NSFileProviderItemIdentifier] = []
+                        await ext.reconcileRoot(client: client, updated: &updated, deleted: &retired)
+                        retired += await ext.index.takeRetired()
+                        if !updated.isEmpty { observer.didUpdate(updated) }
                         if !retired.isEmpty { observer.didDeleteItems(withIdentifiers: retired) }
                         observer.finishEnumeratingChanges(upTo: Self.anchor(seq: page.seq), moreComing: false)
                     } else {
@@ -142,7 +146,13 @@ final class WorkingSetEnumerator: NSObject, NSFileProviderEnumerator {
                 }
                 var updated: [NSFileProviderItem] = []
                 var deleted: [NSFileProviderItemIdentifier] = []
+                // The root is re-listed on every working-set pass: shares appear when mounted and
+                // disappear when unmounted or hidden by the user, none of which the journal reports.
+                // It is one request for a handful of entries.
+                await ext.reconcileRoot(client: client, updated: &updated, deleted: &deleted)
                 for c in page.changes {
+                    // Changes inside shares the user hid are not the system's business.
+                    if c.kind != .delete, !ext.isVisible(c.path) { continue }
                     switch c.kind {
                     case .delete:
                         deleted.append(NSFileProviderItemIdentifier(c.id))
@@ -179,13 +189,14 @@ final class WorkingSetEnumerator: NSObject, NSFileProviderEnumerator {
             var updated: [NSFileProviderItem] = []
             var deleted: [NSFileProviderItemIdentifier] = []
             if a.after == nil, let root = try? await client.list("/") {
-                deleted += await ext.index.vanishedIdentifiers(in: "/", current: root.entries.map(\.name))
-                await ext.index.rememberListing("/", names: root.entries.map(\.name))
-                for e in root.entries { updated.append(await ext.makeItem(e)) }
+                let entries = ext.visibleEntries(root.entries, in: "/")
+                deleted += await ext.index.vanishedIdentifiers(in: "/", current: entries.map(\.name))
+                await ext.index.rememberListing("/", names: entries.map(\.name))
+                for e in entries { updated.append(await ext.makeItem(e)) }
             }
-            for f in page.files { updated.append(await ext.makeItem(f)) }
+            for f in page.files where ext.isVisible(f.path) { updated.append(await ext.makeItem(f)) }
             var relisted = 0
-            for d in page.dirs where d != "/" {
+            for d in page.dirs where d != "/" && ext.isVisible(d) {
                 guard await ext.index.previousListing(d) != nil, relisted < 40 else { continue }
                 relisted += 1
                 if let listing = try? await client.list(d) {
