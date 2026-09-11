@@ -80,9 +80,13 @@ Right after a server connects, the app shows the list of shares the gateway expo
 
 When you connect a server, edit its credentials or pair an Apple TV, this installation registers itself on the gateway. The gateway's web UI (port 8484 › **Devices**) lists every phone, tablet, Mac and TV with its user and last activity; **Remove** signs that device out at once — the app shows "This device was removed from the gateway" — and only a deliberate *Edit server or credentials › Connect* on that device registers it again (the gateway can notify you when that happens). Lost a phone? Remove it there, then rotate the API key if needed.
 
+### Reinstalling (build 30+)
+
+A reinstall wipes the local data, not the registration on the gateway. Unraid Drive remembers the device id in iCloud per hardware (`identifierForVendor` on iPhone/iPad/Vision Pro/Apple TV, the platform UUID on the Mac): after a reinstall on the same hardware the app comes back as the **same device**, so *Devices* shows no duplicate. When the fingerprint is gone (all apps of the developer removed, new phone) the app registers with a new id and unraid-gateway 0.9.1+ marks the previous entry with the same name and user as **old** — its last seen date stays visible and it can be removed.
+
 ## Walkthrough, iCloud and notifications (build 18)
 
 At the first launch and after every update the app opens a short walkthrough: the features and what's new, an **iCloud** step and a **notifications** step, then the four setup steps. Every step can be skipped.
 
-- **iCloud**: if a configuration saved by Unraid Drive on another device is found, the step offers *Restore N servers from iCloud*; otherwise *Enable iCloud sync*. It is one backup shared by iPhone, iPad, Vision Pro and Mac (server list in iCloud, secrets in iCloud Keychain). Skipped it? Settings › iCloud has the same switch and restore button.
+- **iCloud**: on a fresh or reinstalled device with a configuration in iCloud, this step comes **first** (build 30+): *Configuration found in iCloud* lists the server names, *Restore* brings the list from iCloud and the secrets from iCloud Keychain, then the device registers itself on every gateway (one status line per server: registered, waiting for the credentials, error). Otherwise the step offers *Enable iCloud sync*. It is one backup shared by iPhone, iPad, Vision Pro and Mac (server list in iCloud, secrets in iCloud Keychain). Skipped it? Settings › iCloud has the same switch and restore button.
 - **Notifications**: *Allow notifications* asks the system permission once. Unraid Drive then notifies you when a gateway stops answering (and when it is back) and when a file could not be uploaded or downloaded by the Files app or the Finder. There are no switches in the app: Settings › *Notifications ›* opens the system page where you decide what to allow.

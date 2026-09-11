@@ -66,6 +66,42 @@ final class ServersModel: ObservableObject {
         GatewayClientFactory.client(for: server, keychain: keychain)
     }
 
+    // MARK: Restore from iCloud → register this device again
+
+    enum RestoreRegistration: Equatable {
+        case waitingSecrets, registered, failed(String)
+    }
+    /// Per server id: how the re-registration on the gateway went after an iCloud restore.
+    @Published private(set) var restoreRegistration: [String: RestoreRegistration] = [:]
+
+    /// After `CloudSync.restoreFromCloud()`: sign in on every restored server with `register: true`,
+    /// so this installation (new id, or the previous one recovered through iCloud) is registered on
+    /// the gateway and the Files locations work right away. The secrets travel through iCloud
+    /// Keychain and may arrive a little after the server list: keep trying for `timeout` seconds.
+    func registerRestoredDevices(timeout: TimeInterval = 120) async {
+        let targets = servers.filter { !$0.isDemo }
+        for s in targets { restoreRegistration[s.id] = .waitingSecrets }
+        var pending = Set(targets.map(\.id))
+        let deadline = Date().addingTimeInterval(timeout)
+        while !pending.isEmpty, Date() < deadline {
+            for s in targets where pending.contains(s.id) {
+                guard let c = client(for: s) else { continue }     // credentials not here yet
+                do {
+                    _ = try await c.login(register: true)
+                    restoreRegistration[s.id] = .registered
+                } catch {
+                    restoreRegistration[s.id] = .failed(error.localizedDescription)
+                }
+                pending.remove(s.id)
+                await FileProviderDomains.signal(s)
+            }
+            if !pending.isEmpty { try? await Task.sleep(for: .seconds(5)) }
+        }
+        for id in pending {
+            restoreRegistration[id] = .failed(String(localized: "The credentials have not arrived from iCloud Keychain yet. Open the server and use Connect again."))
+        }
+    }
+
     var hasDemo: Bool { servers.contains { $0.isDemo } }
 
     /// Nudges every Files app location to re-check its server (used when the app comes to

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3 (build 30) — 2026-09-11
+
+- **Restore comes first.** On a new or reinstalled device the walkthrough opens with the configuration found in iCloud (server names listed), restores it — server list from iCloud, API keys, Cloudflare service tokens and Unraid passwords from iCloud Keychain — and then **registers the device on every gateway again** (`login(register: true)`), waiting up to two minutes for the secrets to arrive; one status line per server (registered / waiting / error).
+- **Same device after a reinstall.** The device id is remembered in iCloud Key-Value Storage per hardware (`identifierForVendor` on iPhone/iPad/Vision Pro/Apple TV, the platform UUID on the Mac): a reinstall on the same hardware comes back to the gateway as the *same* device, no duplicate in *Devices*. When that is not possible, unraid-gateway 0.9.1 marks the previous entry with the same name and user as **old** (last seen shown) instead of leaving two live entries.
+- **Apple TV restore.** With a configuration in iCloud and nothing on the TV, the pairing screen says *Configuration found in iCloud: N servers* with their names and explains that the credentials arrive with the pairing code. The phone/Mac can now **send all servers at once** (Settings › Pair an Apple TV › *Send all servers*): the whole configuration lands on the TV in one go and the TV registers itself on each gateway. Older TVs keep working: the first server also travels in the legacy fields.
+- **Video that does not start — the real reason.** Before mpv opens a file (Apple TV, iPhone, iPad, Mac) the app fetches its first byte with the same headers: a Cloudflare Access login page, a `401`, a revoked device or a gateway error are now reported as such instead of mpv's *unrecognized file format*. Streams use a **media ticket** (gateway 0.6+), so playback and seeking keep working after the session token expires; headers stay for Cloudflare Access.
+- **Apple TV explorer:** *Rename* and *New folder* (on-screen keyboard), next to Copy, Cut, Paste, Delete (with confirmation) and Info.
+- Apple TV registers with the name you gave it (Settings › General › About) so the gateway's Devices card tells the TVs apart.
+
 ## 1.3 (build 29) — 2026-09-11
 
 - **Device registration** (unraid-gateway 0.9+): each installation has a stable id; adding a server, editing its credentials or pairing an Apple TV registers the device on the gateway. When the admin removes the device there, the app is signed out with a clear message and only a new *Connect* (server → Edit server or credentials) registers it again; background logins never do. Older gateways ignore the extra fields.

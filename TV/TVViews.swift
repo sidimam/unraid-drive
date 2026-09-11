@@ -92,27 +92,46 @@ struct TVPairView: View {
     @State private var code = TVPairing.generateCode()
     @State private var status: LocalizedStringKey = "Waiting for your other device…"
     @State private var done = false
-    @State private var paired: ServerConfig?
+    @State private var paired: [ServerConfig] = []
     private let kvs = NSUbiquitousKeyValueStore.default
 
     var body: some View {
-        if let paired {
-            // Right after pairing: choose the shares to show on this TV (the phone's choice is the start).
+        if paired.count == 1, let one = paired.first {
+            // Right after pairing one server: choose the shares to show on this TV (the phone's choice is the start).
             VStack(spacing: 20) {
-                TVSharesView(server: paired)
+                TVSharesView(server: one)
                 Button("Done") { dismiss() }.buttonStyle(TVPillButtonStyle()).padding(.bottom, 40)
             }
+        } else if paired.count > 1 {
+            VStack(spacing: 24) {
+                Image(systemName: "checkmark.circle.fill").font(.system(size: 80)).foregroundStyle(.green)
+                Text("Configuration restored: \(paired.count) servers").font(.title)
+                Text(paired.map(\.name).joined(separator: " · ")).foregroundStyle(.secondary)
+                Text("Every server keeps the shares chosen on your other device; change them any time from the server's page, Shares to show.")
+                    .multilineTextAlignment(.center).foregroundStyle(.secondary).frame(maxWidth: 900)
+                Button("Done") { dismiss() }.buttonStyle(TVPillButtonStyle())
+            }.padding(60)
         } else {
             pairingView
         }
     }
 
+    /// Servers saved in iCloud by the other devices that this TV does not have yet.
+    private var waitingInCloud: [ServerConfig] { model.cloudServersMissingHere }
+
     private var pairingView: some View {
         VStack(spacing: 28) {
-            Image(systemName: "appletv").font(.system(size: 80)).foregroundStyle(.tint)
-            Text("Add a server from another device").font(.title)
-            Text("Open Unraid Drive on your iPhone, iPad or Mac, go to Settings › Pair an Apple TV and enter this code. The server and its credentials arrive here encrypted with the code; the TV then connects through your unraid-gateway with your own permissions.")
-                .multilineTextAlignment(.center).foregroundStyle(.secondary).frame(maxWidth: 900)
+            Image(systemName: waitingInCloud.isEmpty ? "appletv" : "icloud.and.arrow.down").font(.system(size: 80)).foregroundStyle(.tint)
+            if waitingInCloud.isEmpty {
+                Text("Add a server from another device").font(.title)
+                Text("Open Unraid Drive on your iPhone, iPad or Mac, go to Settings › Pair an Apple TV and enter this code. The server and its credentials arrive here encrypted with the code; the TV then connects through your unraid-gateway with your own permissions.")
+                    .multilineTextAlignment(.center).foregroundStyle(.secondary).frame(maxWidth: 900)
+            } else {
+                Text("Configuration found in iCloud: \(waitingInCloud.count) server(s)").font(.title)
+                Text(waitingInCloud.map(\.name).joined(separator: " · ")).font(.title3).foregroundStyle(.tint)
+                Text("Apple TV cannot read the credentials from iCloud Keychain. Open Unraid Drive on your iPhone, iPad or Mac, go to Settings › Pair an Apple TV, enter this code and send all the servers: the whole configuration arrives here encrypted with the code and this Apple TV registers itself on the gateways again.")
+                    .multilineTextAlignment(.center).foregroundStyle(.secondary).frame(maxWidth: 900)
+            }
             Text(code.enumerated().map { $0.offset == 3 ? " \($0.element)" : String($0.element) }.joined())
                 .font(.system(size: 110, weight: .bold, design: .rounded)).monospacedDigit().foregroundStyle(.tint)
             Label(status, systemImage: done ? "checkmark.circle.fill" : "hourglass").foregroundStyle(done ? .green : .secondary)
@@ -138,10 +157,10 @@ struct TVPairView: View {
         guard !done, let data = kvs.data(forKey: TVPairing.kvsKey(code)) else { return }
         do {
             let payload = try TVPairing.decrypt(data, code: code)
-            try model.adopt(payload)
+            let adopted = try model.adopt(payload)
             kvs.removeObject(forKey: TVPairing.kvsKey(code)); kvs.synchronize()
-            done = true; status = "Paired: \(payload.server.name)"
-            paired = model.current(payload.server)
+            done = true; status = "Paired: \(adopted.map(\.name).joined(separator: ", "))"
+            paired = adopted.map { model.current($0) }
         } catch {
             status = "Received data could not be decrypted. Check the code and try again."
         }
@@ -258,7 +277,10 @@ struct TVPlayerView: View {
             guard let c = model.client(for: server) else { error = String(localized: "Credentials for this server are missing on the TV. Pair it again from your iPhone, iPad or Mac."); return }
             do {
                 let req = try await c.mediaRequest(entry.path)
-                let asset = AVURLAsset(url: req.url!, options: ["AVURLAssetHTTPHeaderFieldsKey": req.allHTTPHeaderFields ?? [:]])
+                // A media ticket carries its own signature: the stream keeps working after the session
+                // token expires (long films, pauses). Headers stay for Cloudflare Access.
+                let streamURL = (try? await c.mediaTicketURL(entry.path)) ?? req.url!
+                let asset = AVURLAsset(url: streamURL, options: ["AVURLAssetHTTPHeaderFieldsKey": req.allHTTPHeaderFields ?? [:]])
                 let item = AVPlayerItem(asset: asset)
                 let p = AVPlayer(playerItem: item); player = p; p.play()
                 // The system player gives up on codecs it does not know: hand over to mpv.
@@ -318,10 +340,17 @@ struct TVMPVPlayerView: View {
         }
         .task {
             guard let c = model.client(for: server) else { error = String(localized: "Credentials for this server are missing on the TV. Pair it again from your iPhone, iPad or Mac."); return }
-            // mpv sends the same headers as the app (bearer token, Cloudflare Access service token), so it
-            // works wherever the app works — no header-less link needed.
-            do { let req = try await c.mediaRequest(entry.path); headers = req.allHTTPHeaderFields ?? [:]; url = req.url }
-            catch { self.error = error.localizedDescription }
+            // mpv sends the same headers as the app (bearer token, Cloudflare Access service token).
+            // Before starting it, fetch the first byte with those headers: mpv only reports
+            // "unrecognized file format" when a login page or a JSON error answers instead of the file,
+            // so the real cause is shown here. The stream itself uses a media ticket (gateway 0.6+),
+            // which does not expire with the session token.
+            do {
+                let req = try await c.mediaRequest(entry.path)
+                if let problem = await c.mediaPreflight(req) { error = problem; return }
+                headers = req.allHTTPHeaderFields ?? [:]
+                url = (try? await c.mediaTicketURL(entry.path)) ?? req.url
+            } catch { self.error = error.localizedDescription }
         }
     }
 

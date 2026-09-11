@@ -6,6 +6,10 @@ import UnraidGatewayKit
 @main
 struct UnraidDriveTVApp: App {
     @StateObject private var model = TVModel()
+    init() {
+        // Same device id as before a reinstall when iCloud remembers it for this Apple TV.
+        DeviceIdentity.adoptFromCloudIfNeeded()
+    }
     var body: some Scene {
         WindowGroup {
             TVRootView().environmentObject(model).tint(AppIconColor.tint(for: AppGroup.defaults.string(forKey: AppIconColor.storageKey) ?? "default"))
@@ -17,11 +21,23 @@ struct UnraidDriveTVApp: App {
 @MainActor
 final class TVModel: ObservableObject {
     @Published private(set) var servers: [ServerConfig] = []
+    /// Servers another device saved in iCloud (Key-Value Storage). tvOS has no iCloud Keychain, so
+    /// their credentials can only arrive through pairing: the list is used to tell the user what
+    /// is waiting for him and to pre-fill names.
+    @Published private(set) var cloudServers: [ServerConfig] = []
     private let store = ServerStore()
     private let keychain = KeychainStore()
+    private let kvs = NSUbiquitousKeyValueStore.default
+    private var observer: NSObjectProtocol?
+
     init() {
         GatewayClient.component = "Apple TV"
         reload()
+        refreshCloud()
+        observer = NotificationCenter.default.addObserver(forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: kvs, queue: .main) { [weak self] _ in
+            Task { @MainActor in self?.refreshCloud() }
+        }
+        kvs.synchronize()
         let args = ProcessInfo.processInfo.arguments
         if args.contains("-seedDemo"), !servers.contains(where: \.isDemo) { addDemo() }
         // Debug: `-tvSelectShares documents,media` limits the demo server to those shares (screenshots/tests).
@@ -30,6 +46,14 @@ final class TVModel: ObservableObject {
         }
     }
     func reload() { servers = store.all() }
+    func refreshCloud() {
+        guard let data = kvs.data(forKey: CloudKeys.servers) else { cloudServers = []; return }
+        cloudServers = ServerStore.decode(data).filter { !$0.isDemo }
+    }
+    /// Servers found in iCloud that this TV does not have yet.
+    var cloudServersMissingHere: [ServerConfig] {
+        cloudServers.filter { c in !servers.contains { $0.id == c.id } }
+    }
     func client(for s: ServerConfig) -> GatewayClient? { GatewayClientFactory.client(for: s, keychain: keychain) }
     func addDemo() { store.upsert(ServerConfig.demo); reload() }
     func remove(_ s: ServerConfig) { keychain.remove(for: s.id); store.remove(id: s.id); reload() }
@@ -40,15 +64,22 @@ final class TVModel: ObservableObject {
         c.selectedShares = shares; c.modifiedAt = Date()
         store.upsert(c); reload()
     }
-    /// Stores a paired server with its secrets (local to this TV: tvOS has no iCloud Keychain).
-    func adopt(_ p: PairingPayload) throws {
-        try keychain.set(apiKey: p.apiKey, for: p.server.id)
-        if let cf = p.cloudflare { try keychain.set(cloudflareToken: cf, for: p.server.id) }
-        if let u = p.username, let pw = p.password { try keychain.set(username: u, password: pw, for: p.server.id) }
-        var s = p.server; s.username = p.username
-        store.upsert(s); reload()
-        // Pairing is the user's own action: register this Apple TV on the gateway.
-        if let c = client(for: s) { Task { _ = try? await c.login(register: true) } }
+    /// Stores the paired servers with their secrets (local to this TV: tvOS has no iCloud Keychain)
+    /// and registers this Apple TV on each gateway. Returns the servers adopted.
+    @discardableResult
+    func adopt(_ p: PairingPayload) throws -> [ServerConfig] {
+        var adopted: [ServerConfig] = []
+        for item in p.all {
+            try keychain.set(apiKey: item.apiKey, for: item.server.id)
+            if let cf = item.cloudflare { try keychain.set(cloudflareToken: cf, for: item.server.id) }
+            if let u = item.username, let pw = item.password { try keychain.set(username: u, password: pw, for: item.server.id) }
+            var s = item.server; s.username = item.username
+            store.upsert(s); adopted.append(s)
+        }
+        reload()
+        // Pairing is the user's own action: register this Apple TV on the gateways.
+        for s in adopted { if let c = client(for: s) { Task { _ = try? await c.login(register: true) } } }
+        return adopted
     }
 }
 

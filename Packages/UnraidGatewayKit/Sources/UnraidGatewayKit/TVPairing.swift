@@ -1,11 +1,8 @@
 import Foundation
 import CryptoKit
 
-/// Pairing an Apple TV without typing on the remote: the TV shows a 6-digit code, the phone/Mac
-/// encrypts the server and its secrets with a key derived from that code and drops the blob in the
-/// iCloud Key-Value Store under `tv.pair.<code>`; the TV picks it up, decrypts, stores and deletes it.
-/// AES-GCM; the code never leaves the two screens, so iCloud only ever sees ciphertext.
-public struct PairingPayload: Codable, Sendable {
+/// One server with its secrets, as sent to an Apple TV.
+public struct PairedServer: Codable, Sendable {
     public var server: ServerConfig
     public var apiKey: String
     public var cloudflareClientID: String?
@@ -20,6 +17,48 @@ public struct PairingPayload: Codable, Sendable {
     public var cloudflare: CloudflareServiceToken? {
         guard let id = cloudflareClientID, let secret = cloudflareClientSecret else { return nil }
         return CloudflareServiceToken(clientID: id, clientSecret: secret)
+    }
+}
+
+/// Pairing an Apple TV without typing on the remote: the TV shows a 6-digit code, the phone/Mac
+/// encrypts the servers and their secrets with a key derived from that code and drops the blob in
+/// the iCloud Key-Value Store under `tv.pair.<code>`; the TV picks it up, decrypts, stores and
+/// deletes it. AES-GCM; the code never leaves the two screens, so iCloud only ever sees ciphertext.
+///
+/// Build 30 sends **every** server in `servers`; the legacy single-server fields carry the first
+/// one so a TV still on build ≤ 29 keeps working.
+public struct PairingPayload: Codable, Sendable {
+    public var server: ServerConfig
+    public var apiKey: String
+    public var cloudflareClientID: String?
+    public var cloudflareClientSecret: String?
+    public var username: String?
+    public var password: String?
+    /// All the servers of the sender (build 30+). Nil in blobs written by older apps.
+    public var servers: [PairedServer]?
+
+    public init(server: ServerConfig, apiKey: String, cloudflare: CloudflareServiceToken?, username: String?, password: String?) {
+        self.init(servers: [PairedServer(server: server, apiKey: apiKey, cloudflare: cloudflare, username: username, password: password)])
+    }
+
+    /// `servers` must not be empty; the first one also fills the legacy fields.
+    public init(servers: [PairedServer]) {
+        let first = servers[0]
+        server = first.server; apiKey = first.apiKey
+        cloudflareClientID = first.cloudflareClientID; cloudflareClientSecret = first.cloudflareClientSecret
+        username = first.username; password = first.password
+        self.servers = servers
+    }
+
+    public var cloudflare: CloudflareServiceToken? {
+        guard let id = cloudflareClientID, let secret = cloudflareClientSecret else { return nil }
+        return CloudflareServiceToken(clientID: id, clientSecret: secret)
+    }
+
+    /// Every server carried by the payload (one for blobs from older apps).
+    public var all: [PairedServer] {
+        if let servers, !servers.isEmpty { return servers }
+        return [PairedServer(server: server, apiKey: apiKey, cloudflare: cloudflare, username: username, password: password)]
     }
 }
 

@@ -98,8 +98,15 @@ struct MPVSheetView: View {
         .frame(minHeight: 320)
         .task {
             guard let c = model.client(for: server) else { error = String(localized: "API key missing"); return }
-            do { let req = try await c.mediaRequest(entry.path); headers = req.allHTTPHeaderFields ?? [:]; url = req.url }
-            catch { self.error = error.localizedDescription }
+            // First byte with the app's headers before mpv starts: a login page or a JSON error is
+            // reported as such instead of mpv's "unrecognized file format". Then a media ticket, which
+            // does not expire with the session token during a long film.
+            do {
+                let req = try await c.mediaRequest(entry.path)
+                if let problem = await c.mediaPreflight(req) { error = problem; return }
+                headers = req.allHTTPHeaderFields ?? [:]
+                url = (try? await c.mediaTicketURL(entry.path)) ?? req.url
+            } catch { self.error = error.localizedDescription }
         }
         #endif
     }

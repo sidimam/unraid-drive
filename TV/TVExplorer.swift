@@ -37,6 +37,8 @@ struct TVBrowserView: View {
     @State private var opened: FSEntry?
     @State private var info: FSEntry?
     @State private var deleting: FSEntry?
+    @State private var renaming: FSEntry?
+    @State private var newFolder = false
     @State private var busy: String?
     @AppStorage("tv.explorer.grid") private var grid = false
     @AppStorage("tv.explorer.sort") private var sortKey = "name"
@@ -61,6 +63,7 @@ struct TVBrowserView: View {
                 if let c = clipboard.pasteable(into: path, server: server) {
                     Button { Task { await paste(into: path) } } label: { Label(c.cut ? "Paste (move) \(c.entry.name)" : "Paste \(c.entry.name)", systemImage: "doc.on.clipboard") }
                 }
+                if path != "/" { Button { newFolder = true } label: { Label("New folder", systemImage: "folder.badge.plus") } }
                 Menu {
                     Picker("Sort by", selection: $sortKey) {
                         Text("Name").tag("name"); Text("Date").tag("date"); Text("Size").tag("size")
@@ -84,6 +87,12 @@ struct TVBrowserView: View {
         .confirmationDialog("Delete?", isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } }), titleVisibility: .visible) {
             Button(role: .destructive) { if let d = deleting { Task { await remove(d) } } } label: { Text("Delete \(deleting?.name ?? "")") }
         } message: { Text("The file is removed from the NAS. There is no trash on the gateway.") }
+        .sheet(item: $renaming) { e in
+            TVTextPromptView(title: "Rename", initial: e.name, confirm: "Rename") { name in Task { await rename(e, to: name) } }
+        }
+        .sheet(isPresented: $newFolder) {
+            TVTextPromptView(title: "New folder", initial: "", confirm: "Create") { name in Task { await create(name) } }
+        }
         .overlay(alignment: .bottom) {
             if let busy { HStack { ProgressView(); Text(busy) }.padding(16).background(.regularMaterial, in: Capsule()).padding(40) }
         }
@@ -100,6 +109,20 @@ struct TVBrowserView: View {
         guard let c = model.client(for: server) else { return }
         busy = e.name; defer { busy = nil }
         do { try await c.delete(e.path); await load() } catch { self.error = error.localizedDescription }
+    }
+
+    private func rename(_ e: FSEntry, to name: String) async {
+        let n = name.trimmingCharacters(in: .whitespaces)
+        guard !n.isEmpty, n != e.name, let c = model.client(for: server) else { return }
+        busy = e.name; defer { busy = nil }
+        do { _ = try await c.move(e.path, to: GatewayPath.join(GatewayPath.parent(e.path), n)); await load() } catch { self.error = error.localizedDescription }
+    }
+
+    private func create(_ name: String) async {
+        let n = name.trimmingCharacters(in: .whitespaces)
+        guard !n.isEmpty, let c = model.client(for: server) else { return }
+        busy = String(localized: "Creating folder…"); defer { busy = nil }
+        do { _ = try await c.mkdir(GatewayPath.join(path, n)); await load() } catch { self.error = error.localizedDescription }
     }
 
     private var listView: some View {
@@ -156,6 +179,7 @@ struct TVBrowserView: View {
             if e.isDirectory, let c = clipboard.pasteable(into: e.path, server: server) {
                 Button { Task { await paste(into: e.path) } } label: { Label(c.cut ? "Paste (move) into folder" : "Paste into folder", systemImage: "doc.on.clipboard") }
             }
+            Button { renaming = e } label: { Label("Rename", systemImage: "pencil") }
             Button(role: .destructive) { deleting = e } label: { Label("Delete", systemImage: "trash") }
         }
     }
@@ -182,6 +206,28 @@ struct TVBrowserView: View {
     }
 
     private func open(_ e: FSEntry) { opened = e }
+}
+
+/// One-line text entry on the TV (rename, new folder): the on-screen keyboard opens on the field.
+struct TVTextPromptView: View {
+    @Environment(\.dismiss) private var dismiss
+    let title: LocalizedStringKey
+    let initial: String
+    let confirm: LocalizedStringKey
+    let onConfirm: (String) -> Void
+    @State private var text = ""
+    var body: some View {
+        VStack(spacing: 32) {
+            Text(title).font(.title)
+            TextField("Name", text: $text).frame(maxWidth: 900)
+            HStack(spacing: 24) {
+                Button("Cancel") { dismiss() }
+                Button(confirm) { onConfirm(text); dismiss() }.disabled(text.trimmingCharacters(in: .whitespaces).isEmpty)
+            }.buttonStyle(TVPillButtonStyle())
+        }
+        .padding(60)
+        .onAppear { text = initial }
+    }
 }
 
 /// Routes a file to its viewer.

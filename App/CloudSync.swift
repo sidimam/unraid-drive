@@ -11,7 +11,7 @@ import UnraidGatewayKit
 @MainActor
 final class CloudSync: ObservableObject {
     static let enabledKey = "icloudSync.enabled"
-    private static let kvsKey = "servers.v1"
+    private static let kvsKey = CloudKeys.servers
 
     @Published private(set) var enabled: Bool
     @Published private(set) var remoteServerCount: Int = 0

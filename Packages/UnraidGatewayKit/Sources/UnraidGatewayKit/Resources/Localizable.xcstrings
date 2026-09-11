@@ -1,6 +1,46 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "A web page answered instead of the file (%@): usually a Cloudflare Access login. Check the service token in the server's settings.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ha risposto una pagina web invece del file (%@): di solito è il login di Cloudflare Access. Controlla il service token nelle impostazioni del server."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Respondió una página web en lugar del archivo (%@): normalmente el inicio de sesión de Cloudflare Access. Revisa el token de servicio en los ajustes del servidor."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une page web a répondu à la place du fichier (%@) : en général la connexion Cloudflare Access. Vérifiez le jeton de service dans les réglages du serveur."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statt der Datei hat eine Webseite geantwortet (%@): meist die Cloudflare-Access-Anmeldung. Prüfen Sie das Service-Token in den Servereinstellungen."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "返回的是网页而不是文件（%@）：通常是 Cloudflare Access 登录页。请检查服务器设置中的服务令牌。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أجابت صفحة ويب بدل الملف (%@): غالبًا تسجيل دخول Cloudflare Access. تحقّق من رمز الخدمة في إعدادات الخادم."
+          }
+        }
+      }
+    },
     "Cannot reach the gateway: %@": {
       "localizations": {
         "ar": {
@@ -237,6 +277,126 @@
           "stringUnit": {
             "state": "translated",
             "value": "文件在服务器上已更改。"
+          }
+        }
+      }
+    },
+    "The gateway answered %lld: %@": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il gateway ha risposto %lld: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El gateway respondió %lld: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La passerelle a répondu %lld : %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Gateway antwortete %lld: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "网关返回 %lld：%@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أجابت البوابة %lld: %@"
+          }
+        }
+      }
+    },
+    "The gateway answered with JSON instead of the file: update unraid-gateway.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il gateway ha risposto con JSON invece del file: aggiorna unraid-gateway."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El gateway respondió con JSON en lugar del archivo: actualiza unraid-gateway."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La passerelle a répondu en JSON au lieu du fichier : mettez à jour unraid-gateway."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Gateway antwortete mit JSON statt der Datei: unraid-gateway aktualisieren."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "网关返回了 JSON 而不是文件：请更新 unraid-gateway。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أجابت البوابة بـ JSON بدل الملف: حدّث unraid-gateway."
+          }
+        }
+      }
+    },
+    "The gateway did not answer.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il gateway non ha risposto."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El gateway no respondió."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La passerelle n'a pas répondu."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Gateway hat nicht geantwortet."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "网关没有响应。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم تستجب البوابة."
           }
         }
       }

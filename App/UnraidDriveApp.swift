@@ -24,6 +24,8 @@ struct UnraidDriveApp: App {
         #if os(macOS)
         DockPolicy.apply()
         #endif
+        // After a reinstall on the same hardware, come back to the gateway as the same device.
+        DeviceIdentity.adoptFromCloudIfNeeded()
     }
 
     var body: some Scene {

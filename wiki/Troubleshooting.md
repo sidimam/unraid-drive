@@ -100,6 +100,17 @@ Cloudflare limits a request to 100 MB. The **app** chunks uploads and is not aff
 
 The gateway preserves the file modification time you send and reports the server's time. Make sure `TZ` in the container matches your timezone (display only; timestamps are UTC internally).
 
+## "Cannot play this file" (mpv) on Apple TV, iPhone, iPad or Mac
+
+Since build 30 the app fetches the first byte of the file with its own headers before starting mpv and prints what answered instead of the video:
+
+- *A web page answered instead of the file (host): usually a Cloudflare Access login* — the Cloudflare service token is missing or wrong on this device (on Apple TV: pair again from the phone).
+- *The API key, or the Unraid username and password, were rejected* — sign in again from the server's details.
+- *This device was removed from the gateway* — connect again to register it (Devices on the gateway).
+- *The gateway answered 5xx* — read the gateway log (`docker logs unraid-gateway`).
+
+If the message is still mpv's own (*unrecognized file format*, *no video/audio*), the file itself is the problem: try it in VLC or IINA on a computer.
+
 ## Where are the logs
 
 - Gateway: Docker tab → icon → **Logs**. One readable line per event: `TIME LEVEL  METHOD PATH → STATUS in Nms  file=… user=… ip=…`, plus explicit messages such as "login failed: Unraid rejected the username/password". The **Console** button opens a guided status check (`gw status`, `gw shares`, `gw login <user>`).

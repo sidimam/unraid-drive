@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(UIKit)
+import UIKit
+#endif
 
 struct GraphQLEnvelope<T: Decodable>: Decodable {
     var data: T?
@@ -133,6 +136,40 @@ public actor GatewayClient {
         let t = try decode(Ticket.self, data)
         guard let url = URL(string: t.url, relativeTo: baseURL)?.absoluteURL else { throw GatewayError.decoding("ticket url") }
         return url
+    }
+
+    /// Checks that a media request really returns the file before handing it to a player: mpv only
+    /// says "unrecognized file format" when it receives a login page, a JSON error or a proxy page.
+    /// Sends the same headers as the app and asks for the first byte only. Returns nil when the
+    /// response is a file, otherwise a message that says what answered instead.
+    public func mediaPreflight(_ request: URLRequest) async -> String? {
+        var req = request
+        req.setValue("bytes=0-0", forHTTPHeaderField: "Range")
+        do {
+            let (data, resp) = try await session.data(for: req)
+            guard let http = resp as? HTTPURLResponse else { return String(localized: "The gateway did not answer.", bundle: .module) }
+            let type = (http.value(forHTTPHeaderField: "Content-Type") ?? "").lowercased()
+            if type.contains("text/html") {
+                return String(localized: "A web page answered instead of the file (\(http.url?.host ?? "proxy")): usually a Cloudflare Access login. Check the service token in the server's settings.", bundle: .module)
+            }
+            if http.statusCode >= 400 {
+                let payload = (try? JSONDecoder().decode([String: String].self, from: data)) ?? [:]
+                let msg = payload["error"] ?? HTTPURLResponse.localizedString(forStatusCode: http.statusCode)
+                switch payload["code"] {
+                case "device_revoked": return GatewayError.deviceRevoked.errorDescription
+                case "device_not_registered": return GatewayError.deviceNotRegistered.errorDescription
+                default: break
+                }
+                if http.statusCode == 401 { return GatewayError.unauthorized.errorDescription }
+                return String(localized: "The gateway answered \(http.statusCode): \(msg)", bundle: .module)
+            }
+            if type.contains("application/json") {
+                return String(localized: "The gateway answered with JSON instead of the file: update unraid-gateway.", bundle: .module)
+            }
+            return nil
+        } catch {
+            return GatewayError.network(error.localizedDescription).errorDescription
+        }
     }
 
     /// Downloads a file to a temporary location owned by the caller.
@@ -389,7 +426,10 @@ public actor GatewayClient {
         let host = Host.current().localizedName ?? "Mac"
         return "\(host) · macOS \(ProcessInfo.processInfo.operatingSystemVersionString.replacingOccurrences(of: "Version ", with: ""))"
         #elseif os(tvOS)
-        return "Apple TV · tvOS \(ProcessInfo.processInfo.operatingSystemVersion.majorVersion).\(ProcessInfo.processInfo.operatingSystemVersion.minorVersion)"
+        // tvOS gives the name the user assigned to the Apple TV (no entitlement needed there).
+        let name = UIDevice.current.name.trimmingCharacters(in: .whitespaces)
+        let tv = name.isEmpty || name.lowercased() == "apple tv" ? "Apple TV" : name
+        return "\(tv) · tvOS \(ProcessInfo.processInfo.operatingSystemVersion.majorVersion).\(ProcessInfo.processInfo.operatingSystemVersion.minorVersion)"
         #elseif os(visionOS)
         return "Apple Vision Pro · visionOS \(ProcessInfo.processInfo.operatingSystemVersion.majorVersion).\(ProcessInfo.processInfo.operatingSystemVersion.minorVersion)"
         #else

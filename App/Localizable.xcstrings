@@ -602,42 +602,42 @@
         }
       }
     },
-    "A configuration saved by Unraid Drive on another device was found. Restoring turns sync on; on the Mac the secrets arrive through iCloud Keychain.": {
+    "A configuration saved by Unraid Drive on another device was found. Restoring turns sync on; the secrets arrive through iCloud Keychain and this device is registered on each gateway again.": {
       "localizations": {
-        "ar": {
+        "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "تم العثور على إعدادات حفظها Unraid Drive على جهاز آخر. الاستعادة تفعّل المزامنة؛ وعلى Mac تصل الأسرار عبر سلسلة مفاتيح iCloud."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eine von Unraid Drive auf einem anderen Gerät gesicherte Konfiguration wurde gefunden. Wiederherstellen schaltet die Synchronisierung ein; auf dem Mac kommen die Geheimnisse über den iCloud-Schlüsselbund."
+            "value": "È stata trovata una configurazione salvata da Unraid Drive su un altro dispositivo. Il ripristino attiva la sincronizzazione; i segreti arrivano dal Portachiavi iCloud e questo dispositivo viene registrato di nuovo su ogni gateway."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Se encontró una configuración guardada por Unraid Drive en otro dispositivo. Restaurar activa la sincronización; en el Mac los secretos llegan a través del Llavero de iCloud."
+            "value": "Se encontró una configuración guardada por Unraid Drive en otro dispositivo. Restaurar activa la sincronización; los secretos llegan por el llavero de iCloud y este dispositivo vuelve a registrarse en cada gateway."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Une configuration enregistrée par Unraid Drive sur un autre appareil a été trouvée. La restauration active la synchronisation ; sur Mac, les secrets arrivent via le trousseau iCloud."
+            "value": "Une configuration enregistrée par Unraid Drive sur un autre appareil a été trouvée. La restauration active la synchronisation ; les secrets arrivent par le trousseau iCloud et cet appareil est réenregistré sur chaque passerelle."
           }
         },
-        "it": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "È stata trovata una configurazione salvata da Unraid Drive su un altro dispositivo. Il ripristino attiva la sincronizzazione; sul Mac i segreti arrivano tramite il Portachiavi iCloud."
+            "value": "Eine von Unraid Drive auf einem anderen Gerät gespeicherte Konfiguration wurde gefunden. Die Wiederherstellung schaltet die Synchronisierung ein; die Geheimnisse kommen über den iCloud-Schlüsselbund und dieses Gerät wird bei jedem Gateway erneut registriert."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "发现了 Unraid Drive 在另一台设备上保存的配置。恢复会开启同步；在 Mac 上，密钥通过 iCloud 钥匙串送达。"
+            "value": "找到了 Unraid Drive 在另一台设备上保存的配置。恢复会开启同步；密钥通过 iCloud 钥匙串送达，本设备会重新在每个网关上注册。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم العثور على إعدادات حفظها Unraid Drive على جهاز آخر. الاستعادة تفعّل المزامنة؛ تصل الأسرار عبر سلسلة مفاتيح iCloud ويُعاد تسجيل هذا الجهاز على كل بوابة."
           }
         }
       }
@@ -1282,6 +1282,46 @@
         }
       }
     },
+    "Another device (or this one, before a reinstall) saved %lld server(s) in iCloud. Restore them here: the list arrives from iCloud, the API keys, Cloudflare service tokens and Unraid passwords from iCloud Keychain, and this device registers itself on each gateway again.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un altro dispositivo (o questo, prima di una reinstallazione) ha salvato %lld server in iCloud. Ripristinali qui: l'elenco arriva da iCloud, le chiavi API, i service token Cloudflare e le password Unraid dal Portachiavi iCloud, e questo dispositivo si registra di nuovo su ogni gateway."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otro dispositivo (o este, antes de una reinstalación) guardó %lld servidor(es) en iCloud. Restáuralos aquí: la lista llega de iCloud, las claves API, los tokens de servicio de Cloudflare y las contraseñas de Unraid del llavero de iCloud, y este dispositivo vuelve a registrarse en cada gateway."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un autre appareil (ou celui-ci, avant une réinstallation) a enregistré %lld serveur(s) dans iCloud. Restaurez-les ici : la liste vient d'iCloud, les clés API, jetons de service Cloudflare et mots de passe Unraid du trousseau iCloud, et cet appareil se réenregistre sur chaque passerelle."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein anderes Gerät (oder dieses, vor einer Neuinstallation) hat %lld Server in iCloud gespeichert. Stellen Sie sie hier wieder her: die Liste kommt aus iCloud, API-Schlüssel, Cloudflare-Service-Tokens und Unraid-Passwörter aus dem iCloud-Schlüsselbund, und dieses Gerät registriert sich erneut bei jedem Gateway."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "另一台设备（或本机在重装前）在 iCloud 中保存了 %lld 个服务器。在此恢复：列表来自 iCloud，API 密钥、Cloudflare 服务令牌和 Unraid 密码来自 iCloud 钥匙串，本设备会重新在每个网关上注册。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حفظ جهاز آخر (أو هذا الجهاز قبل إعادة التثبيت) %lld خادمًا في iCloud. استعدها هنا: تصل القائمة من iCloud، ومفاتيح API ورموز خدمة Cloudflare وكلمات مرور Unraid من سلسلة مفاتيح iCloud، ويعيد هذا الجهاز تسجيل نفسه على كل بوابة."
+          }
+        }
+      }
+    },
     "App colour": {
       "localizations": {
         "ar": {
@@ -1398,6 +1438,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "应用设置"
+          }
+        }
+      }
+    },
+    "Apple TV cannot read the credentials from iCloud Keychain. Open Unraid Drive on your iPhone, iPad or Mac, go to Settings › Pair an Apple TV, enter this code and send all the servers: the whole configuration arrives here encrypted with the code and this Apple TV registers itself on the gateways again.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple TV non può leggere le credenziali dal Portachiavi iCloud. Apri Unraid Drive su iPhone, iPad o Mac, vai in Impostazioni › Abbina una Apple TV, inserisci questo codice e invia tutti i server: l'intera configurazione arriva qui cifrata con il codice e questa Apple TV si registra di nuovo sui gateway."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El Apple TV no puede leer las credenciales del llavero de iCloud. Abre Unraid Drive en tu iPhone, iPad o Mac, ve a Ajustes › Emparejar un Apple TV, introduce este código y envía todos los servidores: toda la configuración llega aquí cifrada con el código y este Apple TV vuelve a registrarse en los gateways."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'Apple TV ne peut pas lire les identifiants dans le trousseau iCloud. Ouvrez Unraid Drive sur votre iPhone, iPad ou Mac, allez dans Réglages › Jumeler une Apple TV, saisissez ce code et envoyez tous les serveurs : toute la configuration arrive ici chiffrée avec le code et cette Apple TV se réenregistre sur les passerelles."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple TV kann die Zugangsdaten nicht aus dem iCloud-Schlüsselbund lesen. Öffnen Sie Unraid Drive auf iPhone, iPad oder Mac, gehen Sie zu Einstellungen › Apple TV koppeln, geben Sie diesen Code ein und senden Sie alle Server: die gesamte Konfiguration kommt mit dem Code verschlüsselt hier an und dieses Apple TV registriert sich erneut bei den Gateways."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple TV 无法从 iCloud 钥匙串读取凭据。请在 iPhone、iPad 或 Mac 上打开 Unraid Drive，进入“设置 › 配对 Apple TV”，输入此代码并发送所有服务器：整套配置将以该代码加密送达，此 Apple TV 会重新在网关上注册。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يستطيع Apple TV قراءة بيانات الاعتماد من سلسلة مفاتيح iCloud. افتح Unraid Drive على iPhone أو iPad أو Mac، ثم الإعدادات › إقران Apple TV، وأدخل هذا الرمز وأرسل جميع الخوادم: تصل الإعدادات كاملة هنا مشفّرة بالرمز ويعيد هذا الـ Apple TV تسجيل نفسه على البوابات."
           }
         }
       }
@@ -2406,46 +2486,6 @@
         }
       }
     },
-    "Choose which shares to show: after connecting, and any time in the server's details, tick the shares you want in the Files app, the Finder, Shortcuts and on Apple TV. Clearer permission errors from the gateway.": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "اختر المشاركات التي تريد عرضها: بعد الاتصال وفي أي وقت من تفاصيل الخادم، حدّد المشاركات التي تريدها في تطبيق الملفات وFinder والاختصارات وApple TV. أخطاء صلاحيات أوضح من البوابة."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wähle, welche Freigaben angezeigt werden: nach dem Verbinden und jederzeit in den Serverdetails hakst du die Freigaben ab, die du in der Dateien-App, im Finder, in Kurzbefehlen und auf Apple TV sehen willst. Klarere Berechtigungsfehler vom Gateway."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Elige qué recursos compartidos mostrar: tras conectar, y en cualquier momento en los detalles del servidor, marca los que quieres en la app Archivos, el Finder, Atajos y el Apple TV. Errores de permisos más claros desde el gateway."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choisissez les partages à afficher : après la connexion, et à tout moment dans les détails du serveur, cochez ceux que vous voulez dans l’app Fichiers, le Finder, Raccourcis et sur l’Apple TV. Erreurs de permission plus claires depuis la passerelle."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scegli quali share mostrare: dopo la connessione, e in ogni momento nei dettagli del server, spunta le share che vuoi nell’app File, nel Finder, nei Comandi rapidi e su Apple TV. Errori di permesso più chiari dal gateway."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "选择要显示的共享：连接后以及随时在服务器详情中，勾选想在“文件”应用、“访达”、快捷指令和 Apple TV 中看到的共享。来自网关的权限错误更清晰。"
-          }
-        }
-      }
-    },
     "Clear": {
       "localizations": {
         "ar": {
@@ -2607,6 +2647,86 @@
         }
       }
     },
+    "Configuration found in iCloud": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurazione trovata in iCloud"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuración encontrada en iCloud"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration trouvée dans iCloud"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfiguration in iCloud gefunden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 iCloud 中找到配置"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم العثور على إعدادات في iCloud"
+          }
+        }
+      }
+    },
+    "Configuration found in iCloud: %lld server(s)": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurazione trovata in iCloud: %lld server"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuración encontrada en iCloud: %lld servidor(es)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration trouvée dans iCloud : %lld serveur(s)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfiguration in iCloud gefunden: %lld Server"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 iCloud 中找到配置：%lld 个服务器"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم العثور على إعدادات في iCloud: %lld خادم"
+          }
+        }
+      }
+    },
     "Configuration restored: %lld server(s).": {
       "localizations": {
         "ar": {
@@ -2643,6 +2763,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "配置已恢复：%lld 个服务器。"
+          }
+        }
+      }
+    },
+    "Configuration restored: %lld servers": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurazione ripristinata: %lld server"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuración restaurada: %lld servidores"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration restaurée : %lld serveurs"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfiguration wiederhergestellt: %lld Server"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配置已恢复：%lld 个服务器"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمت استعادة الإعدادات: %lld خادمًا"
           }
         }
       }
@@ -4604,6 +4764,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "错误列表…"
+          }
+        }
+      }
+    },
+    "Every server keeps the shares chosen on your other device; change them any time from the server's page, Shares to show.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ogni server mantiene le share scelte sull'altro dispositivo; puoi cambiarle in qualsiasi momento dalla pagina del server, Share da mostrare."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cada servidor conserva las carpetas elegidas en tu otro dispositivo; cámbialas cuando quieras desde la página del servidor, Carpetas a mostrar."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque serveur garde les partages choisis sur votre autre appareil ; modifiez-les à tout moment depuis la page du serveur, Partages à afficher."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeder Server behält die auf dem anderen Gerät gewählten Freigaben; ändern Sie sie jederzeit auf der Serverseite unter Anzuzeigende Freigaben."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每个服务器都保留你在其他设备上选择的共享；可随时在服务器页面的“显示的共享”中更改。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يحتفظ كل خادم بالمشاركات المختارة على جهازك الآخر؛ غيّرها في أي وقت من صفحة الخادم، المشاركات المعروضة."
           }
         }
       }
@@ -8396,42 +8596,42 @@
         }
       }
     },
-    "On the Apple TV open Unraid Drive: it shows a 6-digit code. Enter it here and choose the server to send. The credentials travel encrypted with the code; the TV connects through your unraid-gateway with your own permissions.": {
+    "On the Apple TV open Unraid Drive: it shows a 6-digit code. Enter it here and choose what to send. The credentials travel encrypted with the code; the TV connects through your unraid-gateway with your own permissions.": {
       "localizations": {
-        "ar": {
+        "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "على Apple TV افتح Unraid Drive: سيعرض رمزًا من 6 أرقام. أدخله هنا واختر الخادم المطلوب إرساله. تنتقل بيانات الاعتماد مشفّرة بالرمز؛ ويتصل التلفاز عبر unraid-gateway بصلاحياتك."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Öffne auf dem Apple TV Unraid Drive: Es zeigt einen 6-stelligen Code. Gib ihn hier ein und wähle den zu sendenden Server. Die Zugangsdaten reisen mit dem Code verschlüsselt; der TV verbindet sich über dein unraid-gateway mit deinen Berechtigungen."
+            "value": "Sull'Apple TV apri Unraid Drive: mostra un codice di 6 cifre. Inseriscilo qui e scegli cosa inviare. Le credenziali viaggiano cifrate con il codice; la TV si collega tramite il tuo unraid-gateway con i tuoi permessi."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "En el Apple TV abre Unraid Drive: muestra un código de 6 cifras. Introdúcelo aquí y elige el servidor a enviar. Las credenciales viajan cifradas con el código; el TV se conecta a través de tu unraid-gateway con tus permisos."
+            "value": "En el Apple TV abre Unraid Drive: muestra un código de 6 dígitos. Introdúcelo aquí y elige qué enviar. Las credenciales viajan cifradas con el código; el TV se conecta a través de tu unraid-gateway con tus permisos."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sur l’Apple TV, ouvrez Unraid Drive : elle affiche un code à 6 chiffres. Saisissez-le ici et choisissez le serveur à envoyer. Les identifiants voyagent chiffrés avec le code ; la TV se connecte via votre unraid-gateway avec vos permissions."
+            "value": "Sur l'Apple TV, ouvrez Unraid Drive : un code à 6 chiffres s'affiche. Saisissez-le ici et choisissez quoi envoyer. Les identifiants voyagent chiffrés avec le code ; la TV se connecte via votre unraid-gateway avec vos propres droits."
           }
         },
-        "it": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sulla Apple TV apri Unraid Drive: mostra un codice di 6 cifre. Inseriscilo qui e scegli il server da inviare. Le credenziali viaggiano cifrate con il codice; la TV si collega tramite il tuo unraid-gateway con i tuoi permessi."
+            "value": "Öffnen Sie auf dem Apple TV Unraid Drive: es zeigt einen 6-stelligen Code. Geben Sie ihn hier ein und wählen Sie, was gesendet wird. Die Zugangsdaten reisen mit dem Code verschlüsselt; das TV verbindet sich über Ihr unraid-gateway mit Ihren eigenen Rechten."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "在 Apple TV 上打开 Unraid Drive：它会显示一个 6 位代码。在此输入并选择要发送的服务器。凭据以该代码加密传输；Apple TV 通过你的 unraid-gateway 以你的权限连接。"
+            "value": "在 Apple TV 上打开 Unraid Drive：它会显示一个 6 位代码。在此输入并选择要发送的内容。凭据以该代码加密传输；电视通过你的 unraid-gateway 以你自己的权限连接。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "على Apple TV افتح Unraid Drive: سيعرض رمزًا من 6 أرقام. أدخله هنا واختر ما تريد إرساله. تنتقل بيانات الاعتماد مشفّرة بالرمز؛ يتصل التلفاز عبر unraid-gateway الخاص بك بصلاحياتك."
           }
         }
       }
@@ -11076,6 +11276,86 @@
         }
       }
     },
+    "Restore first: on a new or reinstalled device the walkthrough finds the configuration saved in iCloud, restores it and registers the device on the gateways again; the Apple TV shows what is waiting in iCloud and receives every server with one pairing code. Clearer errors when a video cannot stream; Rename and New folder on Apple TV.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prima il ripristino: su un dispositivo nuovo o reinstallato il walkthrough trova la configurazione salvata in iCloud, la ripristina e registra di nuovo il dispositivo sui gateway; l'Apple TV mostra cosa attende in iCloud e riceve tutti i server con un solo codice di abbinamento. Errori più chiari quando un video non si avvia; Rinomina e Nuova cartella su Apple TV."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primero la restauración: en un dispositivo nuevo o reinstalado el recorrido encuentra la configuración guardada en iCloud, la restaura y vuelve a registrar el dispositivo en los gateways; el Apple TV muestra lo que espera en iCloud y recibe todos los servidores con un solo código. Errores más claros cuando un vídeo no se reproduce; Renombrar y Nueva carpeta en Apple TV."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La restauration d'abord : sur un appareil neuf ou réinstallé, la visite guidée trouve la configuration enregistrée dans iCloud, la restaure et réenregistre l'appareil sur les passerelles ; l'Apple TV affiche ce qui attend dans iCloud et reçoit tous les serveurs avec un seul code. Erreurs plus claires quand une vidéo ne démarre pas ; Renommer et Nouveau dossier sur Apple TV."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wiederherstellen zuerst: auf einem neuen oder neu installierten Gerät findet die Einführung die in iCloud gespeicherte Konfiguration, stellt sie wieder her und registriert das Gerät erneut bei den Gateways; das Apple TV zeigt, was in iCloud wartet, und erhält alle Server mit einem Kopplungscode. Klarere Fehler, wenn ein Video nicht startet; Umbenennen und Neuer Ordner auf Apple TV."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "先恢复：在新设备或重装设备上，引导会找到保存在 iCloud 中的配置，恢复它并重新在网关上注册设备；Apple TV 会显示 iCloud 中待恢复的内容，并通过一个配对码接收所有服务器。视频无法播放时的错误更清晰；Apple TV 上新增重命名和新建文件夹。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الاستعادة أولاً: على جهاز جديد أو معاد تثبيته تجد الجولة التعريفية الإعدادات المحفوظة في iCloud وتستعيدها وتعيد تسجيل الجهاز على البوابات؛ يعرض Apple TV ما ينتظر في iCloud ويستلم كل الخوادم برمز إقران واحد. أخطاء أوضح عند تعذّر بث فيديو؛ إعادة التسمية ومجلد جديد على Apple TV."
+          }
+        }
+      }
+    },
+    "Restoring…": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ripristino…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurando…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restauration…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wiederherstellen…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在恢复…"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ الاستعادة…"
+          }
+        }
+      }
+    },
     "Resume sync": {
       "localizations": {
         "ar": {
@@ -11666,6 +11946,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "发送"
+          }
+        }
+      }
+    },
+    "Send all servers (%lld)": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invia tutti i server (%lld)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviar todos los servidores (%lld)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer tous les serveurs (%lld)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Server senden (%lld)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "发送所有服务器（%lld）"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إرسال كل الخوادم (%lld)"
           }
         }
       }
@@ -13452,42 +13772,42 @@
         }
       }
     },
-    "The API key of this server is missing on this device.": {
+    "The API key of %@ is missing on this device.": {
       "localizations": {
-        "ar": {
+        "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "مفتاح API لهذا الخادم مفقود على هذا الجهاز."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Der API-Schlüssel dieses Servers fehlt auf diesem Gerät."
+            "value": "La chiave API di %@ manca su questo dispositivo."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Falta la clave API de este servidor en este dispositivo."
+            "value": "Falta la clave API de %@ en este dispositivo."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La clé API de ce serveur manque sur cet appareil."
+            "value": "La clé API de %@ est absente sur cet appareil."
           }
         },
-        "it": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Su questo dispositivo manca la chiave API di questo server."
+            "value": "Der API-Schlüssel von %@ fehlt auf diesem Gerät."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "此设备上缺少该服务器的 API 密钥。"
+            "value": "此设备上缺少 %@ 的 API 密钥。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مفتاح API الخاص بـ %@ غير موجود على هذا الجهاز."
           }
         }
       }
@@ -13812,6 +14132,46 @@
         }
       }
     },
+    "The credentials have not arrived from iCloud Keychain yet. Open the server and use Connect again.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le credenziali non sono ancora arrivate dal Portachiavi iCloud. Apri il server e usa Connetti di nuovo."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las credenciales aún no han llegado del llavero de iCloud. Abre el servidor y usa Conectar de nuevo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les identifiants ne sont pas encore arrivés du trousseau iCloud. Ouvrez le serveur et utilisez Se reconnecter."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Zugangsdaten sind noch nicht aus dem iCloud-Schlüsselbund angekommen. Öffnen Sie den Server und verwenden Sie Erneut verbinden."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "凭据尚未从 iCloud 钥匙串送达。请打开服务器并使用“重新连接”。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم تصل بيانات الاعتماد من سلسلة مفاتيح iCloud بعد. افتح الخادم واستخدم إعادة الاتصال."
+          }
+        }
+      }
+    },
     "The file is removed from the NAS. There is no trash on the gateway.": {
       "localizations": {
         "ar": {
@@ -13968,6 +14328,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "系统播放器无法解码此文件。"
+          }
+        }
+      }
+    },
+    "The whole configuration goes to the TV in one go, like a restore: every server with its credentials and the shares you chose.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tutta la configurazione va alla TV in una volta, come un ripristino: ogni server con le sue credenziali e le share che hai scelto."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toda la configuración va al TV de una vez, como una restauración: cada servidor con sus credenciales y las carpetas que elegiste."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toute la configuration part vers la TV en une fois, comme une restauration : chaque serveur avec ses identifiants et les partages choisis."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die gesamte Konfiguration geht in einem Schritt an das TV, wie eine Wiederherstellung: jeder Server mit seinen Zugangsdaten und den gewählten Freigaben."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "整套配置一次性发送到电视，就像一次恢复：每个服务器及其凭据和你选择的共享。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تنتقل الإعدادات كاملة إلى التلفاز دفعة واحدة كأنها استعادة: كل خادم مع بيانات اعتماده والمشاركات التي اخترتها."
           }
         }
       }
@@ -16216,6 +16616,46 @@
         }
       }
     },
+    "registered on the gateway": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "registrato sul gateway"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "registrado en el gateway"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "enregistré sur la passerelle"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "beim Gateway registriert"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已在网关上注册"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مسجّل على البوابة"
+          }
+        }
+      }
+    },
     "unraid-gateway (server side)": {
       "localizations": {
         "ar": {
@@ -16366,6 +16806,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "版本 %1$@ · %2$lld 毫秒"
+          }
+        }
+      }
+    },
+    "waiting for the credentials from iCloud Keychain…": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in attesa delle credenziali dal Portachiavi iCloud…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "esperando las credenciales del llavero de iCloud…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "en attente des identifiants du trousseau iCloud…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "warte auf die Zugangsdaten aus dem iCloud-Schlüsselbund…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在等待 iCloud 钥匙串中的凭据…"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بانتظار بيانات الاعتماد من سلسلة مفاتيح iCloud…"
           }
         }
       }
