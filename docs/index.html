@@ -6,7 +6,7 @@
 <p style="display:flex;gap:10px;flex-wrap:wrap;margin:0 0 24px"><a href="https://apps.apple.com/app/id6809862123" style="background:#0D96F6;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none">App Store</a><a href="https://github.com/sidimam/unraid-drive/releases/latest/download/Unraid-Drive-macOS.dmg" style="background:#FF8C2F;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none">Mac DMG (latest)</a><a href="https://github.com/sidimam/homebrew-tap" style="background:#FBB040;color:#222;padding:8px 14px;border-radius:8px;text-decoration:none">Homebrew cask</a><a href="https://github.com/sidimam/unraid-drive/blob/main/CHANGELOG.md" style="background:#eee;color:#222;padding:8px 14px;border-radius:8px;text-decoration:none">What's new</a><a href="https://github.com/sidimam/unraid-drive/wiki" style="background:#eee;color:#222;padding:8px 14px;border-radius:8px;text-decoration:none">Wiki</a></p>
 <h1>Unraid Drive — Privacy Policy</h1>
 <p><em>Last updated: 11 September 2026</em></p>
-<p>Unraid Drive is an app for iPhone, iPad, Apple Vision Pro and Mac that connects to <strong>your own</strong> Unraid server through the <code>unraid-gateway</code> container you run yourself. It does not use any server operated by the developer.</p>
+<p>Unraid Drive is an app for iPhone, iPad, Apple Vision Pro, Mac and Apple TV that connects to <strong>your own</strong> Unraid server through the <code>unraid-gateway</code> container you run yourself. It does not use any server operated by the developer.</p>
 <h2>Data the app processes</h2>
 <ul>
 <li><strong>Gateway URL, Unraid API key, optional Unraid username and password, optional Cloudflare Access service token.</strong> Entered by you. Stored on your device in the iOS Keychain. Sent only to the gateway URL you entered, to authenticate. If you turn on <em>Sync configuration with iCloud</em> in Settings, the server list is stored in your iCloud account (Key-Value Storage) and the secrets in iCloud Keychain, both provided by Apple and end-to-end encrypted; this is off by default.</li>
@@ -15,6 +15,8 @@
 </ul>
 <h2>Data the app does not collect</h2>
 <p>The app contains no analytics, no advertising, no crash-reporting service and no account system. The developer receives no data from the app. Cloudflare, if you choose to use it to publish your gateway, relays encrypted traffic under its own privacy policy and never stores your files.</p>
+<h2>Apple TV</h2>
+<p>Pairing an Apple TV uses a one-time 6-digit code shown on the TV. The server configuration is encrypted with that code and exchanged only through your own iCloud account (Key-Value Storage); the Apple TV then talks directly to your gateway with your Unraid user's permissions.</p>
 <h2>Demo server</h2>
 <p>The demo server is a simulation that lives entirely on your device. Nothing is sent anywhere.</p>
 <h2>Your choices</h2>

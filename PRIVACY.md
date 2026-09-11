@@ -1,8 +1,8 @@
 # Privacy Policy — Unraid Drive
 
-_Last updated: 8 September 2026_
+_Last updated: 11 September 2026_
 
-Unraid Drive is an app for iPhone, iPad and Apple Vision Pro that connects to **your own** Unraid server through the `unraid-gateway` container you run yourself. It does not use any server operated by the developer.
+Unraid Drive is an app for iPhone, iPad, Apple Vision Pro, Mac and Apple TV that connects to **your own** Unraid server through the `unraid-gateway` container you run yourself. It does not use any server operated by the developer.
 
 ## Data the app processes
 
@@ -13,6 +13,10 @@ Unraid Drive is an app for iPhone, iPad and Apple Vision Pro that connects to **
 ## Data the app does not collect
 
 The app contains no analytics, no advertising, no crash-reporting service and no account system. The developer receives no data from the app. Cloudflare, if you choose to use it to publish your gateway, relays encrypted traffic under its own privacy policy and never stores your files.
+
+## Apple TV
+
+Pairing an Apple TV uses a one-time 6-digit code shown on the TV. The server configuration is encrypted with that code and exchanged only through your own iCloud account (Key-Value Storage); the Apple TV then talks directly to your gateway with your Unraid user's permissions.
 
 ## Demo server
 
