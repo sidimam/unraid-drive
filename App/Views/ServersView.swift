@@ -13,7 +13,6 @@ struct ServersView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     private var compact: Bool { sizeClass == .compact }
     #endif
-    @AppStorage("walkthrough.seen") private var walkthroughSeen = false
     /// Navigation path; `-openServer` as a launch argument opens the first server (screenshot automation).
     @State private var path: [ServerConfig] = []
     /// Server whose connection test was requested from a Home Screen quick action.
@@ -122,7 +121,7 @@ struct ServersView: View {
                 }
             }
             #endif
-            .sheet(isPresented: $showWalkthrough, onDismiss: { walkthroughSeen = true }) {
+            .sheet(isPresented: $showWalkthrough, onDismiss: { WalkthroughView.markSeen() }) {
                 WalkthroughView(onTryDemo: model.hasDemo ? nil : { Task { await model.addDemo() } })
             }
             .onAppear {
@@ -130,17 +129,17 @@ struct ServersView: View {
                 if ProcessInfo.processInfo.arguments.contains("-panelPreview") { openWindow(id: "panelPreview") }
                 #endif
                 #if DEBUG
-                if ProcessInfo.processInfo.arguments.contains("-testConnection") { walkthroughSeen = true; quickTestServer = model.servers.first { !$0.isDemo } ?? model.servers.first }
+                if ProcessInfo.processInfo.arguments.contains("-testConnection") { WalkthroughView.markSeen(); quickTestServer = model.servers.first { !$0.isDemo } ?? model.servers.first }
                 // Screenshots without personal data: open the demo server (and its connection test).
                 if ProcessInfo.processInfo.arguments.contains("-openDemo"), let demo = model.servers.first(where: { $0.isDemo }) {
-                    walkthroughSeen = true; path = [demo]
+                    WalkthroughView.markSeen(); path = [demo]
                     if ProcessInfo.processInfo.arguments.contains("-testDemo") { DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { quickTestServer = demo } }
                 }
                 #endif
                 if ProcessInfo.processInfo.arguments.contains("-openServer"), let first = model.servers.first {
-                    walkthroughSeen = true
+                    WalkthroughView.markSeen()
                     path = [first]
-                } else if !walkthroughSeen {
+                } else if WalkthroughView.shouldShow {
                     showWalkthrough = true
                 }
             }

@@ -25,6 +25,9 @@ FUNZIONI
 • Aggiornamento in background: le posizioni in File restano sincronizzate anche dopo un riavvio del gateway.
 • Motore di sincronizzazione come i grandi cloud (con unraid-gateway 0.5+): id stabili e journal delle modifiche, così rinomine, spostamenti ed eliminazioni fatti ovunque sul NAS arrivano nell’app File in pochi minuti senza scansioni.
 • Azioni rapide dalla Home: Apri l’app File, Test di connessione, Aggiungi server.
+• Comandi rapidi e Siri: salva gli appunti o un file in una share, scarica un file, elenca una cartella, aggiorna le posizioni, test di connessione.
+• Notifiche: avviso quando il gateway non è raggiungibile (e quando torna) e quando un file non è stato caricato o scaricato; si gestiscono dalle impostazioni di sistema.
+• Walkthrough a ogni aggiornamento con novità, ripristino della configurazione da iCloud e consenso alle notifiche.
 
 SU MAC
 La stessa app (acquisto universale) porta le share nella barra laterale del Finder come gli altri cloud drive, con un pannello nella barra dei menu: stato della sincronizzazione, attività (download, upload, rinomine, eliminazioni), notifiche Unraid, pausa/ripresa, file offline, elenco errori, apertura al login e modalità solo barra dei menu.
@@ -58,6 +61,9 @@ FUNCIONES
 • Actualización en segundo plano: las ubicaciones en Archivos siguen sincronizadas tras un reinicio del gateway.
 • Motor de sincronización como los grandes servicios en la nube (con unraid-gateway 0.5+): ids estables y diario de cambios, así los renombrados, movimientos y borrados hechos en el NAS llegan a Archivos en minutos sin escanear los recursos.
 • Acciones rápidas en la pantalla de inicio: Abrir Archivos, Probar conexión, Añadir servidor.
+• Atajos y Siri: guarda el portapapeles o un archivo en un recurso compartido, descarga un archivo, lista una carpeta, actualiza las ubicaciones, prueba la conexión.
+• Notificaciones: aviso cuando el gateway no responde (y cuando vuelve) y cuando un archivo no se pudo subir o descargar; se gestionan desde los ajustes del sistema.
+• Recorrido en cada actualización con las novedades, restauración de la configuración desde iCloud y permiso de notificaciones.
 
 EN EL MAC
 La misma app (compra universal) lleva los recursos compartidos a la barra lateral del Finder como los demás cloud drives, con un panel en la barra de menús: estado de la sincronización, actividad (descargas, subidas, renombrados, eliminaciones), notificaciones de Unraid, pausa/reanudación, archivos sin conexión, lista de errores, apertura al iniciar sesión y modo solo barra de menús.
@@ -91,6 +97,9 @@ FONCTIONS
 • Actualisation en arrière-plan : les emplacements Fichiers restent synchronisés même après un redémarrage de la passerelle.
 • Moteur de synchronisation à la manière des grands clouds (avec unraid-gateway 0.5+) : identifiants stables et journal des changements, les renommages, déplacements et suppressions faits sur le NAS arrivent dans Fichiers en quelques minutes sans parcourir les partages.
 • Actions rapides sur l’écran d’accueil : Ouvrir Fichiers, Tester la connexion, Ajouter un serveur.
+• Raccourcis et Siri : enregistrez le presse-papiers ou un fichier dans un partage, téléchargez un fichier, listez un dossier, actualisez les emplacements, testez la connexion.
+• Notifications : alerte quand la passerelle est injoignable (et quand elle revient) et quand un fichier n’a pu être envoyé ou téléchargé ; gérées depuis les réglages système.
+• Visite guidée à chaque mise à jour avec les nouveautés, restauration de la configuration depuis iCloud et autorisation des notifications.
 
 SUR MAC
 La même app (achat universel) place les partages dans la barre latérale du Finder comme les autres cloud drives, avec un panneau dans la barre des menus : état de la synchronisation, activité (téléchargements, envois, renommages, suppressions), notifications Unraid, pause/reprise, fichiers hors ligne, liste des erreurs, ouverture à la connexion et mode barre des menus seule.
@@ -124,6 +133,9 @@ FUNKTIONEN
 • Hintergrundaktualisierung: Die Orte in Dateien bleiben auch nach einem Neustart des Gateways synchron.
 • Synchronisierung wie bei den großen Cloud-Diensten (mit unraid-gateway 0.5+): stabile Objekt-IDs und ein Änderungsjournal, sodass Umbenennungen, Verschiebungen und Löschungen auf dem NAS binnen Minuten in der Dateien-App erscheinen, ohne die Freigaben zu durchsuchen.
 • Schnellaktionen auf dem Home-Bildschirm: Dateien öffnen, Verbindung testen, Server hinzufügen.
+• Kurzbefehle und Siri: Zwischenablage oder Datei in eine Freigabe sichern, Datei laden, Ordner auflisten, Orte aktualisieren, Verbindung testen.
+• Mitteilungen: Hinweis, wenn das Gateway nicht erreichbar ist (und wenn es zurück ist) und wenn eine Datei nicht hoch- oder heruntergeladen werden konnte; verwaltet in den Systemeinstellungen.
+• Einführung bei jedem Update mit den Neuerungen, Wiederherstellung der Konfiguration aus iCloud und Mitteilungsfreigabe.
 
 AUF DEM MAC
 Dieselbe App (Universalkauf) bringt die Freigaben wie die anderen Cloud-Laufwerke in die Finder-Seitenleiste, mit einem Menüleisten-Panel: Synchronisierungsstatus, Aktivität (Downloads, Uploads, Umbenennungen, Löschungen), Unraid-Mitteilungen, Pause/Fortsetzen, Offline-Dateien, Fehlerliste, Start beim Anmelden und Nur-Menüleiste-Modus.
@@ -157,6 +169,9 @@ Unraid Drive ist ein unabhängiges Projekt und nicht mit Lime Technology / Unrai
 • 后台刷新：网关重启后，“文件”中的位置仍保持同步。
 • 与主流云盘一致的同步引擎（配合 unraid-gateway 0.5+）：稳定的项目 ID 和变更日志，在 NAS 上任意位置进行的重命名、移动和删除都会在几分钟内出现在“文件”应用中，无需扫描共享。
 • 主屏幕快捷操作：打开“文件”、测试连接、添加服务器。
+• 快捷指令与 Siri：将剪贴板或文件保存到共享、下载文件、列出文件夹、刷新位置、测试连接。
+• 通知：网关不可达（及恢复）时和文件无法上传或下载时提醒；在系统设置中管理。
+• 每次更新后的引导：新功能介绍、从 iCloud 恢复配置、通知授权。
 
 在 Mac 上
 同一个应用（通用购买）像其他云盘一样把共享放入“访达”边栏，并提供菜单栏面板：同步状态、活动（下载、上传、重命名、删除）、Unraid 通知、暂停/恢复、离线文件、错误列表、登录时启动以及仅菜单栏模式。
@@ -190,6 +205,9 @@ Unraid Drive 是独立项目，与 Lime Technology / Unraid 无关。"""),
 • تحديث في الخلفية: تبقى المواقع في تطبيق الملفات متزامنة حتى بعد إعادة تشغيل البوابة.
 • محرك مزامنة مثل خدمات التخزين السحابي الكبيرة (مع unraid-gateway 0.5+): معرّفات ثابتة وسجل تغييرات، فتصل عمليات إعادة التسمية والنقل والحذف على NAS إلى تطبيق الملفات خلال دقائق دون فحص المجلدات.
 • إجراءات سريعة من الشاشة الرئيسية: فتح تطبيق الملفات، اختبار الاتصال، إضافة خادم.
+• الاختصارات وSiri: احفظ الحافظة أو ملفًا في مشاركة، نزّل ملفًا، اعرض مجلدًا، حدّث المواقع، اختبر الاتصال.
+• الإشعارات: تنبيه عند تعذّر الوصول إلى البوابة (وعند عودتها) وعند فشل رفع ملف أو تنزيله؛ تُدار من إعدادات النظام.
+• جولة تعريفية مع كل تحديث تعرض الجديد وتستعيد الإعدادات من iCloud وتطلب إذن الإشعارات.
 
 على Mac
 التطبيق نفسه (شراء موحّد) يضع المشاركات في الشريط الجانبي لـ Finder مثل بقية خدمات التخزين السحابي، مع لوحة في شريط القوائم: حالة المزامنة، النشاط (التنزيلات والرفع وإعادة التسمية والحذف)، إشعارات Unraid، الإيقاف المؤقت/الاستئناف، الملفات دون اتصال، قائمة الأخطاء، التشغيل عند تسجيل الدخول ووضع شريط القوائم فقط.

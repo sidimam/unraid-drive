@@ -61,7 +61,7 @@ struct UnraidDriveApp: App {
                     if phase == .active {
                         (Appearance(rawValue: appearance) ?? .system).applyToWindows()
                         AppIconColor.apply(iconColor)
-                        Task { await servers.signalAllDomains() }
+                        Task { await servers.signalAllDomains(); await servers.checkHealthAndAlerts() }
                     }
                     if phase == .background { Self.scheduleRefresh() }
                 }
@@ -80,6 +80,7 @@ struct UnraidDriveApp: App {
         // restart (updates, nightly backups) does not leave them paused until the next launch.
         .backgroundTask(.appRefresh(Self.refreshTaskID)) {
             await servers.signalAllDomains()
+            await servers.checkHealthAndAlerts()
             Self.scheduleRefresh()
         }
         #endif
@@ -100,6 +101,15 @@ struct UnraidDriveApp: App {
         let args = CommandLine.arguments
         if args.contains("-seedDemo"), !servers.hasDemo { await servers.addDemo() }
         if args.contains("-rebuildDomains") { for s in servers.servers { await FileProviderDomains.rebuild(s) } }
+        if args.contains("-testIntent") {
+            do {
+                let intent = SaveClipboardIntent(); intent.server = ServerStore().all().first { $0.isDemo }.map(ServerEntity.init)
+                intent.folder = "documents"; intent.fileName = "Intent test {date}"
+                let r = try await intent.perform(); NSLog("intent result: %@", String(describing: r.value ?? ""))
+                let l = ListFolderIntent(); l.server = intent.server; l.folder = "documents"
+                NSLog("list: %@", String(describing: try await l.perform().value ?? []))
+            } catch { NSLog("intent failed: %@", error.localizedDescription) }
+        }
         #if os(macOS)
         if args.contains("-evictAll") {   // test hook for the "Free up space" path
             for s in servers.servers { let n = await MaterializedItems.evictAll(for: FileProviderDomains.domain(for: s)); NSLog("evicted %d items for %@", n, s.name) }

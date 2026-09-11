@@ -119,7 +119,10 @@ final class ActivityFeed: ObservableObject {
     }
     deinit { if let observer { CFNotificationCenterRemoveEveryObserver(CFNotificationCenterGetDarwinNotifyCenter(), observer) } }
 
-    func reload() { events = ActivityLog.recent() }
+    func reload() {
+        events = ActivityLog.recent()
+        Task { await ActivityAlerts.process { id in ServerStore().server(id: id)?.name } }
+    }
     func clear() { ActivityLog.clear(); reload() }
     var errors: [ActivityEvent] { events.filter(\.failed) }
 }

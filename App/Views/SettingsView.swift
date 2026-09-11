@@ -43,6 +43,9 @@ struct SettingsView: View {
                     }
                     .onChange(of: iconColor) { _, v in AppIconColor.apply(v) }
                     #endif
+                    Button { AppNotifications.openSystemSettings() } label: {
+                        HStack { Label("Notifications", systemImage: "bell.badge"); Spacer(); Image(systemName: "chevron.right").foregroundStyle(.tertiary) }
+                    }
                     #if os(macOS)
                     Toggle(isOn: Binding(get: { launchAtLogin }, set: { v in
                         do { if v { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() } } catch {}

@@ -8849,6 +8849,2646 @@
           }
         }
       }
+    },
+    "Your Unraid shares in Files and in the Finder": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le tue share Unraid in File e nel Finder"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus recursos Unraid en Archivos y en el Finder"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vos partages Unraid dans Fichiers et le Finder"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Unraid-Freigaben in Dateien und im Finder"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的 Unraid 共享，尽在“文件”和“访达”"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشاركات Unraid في الملفات وفي Finder"
+          }
+        }
+      }
+    },
+    "Unraid Drive adds your Unraid shares to the Files app on iPhone, iPad and Vision Pro and to the Finder sidebar on the Mac, next to iCloud Drive. Open, save, move and share files from any app, at home or away, over HTTPS.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive aggiunge le share del tuo Unraid all’app File su iPhone, iPad e Vision Pro e alla barra laterale del Finder sul Mac, accanto a iCloud Drive. Apri, salva, sposta e condividi file da qualsiasi app, a casa o fuori, via HTTPS."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive añade tus recursos compartidos de Unraid a la app Archivos en iPhone, iPad y Vision Pro y a la barra lateral del Finder en el Mac, junto a iCloud Drive. Abre, guarda, mueve y comparte archivos desde cualquier app, en casa o fuera, por HTTPS."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive ajoute vos partages Unraid à l’app Fichiers sur iPhone, iPad et Vision Pro et à la barre latérale du Finder sur Mac, à côté d’iCloud Drive. Ouvrez, enregistrez, déplacez et partagez des fichiers depuis n’importe quelle app, chez vous ou ailleurs, en HTTPS."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive bringt deine Unraid-Freigaben in die Dateien-App auf iPhone, iPad und Vision Pro und in die Finder-Seitenleiste auf dem Mac, neben iCloud Drive. Öffne, sichere, verschiebe und teile Dateien aus jeder App, zu Hause oder unterwegs, per HTTPS."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive 将你的 Unraid 共享添加到 iPhone、iPad 和 Vision Pro 的“文件”应用以及 Mac 的“访达”边栏，与 iCloud 云盘并列。在家或外出时，都可通过 HTTPS 从任意应用打开、保存、移动和共享文件。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يضيف Unraid Drive مشاركات Unraid إلى تطبيق الملفات على iPhone وiPad وVision Pro وإلى الشريط الجانبي لـ Finder على Mac بجوار iCloud Drive. افتح الملفات واحفظها وانقلها وشاركها من أي تطبيق، في المنزل أو خارجه، عبر HTTPS."
+          }
+        }
+      }
+    },
+    "What's new in this version": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Novità di questa versione"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Novedades de esta versión"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouveautés de cette version"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neu in dieser Version"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此版本的新功能"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الجديد في هذا الإصدار"
+          }
+        }
+      }
+    },
+    "Walkthrough with iCloud restore and notifications, Shortcuts and Siri actions (save the clipboard or a file to a share, download, list, refresh), notifications when the gateway is unreachable or a file could not sync, menu bar panel on the Mac.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Walkthrough con ripristino da iCloud e notifiche, azioni per Comandi rapidi e Siri (salva gli appunti o un file in una share, scarica, elenca, aggiorna), notifiche quando il gateway non è raggiungibile o un file non si sincronizza, pannello nella barra dei menu sul Mac."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recorrido con restauración desde iCloud y notificaciones, acciones de Atajos y Siri (guardar el portapapeles o un archivo en un recurso compartido, descargar, listar, actualizar), notificaciones cuando el gateway no responde o un archivo no se sincroniza, panel en la barra de menús del Mac."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visite guidée avec restauration iCloud et notifications, actions Raccourcis et Siri (enregistrer le presse-papiers ou un fichier dans un partage, télécharger, lister, actualiser), notifications quand la passerelle est injoignable ou qu’un fichier ne se synchronise pas, panneau dans la barre des menus sur Mac."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einführung mit iCloud-Wiederherstellung und Mitteilungen, Kurzbefehle- und Siri-Aktionen (Zwischenablage oder Datei in eine Freigabe sichern, laden, auflisten, aktualisieren), Mitteilungen wenn das Gateway nicht erreichbar ist oder eine Datei nicht synchronisiert, Menüleisten-Panel auf dem Mac."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "引导流程支持 iCloud 恢复和通知；快捷指令与 Siri 操作（将剪贴板或文件保存到共享、下载、列出、刷新）；网关不可达或文件无法同步时的通知；Mac 菜单栏面板。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جولة تعريفية مع استعادة iCloud والإشعارات، وإجراءات الاختصارات وSiri (حفظ الحافظة أو ملف في مشاركة، تنزيل، عرض، تحديث)، وإشعارات عند تعذّر الوصول إلى البوابة أو فشل مزامنة ملف، ولوحة شريط القوائم على Mac."
+          }
+        }
+      }
+    },
+    "Your configuration in iCloud": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La tua configurazione in iCloud"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu configuración en iCloud"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre configuration dans iCloud"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Konfiguration in iCloud"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的配置在 iCloud 中"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعداداتك في iCloud"
+          }
+        }
+      }
+    },
+    "One backup shared by iPhone, iPad, Vision Pro and Mac: the server list in iCloud and the secrets in iCloud Keychain, end-to-end encrypted. You can turn it on later in Settings › iCloud.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un unico backup condiviso da iPhone, iPad, Vision Pro e Mac: l’elenco dei server in iCloud e i segreti nel Portachiavi iCloud, cifrati end-to-end. Puoi attivarlo più tardi in Impostazioni › iCloud."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una única copia compartida por iPhone, iPad, Vision Pro y Mac: la lista de servidores en iCloud y los secretos en el Llavero de iCloud, cifrados de extremo a extremo. Puedes activarla más tarde en Ajustes › iCloud."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une seule sauvegarde partagée par iPhone, iPad, Vision Pro et Mac : la liste des serveurs dans iCloud et les secrets dans le trousseau iCloud, chiffrés de bout en bout. Vous pourrez l’activer plus tard dans Réglages › iCloud."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Backup für iPhone, iPad, Vision Pro und Mac: die Serverliste in iCloud und die Geheimnisse im iCloud-Schlüsselbund, Ende-zu-Ende verschlüsselt. Du kannst es später unter Einstellungen › iCloud einschalten."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone、iPad、Vision Pro 和 Mac 共用一份备份：服务器列表存于 iCloud，密钥存于 iCloud 钥匙串，端到端加密。你可以稍后在“设置”›“iCloud”中开启。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نسخة احتياطية واحدة مشتركة بين iPhone وiPad وVision Pro وMac: قائمة الخوادم في iCloud والأسرار في سلسلة مفاتيح iCloud بتشفير تام. يمكنك تفعيلها لاحقًا من الإعدادات › iCloud."
+          }
+        }
+      }
+    },
+    "Stay informed": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resta informato"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mantente informado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restez informé"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bleib informiert"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "随时掌握"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ابقَ على اطّلاع"
+          }
+        }
+      }
+    },
+    "Unraid Drive can tell you when a gateway is unreachable and when a file could not be uploaded or downloaded. You choose what to allow in the system Settings at any time.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive può avvisarti quando un gateway non è raggiungibile e quando un file non è stato caricato o scaricato. Decidi cosa consentire nelle Impostazioni di sistema, in qualsiasi momento."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive puede avisarte cuando un gateway no responde y cuando un archivo no se pudo subir o descargar. Decides qué permitir en los Ajustes del sistema en cualquier momento."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive peut vous prévenir quand une passerelle est injoignable et quand un fichier n’a pu être envoyé ou téléchargé. Vous choisissez ce que vous autorisez dans les Réglages système, à tout moment."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive kann dich informieren, wenn ein Gateway nicht erreichbar ist oder eine Datei nicht hoch- oder heruntergeladen werden konnte. Was du erlaubst, entscheidest du jederzeit in den Systemeinstellungen."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当网关不可达或文件无法上传、下载时，Unraid Drive 可以通知你。你可以随时在系统“设置”中决定允许的内容。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يمكن لـ Unraid Drive إخبارك عندما يتعذّر الوصول إلى بوابة أو يفشل رفع ملف أو تنزيله. أنت تختار ما تسمح به من إعدادات النظام في أي وقت."
+          }
+        }
+      }
+    },
+    "On Unraid, add the unraid-gateway container from Community Applications (or the template URL in the project README). Map the shares you want under /data/<name>. Nothing else runs on the server.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Su Unraid aggiungi il container unraid-gateway da Community Applications (o dall’URL del template nel README del progetto). Mappa le share che vuoi sotto /data/<nome>. Sul server non gira altro."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En Unraid, añade el contenedor unraid-gateway desde Community Applications (o la URL de la plantilla en el README del proyecto). Mapea los recursos que quieras bajo /data/<nombre>. En el servidor no se ejecuta nada más."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sur Unraid, ajoutez le conteneur unraid-gateway depuis Community Applications (ou l’URL du modèle dans le README du projet). Mappez les partages voulus sous /data/<nom>. Rien d’autre ne tourne sur le serveur."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Füge auf Unraid den Container unraid-gateway aus Community Applications hinzu (oder über die Template-URL im README des Projekts). Ordne die gewünschten Freigaben unter /data/<Name> zu. Sonst läuft nichts auf dem Server."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Unraid 上，从 Community Applications 添加 unraid-gateway 容器（或使用项目 README 中的模板 URL）。将需要的共享映射到 /data/<名称>。服务器上无需运行其他内容。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "على Unraid، أضف حاوية unraid-gateway من Community Applications (أو عبر رابط القالب في ملف README الخاص بالمشروع). اربط المشاركات التي تريدها تحت /data/<الاسم>. لا يعمل شيء آخر على الخادم."
+          }
+        }
+      }
+    },
+    "Publish the gateway port through Cloudflare (works behind CGNAT, free) or a reverse proxy with a valid certificate. Optionally protect it with Cloudflare Zero Trust and a Service Token: the app supports it.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pubblica la porta del gateway tramite Cloudflare (funziona dietro CGNAT, gratis) o un reverse proxy con certificato valido. Se vuoi, proteggila con Cloudflare Zero Trust e un Service Token: l’app lo supporta."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Publica el puerto del gateway a través de Cloudflare (funciona tras CGNAT, gratis) o de un proxy inverso con certificado válido. Si quieres, protégelo con Cloudflare Zero Trust y un Service Token: la app lo admite."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Publiez le port de la passerelle via Cloudflare (fonctionne derrière un CGNAT, gratuit) ou un reverse proxy avec certificat valide. Protégez-le éventuellement avec Cloudflare Zero Trust et un Service Token : l’app le prend en charge."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veröffentliche den Gateway-Port über Cloudflare (funktioniert hinter CGNAT, kostenlos) oder einen Reverse Proxy mit gültigem Zertifikat. Optional mit Cloudflare Zero Trust und einem Service Token schützen: die App unterstützt es."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通过 Cloudflare（可在 CGNAT 后使用，免费）或带有效证书的反向代理发布网关端口。可选地用 Cloudflare Zero Trust 和 Service Token 保护它：应用支持该方式。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "انشر منفذ البوابة عبر Cloudflare (يعمل خلف CGNAT، مجاني) أو عبر وكيل عكسي بشهادة صالحة. ويمكنك حمايتها بـ Cloudflare Zero Trust ورمز خدمة: التطبيق يدعم ذلك."
+          }
+        }
+      }
+    },
+    "Tap + , enter the gateway URL and the API key, connect. The server appears in the Files app and in the Finder under Unraid Drive. Curious first? Try the demo server: sample files, no setup.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocca +, inserisci l’URL del gateway e la chiave API, connetti. Il server compare nell’app File e nel Finder sotto Unraid Drive. Vuoi prima curiosare? Prova il server demo: file di esempio, nessuna configurazione."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca +, introduce la URL del gateway y la clave API, conecta. El servidor aparece en la app Archivos y en el Finder bajo Unraid Drive. ¿Quieres curiosear antes? Prueba el servidor demo: archivos de ejemplo, sin configuración."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez +, saisissez l’URL de la passerelle et la clé API, connectez. Le serveur apparaît dans l’app Fichiers et dans le Finder sous Unraid Drive. Envie de voir d’abord ? Essayez le serveur démo : fichiers d’exemple, aucune configuration."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tippe auf +, gib die Gateway-URL und den API-Schlüssel ein, verbinden. Der Server erscheint in der Dateien-App und im Finder unter Unraid Drive. Erst mal schauen? Probiere den Demo-Server: Beispieldateien, keine Einrichtung."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点按 +，输入网关 URL 和 API 密钥并连接。服务器会出现在“文件”应用和“访达”的 Unraid Drive 下。想先看看？试试演示服务器：示例文件，无需设置。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اضغط على +، وأدخل عنوان البوابة ومفتاح API، ثم اتصل. يظهر الخادم في تطبيق الملفات وفي Finder تحت Unraid Drive. تريد الاستكشاف أولًا؟ جرّب الخادم التجريبي: ملفات نموذجية دون أي إعداد."
+          }
+        }
+      }
+    },
+    "Configuration restored: %lld server(s).": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurazione ripristinata: %lld server."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuración restaurada: %lld servidor(es)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration restaurée : %lld serveur(s)."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfiguration wiederhergestellt: %lld Server."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配置已恢复：%lld 个服务器。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمت استعادة الإعدادات: %lld خادم."
+          }
+        }
+      }
+    },
+    "iCloud sync is on.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La sincronizzazione iCloud è attiva."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La sincronización con iCloud está activada."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La synchronisation iCloud est activée."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud-Synchronisierung ist eingeschaltet."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud 同步已开启。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مزامنة iCloud مفعّلة."
+          }
+        }
+      }
+    },
+    "A configuration saved by Unraid Drive on another device was found. Restoring turns sync on; on the Mac the secrets arrive through iCloud Keychain.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "È stata trovata una configurazione salvata da Unraid Drive su un altro dispositivo. Il ripristino attiva la sincronizzazione; sul Mac i segreti arrivano tramite il Portachiavi iCloud."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se encontró una configuración guardada por Unraid Drive en otro dispositivo. Restaurar activa la sincronización; en el Mac los secretos llegan a través del Llavero de iCloud."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une configuration enregistrée par Unraid Drive sur un autre appareil a été trouvée. La restauration active la synchronisation ; sur Mac, les secrets arrivent via le trousseau iCloud."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine von Unraid Drive auf einem anderen Gerät gesicherte Konfiguration wurde gefunden. Wiederherstellen schaltet die Synchronisierung ein; auf dem Mac kommen die Geheimnisse über den iCloud-Schlüsselbund."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "发现了 Unraid Drive 在另一台设备上保存的配置。恢复会开启同步；在 Mac 上，密钥通过 iCloud 钥匙串送达。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم العثور على إعدادات حفظها Unraid Drive على جهاز آخر. الاستعادة تفعّل المزامنة؛ وعلى Mac تصل الأسرار عبر سلسلة مفاتيح iCloud."
+          }
+        }
+      }
+    },
+    "Enable iCloud sync": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attiva la sincronizzazione iCloud"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activar la sincronización con iCloud"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activer la synchronisation iCloud"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud-Synchronisierung einschalten"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开启 iCloud 同步"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تفعيل مزامنة iCloud"
+          }
+        }
+      }
+    },
+    "No backup found yet. Turning sync on saves this device's servers for the others.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun backup trovato. Attivando la sincronizzazione, i server di questo dispositivo vengono salvati per gli altri."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aún no hay copia. Al activar la sincronización, los servidores de este dispositivo se guardan para los demás."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune sauvegarde pour l’instant. Activer la synchronisation enregistre les serveurs de cet appareil pour les autres."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch kein Backup gefunden. Mit der Synchronisierung werden die Server dieses Geräts für die anderen gesichert."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尚未找到备份。开启同步会为其他设备保存此设备上的服务器。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم يتم العثور على نسخة احتياطية بعد. تفعيل المزامنة يحفظ خوادم هذا الجهاز للأجهزة الأخرى."
+          }
+        }
+      }
+    },
+    "Notifications are allowed.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le notifiche sono consentite."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las notificaciones están permitidas."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les notifications sont autorisées."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mitteilungen sind erlaubt."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已允许通知。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإشعارات مسموح بها."
+          }
+        }
+      }
+    },
+    "Notifications are off for Unraid Drive.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le notifiche di Unraid Drive sono disattivate."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las notificaciones de Unraid Drive están desactivadas."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les notifications d’Unraid Drive sont désactivées."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mitteilungen für Unraid Drive sind aus."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive 的通知已关闭。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إشعارات Unraid Drive معطّلة."
+          }
+        }
+      }
+    },
+    "Open notification settings": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apri le impostazioni notifiche"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir los ajustes de notificaciones"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir les réglages des notifications"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mitteilungseinstellungen öffnen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开通知设置"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "افتح إعدادات الإشعارات"
+          }
+        }
+      }
+    },
+    "Allow notifications": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consenti le notifiche"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permitir notificaciones"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autoriser les notifications"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mitteilungen erlauben"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "允许通知"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "السماح بالإشعارات"
+          }
+        }
+      }
+    },
+    "Cannot reach %@": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile raggiungere %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se puede contactar con %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de joindre %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ nicht erreichbar"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法连接 %@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر الوصول إلى %@"
+          }
+        }
+      }
+    },
+    "unraid-gateway did not answer: %@. Files already downloaded stay available; changes will sync when the server is back.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "unraid-gateway non ha risposto: %@. I file già scaricati restano disponibili; le modifiche si sincronizzeranno quando il server tornerà raggiungibile."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "unraid-gateway no respondió: %@. Los archivos ya descargados siguen disponibles; los cambios se sincronizarán cuando el servidor vuelva."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "unraid-gateway n’a pas répondu : %@. Les fichiers déjà téléchargés restent disponibles ; les modifications se synchroniseront au retour du serveur."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "unraid-gateway hat nicht geantwortet: %@. Bereits geladene Dateien bleiben verfügbar; Änderungen werden synchronisiert, sobald der Server zurück ist."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "unraid-gateway 未响应：%@。已下载的文件仍可使用；服务器恢复后会同步更改。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم تستجب unraid-gateway: %@. تبقى الملفات المنزّلة متاحة؛ وستتم مزامنة التغييرات عند عودة الخادم."
+          }
+        }
+      }
+    },
+    "%@ is reachable again": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ è di nuovo raggiungibile"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ vuelve a estar disponible"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ est de nouveau joignable"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ist wieder erreichbar"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 已恢复连接"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ متاح مجددًا"
+          }
+        }
+      }
+    },
+    "The connection to unraid-gateway is back; the Files location resumes syncing.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La connessione a unraid-gateway è tornata; la posizione in File riprende la sincronizzazione."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La conexión con unraid-gateway ha vuelto; la ubicación de Archivos reanuda la sincronización."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La connexion à unraid-gateway est rétablie ; l’emplacement Fichiers reprend la synchronisation."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Verbindung zu unraid-gateway ist wieder da; der Dateien-Ort synchronisiert weiter."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "与 unraid-gateway 的连接已恢复；“文件”位置继续同步。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عادت الاتصال بـ unraid-gateway؛ ويستأنف موقع الملفات المزامنة."
+          }
+        }
+      }
+    },
+    "Could not download %@": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile scaricare %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo descargar %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de télécharger %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ konnte nicht geladen werden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法下载 %@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر تنزيل %@"
+          }
+        }
+      }
+    },
+    "Could not upload %@": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile caricare %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo subir %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d’envoyer %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ konnte nicht hochgeladen werden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法上传 %@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر رفع %@"
+          }
+        }
+      }
+    },
+    "Could not create the folder %@": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile creare la cartella %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo crear la carpeta %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de créer le dossier %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ordner %@ konnte nicht erstellt werden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法创建文件夹 %@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر إنشاء المجلد %@"
+          }
+        }
+      }
+    },
+    "Could not move or rename %@": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile spostare o rinominare %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo mover o renombrar %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de déplacer ou renommer %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ konnte nicht verschoben oder umbenannt werden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法移动或重命名 %@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر نقل أو إعادة تسمية %@"
+          }
+        }
+      }
+    },
+    "Could not delete %@": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile eliminare %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo eliminar %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de supprimer %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ konnte nicht gelöscht werden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法删除 %@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر حذف %@"
+          }
+        }
+      }
+    },
+    "Unraid server": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server Unraid"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Servidor Unraid"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serveur Unraid"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid-Server"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid 服务器"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "خادم Unraid"
+          }
+        }
+      }
+    },
+    "No server is configured in Unraid Drive.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun server configurato in Unraid Drive."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay ningún servidor configurado en Unraid Drive."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun serveur n’est configuré dans Unraid Drive."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In Unraid Drive ist kein Server konfiguriert."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive 中未配置服务器。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يوجد خادم مُعدّ في Unraid Drive."
+          }
+        }
+      }
+    },
+    "The API key for this server is missing on this device. Open Unraid Drive to enter it.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Su questo dispositivo manca la chiave API di questo server. Apri Unraid Drive per inserirla."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falta la clave API de este servidor en este dispositivo. Abre Unraid Drive para introducirla."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La clé API de ce serveur manque sur cet appareil. Ouvrez Unraid Drive pour la saisir."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der API-Schlüssel dieses Servers fehlt auf diesem Gerät. Öffne Unraid Drive, um ihn einzugeben."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此设备上缺少该服务器的 API 密钥。请打开 Unraid Drive 输入。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مفتاح API لهذا الخادم مفقود على هذا الجهاز. افتح Unraid Drive لإدخاله."
+          }
+        }
+      }
+    },
+    "The clipboard is empty.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gli appunti sono vuoti."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El portapapeles está vacío."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le presse-papiers est vide."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Zwischenablage ist leer."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "剪贴板为空。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحافظة فارغة."
+          }
+        }
+      }
+    },
+    "Nothing found at %@.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun elemento in %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se encontró nada en %@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rien trouvé à %@."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nichts gefunden unter %@."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 %@ 未找到任何内容。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم يتم العثور على شيء في %@."
+          }
+        }
+      }
+    },
+    "Save clipboard to Unraid Drive": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salva gli appunti in Unraid Drive"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar el portapapeles en Unraid Drive"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer le presse-papiers dans Unraid Drive"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zwischenablage in Unraid Drive sichern"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将剪贴板保存到 Unraid Drive"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حفظ الحافظة في Unraid Drive"
+          }
+        }
+      }
+    },
+    "Saves the clipboard (text, image or file) as a new file in a share of your Unraid server.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salva gli appunti (testo, immagine o file) come nuovo file in una share del tuo server Unraid."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guarda el portapapeles (texto, imagen o archivo) como archivo nuevo en un recurso compartido de tu servidor Unraid."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistre le presse-papiers (texte, image ou fichier) comme nouveau fichier dans un partage de votre serveur Unraid."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sichert die Zwischenablage (Text, Bild oder Datei) als neue Datei in einer Freigabe deines Unraid-Servers."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将剪贴板（文本、图像或文件）保存为 Unraid 服务器共享中的新文件。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يحفظ الحافظة (نص أو صورة أو ملف) كملف جديد في مشاركة على خادم Unraid."
+          }
+        }
+      }
+    },
+    "Folder": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cartella"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carpeta"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dossier"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ordner"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文件夹"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المجلد"
+          }
+        }
+      }
+    },
+    "Share and folder, e.g. documents/Notes": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share e cartella, es. documents/Note"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recurso compartido y carpeta, p. ej. documents/Notas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partage et dossier, p. ex. documents/Notes"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Freigabe und Ordner, z. B. documents/Notizen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "共享和文件夹，例如 documents/Notes"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المشاركة والمجلد، مثل documents/Notes"
+          }
+        }
+      }
+    },
+    "File name": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nome file"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nombre del archivo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom du fichier"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dateiname"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文件名"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اسم الملف"
+          }
+        }
+      }
+    },
+    "Without extension; {date} is replaced by the current date and time": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Senza estensione; {date} viene sostituito da data e ora correnti"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin extensión; {date} se sustituye por la fecha y hora actuales"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sans extension ; {date} est remplacé par la date et l’heure actuelles"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ohne Endung; {date} wird durch Datum und Uhrzeit ersetzt"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不含扩展名；{date} 会替换为当前日期和时间"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدون امتداد؛ يُستبدل {date} بالتاريخ والوقت الحاليين"
+          }
+        }
+      }
+    },
+    "Save the clipboard to ${folder} on ${server}": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salva gli appunti in ${folder} su ${server}"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar el portapapeles en ${folder} en ${server}"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer le presse-papiers dans ${folder} sur ${server}"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zwischenablage in ${folder} auf ${server} sichern"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将剪贴板保存到 ${server} 的 ${folder}"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حفظ الحافظة في ${folder} على ${server}"
+          }
+        }
+      }
+    },
+    "Upload file to Unraid Drive": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carica file in Unraid Drive"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subir archivo a Unraid Drive"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer un fichier vers Unraid Drive"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datei zu Unraid Drive hochladen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上传文件到 Unraid Drive"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رفع ملف إلى Unraid Drive"
+          }
+        }
+      }
+    },
+    "Uploads a file to a share of your Unraid server.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carica un file in una share del tuo server Unraid."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sube un archivo a un recurso compartido de tu servidor Unraid."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoie un fichier dans un partage de votre serveur Unraid."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lädt eine Datei in eine Freigabe deines Unraid-Servers hoch."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将文件上传到 Unraid 服务器的共享。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يرفع ملفًا إلى مشاركة على خادم Unraid."
+          }
+        }
+      }
+    },
+    "File": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Archivo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fichier"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datei"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文件"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الملف"
+          }
+        }
+      }
+    },
+    "Share and folder, e.g. media/Photos": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share e cartella, es. media/Foto"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recurso compartido y carpeta, p. ej. media/Fotos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partage et dossier, p. ex. media/Photos"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Freigabe und Ordner, z. B. media/Fotos"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "共享和文件夹，例如 media/Photos"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المشاركة والمجلد، مثل media/Photos"
+          }
+        }
+      }
+    },
+    "Replace if it exists": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sostituisci se esiste"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reemplazar si existe"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remplacer s’il existe"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ersetzen, falls vorhanden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "若已存在则替换"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استبدال إن كان موجودًا"
+          }
+        }
+      }
+    },
+    "Upload ${file} to ${folder} on ${server}": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carica ${file} in ${folder} su ${server}"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subir ${file} a ${folder} en ${server}"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer ${file} dans ${folder} sur ${server}"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${file} in ${folder} auf ${server} hochladen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将 ${file} 上传到 ${server} 的 ${folder}"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رفع ${file} إلى ${folder} على ${server}"
+          }
+        }
+      }
+    },
+    "Get file from Unraid Drive": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prendi file da Unraid Drive"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obtener archivo de Unraid Drive"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Récupérer un fichier depuis Unraid Drive"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datei von Unraid Drive holen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从 Unraid Drive 获取文件"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحصول على ملف من Unraid Drive"
+          }
+        }
+      }
+    },
+    "Downloads a file from a share of your Unraid server and passes it on.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scarica un file da una share del tuo server Unraid e lo passa all’azione successiva."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descarga un archivo de un recurso compartido de tu servidor Unraid y lo pasa a la siguiente acción."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Télécharge un fichier depuis un partage de votre serveur Unraid et le transmet."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lädt eine Datei aus einer Freigabe deines Unraid-Servers und gibt sie weiter."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从 Unraid 服务器的共享下载文件并传递给下一步。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ينزّل ملفًا من مشاركة على خادم Unraid ويمرّره."
+          }
+        }
+      }
+    },
+    "Path": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Percorso"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ruta"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chemin"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pfad"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "路径"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المسار"
+          }
+        }
+      }
+    },
+    "Share and path of the file, e.g. documents/report.pdf": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share e percorso del file, es. documents/relazione.pdf"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recurso compartido y ruta del archivo, p. ej. documents/informe.pdf"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partage et chemin du fichier, p. ex. documents/rapport.pdf"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Freigabe und Pfad der Datei, z. B. documents/bericht.pdf"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "共享和文件路径，例如 documents/report.pdf"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المشاركة ومسار الملف، مثل documents/report.pdf"
+          }
+        }
+      }
+    },
+    "Get ${path} from ${server}": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prendi ${path} da ${server}"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obtener ${path} de ${server}"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Récupérer ${path} depuis ${server}"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${path} von ${server} holen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从 ${server} 获取 ${path}"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحصول على ${path} من ${server}"
+          }
+        }
+      }
+    },
+    "List folder on Unraid Drive": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elenca cartella su Unraid Drive"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listar carpeta en Unraid Drive"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lister un dossier sur Unraid Drive"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ordner auf Unraid Drive auflisten"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "列出 Unraid Drive 上的文件夹"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عرض مجلد على Unraid Drive"
+          }
+        }
+      }
+    },
+    "Returns the names of the files and folders in a share folder.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restituisce i nomi di file e cartelle in una cartella di una share."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Devuelve los nombres de los archivos y carpetas de una carpeta compartida."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renvoie les noms des fichiers et dossiers d’un dossier de partage."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gibt die Namen der Dateien und Ordner in einem Freigabeordner zurück."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "返回共享文件夹中文件和文件夹的名称。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يعيد أسماء الملفات والمجلدات في مجلد المشاركة."
+          }
+        }
+      }
+    },
+    "Share and folder, e.g. documents; empty for the list of shares": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share e cartella, es. documents; vuoto per l’elenco delle share"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recurso compartido y carpeta, p. ej. documents; vacío para la lista de recursos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partage et dossier, p. ex. documents ; vide pour la liste des partages"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Freigabe und Ordner, z. B. documents; leer für die Liste der Freigaben"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "共享和文件夹，例如 documents；留空则列出所有共享"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المشاركة والمجلد، مثل documents؛ اتركه فارغًا لعرض قائمة المشاركات"
+          }
+        }
+      }
+    },
+    "List ${folder} on ${server}": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elenca ${folder} su ${server}"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listar ${folder} en ${server}"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lister ${folder} sur ${server}"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${folder} auf ${server} auflisten"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "列出 ${server} 上的 ${folder}"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عرض ${folder} على ${server}"
+          }
+        }
+      }
+    },
+    "Refresh Unraid Drive locations": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiorna le posizioni di Unraid Drive"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actualizar las ubicaciones de Unraid Drive"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actualiser les emplacements Unraid Drive"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive-Orte aktualisieren"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刷新 Unraid Drive 位置"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تحديث مواقع Unraid Drive"
+          }
+        }
+      }
+    },
+    "Asks the Files app / Finder to re-read every Unraid Drive location from the gateway.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chiede all’app File / al Finder di rileggere ogni posizione di Unraid Drive dal gateway."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pide a la app Archivos / al Finder que vuelva a leer cada ubicación de Unraid Drive desde el gateway."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demande à l’app Fichiers / au Finder de relire chaque emplacement Unraid Drive depuis la passerelle."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lässt die Dateien-App / den Finder jeden Unraid Drive-Ort neu vom Gateway lesen."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "让“文件”应用/“访达”从网关重新读取每个 Unraid Drive 位置。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يطلب من تطبيق الملفات / Finder إعادة قراءة كل موقع Unraid Drive من البوابة."
+          }
+        }
+      }
+    },
+    "Test Unraid Drive connection": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test di connessione di Unraid Drive"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Probar la conexión de Unraid Drive"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tester la connexion Unraid Drive"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive-Verbindung testen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "测试 Unraid Drive 连接"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اختبار اتصال Unraid Drive"
+          }
+        }
+      }
+    },
+    "Checks that the gateway answers and the API key is accepted.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verifica che il gateway risponda e che la chiave API sia accettata."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comprueba que el gateway responde y que la clave API es aceptada."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérifie que la passerelle répond et que la clé API est acceptée."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prüft, ob das Gateway antwortet und der API-Schlüssel akzeptiert wird."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "检查网关是否响应以及 API 密钥是否被接受。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يتحقق من استجابة البوابة وقبول مفتاح API."
+          }
+        }
+      }
+    },
+    "Test the connection to ${server}": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prova la connessione a ${server}"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Probar la conexión con ${server}"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tester la connexion à ${server}"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verbindung zu ${server} testen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "测试与 ${server} 的连接"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اختبار الاتصال بـ ${server}"
+          }
+        }
+      }
+    },
+    "%@ is reachable (gateway %@) and the key is accepted.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ è raggiungibile (gateway %@) e la chiave è accettata."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ responde (gateway %@) y la clave es aceptada."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ est joignable (passerelle %@) et la clé est acceptée."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ist erreichbar (Gateway %@) und der Schlüssel wird akzeptiert."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 可连接（网关 %@），密钥已被接受。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ متاح (البوابة %@) والمفتاح مقبول."
+          }
+        }
+      }
+    },
+    "Save clipboard": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salva appunti"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar portapapeles"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer le presse-papiers"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zwischenablage sichern"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存剪贴板"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حفظ الحافظة"
+          }
+        }
+      }
+    },
+    "Upload file": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carica file"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subir archivo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer un fichier"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datei hochladen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上传文件"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رفع ملف"
+          }
+        }
+      }
+    },
+    "Get file": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prendi file"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obtener archivo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Récupérer un fichier"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datei holen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "获取文件"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحصول على ملف"
+          }
+        }
+      }
+    },
+    "List folder": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elenca cartella"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listar carpeta"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lister un dossier"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ordner auflisten"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "列出文件夹"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عرض مجلد"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

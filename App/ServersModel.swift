@@ -73,6 +73,12 @@ final class ServersModel: ObservableObject {
         for s in servers where !s.isDemo { await FileProviderDomains.signal(s) }
     }
 
+    /// Gateway reachability + failed sync operations → local notifications (if allowed).
+    func checkHealthAndAlerts() async {
+        await HealthMonitor.check(servers) { [weak self] s in self?.client(for: s) }
+        await ActivityAlerts.process { [weak self] id in self?.servers.first { $0.id == id }?.name }
+    }
+
     /// Validates the key against the gateway, then persists the server and
     /// registers its File Provider domain so it shows up in the Files app.
     func add(name: String, url: URL, apiKey: String, cloudflare: CloudflareServiceToken?, user: (username: String, password: String)? = nil) async throws -> LoginResponse {

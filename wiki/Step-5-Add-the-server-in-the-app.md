@@ -70,3 +70,11 @@ Server page → **Test connection** runs five checks with a suggestion for whate
 Swipe left on it in the list → **Delete**. This removes the Files app location, the cached files and the key from the Keychain. Nothing changes on the NAS.
 
 → Next: [Step 6 — Use your shares in the Files app](Step-6-Using-the-Files-app)
+
+
+## Walkthrough, iCloud and notifications (build 18)
+
+At the first launch and after every update the app opens a short walkthrough: the features and what's new, an **iCloud** step and a **notifications** step, then the four setup steps. Every step can be skipped.
+
+- **iCloud**: if a configuration saved by Unraid Drive on another device is found, the step offers *Restore N servers from iCloud*; otherwise *Enable iCloud sync*. It is one backup shared by iPhone, iPad, Vision Pro and Mac (server list in iCloud, secrets in iCloud Keychain). Skipped it? Settings › iCloud has the same switch and restore button.
+- **Notifications**: *Allow notifications* asks the system permission once. Unraid Drive then notifies you when a gateway stops answering (and when it is back) and when a file could not be uploaded or downloaded by the Files app or the Finder. There are no switches in the app: Settings › *Notifications ›* opens the system page where you decide what to allow.
