@@ -253,3 +253,14 @@ WHATS_NEW = {
 }
 for l, t in WHATS_NEW.items():
     assert len(t) <= 4000, (l, "whatsNew", len(t))
+
+# Paragraph appended to the tvOS listing (App Store Connect platform TV_OS), per locale.
+TV_PARAGRAPH = {
+"en-US": "ON APPLE TV\nThe same app on Apple TV (tvOS 17+): browse your shares and play photos, music and video straight from the NAS through unraid-gateway, with your Unraid user's permissions. Pair the TV with a 6-digit code from your iPhone, iPad or Mac: nothing to type on the remote.",
+"it": "SU APPLE TV\nLa stessa app su Apple TV (tvOS 17+): sfoglia le share e riproduci foto, musica e video direttamente dal NAS tramite unraid-gateway, con i permessi del tuo utente Unraid. Abbina la TV con un codice di 6 cifre da iPhone, iPad o Mac: niente da digitare sul telecomando.",
+"es-ES": "EN EL APPLE TV\nLa misma app en Apple TV (tvOS 17+): explora tus recursos compartidos y reproduce fotos, música y vídeo directamente desde el NAS a través de unraid-gateway, con los permisos de tu usuario Unraid. Empareja el TV con un código de 6 cifras desde tu iPhone, iPad o Mac: nada que escribir en el mando.",
+"fr-FR": "SUR APPLE TV\nLa même app sur Apple TV (tvOS 17+) : parcourez vos partages et lisez photos, musique et vidéos directement depuis le NAS via unraid-gateway, avec les permissions de votre utilisateur Unraid. Jumelez la TV avec un code à 6 chiffres depuis votre iPhone, iPad ou Mac : rien à saisir sur la télécommande.",
+"de-DE": "AUF APPLE TV\nDieselbe App auf Apple TV (tvOS 17+): Freigaben durchsuchen und Fotos, Musik und Videos direkt vom NAS über unraid-gateway wiedergeben, mit den Berechtigungen deines Unraid-Benutzers. Kopple den TV mit einem 6-stelligen Code von iPhone, iPad oder Mac: nichts auf der Fernbedienung zu tippen.",
+"zh-Hans": "在 Apple TV 上\n同一个应用登陆 Apple TV（tvOS 17+）：浏览共享并通过 unraid-gateway 以你的 Unraid 用户权限直接播放 NAS 上的照片、音乐和视频。用 iPhone、iPad 或 Mac 上的 6 位代码配对电视，遥控器上无需输入任何内容。",
+"ar-SA": "على Apple TV\nالتطبيق نفسه على Apple TV (tvOS 17+): استعرض مشاركاتك وشغّل الصور والموسيقى والفيديو مباشرة من NAS عبر unraid-gateway بصلاحيات مستخدم Unraid الخاص بك. اقرن التلفاز برمز من 6 أرقام من iPhone أو iPad أو Mac: لا شيء تكتبه على جهاز التحكم.",
+}
