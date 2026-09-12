@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3 (build 32) — 2026-09-12
+
+- **Move… / Copy to… now confirm the destination.** The folder picker has a fixed bar at the bottom that names the folder that is open (*Destination: /documents/Invoices*) and a big **Move here** / **Copy here** button; at the root it explains that a share must be opened first. Before, the only confirmation was a *Choose* item in the toolbar of the pushed folder, which the Mac did not show inside the sheet — so a move could never be confirmed there. Cancel now closes the picker on every platform (it used to step back one folder).
+- **One “Open” for every file.** The context menu no longer has *Play with mpv*: *Open* picks the right viewer by itself (mpv for MKV, AVI, WebM, FLAC…, the EPUB, comic and archive readers, Quick Look for everything else). *Quick Look* stays as a separate entry only where *Open* does something different.
+
 ## 1.3 (build 31) — 2026-09-11
 
 - **Mac: crash when playing MKV, AVI and the other mpv formats — fixed.** The notarized app (Developer ID DMG and the App Store build alike) was killed by the hardened runtime as soon as a video loaded: mpv's built-in Lua scripts (stats overlay, console, ytdl hook, auto profiles) run on LuaJIT, whose generated code the kernel refuses (`SIGKILL — Code Signature Invalid` in `load_builtin`). The player now starts mpv with `load-scripts=no` (plus stats overlay, OSD console, auto profiles, OSC and ytdl off) on every platform; the app draws its own controls, so nothing is lost. Verified with the real MKV and AVI from the NAS on Mac, iPhone and Apple TV.

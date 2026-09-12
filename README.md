@@ -65,6 +65,8 @@ After the first launch enable the extension under System Settings › General �
 
 ## What's new
 
+**1.3 (build 32):** Move… and Copy to… confirm the destination with a fixed *Move here* / *Copy here* button (on the Mac the confirmation was not reachable); one *Open* entry for every file (no more *Play with mpv*).
+
 **1.3 (build 31):** Mac — fixed the crash when playing MKV, AVI and the other mpv formats (the notarized app was killed by the hardened runtime as soon as the video loaded: mpv's LuaJIT scripts are now off on every platform).
 
 **1.3 (build 30):** restore first — a new or reinstalled device finds the configuration saved in iCloud, restores it and registers itself on the gateways again (same device id after a reinstall, thanks to iCloud); Apple TV shows what waits in iCloud and receives every server with one pairing code; the real reason when a video cannot stream (Cloudflare Access login, revoked device, gateway error) instead of "unrecognized file format", streams on media tickets that outlive the session token; Rename and New folder on Apple TV.
