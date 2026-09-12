@@ -10,9 +10,7 @@ struct ServerDetailView: View {
     @State private var filesURL: URL?
     @State private var testing = false
     @State private var editing = false
-    @State private var resyncRequested = false
-    @State private var confirmRebuild = false
-    @State private var rebuilt = false
+    @State private var checking = false
 
     var body: some View {
         List {
@@ -31,35 +29,7 @@ struct ServerDetailView: View {
                     }
                 }
                 Button { testing = true } label: { Label("Test connection", systemImage: "stethoscope") }
-                Button {
-                    Task { await FileProviderDomains.signal(server); resyncRequested = true }
-                } label: {
-                    #if os(macOS)
-                    Label(resyncRequested ? "Finder refresh requested" : "Refresh the Finder location", systemImage: "arrow.triangle.2.circlepath")
-                    #else
-                    Label(resyncRequested ? "Files app refresh requested" : "Refresh the Files app", systemImage: "arrow.triangle.2.circlepath")
-                    #endif
-                }
-                .disabled(resyncRequested)
-                if !server.isDemo {
-                    #if os(macOS)
-                    Button(role: .destructive) { confirmRebuild = true } label: { Label("Rebuild the Finder location", systemImage: "arrow.counterclockwise.circle") }
-                        .confirmationDialog("Rebuild the Finder location?", isPresented: $confirmRebuild, titleVisibility: .visible) {
-                            Button("Rebuild", role: .destructive) { Task { await model.rebuildDomain(server); rebuilt = true } }
-                        } message: {
-                            Text("The Finder forgets everything it cached for this server and reads the shares again from the gateway. Files created in the Finder that were never uploaded are lost. Use it when the Finder keeps showing folders that no longer exist.")
-                        }
-                    if rebuilt { Label("Location rebuilt. Open the Finder to see the shares.", systemImage: "checkmark.circle").foregroundStyle(.secondary) }
-                    #else
-                    Button(role: .destructive) { confirmRebuild = true } label: { Label("Rebuild the Files location", systemImage: "arrow.counterclockwise.circle") }
-                        .confirmationDialog("Rebuild the Files location?", isPresented: $confirmRebuild, titleVisibility: .visible) {
-                            Button("Rebuild", role: .destructive) { Task { await model.rebuildDomain(server); rebuilt = true } }
-                        } message: {
-                            Text("The Files app forgets everything it cached for this server and reads the shares again from the gateway. Files created in the Files app that were never uploaded are lost. Use it when Files keeps showing folders that no longer exist.")
-                        }
-                    if rebuilt { Label("Location rebuilt. Open the Files app to see the shares.", systemImage: "checkmark.circle").foregroundStyle(.secondary) }
-                    #endif
-                }
+                if !server.isDemo { locationStatus }
                 if !server.isDemo {
                     Button { editing = true } label: { Label("Edit server or credentials", systemImage: "pencil") }
                 }
@@ -107,6 +77,32 @@ struct ServerDetailView: View {
             if let p = d.metrics?.cpu?.percentTotal { gauge("CPU load", p) }
             if let p = d.metrics?.memory?.percentTotal { gauge("Memory", p) }
             if let n = d.notifications?.overview?.unread { notificationsRow(n) }
+        }
+    }
+
+    /// The automatic pass (connection check + location rebuild) runs on the first launch and after
+    /// every update; this row says when it last happened, or why it is still pending.
+    @ViewBuilder private var locationStatus: some View {
+        let m = model.maintenance[server.id] ?? model.storedMaintenance(server.id)
+        HStack(alignment: .top, spacing: 12) {
+            #if os(macOS)
+            Label("Finder location", systemImage: m?.gatewayOK == true ? "checkmark.circle" : "clock.arrow.circlepath")
+            #else
+            Label("Files location", systemImage: m?.gatewayOK == true ? "checkmark.circle" : "clock.arrow.circlepath")
+            #endif
+            Spacer()
+            VStack(alignment: .trailing, spacing: 2) {
+                if let m, m.gatewayOK {
+                    Text("Checked and rebuilt automatically (build \(m.build))").multilineTextAlignment(.trailing)
+                    Text(m.date.formatted(date: .abbreviated, time: .shortened)).foregroundStyle(.secondary)
+                } else {
+                    Text("Automatic check pending").multilineTextAlignment(.trailing)
+                    if let m { Text(m.detail).foregroundStyle(.secondary).lineLimit(2) }
+                    Button(checking ? "Checking…" : "Check now") {
+                        Task { checking = true; await model.maintainLocationsIfNeeded(force: true, only: server); checking = false }
+                    }.disabled(checking).font(.callout)
+                }
+            }.font(.footnote)
         }
     }
 
