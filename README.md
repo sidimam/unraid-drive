@@ -65,6 +65,8 @@ After the first launch enable the extension under System Settings â€º General â€
 
 ## What's new
 
+**1.3 (build 36):** a server opens its shares directly on every device, with a gear for its settings (Dashboard, Shares to show, connection test, credentials; Remove on Apple TV); share roots are not selectable; the Apple TV dashboard shows the gateway container.
+
 **1.3 (build 35):** transient network errors (connection refused/reset, a dead VPN interface, a Wi-Fi hand-over) are retried twice before the Files app / Finder sees them.
 
 **1.3 (build 34):** the Files / Finder location is checked and rebuilt automatically on the first launch and after every update (connection check included); the manual Refresh and Rebuild rows are gone.

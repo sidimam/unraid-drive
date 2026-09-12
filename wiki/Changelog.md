@@ -2,6 +2,13 @@
 
 All notable changes to Unraid Drive. The server side has its own changelog in [unraid-gateway](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
 
+## 1.3 (build 36) — 2026-09-12
+
+- **A server opens its shares directly, on every device.** Tapping a server (iPhone, iPad, Vision Pro, Mac) or selecting it on Apple TV lands in the explorer at the share root; no more *Browse shares* row. A **gear** in the explorer's toolbar (header on Apple TV) leads to the server's settings: on Apple TV *Dashboard*, *Shares to show* and *Remove this server from the TV*; on the other devices *Open the Files app / Finder*, *Shares to show*, *Test connection*, the Files/Finder location status, *Edit server or credentials* and the dashboard sections. The explanatory banners (how to open the Files app, which formats play) are gone.
+- **Share roots are not selectable.** Select mode is offered only inside a share (the roots are mount points: nothing to move, copy or delete), on every device.
+- **Apple TV dashboard shows the gateway:** server URL, unraid-gateway version, the `unraid-gateway` Docker container with its state and image.
+- **Apple TV:** the focused server row is readable again (black text on the white focus), and so are the settings rows.
+
 ## 1.3 (build 35) — 2026-09-12
 
 - **Transient network errors are retried.** Every request to the gateway (listing, download, upload, sign-in) now retries up to two times, after 0.4 s and 1.6 s, when the transport fails — connection refused or reset, DNS hiccup, a VPN interface that is up but dead, a Wi-Fi hand-over — before the error surfaces. Timeouts and cancellations are not retried. Why: on a Mac where a WireGuard tunnel was listed as disconnected but still owned the routes to the gateway's Cloudflare address, every first connection was refused and the system fell back to Wi-Fi only ~0.8 s later; the Finder extension gave up on the first refusal and showed *"Unraid Drive" ha riscontrato un errore* (File Provider -1005, server unreachable) while the app, retrying by hand, looked fine.

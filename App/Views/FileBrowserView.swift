@@ -159,11 +159,16 @@ struct FileBrowserView: View {
                     Divider()
                     Button { grid = false } label: { Label("List", systemImage: grid ? "list.bullet" : "checkmark") }
                     Button { grid = true } label: { Label("Icons", systemImage: grid ? "checkmark" : "square.grid.2x2") }
-                    Divider()
-                    Button { selecting = true } label: { Label("Select", systemImage: "checkmark.circle") }.disabled(visible.isEmpty)
+                    if path != "/" {
+                        Divider()
+                        Button { selecting = true } label: { Label("Select", systemImage: "checkmark.circle") }.disabled(visible.isEmpty)
+                    }
                 } label: { Label("View options", systemImage: "arrow.up.arrow.down.circle") }
                 if path != "/" {
                     Button { selecting = true } label: { Label("Select", systemImage: "checkmark.circle") }.disabled(visible.isEmpty)
+                } else {
+                    // Server settings: dashboard, shares to show, connection test, location, credentials.
+                    NavigationLink { ServerDetailView(server: server) } label: { Label("Settings", systemImage: "gearshape") }
                 }
                 if canModify {
                     Menu {
@@ -319,7 +324,7 @@ struct FileBrowserView: View {
             }
             Button { Task { await download([e]) } } label: { Label("Download…", systemImage: "arrow.down.circle") }
             Button { info = e } label: { Label("Info", systemImage: "info.circle") }
-            if !selecting { Button { selecting = true; selection = [e.id] } label: { Label("Select", systemImage: "checkmark.circle") } }
+            if !selecting && GatewayPath.depth(e.path) > 1 { Button { selecting = true; selection = [e.id] } label: { Label("Select", systemImage: "checkmark.circle") } }
             if GatewayPath.depth(e.path) > 1 {
                 Divider()
                 Button { clipboard.copy(e, server: server) } label: { Label("Copy", systemImage: "doc.on.doc") }
