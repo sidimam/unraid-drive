@@ -3,6 +3,7 @@
 ## 1.3 (build 36) — 2026-09-12
 
 - **A server opens its shares directly, on every device.** Tapping a server (iPhone, iPad, Vision Pro, Mac) or selecting it on Apple TV lands in the explorer at the share root; no more *Browse shares* row. A **gear** in the explorer's toolbar (header on Apple TV) leads to the server's settings: on Apple TV *Dashboard*, *Shares to show* and *Remove this server from the TV*; on the other devices *Open the Files app / Finder*, *Shares to show*, *Test connection*, the Files/Finder location status, *Edit server or credentials* and the dashboard sections. The explanatory banners (how to open the Files app, which formats play) are gone.
+- **No search field at the share root** (it lists a handful of mount points); search stays inside the shares.
 - **Share roots are not selectable.** Select mode is offered only inside a share (the roots are mount points: nothing to move, copy or delete), on every device.
 - **Apple TV dashboard shows the gateway:** server URL, unraid-gateway version, the `unraid-gateway` Docker container with its state and image.
 - **Apple TV:** the focused server row is readable again (black text on the white focus), and so are the settings rows.
