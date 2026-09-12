@@ -30,6 +30,14 @@ struct TVRootView: View {
         #endif
         return nil
     }
+    /// Debug: `-tvDashboard` opens the demo server's dashboard directly.
+    private var debugDashboard: Bool {
+        #if DEBUG
+        return ProcessInfo.processInfo.arguments.contains("-tvDashboard")
+        #else
+        return false
+        #endif
+    }
     var body: some View {
         NavigationStack {
             if let u = debugPlayURL { TVMPVDebugPlayer(url: u) }
@@ -37,6 +45,7 @@ struct TVRootView: View {
                 TVFileOpener(server: demo, entry: FSEntry(name: (f as NSString).lastPathComponent, path: f, type: .file, size: 0, mtime: Date(), etag: ""))
             }
             else if let p = debugPath, let demo = model.servers.first(where: \.isDemo) { TVBrowserView(server: demo, path: p, title: (p as NSString).lastPathComponent.isEmpty ? demo.name : (p as NSString).lastPathComponent) }
+            else if debugDashboard, let demo = model.servers.first(where: \.isDemo) { TVDashboardView(server: demo) }
             else if model.servers.isEmpty { TVPairView() } else { TVServersView() }
         }
     }
@@ -49,10 +58,9 @@ struct TVServersView: View {
         List {
             Section {
                 ForEach(model.servers) { s in
-                    NavigationLink { TVServerHome(server: s) } label: {
-                        Label { VStack(alignment: .leading) { Text(s.name).font(.headline); (s.isDemo ? Text("Sample data, offline") : Text(verbatim: (s.username.map { "\($0) · " } ?? "") + (s.url.host ?? ""))).font(.caption).foregroundStyle(.secondary) } }
-                        icon: { Image(systemName: s.isDemo ? "sparkles" : "externaldrive.connected.to.line.below") }
-                    }
+                    // A configured server opens its shares directly; Dashboard, Shares to show and
+                    // Remove live behind the gear in the explorer's header.
+                    NavigationLink { TVBrowserView(server: s, path: "/", title: s.name) } label: { TVServerRow(server: s) }
                 }
             } header: { Text("Servers") }
             Section {
@@ -167,25 +175,56 @@ struct TVPairView: View {
     }
 }
 
-// MARK: - Server home
+// MARK: - Server row / settings
 
+/// A list row whose texts stay readable when tvOS paints the focused row white: the system only
+/// recolours `.primary`, and a global tint used to leave the label white on white.
+struct TVServerRow: View {
+    @Environment(\.isFocused) private var focused
+    let server: ServerConfig
+    var body: some View {
+        HStack(spacing: 20) {
+            Image(systemName: server.isDemo ? "sparkles" : "externaldrive.connected.to.line.below").font(.title2).frame(width: 44)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(server.name).font(.headline)
+                (server.isDemo ? Text("Sample data, offline") : Text(verbatim: (server.username.map { "\($0) · " } ?? "") + (server.url.host ?? "")))
+                    .font(.caption).opacity(0.7)
+            }
+            Spacer()
+        }
+        .foregroundStyle(focused ? Color.black : Color.white)
+    }
+}
+
+/// Behind the gear of the explorer: dashboard, shares to show, removal.
 struct TVServerHome: View {
     @EnvironmentObject private var model: TVModel
+    @Environment(\.dismiss) private var dismiss
     let server: ServerConfig
     @State private var confirmRemove = false
     var body: some View {
         List {
             Section {
-                NavigationLink { TVBrowserView(server: server, path: "/", title: server.name) } label: { Label("Browse shares", systemImage: "folder") }
-                NavigationLink { TVDashboardView(server: server) } label: { Label("Dashboard", systemImage: "gauge.with.dots.needle.33percent") }
-                NavigationLink { TVSharesView(server: server) } label: { Label("Shares to show", systemImage: "externaldrive.badge.checkmark") }
+                NavigationLink { TVDashboardView(server: server) } label: { TVMenuRow(title: "Dashboard", symbol: "gauge.with.dots.needle.33percent") }
+                NavigationLink { TVSharesView(server: server) } label: { TVMenuRow(title: "Shares to show", symbol: "externaldrive.badge.checkmark") }
             }
             Section {
-                Button(role: .destructive) { confirmRemove = true } label: { Label("Remove this server from the TV", systemImage: "trash") }
-                    .confirmationDialog("Remove \(server.name)?", isPresented: $confirmRemove) { Button("Remove", role: .destructive) { model.remove(server) } }
-            } footer: { Text("Files stay on the NAS. Photos, music and video in Apple formats (MP4, MOV, HEVC, AAC, MP3, JPEG, HEIC) play with the system player; MKV, AVI, WebM, FLAC and the other formats play with the built-in mpv player (libmpv and FFmpeg, open source). Documents are listed but cannot be opened here.") }
+                Button(role: .destructive) { confirmRemove = true } label: { TVMenuRow(title: "Remove this server from the TV", symbol: "trash", destructive: true) }
+                    .confirmationDialog("Remove \(server.name)?", isPresented: $confirmRemove) { Button("Remove", role: .destructive) { model.remove(server); dismiss() } }
+            }
         }
-        .navigationTitle(server.name)
+        .navigationTitle(Text("Settings") + Text(verbatim: " · \(server.name)"))
+    }
+}
+
+struct TVMenuRow: View {
+    @Environment(\.isFocused) private var focused
+    let title: LocalizedStringKey
+    let symbol: String
+    var destructive = false
+    var body: some View {
+        Label(title, systemImage: symbol)
+            .foregroundStyle(focused ? Color.black : (destructive ? Color.red : Color.white))
     }
 }
 
@@ -390,11 +429,36 @@ struct TVDashboardView: View {
     @EnvironmentObject private var model: TVModel
     let server: ServerConfig
     @State private var d: Dashboard?
+    @State private var health: HealthResponse?
+    @State private var healthError: String?
     @State private var error: String?
+    private static func isGateway(_ c: Dashboard.Container) -> Bool {
+        ([c.image ?? ""] + c.names).joined(separator: " ").lowercased().contains("unraid-gateway")
+    }
     var body: some View {
         Group {
             if let d {
                 List {
+                    Section("unraid-gateway") {
+                        LabeledContent("Server URL", value: server.url.host ?? server.url.absoluteString)
+                        if let health { LabeledContent("Gateway version", value: health.version ?? "—") }
+                        else if let healthError { LabeledContent("Gateway version", value: healthError) }
+                        let containers = (d.docker?.containers ?? []).filter { Self.isGateway($0) }
+                        if containers.isEmpty {
+                            LabeledContent("Container", value: String(localized: "not found in Docker"))
+                        } else {
+                            ForEach(containers) { c in
+                                LabeledContent(c.displayName) {
+                                    HStack(spacing: 10) {
+                                        Circle().fill(c.state == "RUNNING" ? Color.green : (c.state == "PAUSED" ? Color.orange : Color.gray)).frame(width: 14, height: 14)
+                                        Text(c.state.capitalized)
+                                        if c.isUpdateAvailable == true { Image(systemName: "arrow.down.circle") }
+                                    }
+                                }
+                                if let img = c.image { LabeledContent("Image", value: img) }
+                            }
+                        }
+                    }
                     Section("System") {
                         LabeledContent("Hostname", value: d.info?.os?.hostname ?? "—")
                         LabeledContent("Unraid", value: d.info?.os?.release ?? "—")
@@ -418,6 +482,7 @@ struct TVDashboardView: View {
         .navigationTitle("Dashboard")
         .task {
             guard let c = model.client(for: server) else { error = String(localized: "Credentials for this server are missing on the TV. Pair it again from your iPhone, iPad or Mac."); return }
+            do { health = try await c.health() } catch { healthError = error.localizedDescription }
             do { d = try await c.graphQL(Dashboard.query, as: Dashboard.self) } catch { self.error = error.localizedDescription }
         }
     }

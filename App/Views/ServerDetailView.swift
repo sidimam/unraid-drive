@@ -22,7 +22,6 @@ struct ServerDetailView: View {
                     Link(destination: filesURL) { Label("Open the Files app", systemImage: "folder") }
                     #endif
                 }
-                NavigationLink { FileBrowserView(server: server, path: "/") } label: { Label("Browse shares", systemImage: "externaldrive.connected.to.line.below") }
                 NavigationLink { SharesPickerView(server: server) } label: {
                     LabeledContent { Text(model.current(server).selectedShares == nil ? String(localized: "All shares") : String(localized: "\(model.current(server).selectedShares?.count ?? 0) shares")) } label: {
                         Label("Shares to show", systemImage: "externaldrive.badge.checkmark")
@@ -33,12 +32,6 @@ struct ServerDetailView: View {
                 if !server.isDemo {
                     Button { editing = true } label: { Label("Edit server or credentials", systemImage: "pencil") }
                 }
-            } footer: {
-                #if os(macOS)
-                Text("In the Finder sidebar, under Locations, click Unraid Drive › \(server.name). The shares are then available to every app; files download when you open them.")
-                #else
-                Text("In the Files app, tap Browse › Locations › Unraid Drive › \(server.name). The shares are then available to every app.")
-                #endif
             }
             #if os(macOS)
             LocationStateBanner(server: server)
@@ -62,7 +55,7 @@ struct ServerDetailView: View {
                 Section { HStack { ProgressView(); Text("Loading dashboard…") } }
             }
         }
-        .navigationTitle(server.name)
+        .navigationTitle(Text("Settings") + Text(verbatim: " · \(server.name)"))
         .sheet(isPresented: $testing) { ConnectionTestView(server: server) }
         .sheet(isPresented: $editing, onDismiss: { Task { await load() } }) { AddServerView(editing: model.servers.first { $0.id == server.id } ?? server) }
         .refreshable { await load() }

@@ -81,8 +81,10 @@ struct TVBrowserView: View {
                     if let c = clipboard.pasteable(into: path, server: server) {
                         Button { Task { await paste(into: path) } } label: { Label(c.cut ? "Paste (move) \(c.label)" : "Paste \(c.label)", systemImage: "doc.on.clipboard") }
                     }
-                    if !entries.isEmpty { Button { selecting = true } label: { Label("Select", systemImage: "checkmark.circle") } }
+                    // Share roots are mount points: nothing to copy, cut or delete there.
+                    if !entries.isEmpty && path != "/" { Button { selecting = true } label: { Label("Select", systemImage: "checkmark.circle") } }
                     if path != "/" { Button { newFolder = true } label: { Label("New folder", systemImage: "folder.badge.plus") } }
+                    if path == "/" { NavigationLink { TVServerHome(server: server) } label: { Label("Settings", systemImage: "gearshape") } }
                     Menu {
                         Picker("Sort by", selection: $sortKey) {
                             Text("Name").tag("name"); Text("Date").tag("date"); Text("Size").tag("size")
@@ -227,7 +229,7 @@ struct TVBrowserView: View {
         } else {
             Button { info = e } label: { Label("Info", systemImage: "info.circle") }
             if !e.isDirectory { Button { open(e) } label: { Label("Open", systemImage: "arrow.up.right.square") } }
-            if !selecting { Button { selecting = true; selection = [e.id] } label: { Label("Select", systemImage: "checkmark.circle") } }
+            if !selecting && GatewayPath.depth(e.path) > 1 { Button { selecting = true; selection = [e.id] } label: { Label("Select", systemImage: "checkmark.circle") } }
             if GatewayPath.depth(e.path) > 1 {
                 Button { clipboard.copy(e, server: server) } label: { Label("Copy", systemImage: "doc.on.doc") }
                 Button { clipboard.cut(e, server: server) } label: { Label("Cut", systemImage: "scissors") }

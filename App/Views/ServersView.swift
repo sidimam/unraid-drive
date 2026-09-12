@@ -93,7 +93,8 @@ struct ServersView: View {
                 }
             }
             .navigationTitle("Unraid Drive")
-            .navigationDestination(for: ServerConfig.self) { ServerDetailView(server: $0) }
+            // A server opens its shares directly; the gear in the explorer leads to its settings.
+            .navigationDestination(for: ServerConfig.self) { FileBrowserView(server: $0, path: "/") }
             .toolbar {
                 ToolbarItemGroup(placement: leadingPlacement) {
                     Button { showWalkthrough = true } label: { Image(systemName: "questionmark.circle") }
