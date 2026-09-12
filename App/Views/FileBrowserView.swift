@@ -20,6 +20,12 @@ struct FileBrowserView: View {
     @AppStorage("explorer.sort") private var sortKey = "name"
     @AppStorage("explorer.grid") private var grid = false
     @State private var busy: String?
+    // Selection (Select mode): several files/folders at once, acted on together.
+    @State private var selecting = false
+    @State private var selection = Set<String>()
+    #if os(iOS) || os(visionOS)
+    @State private var editMode: EditMode = .inactive
+    #endif
     // Presentation
     @State private var preview: URL?
     @State private var viewer: FSEntry?
@@ -28,10 +34,13 @@ struct FileBrowserView: View {
     @State private var newFolderName = ""
     @State private var renaming: FSEntry?
     @State private var renameName = ""
-    @State private var moving: (entry: FSEntry, copy: Bool)?
-    @State private var deleting: FSEntry?
+    @State private var moving: (entries: [FSEntry], copy: Bool)?
+    @State private var deleting: [FSEntry]?
     @State private var importing = false
-    @State private var shareURL: URL?
+    @State private var shareURLs: [URL]?
+    @State private var exportURLs: [URL] = []
+    @State private var exporting = false
+    @State private var opError: String?
 
     private var readOnly: Bool {
         guard let share = path.split(separator: "/").first, let c = model.client(for: server) else { return false }
@@ -49,6 +58,9 @@ struct FileBrowserView: View {
             }
         }
     }
+    /// The selected entries, in display order (only what is really in this folder).
+    private var selected: [FSEntry] { visible.filter { selection.contains($0.id) } }
+    private var canModify: Bool { !readOnly && path != "/" }
 
     var body: some View {
         Group {
@@ -60,25 +72,41 @@ struct FileBrowserView: View {
             else if !loading && entries.isEmpty { ContentUnavailableView(path == "/" ? "No shares" : "Empty folder", systemImage: "folder") }
         }
         .searchable(text: $search, prompt: Text("Search in this folder"))
-        .navigationTitle(path == "/" ? server.name : GatewayPath.name(path))
+        .navigationTitle(selecting ? Text("\(selection.count) selected") : Text(path == "/" ? server.name : GatewayPath.name(path)))
         .inlineNavigationTitle()
         .toolbar { toolbarItems }
+        #if os(iOS) || os(visionOS)
+        .environment(\.editMode, $editMode)
+        #endif
+        .safeAreaInset(edge: .bottom) { if selecting { selectionBar } }
         .refreshable { await load() }
         .task { await load() }
+        .onChange(of: selecting) { _, on in
+            #if os(iOS) || os(visionOS)
+            editMode = on ? .active : .inactive
+            #endif
+            if !on { selection.removeAll() }
+        }
         .quickLookPreview($preview)
         .sheet(item: $viewer) { e in FileViewerSheet(server: server, entry: e).sheetFrame() }
         .sheet(item: $info) { e in NavigationStack { FileInfoView(server: server, entry: e) }.sheetFrame() }
         .sheet(isPresented: Binding(get: { moving != nil }, set: { if !$0 { moving = nil } })) {
             if let m = moving {
                 NavigationStack {
-                    FolderPickerView(server: server, title: m.copy ? "Copy to" : "Move to", excluding: m.entry.path, copy: m.copy, onChoose: { dest in
+                    FolderPickerView(server: server, title: m.copy ? "Copy to" : "Move to", excluding: Set(m.entries.map(\.path)), copy: m.copy, onChoose: { dest in
                         moving = nil
-                        Task { await transfer(m.entry, to: dest, copy: m.copy) }
+                        Task { await transfer(m.entries, to: dest, copy: m.copy) }
                     }, onCancel: { moving = nil })
                 }.sheetFrame()
             }
         }
-        .sheet(item: $shareURL) { url in ShareSheet(url: url).sheetFrame() }
+        .sheet(isPresented: Binding(get: { shareURLs != nil }, set: { if !$0 { shareURLs = nil } })) {
+            if let urls = shareURLs { ShareSheet(urls: urls).sheetFrame() }
+        }
+        .fileMover(isPresented: $exporting, files: exportURLs) { result in
+            if case .failure(let e) = result { opError = e.localizedDescription }
+            exportURLs = []
+        }
         .alert("New folder", isPresented: $newFolder) {
             TextField("Name", text: $newFolderName)
             Button("Create") { Task { await create() } }
@@ -89,54 +117,117 @@ struct FileBrowserView: View {
             Button("Rename") { if let r = renaming { Task { await rename(r, to: renameName) } } }
             Button("Cancel", role: .cancel) {}
         }
-        .confirmationDialog("Delete?", isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } }), titleVisibility: .visible) {
-            Button(role: .destructive) { if let d = deleting { Task { await remove(d) } } } label: { Text("Delete \(deleting?.name ?? "")") }
-        } message: { Text("The file is removed from the NAS. There is no trash on the gateway.") }
+        .confirmationDialog(deleteTitle, isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } }), titleVisibility: .visible) {
+            Button(role: .destructive) { if let d = deleting { Task { await remove(d) } } } label: {
+                if let d = deleting, d.count == 1 { Text("Delete \(d[0].name)") } else { Text("Delete \(deleting?.count ?? 0) items") }
+            }
+        } message: { Text("The files are removed from the NAS. There is no trash on the gateway.") }
+        .alert("Something went wrong", isPresented: Binding(get: { opError != nil }, set: { if !$0 { opError = nil } })) {
+            Button("OK", role: .cancel) {}
+        } message: { Text(opError ?? "") }
         .fileImporter(isPresented: $importing, allowedContentTypes: [.item], allowsMultipleSelection: true) { result in
             if case .success(let urls) = result { Task { await upload(urls) } }
         }
         .overlay(alignment: .bottom) {
             if let busy {
-                HStack { ProgressView(); Text(busy).font(.callout) }.padding(12).background(.regularMaterial, in: Capsule()).padding()
+                HStack { ProgressView(); Text(busy).font(.callout) }.padding(12).background(.regularMaterial, in: Capsule()).padding().padding(.bottom, selecting ? 64 : 0)
             }
         }
+    }
+
+    private var deleteTitle: Text {
+        if let d = deleting, d.count > 1 { return Text("Delete \(d.count) items?") }
+        return Text("Delete?")
     }
 
     // MARK: Toolbar
 
     @ToolbarContentBuilder private var toolbarItems: some ToolbarContent {
         ToolbarItemGroup(placement: .primaryAction) {
-            Menu {
-                Picker("Sort by", selection: $sortKey) {
-                    Label("Name", systemImage: "textformat").tag("name")
-                    Label("Kind", systemImage: "doc").tag("kind")
-                    Label("Date", systemImage: "calendar").tag("date")
-                    Label("Size", systemImage: "arrow.up.arrow.down").tag("size")
-                }
-                Divider()
-                Button { grid = false } label: { Label("List", systemImage: grid ? "list.bullet" : "checkmark") }
-                Button { grid = true } label: { Label("Icons", systemImage: grid ? "checkmark" : "square.grid.2x2") }
-            } label: { Label("View options", systemImage: "arrow.up.arrow.down.circle") }
-            if path != "/" && !readOnly {
+            if selecting {
+                Button { selection = Set(visible.map(\.id)) } label: { Label("Select all", systemImage: "checklist.checked") }
+                    .disabled(selection.count == visible.count)
+                Button { selecting = false } label: { Text("Done").bold() }
+            } else {
                 Menu {
-                    Button { newFolderName = ""; newFolder = true } label: { Label("New folder", systemImage: "folder.badge.plus") }
-                    Button { importing = true } label: { Label("Upload files…", systemImage: "square.and.arrow.up") }
-                    if let c = clipboard.pasteable(into: path, server: server) {
-                        Divider()
-                        Button { Task { await paste(into: path) } } label: { Label(c.cut ? "Paste (move) \(c.entry.name)" : "Paste \(c.entry.name)", systemImage: "doc.on.clipboard") }
-                            .keyboardShortcut("v", modifiers: .command)
+                    Picker("Sort by", selection: $sortKey) {
+                        Label("Name", systemImage: "textformat").tag("name")
+                        Label("Kind", systemImage: "doc").tag("kind")
+                        Label("Date", systemImage: "calendar").tag("date")
+                        Label("Size", systemImage: "arrow.up.arrow.down").tag("size")
                     }
-                } label: { Label("Add", systemImage: "plus") }
+                    Divider()
+                    Button { grid = false } label: { Label("List", systemImage: grid ? "list.bullet" : "checkmark") }
+                    Button { grid = true } label: { Label("Icons", systemImage: grid ? "checkmark" : "square.grid.2x2") }
+                    Divider()
+                    Button { selecting = true } label: { Label("Select", systemImage: "checkmark.circle") }.disabled(visible.isEmpty)
+                } label: { Label("View options", systemImage: "arrow.up.arrow.down.circle") }
+                if path != "/" {
+                    Button { selecting = true } label: { Label("Select", systemImage: "checkmark.circle") }.disabled(visible.isEmpty)
+                }
+                if canModify {
+                    Menu {
+                        Button { newFolderName = ""; newFolder = true } label: { Label("New folder", systemImage: "folder.badge.plus") }
+                        Button { importing = true } label: { Label("Upload files…", systemImage: "square.and.arrow.up") }
+                        if let c = clipboard.pasteable(into: path, server: server) {
+                            Divider()
+                            Button { Task { await paste(into: path) } } label: { Label(c.cut ? "Paste (move) \(c.label)" : "Paste \(c.label)", systemImage: "doc.on.clipboard") }
+                                .keyboardShortcut("v", modifiers: .command)
+                        }
+                    } label: { Label("Add", systemImage: "plus") }
+                }
             }
         }
     }
 
+    /// The bar under the list in Select mode: every action applies to the whole selection.
+    private var selectionBar: some View {
+        let items = selected
+        let none = items.isEmpty
+        let filesOnly = items.filter { !$0.isDirectory }
+        return HStack(spacing: 4) {
+            barButton("Copy", "doc.on.doc", disabled: none || path == "/") { clipboard.copy(items, server: server); selecting = false }
+            if canModify {
+                barButton("Cut", "scissors", disabled: none) { clipboard.cut(items, server: server); selecting = false }
+                barButton("Move…", "folder", disabled: none) { moving = (items, false) }
+                barButton("Copy to…", "doc.on.doc.fill", disabled: none) { moving = (items, true) }
+            }
+            barButton("Download", "arrow.down.circle", disabled: none) { Task { await download(items) } }
+            barButton("Share…", "square.and.arrow.up", disabled: filesOnly.isEmpty) { Task { await share(filesOnly) } }
+            if canModify {
+                barButton("Delete", "trash", disabled: none, role: .destructive) { deleting = items }
+            }
+        }
+        .padding(.horizontal, 8).padding(.vertical, 6)
+        .frame(maxWidth: .infinity)
+        .background(.bar)
+    }
+
+    private func barButton(_ title: LocalizedStringKey, _ symbol: String, disabled: Bool, role: ButtonRole? = nil, action: @escaping () -> Void) -> some View {
+        Button(role: role, action: action) {
+            VStack(spacing: 3) { Image(systemName: symbol).font(.title3); Text(title).font(.caption2).lineLimit(1).minimumScaleFactor(0.7) }
+                .frame(maxWidth: .infinity).padding(.vertical, 4)
+        }
+        .buttonStyle(.borderless).disabled(disabled).help(title)
+    }
+
     // MARK: Lists
 
+    private func toggle(_ e: FSEntry) {
+        if selection.contains(e.id) { selection.remove(e.id) } else { selection.insert(e.id) }
+    }
+
     private var listView: some View {
-        List {
+        List(selection: $selection) {
             ForEach(visible) { e in
-                if e.isDirectory {
+                if selecting {
+                    // Plain rows in Select mode: the List handles taps (iOS Edit mode) and ⌘/⇧-clicks (Mac).
+                    row(e).tag(e.id)
+                        #if os(macOS)
+                        .contentShape(Rectangle()).onTapGesture { toggle(e) }
+                        #endif
+                        .contextMenu { contextItems(e) }
+                } else if e.isDirectory {
                     NavigationLink { FileBrowserView(server: server, path: e.path) } label: { row(e) }
                         .contextMenu { contextItems(e) }
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) { swipeItems(e) }
@@ -157,7 +248,16 @@ struct FileBrowserView: View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: 16)], spacing: 20) {
                 ForEach(visible) { e in
-                    if e.isDirectory {
+                    if selecting {
+                        Button { toggle(e) } label: {
+                            tile(e).overlay(alignment: .topTrailing) {
+                                Image(systemName: selection.contains(e.id) ? "checkmark.circle.fill" : "circle")
+                                    .font(.title3).foregroundStyle(selection.contains(e.id) ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
+                                    .padding(6)
+                            }
+                            .background(selection.contains(e.id) ? AnyShapeStyle(.tint.opacity(0.12)) : AnyShapeStyle(.clear), in: RoundedRectangle(cornerRadius: 12))
+                        }.buttonStyle(.plain).contextMenu { contextItems(e) }
+                    } else if e.isDirectory {
                         NavigationLink { FileBrowserView(server: server, path: e.path) } label: { tile(e) }.buttonStyle(.plain).contextMenu { contextItems(e) }
                     } else {
                         Button { open(e) } label: { tile(e) }.buttonStyle(.plain).contextMenu { contextItems(e) }
@@ -193,35 +293,54 @@ struct FileBrowserView: View {
     }
 
     @ViewBuilder private func contextItems(_ e: FSEntry) -> some View {
-        if !e.isDirectory {
-            // One "Open" for every file: it picks the right viewer (mpv for MKV/AVI…, the EPUB, comic
-            // and archive readers, Quick Look for everything else). Quick Look stays as a separate
-            // entry only where Open does something else.
-            Button { open(e) } label: { Label("Open", systemImage: "arrow.up.right.square") }
-            if opensInViewer(e) { Button { quickLook(e) } label: { Label("Quick Look", systemImage: "eye") } }
-            Button { Task { await share(e) } } label: { Label("Share…", systemImage: "square.and.arrow.up") }
-        }
-        Button { info = e } label: { Label("Info", systemImage: "info.circle") }
-        if GatewayPath.depth(e.path) > 1 {
-            Divider()
-            Button { clipboard.copy(e, server: server) } label: { Label("Copy", systemImage: "doc.on.doc") }
-            if !readOnly { Button { clipboard.cut(e, server: server) } label: { Label("Cut", systemImage: "scissors") } }
-            if e.isDirectory, !readOnly, let c = clipboard.pasteable(into: e.path, server: server) {
-                Button { Task { await paste(into: e.path) } } label: { Label(c.cut ? "Paste (move) into folder" : "Paste into folder", systemImage: "doc.on.clipboard") }
+        if selecting, selection.contains(e.id), selection.count > 1 {
+            // The menu of a selected row acts on the whole selection.
+            let items = selected
+            let filesOnly = items.filter { !$0.isDirectory }
+            Text("\(items.count) selected")
+            if path != "/" { Button { clipboard.copy(items, server: server); selecting = false } label: { Label("Copy", systemImage: "doc.on.doc") } }
+            if canModify { Button { clipboard.cut(items, server: server); selecting = false } label: { Label("Cut", systemImage: "scissors") } }
+            Button { Task { await download(items) } } label: { Label("Download…", systemImage: "arrow.down.circle") }
+            if !filesOnly.isEmpty { Button { Task { await share(filesOnly) } } label: { Label("Share…", systemImage: "square.and.arrow.up") } }
+            if canModify {
+                Divider()
+                Button { moving = (items, false) } label: { Label("Move…", systemImage: "folder") }
+                Button { moving = (items, true) } label: { Label("Copy to…", systemImage: "doc.on.doc") }
+                Button(role: .destructive) { deleting = items } label: { Label("Delete", systemImage: "trash") }
             }
-        }
-        if !readOnly && GatewayPath.depth(e.path) > 1 {
-            Divider()
-            Button { renameName = e.name; renaming = e } label: { Label("Rename", systemImage: "pencil") }
-            Button { moving = (e, false) } label: { Label("Move…", systemImage: "folder") }
-            Button { moving = (e, true) } label: { Label("Copy to…", systemImage: "doc.on.doc") }
-            Button(role: .destructive) { deleting = e } label: { Label("Delete", systemImage: "trash") }
+        } else {
+            if !e.isDirectory {
+                // One "Open" for every file: it picks the right viewer (mpv for MKV/AVI…, the EPUB, comic
+                // and archive readers, Quick Look for everything else). Quick Look stays as a separate
+                // entry only where Open does something else.
+                Button { open(e) } label: { Label("Open", systemImage: "arrow.up.right.square") }
+                if opensInViewer(e) { Button { quickLook(e) } label: { Label("Quick Look", systemImage: "eye") } }
+                Button { Task { await share([e]) } } label: { Label("Share…", systemImage: "square.and.arrow.up") }
+            }
+            Button { Task { await download([e]) } } label: { Label("Download…", systemImage: "arrow.down.circle") }
+            Button { info = e } label: { Label("Info", systemImage: "info.circle") }
+            if !selecting { Button { selecting = true; selection = [e.id] } label: { Label("Select", systemImage: "checkmark.circle") } }
+            if GatewayPath.depth(e.path) > 1 {
+                Divider()
+                Button { clipboard.copy(e, server: server) } label: { Label("Copy", systemImage: "doc.on.doc") }
+                if !readOnly { Button { clipboard.cut(e, server: server) } label: { Label("Cut", systemImage: "scissors") } }
+                if e.isDirectory, !readOnly, let c = clipboard.pasteable(into: e.path, server: server) {
+                    Button { Task { await paste(into: e.path) } } label: { Label(c.cut ? "Paste (move) into folder" : "Paste into folder", systemImage: "doc.on.clipboard") }
+                }
+            }
+            if !readOnly && GatewayPath.depth(e.path) > 1 {
+                Divider()
+                Button { renameName = e.name; renaming = e } label: { Label("Rename", systemImage: "pencil") }
+                Button { moving = ([e], false) } label: { Label("Move…", systemImage: "folder") }
+                Button { moving = ([e], true) } label: { Label("Copy to…", systemImage: "doc.on.doc") }
+                Button(role: .destructive) { deleting = [e] } label: { Label("Delete", systemImage: "trash") }
+            }
         }
     }
 
     @ViewBuilder private func swipeItems(_ e: FSEntry) -> some View {
         if !readOnly && GatewayPath.depth(e.path) > 1 {
-            Button(role: .destructive) { deleting = e } label: { Label("Delete", systemImage: "trash") }
+            Button(role: .destructive) { deleting = [e] } label: { Label("Delete", systemImage: "trash") }
             Button { renameName = e.name; renaming = e } label: { Label("Rename", systemImage: "pencil") }.tint(.orange)
         }
         Button { info = e } label: { Label("Info", systemImage: "info.circle") }.tint(.gray)
@@ -237,6 +356,7 @@ struct FileBrowserView: View {
             let listed = try await client.list(path).entries
             entries = path == "/" ? listed.filter { model.current(server).isVisible(path: $0.path) } : listed
             error = nil
+            selection = selection.intersection(entries.map(\.id))
         } catch { self.error = error.localizedDescription }
         loading = false
     }
@@ -259,63 +379,112 @@ struct FileBrowserView: View {
             busy = e.path; defer { busy = nil }
             let dest = FileManager.default.temporaryDirectory.appendingPathComponent("preview", isDirectory: true).appendingPathComponent(e.name)
             try? FileManager.default.createDirectory(at: dest.deletingLastPathComponent(), withIntermediateDirectories: true)
-            do { _ = try await client.download(e.path, to: dest); preview = dest } catch { self.error = error.localizedDescription }
+            do { _ = try await client.download(e.path, to: dest); preview = dest } catch { opError = error.localizedDescription }
         }
     }
 
-    private func share(_ e: FSEntry) async {
-        guard let client = model.client(for: server) else { return }
-        busy = e.path; defer { busy = nil }
-        let dest = FileManager.default.temporaryDirectory.appendingPathComponent("share", isDirectory: true).appendingPathComponent(e.name)
-        try? FileManager.default.createDirectory(at: dest.deletingLastPathComponent(), withIntermediateDirectories: true)
-        do { _ = try await client.download(e.path, to: dest); shareURL = dest } catch { self.error = error.localizedDescription }
+    /// Fetches the entries (folders recursively) into a fresh temporary folder; returns the top-level
+    /// local URLs and the errors met on the way.
+    private func fetch(_ items: [FSEntry], purpose: String) async -> (urls: [URL], errors: [String]) {
+        guard let client = model.client(for: server) else { return ([], []) }
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(purpose, isDirectory: true).appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try? FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        var urls: [URL] = []; var errors: [String] = []
+        func fetchOne(_ e: FSEntry, into dir: URL) async {
+            let local = dir.appendingPathComponent(e.name)
+            if e.isDirectory {
+                try? FileManager.default.createDirectory(at: local, withIntermediateDirectories: true)
+                do { for child in try await client.list(e.path).entries { await fetchOne(child, into: local) } }
+                catch { errors.append("\(e.name): \(error.localizedDescription)") }
+            } else {
+                busy = String(localized: "Downloading \(e.name)…")
+                do { _ = try await client.download(e.path, to: local) } catch { errors.append("\(e.name): \(error.localizedDescription)") }
+            }
+        }
+        for e in items { await fetchOne(e, into: root); urls.append(root.appendingPathComponent(e.name)) }
+        busy = nil
+        return (urls.filter { FileManager.default.fileExists(atPath: $0.path) }, errors)
+    }
+
+    /// Download: the files (and folders) land where the user chooses through the system's mover.
+    private func download(_ items: [FSEntry]) async {
+        let r = await fetch(items, purpose: "download")
+        if !r.errors.isEmpty { opError = r.errors.joined(separator: "\n") }
+        guard !r.urls.isEmpty else { return }
+        exportURLs = r.urls; exporting = true
+        selecting = false
+    }
+
+    private func share(_ items: [FSEntry]) async {
+        let r = await fetch(items, purpose: "share")
+        if !r.errors.isEmpty { opError = r.errors.joined(separator: "\n") }
+        guard !r.urls.isEmpty else { return }
+        shareURLs = r.urls
     }
 
     private func create() async {
         let name = newFolderName.trimmingCharacters(in: .whitespaces)
         guard !name.isEmpty, let client = model.client(for: server) else { return }
         busy = String(localized: "Creating folder…"); defer { busy = nil }
-        do { _ = try await client.mkdir(GatewayPath.join(path, name)); await load() } catch { self.error = error.localizedDescription }
+        do { _ = try await client.mkdir(GatewayPath.join(path, name)); await load() } catch { opError = error.localizedDescription }
     }
 
     private func rename(_ e: FSEntry, to name: String) async {
         let n = name.trimmingCharacters(in: .whitespaces)
         guard !n.isEmpty, n != e.name, let client = model.client(for: server) else { return }
         busy = e.path; defer { busy = nil }
-        do { _ = try await client.move(e.path, to: GatewayPath.join(GatewayPath.parent(e.path), n)); await load() } catch { self.error = error.localizedDescription }
+        do { _ = try await client.move(e.path, to: GatewayPath.join(GatewayPath.parent(e.path), n)); await load() } catch { opError = error.localizedDescription }
     }
 
-    private func transfer(_ e: FSEntry, to folder: String, copy: Bool) async {
+    /// Moves or copies the entries one after the other; a failure does not stop the others.
+    private func transfer(_ items: [FSEntry], to folder: String, copy: Bool) async {
         guard let client = model.client(for: server) else { return }
-        busy = e.path; defer { busy = nil }
-        let dest = GatewayPath.join(folder, e.name)
-        do {
-            if copy { _ = try await client.copy(e.path, to: dest) } else { _ = try await client.move(e.path, to: dest) }
-            await load()
-        } catch { self.error = error.localizedDescription }
+        var errors: [String] = []
+        for (n, e) in items.enumerated() {
+            busy = copy ? String(localized: "Copying \(n + 1) of \(items.count)…") : String(localized: "Moving \(n + 1) of \(items.count)…")
+            let dest = GatewayPath.join(folder, e.name)
+            do {
+                if copy { _ = try await client.copy(e.path, to: dest) } else { _ = try await client.move(e.path, to: dest) }
+            } catch { errors.append("\(e.name): \(error.localizedDescription)") }
+        }
+        busy = nil
+        if !errors.isEmpty { opError = errors.joined(separator: "\n") }
+        selecting = false
+        await load()
     }
 
     private func paste(into folder: String) async {
         guard let client = model.client(for: server) else { return }
         busy = String(localized: "Pasting…"); defer { busy = nil }
-        if let err = await clipboard.paste(into: folder, server: server, client: client) { error = err }
+        if let err = await clipboard.paste(into: folder, server: server, client: client, progress: { n, total in
+            busy = total > 1 ? String(localized: "Pasting \(n) of \(total)…") : String(localized: "Pasting…")
+        }) { opError = err }
         await load()
     }
 
-    private func remove(_ e: FSEntry) async {
+    private func remove(_ items: [FSEntry]) async {
         guard let client = model.client(for: server) else { return }
-        busy = e.path; defer { busy = nil }
-        do { try await client.delete(e.path); await load() } catch { self.error = error.localizedDescription }
+        var errors: [String] = []
+        for (n, e) in items.enumerated() {
+            busy = items.count > 1 ? String(localized: "Deleting \(n + 1) of \(items.count)…") : e.path
+            do { try await client.delete(e.path) } catch { errors.append("\(e.name): \(error.localizedDescription)") }
+        }
+        busy = nil
+        if !errors.isEmpty { opError = errors.joined(separator: "\n") }
+        selecting = false
+        await load()
     }
 
     private func upload(_ urls: [URL]) async {
         guard let client = model.client(for: server) else { return }
+        var errors: [String] = []
         for url in urls {
             let scoped = url.startAccessingSecurityScopedResource(); defer { if scoped { url.stopAccessingSecurityScopedResource() } }
             busy = String(localized: "Uploading \(url.lastPathComponent)…")
-            do { _ = try await client.upload(fileURL: url, to: GatewayPath.join(path, url.lastPathComponent)) } catch { self.error = error.localizedDescription }
+            do { _ = try await client.upload(fileURL: url, to: GatewayPath.join(path, url.lastPathComponent)) } catch { errors.append("\(url.lastPathComponent): \(error.localizedDescription)") }
         }
         busy = nil
+        if !errors.isEmpty { opError = errors.joined(separator: "\n") }
         await load()
     }
 }
@@ -357,7 +526,7 @@ struct FolderPickerView: View {
     @EnvironmentObject private var model: ServersModel
     let server: ServerConfig
     let title: LocalizedStringKey
-    var excluding: String
+    var excluding: Set<String>
     var path: String = "/"
     var copy = false
     let onChoose: (String) -> Void
@@ -402,7 +571,7 @@ struct FolderPickerView: View {
         .task {
             guard let c = model.client(for: server) else { loading = false; return }
             let cfg = model.current(server)
-            folders = ((try? await c.list(path).entries) ?? []).filter { $0.isDirectory && $0.path != excluding && (path != "/" || cfg.isVisible(path: $0.path)) }
+            folders = ((try? await c.list(path).entries) ?? []).filter { $0.isDirectory && !excluding.contains($0.path) && (path != "/" || cfg.isVisible(path: $0.path)) }
                 .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
             loading = false
         }
@@ -413,12 +582,21 @@ struct FolderPickerView: View {
 
 struct ShareSheet: View {
     @Environment(\.dismiss) private var dismiss
-    let url: URL
+    let urls: [URL]
+    init(urls: [URL]) { self.urls = urls }
+    init(url: URL) { self.urls = [url] }
     var body: some View {
         VStack(spacing: 20) {
-            Image(systemName: FileKind.of(name: url.lastPathComponent, isDirectory: false).symbol).font(.system(size: 48)).foregroundStyle(.tint)
-            Text(url.lastPathComponent).font(.headline).multilineTextAlignment(.center)
-            ShareLink(item: url) { Label("Share or save a copy", systemImage: "square.and.arrow.up") }.buttonStyle(.borderedProminent)
+            if urls.count == 1, let url = urls.first {
+                Image(systemName: FileKind.of(name: url.lastPathComponent, isDirectory: false).symbol).font(.system(size: 48)).foregroundStyle(.tint)
+                Text(url.lastPathComponent).font(.headline).multilineTextAlignment(.center)
+                ShareLink(item: url) { Label("Share or save a copy", systemImage: "square.and.arrow.up") }.buttonStyle(.borderedProminent)
+            } else {
+                Image(systemName: "doc.on.doc").font(.system(size: 48)).foregroundStyle(.tint)
+                Text("\(urls.count) files").font(.headline)
+                Text(urls.map(\.lastPathComponent).joined(separator: ", ")).font(.footnote).foregroundStyle(.secondary).multilineTextAlignment(.center).lineLimit(4)
+                ShareLink(items: urls) { Label("Share or save a copy", systemImage: "square.and.arrow.up") }.buttonStyle(.borderedProminent)
+            }
             Button("Done") { dismiss() }
         }.padding(32)
     }

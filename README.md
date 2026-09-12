@@ -49,7 +49,7 @@ It talks to [`unraid-gateway`](https://github.com/sidimam/unraid-gateway), a 10 
 - **Optional iCloud sync** (Settings): the server list goes to iCloud Key-Value Storage and the secrets to iCloud Keychain (end-to-end encrypted), so a restored or new iPhone finds its configuration. Off by default; a restore banner appears when iCloud holds a configuration and the device has none.
 - **Connection test** with five checks (reachability, key, shares, write probe, Files location) and **edit server** without losing the Files app location.
 - **Choose which shares to show** (1.2): after connecting, in the walkthrough, from Settings › Shares to show or in the server's details, tick the shares you want in Files, the Finder, Shortcuts and on Apple TV. The gateway already limits the list to what your Unraid user may see; this filter is yours, like the folder selection of Google Drive/OneDrive, and travels with the iCloud configuration.
-- **File explorer in the app** (1.3): Files-style browser on every device — list/icons, sort, search, Info, new folder, upload, rename, move, copy, share, delete — with Quick Look and built-in viewers (mpv for MKV/AVI/WebM/FLAC…, EPUB, CBZ, ZIP; text and PDF on Apple TV).
+- **File explorer in the app** (1.3): Files-style browser on every device — list/icons, sort, search, Info, new folder, upload, rename, move, copy, share, download, delete, multi-selection with batch actions — with Quick Look and built-in viewers (mpv for MKV/AVI/WebM/FLAC…, EPUB, CBZ, ZIP; text and PDF on Apple TV).
 - **Device registration** (1.3, gateway 0.9+): every installation is registered on the gateway and can be revoked there (web UI › Devices); the app then asks to sign in again. After a reinstall on the same hardware the app comes back as the same device (id remembered in iCloud); otherwise the gateway (0.9.1+) marks the previous entry as *old*.
 - **Universal**: iPhone, iPad, native visionOS, macOS and Apple TV from one codebase.
 - **Apple TV**: media browser through the gateway with the user's own permissions — Apple formats with the system player, everything else (MKV, AVI, WebM, FLAC, …) with a built-in mpv player (libmpv + FFmpeg, LGPL, via [MPVKit](https://github.com/mpvkit/MPVKit); needs unraid-gateway 0.6+ for its media tickets), dashboard; pairing by a 6-digit code from iPhone/iPad/Mac (credentials travel AES-GCM encrypted through iCloud Key-Value Storage). See [Step 8](https://github.com/sidimam/unraid-drive/wiki/Step-8-Unraid-Drive-on-Apple-TV).
@@ -64,6 +64,8 @@ It talks to [`unraid-gateway`](https://github.com/sidimam/unraid-gateway), a 10 
 After the first launch enable the extension under System Settings › General › Login Items & Extensions › File Providers ([Step 7 of the wiki](https://github.com/sidimam/unraid-drive/wiki/Step-7-Unraid-Drive-on-the-Mac)). `scripts/make_dmg.sh` builds, notarizes and staples the DMG.
 
 ## What's new
+
+**1.3 (build 33):** multi-selection in the explorer on every device (Copy, Cut, Move…, Copy to…, Download, Share…, Delete on the whole selection; Apple TV too), *Download* of files and folders to a place you choose, and on the Mac *Start without a window* (menu bar only, or menu bar + Dock).
 
 **1.3 (build 32):** Move… and Copy to… confirm the destination with a fixed *Move here* / *Copy here* button (on the Mac the confirmation was not reachable); one *Open* entry for every file (no more *Play with mpv*).
 

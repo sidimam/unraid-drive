@@ -2,6 +2,12 @@
 
 All notable changes to Unraid Drive. The server side has its own changelog in [unraid-gateway](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
 
+## 1.3 (build 33) — 2026-09-12
+
+- **Multi-selection in the explorer, on every device.** *Select* (toolbar button, or *Select* in an item's menu) turns on Select mode: tick as many files and folders as you like (*Select all* in the toolbar; ⌘/⇧-click on the Mac), the title counts them, and the bar at the bottom applies **Copy**, **Cut**, **Move…**, **Copy to…**, **Download**, **Share…** and **Delete** to the whole selection (one confirmation that names the count). The menu of a selected item offers the same actions. Operations run one item after the other with a progress line; a failure does not stop the rest and the errors are listed at the end (they were silent before when the folder was not empty). Paste handles several items too. On Apple TV: *Select* in the header or in the long-press menu, a checkmark per item, *Select all*, *Copy*, *Cut*, *Delete*, *Done*.
+- **Download.** New in the item menu and in the selection bar: the files (folders included, recursively) are fetched from the gateway and the system asks where to save them — the Files picker on iPhone, iPad and Vision Pro, a Save panel on the Mac. *Share…* also takes several files at once.
+- **Mac: start without a window.** New switch in Preferences › App settings and in the menu bar panel: the app launches in the menu bar only (with *Show only in the menu bar*) or in the menu bar plus the Dock, with no window; *Open Unraid Drive* in the panel or a click on the Dock icon brings it back. Launching at login always starts this way. A first launch, or a new build whose walkthrough is due, still opens the window.
+
 ## 1.3 (build 32) — 2026-09-12
 
 - **Move… / Copy to… now confirm the destination.** The folder picker has a fixed bar at the bottom that names the folder that is open (*Destination: /documents/Invoices*) and a big **Move here** / **Copy here** button; at the root it explains that a share must be opened first. Before, the only confirmation was a *Choose* item in the toolbar of the pushed folder, which the Mac did not show inside the sheet — so a move could never be confirmed there. Cancel now closes the picker on every platform (it used to step back one folder).

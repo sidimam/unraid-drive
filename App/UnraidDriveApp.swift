@@ -18,6 +18,9 @@ struct UnraidDriveApp: App {
     #if os(iOS)
     @UIApplicationDelegateAdaptor(QuickActionAppDelegate.self) private var appDelegate
     #endif
+    #if os(macOS)
+    @NSApplicationDelegateAdaptor(MacAppDelegate.self) private var appDelegate
+    #endif
 
     init() {
         NavigationBarStyle.apply()

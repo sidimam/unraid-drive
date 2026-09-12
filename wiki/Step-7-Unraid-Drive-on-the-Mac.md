@@ -22,7 +22,7 @@ Click the Unraid Drive glyph in the menu bar:
 - **⚙ gear** — Preferences (the main window), Offline files (space used on this Mac per server, *Free up space*), Error list, About, Help, Send feedback, **Launch at login**, **Show only in the menu bar**, **Theme** (System / Light / Dark), **App colour**, Quit.
 - **Refresh** (bottom right) asks the Finder to re-read every location from the gateway and reloads status, activity and notifications; it shows the time of the last check.
 
-*Show only in the menu bar* turns Unraid Drive into a menu-bar app: no Dock icon, the panel is the entry point and *Open Unraid Drive* brings the window back. Theme, language and icon colour are the same settings as on iOS (Preferences › App settings); on the Mac the icon colour applies to the Dock icon while the app runs.
+*Show only in the menu bar* turns Unraid Drive into a menu-bar app: no Dock icon, the panel is the entry point and *Open Unraid Drive* brings the window back. *Start without a window* (build 33+) launches the app minimized — menu bar only, or menu bar plus Dock icon when the Dock icon is kept — with no window; *Open Unraid Drive* in the panel or a click on the Dock icon opens it. Launching at login always starts this way; a first launch, or a new build whose walkthrough is due, still opens the window. Theme, language and icon colour are the same settings as on iOS (Preferences › App settings); on the Mac the icon colour applies to the Dock icon while the app runs.
 
 The Finder location lists only the shares ticked under the server page › **Shares to show** (Preferences… from the menu bar panel opens the app). Hiding a share removes it from the sidebar folder; ticking it again brings it back.
 

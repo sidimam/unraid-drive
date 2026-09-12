@@ -10,6 +10,7 @@ struct SettingsView: View {
     #if os(macOS)
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @AppStorage(DockPolicy.key, store: AppGroup.defaults) private var menuBarOnly = false
+    @AppStorage(LaunchPolicy.key, store: AppGroup.defaults) private var startMinimized = false
     #endif
     @EnvironmentObject private var model: ServersModel
     @EnvironmentObject private var cloud: CloudSync
@@ -57,10 +58,11 @@ struct SettingsView: View {
                         launchAtLogin = SMAppService.mainApp.status == .enabled })) { Label("Launch at login", systemImage: "power") }
                     Toggle(isOn: $menuBarOnly) { Label("Show only in the menu bar", systemImage: "menubar.rectangle") }
                         .onChange(of: menuBarOnly) { _, _ in DockPolicy.apply() }
+                    Toggle(isOn: $startMinimized) { Label("Start without a window", systemImage: "macwindow.badge.plus") }
                     #endif
                 } header: { SectionTitle("App settings") } footer: {
                     #if os(macOS)
-                    Text("System follows the Mac settings for theme and language. A forced language applies to this app only; a few system-provided texts follow at the next launch. The icon colour also colours the app's titles, headers and controls, and the Dock icon while the app runs.")
+                    Text("System follows the Mac settings for theme and language. A forced language applies to this app only; a few system-provided texts follow at the next launch. The icon colour also colours the app's titles, headers and controls, and the Dock icon while the app runs. “Start without a window” opens the app in the menu bar only (or menu bar and Dock, when the Dock icon is kept): the window comes back from the menu bar panel or the Dock icon. Launching at login always starts this way.")
                     #else
                     Text("System follows the device settings for theme and language. A forced language applies to this app only; a few system-provided texts follow at the next launch. The icon colour also colours the app's titles, headers and controls; Apple Vision Pro keeps the layered icon.")
                     #endif

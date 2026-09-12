@@ -51,6 +51,74 @@ enum DockPolicy {
     }
 }
 
+/// "Start minimized": launch without the main window — only the menu bar icon (with "menu bar
+/// only") or the menu bar icon plus the Dock icon. Always on when macOS launched the app as a
+/// login item. The window comes back from the menu bar panel ("Open Unraid Drive") or the Dock.
+/// A first launch (nothing configured yet) or a new build (walkthrough due) always shows the window.
+enum LaunchPolicy {
+    static let key = "startMinimized"
+    static var startMinimized: Bool { AppGroup.defaults.bool(forKey: key) }
+    /// Decided once per process, at launch.
+    static var hideWindowAtLaunch = false
+
+    static func decideAtLaunch(hasServers: Bool) {
+        hideWindowAtLaunch = (startMinimized || launchedAsLoginItem) && hasServers && !WalkthroughView.shouldShow
+        #if DEBUG
+        if CommandLine.arguments.contains("-startMinimized") { hideWindowAtLaunch = true }   // test hook: exercise the closing path
+        #endif
+    }
+    static var launchedAsLoginItem: Bool {
+        guard let ev = NSAppleEventManager.shared().currentAppleEvent, ev.eventID == kAEOpenApplication else { return false }
+        return ev.paramDescriptor(forKeyword: keyAEPropData)?.enumCodeValue == keyAELaunchedAsLogInItem
+    }
+    /// The main windows hidden at launch, kept so that a reopen (Dock icon, `open`) can show them again.
+    private static var hidden: [NSWindow] = []
+
+    /// Hides the main windows the system opened at launch (macOS 14: the scene cannot be suppressed).
+    @discardableResult static func hideMainWindows() -> Int {
+        var n = 0
+        for w in NSApp.windows where w.isVisible && w.styleMask.contains(.titled) && w.level == .normal && !(w is NSPanel) {
+            let id = w.identifier?.rawValue ?? ""
+            if id.contains("about") || id.contains("storage") || id.contains("errors") { continue }
+            w.orderOut(nil); hidden.append(w); n += 1
+        }
+        return n
+    }
+    /// SwiftUI opens the WindowGroup shortly after `applicationDidFinishLaunching`: watch for it for a
+    /// few seconds and hide it as soon as it shows up.
+    static func hideLaunchWindow() {
+        var ticks = 0
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { t in
+            ticks += 1
+            hideMainWindows()
+            if ticks > 40 { t.invalidate(); hideWindowAtLaunch = false }
+        }
+    }
+    /// Brings the main window back (Dock icon click, reopen event, "Open Unraid Drive" in the panel).
+    /// Returns false when there was nothing hidden to show.
+    @discardableResult static func showMainWindow() -> Bool {
+        hideWindowAtLaunch = false
+        let ws = hidden.filter { !$0.isVisible }; hidden.removeAll()
+        guard let w = ws.last ?? NSApp.windows.first(where: { ($0.identifier?.rawValue ?? "").hasPrefix("main") }) else { return false }
+        w.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+        return true
+    }
+}
+
+final class MacAppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        LaunchPolicy.decideAtLaunch(hasServers: !ServerStore().all().filter { !$0.isDemo }.isEmpty)
+        if LaunchPolicy.hideWindowAtLaunch { LaunchPolicy.hideLaunchWindow() }
+    }
+    /// Dock icon clicked (or a reopen event) with no window: show the one hidden at launch; if there
+    /// is none, let SwiftUI recreate the main WindowGroup window.
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if flag { return true }
+        return !LaunchPolicy.showMainWindow()
+    }
+}
+
 extension FileProviderDomains {
     static let pausedKey = "fp.paused"
     static var paused: Bool {
@@ -165,6 +233,7 @@ struct MenuBarPanel: View {
     @State private var paused = FileProviderDomains.paused
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @AppStorage(DockPolicy.key, store: AppGroup.defaults) private var menuBarOnly = false
+    @AppStorage(LaunchPolicy.key, store: AppGroup.defaults) private var startMinimized = false
     @AppStorage(Appearance.key, store: AppGroup.defaults) private var appearance = Appearance.system.rawValue
     @AppStorage(AppIconColor.storageKey, store: AppGroup.defaults) private var iconColor = "default"
     @State private var notifications: [String: Dashboard.Notifications.Overview.Counts] = [:]
@@ -226,6 +295,7 @@ struct MenuBarPanel: View {
             Divider()
             Toggle(isOn: Binding(get: { launchAtLogin }, set: { setLaunchAtLogin($0) })) { Text("Launch at login") }
             Toggle(isOn: $menuBarOnly) { Text("Show only in the menu bar") }
+            Toggle(isOn: $startMinimized) { Text("Start without a window") }
             Picker("Theme", selection: $appearance) {
                 ForEach(Appearance.allCases) { a in Label(a.label, systemImage: a.icon).tag(a.rawValue) }
             }

@@ -201,6 +201,46 @@
         }
       }
     },
+    "%lld files": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ملفات"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Dateien"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld archivos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld fichiers"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld file"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 个文件"
+          }
+        }
+      }
+    },
     "%lld files · %@": {
       "localizations": {
         "ar": {
@@ -317,6 +357,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld/%lld 个共享"
+          }
+        }
+      }
+    },
+    "%lld selected": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم تحديد %lld"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ausgewählt"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld seleccionados"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld sélectionnés"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld selezionati"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已选择 %lld 项"
           }
         }
       }
@@ -3127,6 +3207,46 @@
         }
       }
     },
+    "Copying %lld of %lld…": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ نسخ %lld من %lld…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopiere %lld von %lld…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiando %lld de %lld…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copie %lld sur %lld…"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copia %lld di %lld…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在拷贝第 %lld 项，共 %lld 项…"
+          }
+        }
+      }
+    },
     "Could not create the folder %@": {
       "localizations": {
         "ar": {
@@ -3927,6 +4047,86 @@
         }
       }
     },
+    "Delete %lld items": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حذف %lld عناصر"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Objekte löschen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar %lld elementos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer %lld éléments"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elimina %lld elementi"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "删除 %lld 项"
+          }
+        }
+      }
+    },
+    "Delete %lld items?": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هل تريد حذف %lld عناصر؟"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Objekte löschen?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Eliminar %lld elementos?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer %lld éléments ?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminare %lld elementi?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要删除 %lld 项吗？"
+          }
+        }
+      }
+    },
     "Delete?": {
       "localizations": {
         "ar": {
@@ -4003,6 +4203,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "已删除"
+          }
+        }
+      }
+    },
+    "Deleting %lld of %lld…": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ حذف %lld من %lld…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lösche %lld von %lld…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminando %lld de %lld…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suppression %lld sur %lld…"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminazione %lld di %lld…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在删除第 %lld 项，共 %lld 项…"
           }
         }
       }
@@ -4248,6 +4488,46 @@
         }
       }
     },
+    "Download": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تنزيل"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descargar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Télécharger"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scarica"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下载"
+          }
+        }
+      }
+    },
     "Downloaded": {
       "localizations": {
         "ar": {
@@ -4288,6 +4568,46 @@
         }
       }
     },
+    "Downloading %@…": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ تنزيل %@…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ wird geladen…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descargando %@…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Téléchargement de %@…"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download di %@…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在下载 %@…"
+          }
+        }
+      }
+    },
     "Downloads a file from a share of your Unraid server and passes it on.": {
       "localizations": {
         "ar": {
@@ -4324,6 +4644,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "从 Unraid 服务器的共享下载文件并传递给下一步。"
+          }
+        }
+      }
+    },
+    "Download…": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تنزيل…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laden…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descargar…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Télécharger…"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scarica…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下载…"
           }
         }
       }
@@ -7642,6 +8002,46 @@
         }
       }
     },
+    "Moving %lld of %lld…": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ نقل %lld من %lld…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bewege %lld von %lld…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moviendo %lld de %lld…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déplacement %lld sur %lld…"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spostamento %lld di %lld…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在移动第 %lld 项，共 %lld 项…"
+          }
+        }
+      }
+    },
     "Name": {
       "localizations": {
         "ar": {
@@ -8552,6 +8952,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "Unraid Drive 的通知已关闭。"
+          }
+        }
+      }
+    },
+    "OK": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حسنًا"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "好"
           }
         }
       }
@@ -9832,6 +10272,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "粘贴到文件夹"
+          }
+        }
+      }
+    },
+    "Pasting %lld of %lld…": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ لصق %lld من %lld…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Füge %lld von %lld ein…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pegando %lld de %lld…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collage %lld sur %lld…"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incolla %lld di %lld…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在粘贴第 %lld 项，共 %lld 项…"
           }
         }
       }
@@ -12070,6 +12550,86 @@
         }
       }
     },
+    "Select": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تحديد"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auswählen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seleccionar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélectionner"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seleziona"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择"
+          }
+        }
+      }
+    },
+    "Select all": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تحديد الكل"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle auswählen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seleccionar todo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout sélectionner"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seleziona tutto"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全选"
+          }
+        }
+      }
+    },
     "Send": {
       "localizations": {
         "ar": {
@@ -12978,6 +13538,46 @@
         }
       }
     },
+    "Something went wrong": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حدث خطأ ما"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Etwas ist schiefgelaufen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Algo ha fallado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un problème est survenu"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qualcosa è andato storto"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "出了点问题"
+          }
+        }
+      }
+    },
     "Sort by": {
       "localizations": {
         "ar": {
@@ -13054,6 +13654,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "源代码"
+          }
+        }
+      }
+    },
+    "Start without a window": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "البدء بدون نافذة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ohne Fenster starten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iniciar sin ventana"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Démarrer sans fenêtre"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avvia senza finestra"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "启动时不打开窗口"
           }
         }
       }
@@ -13448,6 +14088,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "“系统”跟随 Mac 的主题和语言设置。强制语言仅适用于本应用；部分系统文本在下次启动时生效。图标颜色同时应用于应用的标题、栏目标题和控件，以及运行期间的程序坞图标。"
+          }
+        }
+      }
+    },
+    "System follows the Mac settings for theme and language. A forced language applies to this app only; a few system-provided texts follow at the next launch. The icon colour also colours the app's titles, headers and controls, and the Dock icon while the app runs. “Start without a window” opens the app in the menu bar only (or menu bar and Dock, when the Dock icon is kept): the window comes back from the menu bar panel or the Dock icon. Launching at login always starts this way.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يتبع «النظام» إعدادات Mac للمظهر واللغة. تنطبق اللغة المفروضة على هذا التطبيق فقط؛ وتتبع بعض نصوص النظام عند التشغيل التالي. يلوّن لون الأيقونة أيضًا عناوين التطبيق وترويساته وعناصر التحكم، وأيقونة Dock أثناء تشغيل التطبيق. «البدء بدون نافذة» يفتح التطبيق في شريط القوائم فقط (أو شريط القوائم وDock إذا بقيت أيقونة Dock): تعود النافذة من لوحة شريط القوائم أو أيقونة Dock. يبدأ التشغيل عند تسجيل الدخول دائمًا بهذه الطريقة."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System folgt den Mac-Einstellungen für Darstellung und Sprache. Eine erzwungene Sprache gilt nur für diese App; einige Systemtexte folgen beim nächsten Start. Die Symbolfarbe färbt auch Titel, Überschriften und Bedienelemente der App sowie das Dock-Symbol, solange die App läuft. „Ohne Fenster starten“ öffnet die App nur in der Menüleiste (oder Menüleiste und Dock, wenn das Dock-Symbol bleibt): das Fenster kommt über das Menüleisten-Panel oder das Dock-Symbol zurück. Der Start beim Anmelden beginnt immer so."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistema sigue los ajustes del Mac para tema e idioma. Un idioma forzado se aplica solo a esta app; algunos textos del sistema se adaptan en el siguiente inicio. El color del icono también colorea títulos, cabeceras y controles de la app, y el icono del Dock mientras la app se ejecuta. «Iniciar sin ventana» abre la app solo en la barra de menús (o barra de menús y Dock, si se mantiene el icono del Dock): la ventana vuelve desde el panel de la barra de menús o el icono del Dock. El inicio de sesión siempre arranca así."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Système suit les réglages du Mac pour le thème et la langue. Une langue forcée ne s’applique qu’à cette app ; quelques textes fournis par le système suivent au prochain lancement. La couleur de l’icône colore aussi les titres, en‑têtes et contrôles de l’app, et l’icône du Dock pendant l’exécution. « Démarrer sans fenêtre » ouvre l’app dans la barre des menus seulement (ou barre des menus et Dock, si l’icône du Dock est conservée) : la fenêtre revient depuis le panneau de la barre des menus ou l’icône du Dock. Le lancement à l’ouverture de session démarre toujours ainsi."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistema segue le impostazioni del Mac per tema e lingua. Una lingua forzata vale solo per questa app; alcuni testi forniti dal sistema si adeguano al prossimo avvio. Il colore dell’icona colora anche titoli, intestazioni e controlli dell’app, e l’icona nel Dock mentre l’app è in esecuzione. “Avvia senza finestra” apre l’app solo nella barra dei menu (o barra dei menu e Dock, se l’icona nel Dock è mantenuta): la finestra torna dal pannello nella barra dei menu o dall’icona nel Dock. L’avvio al login parte sempre così."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“系统”跟随 Mac 的主题和语言设置。强制语言仅对本应用生效；部分系统文本在下次启动后跟随。图标颜色也会用于应用的标题、表头和控件，以及运行时的 Dock 图标。“启动时不打开窗口”让应用只出现在菜单栏（若保留 Dock 图标，则为菜单栏和 Dock）：可从菜单栏面板或 Dock 图标重新打开窗口。登录时启动始终采用此方式。"
           }
         }
       }
@@ -14362,6 +15042,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "Il file viene rimosso dal NAS. Il gateway non ha un cestino."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文件将从 NAS 中移除。网关没有废纸篓。"
+          }
+        }
+      }
+    },
+    "The files are removed from the NAS. There is no trash on the gateway.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تُحذف الملفات من NAS. لا توجد سلة مهملات في البوابة."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Dateien werden vom NAS entfernt. Das Gateway hat keinen Papierkorb."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los archivos se eliminan del NAS. El gateway no tiene papelera."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les fichiers sont supprimés du NAS. La passerelle n’a pas de corbeille."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I file vengono rimossi dal NAS. Il gateway non ha un cestino."
           }
         },
         "zh-Hans": {
