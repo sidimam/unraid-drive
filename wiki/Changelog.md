@@ -8,6 +8,7 @@ All notable changes to Unraid Drive. The server side has its own changelog in [u
 - **Share roots are not selectable.** Select mode is offered only inside a share (the roots are mount points: nothing to move, copy or delete), on every device.
 - **Apple TV dashboard shows the gateway:** server URL, unraid-gateway version, the `unraid-gateway` Docker container with its state and image.
 - **Apple TV:** the focused server row is readable again (black text on the white focus), and so are the settings rows.
+- **System fonts everywhere.** No more fixed point sizes: every text and symbol uses the system text styles, so type and size follow the device settings (Dynamic Type on iPhone/iPad/Vision Pro, text size on Mac and Apple TV) — including the Apple TV EPUB reader and pairing code.
 
 ## 1.3 (build 35) — 2026-09-12
 

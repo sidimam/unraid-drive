@@ -291,7 +291,7 @@ struct FileBrowserView: View {
         let kind = FileKind.of(e)
         return VStack(spacing: 8) {
             Image(systemName: e.isDirectory && GatewayPath.depth(e.path) == 1 ? "externaldrive.fill" : (e.isDirectory ? "folder.fill" : kind.symbol))
-                .font(.system(size: 44)).frame(height: 56).foregroundStyle(e.isDirectory ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
+                .font(.largeTitle).imageScale(.large).frame(minHeight: 56).foregroundStyle(e.isDirectory ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
             Text(e.name).font(.footnote).lineLimit(2).multilineTextAlignment(.center).foregroundStyle(.primary)
             if !e.isDirectory { Text(ByteCountFormatter.string(fromByteCount: e.size, countStyle: .file)).font(.caption2).foregroundStyle(.secondary) }
         }.frame(maxWidth: .infinity).padding(8)
@@ -507,7 +507,7 @@ struct FileInfoView: View {
         let kind = FileKind.of(entry)
         Form {
             Section {
-                HStack { Spacer(); Image(systemName: kind.symbol).font(.system(size: 56)).foregroundStyle(.tint); Spacer() }
+                HStack { Spacer(); Image(systemName: kind.symbol).font(.largeTitle).imageScale(.large).foregroundStyle(.tint); Spacer() }
                 LabeledContent("Name", value: entry.name)
                 LabeledContent("Type", value: String(localized: String.LocalizationValue(kind.labelKey)))
                 if !entry.isDirectory { LabeledContent("Size", value: ByteCountFormatter.string(fromByteCount: entry.size, countStyle: .file)) }
@@ -593,11 +593,11 @@ struct ShareSheet: View {
     var body: some View {
         VStack(spacing: 20) {
             if urls.count == 1, let url = urls.first {
-                Image(systemName: FileKind.of(name: url.lastPathComponent, isDirectory: false).symbol).font(.system(size: 48)).foregroundStyle(.tint)
+                Image(systemName: FileKind.of(name: url.lastPathComponent, isDirectory: false).symbol).font(.largeTitle).imageScale(.large).foregroundStyle(.tint)
                 Text(url.lastPathComponent).font(.headline).multilineTextAlignment(.center)
                 ShareLink(item: url) { Label("Share or save a copy", systemImage: "square.and.arrow.up") }.buttonStyle(.borderedProminent)
             } else {
-                Image(systemName: "doc.on.doc").font(.system(size: 48)).foregroundStyle(.tint)
+                Image(systemName: "doc.on.doc").font(.largeTitle).imageScale(.large).foregroundStyle(.tint)
                 Text("\(urls.count) files").font(.headline)
                 Text(urls.map(\.lastPathComponent).joined(separator: ", ")).font(.footnote).foregroundStyle(.secondary).multilineTextAlignment(.center).lineLimit(4)
                 ShareLink(items: urls) { Label("Share or save a copy", systemImage: "square.and.arrow.up") }.buttonStyle(.borderedProminent)

@@ -70,7 +70,7 @@ struct WalkthroughView: View {
 
     private func page(_ p: Page) -> some View {
         VStack(spacing: 20) {
-            Image(systemName: p.icon).font(.system(size: 64)).foregroundStyle(.tint).padding(.top, 24)
+            Image(systemName: p.icon).font(.largeTitle).imageScale(.large).foregroundStyle(.tint).padding(.top, 24)
             Text(p.title).font(.title2.bold()).multilineTextAlignment(.center)
             Text(p.text).multilineTextAlignment(.center).foregroundStyle(.secondary).padding(.horizontal, 24)
             if let (label, url) = p.link { Link(label, destination: url).font(.callout) }

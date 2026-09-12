@@ -154,7 +154,7 @@ struct IconColorPicker: View {
                 Button { selection = c.key } label: {
                     ZStack {
                         Circle().fill(c.tint).frame(width: 30, height: 30)
-                        if selection == c.key { Image(systemName: "checkmark").font(.system(size: 13, weight: .bold)).foregroundStyle(.white) }
+                        if selection == c.key { Image(systemName: "checkmark").font(.footnote.bold()).foregroundStyle(.white) }
                     }
                 }
                 .buttonStyle(.plain)
