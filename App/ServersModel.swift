@@ -15,7 +15,7 @@ final class ServersModel: ObservableObject {
         reload()
         cloud.onRemoteChange = { [weak self] in await self?.reloadAndRegisterDomains() }
         if cloud.enabled { Task { await cloud.pull() } }
-        Task { await rebuildDomainsOncePerInstall() }
+        Task { await maintainLocationsIfNeeded() }
     }
 
     /// After servers arrived from iCloud: reload and make sure each has a Files app location.
@@ -23,26 +23,72 @@ final class ServersModel: ObservableObject {
         reload()
         let existing = (try? await NSFileProviderManager.domains().map(\.identifier.rawValue)) ?? []
         for s in servers where !existing.contains(s.id) { try? await FileProviderDomains.add(s) }
-        await rebuildDomainsOncePerInstall()
+        await maintainLocationsIfNeeded()
     }
 
     /// The system keeps a Files location's database across an uninstall when the same server comes
     /// back (iCloud restore), but the extension's item index, which maps its identifiers to paths,
-    /// does not survive. The two then disagree: stale entries can never be removed and re-enumerated
-    /// items look like new local files. Once per installation, remove and re-add each location so
-    /// the system starts from a clean database that matches the fresh index.
-    /// Bump when the app icon changes: the Files app shows the icon it saw when the location was
-    /// registered, so the locations are re-registered once for every new icon generation.
-    static let iconGeneration = 2
+    /// does not survive; an app update can also change what the extension reports. So, once per
+    /// build (first install and every upgrade), each location is **checked and rebuilt
+    /// automatically**: the gateway is contacted with the stored credentials, then the location is
+    /// removed and registered again so the Files app / Finder starts from a clean database, and
+    /// finally nudged. Nothing to do by hand: the server page shows when it last happened. If the
+    /// gateway cannot be reached (or the credentials are still arriving from iCloud Keychain) the
+    /// pass is retried the next time the app becomes active.
+    static let currentBuild = (Bundle.main.infoDictionary?["CFBundleVersion"] as? String) ?? "0"
 
-    func rebuildDomainsOncePerInstall() async {
-        for s in servers where !s.isDemo {
-            let key = "fp.rebuilt.g\(Self.iconGeneration)." + s.id
-            guard !AppGroup.defaults.bool(forKey: key) else { continue }
-            await FileProviderDomains.rebuild(s)
-            AppGroup.defaults.set(true, forKey: key)
+    struct LocationMaintenance: Codable, Equatable {
+        var build: String
+        var date: Date
+        var gatewayOK: Bool
+        var detail: String
+        var done: Bool { gatewayOK }
+    }
+    /// Per server id: the outcome of the last automatic pass (also persisted in the app group).
+    @Published private(set) var maintenance: [String: LocationMaintenance] = [:]
+    private static func maintenanceKey(_ id: String) -> String { "fp.maintenance." + id }
+    private var maintaining = false
+
+    func storedMaintenance(_ id: String) -> LocationMaintenance? {
+        guard let d = AppGroup.defaults.data(forKey: Self.maintenanceKey(id)) else { return nil }
+        return try? JSONDecoder().decode(LocationMaintenance.self, from: d)
+    }
+    private func record(_ m: LocationMaintenance, for id: String) {
+        maintenance[id] = m
+        if let d = try? JSONEncoder().encode(m) { AppGroup.defaults.set(d, forKey: Self.maintenanceKey(id)) }
+    }
+
+    /// Runs the automatic pass for every server that has not completed it on this build.
+    /// `force` repeats it even when already done (e.g. "Check now" on the server page).
+    func maintainLocationsIfNeeded(force: Bool = false, only: ServerConfig? = nil) async {
+        guard !maintaining else { return }
+        maintaining = true; defer { maintaining = false }
+        for s in servers where !s.isDemo && (only == nil || only?.id == s.id) {
+            let stored = storedMaintenance(s.id)
+            if maintenance[s.id] == nil, let stored { maintenance[s.id] = stored }
+            if !force, let stored, stored.build == Self.currentBuild, stored.done { continue }
+            // 1. Connection check with the stored credentials.
+            guard let c = client(for: s) else {
+                record(LocationMaintenance(build: Self.currentBuild, date: Date(), gatewayOK: false, detail: String(localized: "credentials not available yet")), for: s.id)
+                continue
+            }
+            do {
+                let h = try await c.health()
+                _ = try await c.list("/")
+                // 2. Rebuild the location, 3. nudge it.
+                await FileProviderDomains.rebuild(s)
+                await FileProviderDomains.signal(s)
+                AppGroup.defaults.set(true, forKey: "fp.rebuilt.g\(Self.iconGeneration)." + s.id)
+                record(LocationMaintenance(build: Self.currentBuild, date: Date(), gatewayOK: true, detail: String(localized: "gateway \(h.version ?? "")")), for: s.id)
+            } catch {
+                record(LocationMaintenance(build: Self.currentBuild, date: Date(), gatewayOK: false, detail: error.localizedDescription), for: s.id)
+            }
         }
     }
+
+    /// Bump when the app icon changes: the Files app shows the icon it saw when the location was
+    /// registered (the per-build pass above re-registers it anyway).
+    static let iconGeneration = 2
 
     /// First contact with a gateway that hands out stable ids (0.5+): rebuild the Files location
     /// once so items switch from local identifiers to server ids without duplicates.
@@ -129,6 +175,7 @@ final class ServersModel: ObservableObject {
         store.upsert(server)
         try await FileProviderDomains.add(server)
         reload()
+        record(LocationMaintenance(build: Self.currentBuild, date: Date(), gatewayOK: true, detail: String(localized: "gateway \(login.version ?? "")")), for: server.id)
         cloud.push()
         return login
     }

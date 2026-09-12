@@ -67,7 +67,7 @@ struct UnraidDriveApp: App {
                     if phase == .active {
                         (Appearance(rawValue: appearance) ?? .system).applyToWindows()
                         AppIconColor.apply(iconColor)
-                        Task { await servers.signalAllDomains(); await servers.checkHealthAndAlerts() }
+                        Task { await servers.maintainLocationsIfNeeded(); await servers.signalAllDomains(); await servers.checkHealthAndAlerts() }
                     }
                     if phase == .background { Self.scheduleRefresh() }
                 }

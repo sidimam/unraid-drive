@@ -2,6 +2,10 @@
 
 All notable changes to Unraid Drive. The server side has its own changelog in [unraid-gateway](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
 
+## 1.3 (build 34) — 2026-09-12
+
+- **Files / Finder location maintained automatically.** On the first launch and after every update the app, by itself and for every server: checks the connection to the gateway with the stored credentials, **rebuilds the Files app / Finder location** (removed and registered again, so the system starts from a clean database that matches the extension) and nudges it. The manual *Refresh the Files app / Finder location* and *Rebuild the location* rows are gone; the server page now shows **Files location / Finder location: checked and rebuilt automatically (build N, date)**. If the gateway cannot be reached, or the credentials have not arrived from iCloud Keychain yet, the row says *Automatic check pending* with the reason and a *Check now* button, and the pass is repeated every time the app becomes active until it succeeds. A server you add gets a fresh location, so nothing runs for it until the next update.
+
 ## 1.3 (build 33) — 2026-09-12
 
 - **Multi-selection in the explorer, on every device.** *Select* (toolbar button, or *Select* in an item's menu) turns on Select mode: tick as many files and folders as you like (*Select all* in the toolbar; ⌘/⇧-click on the Mac), the title counts them, and the bar at the bottom applies **Copy**, **Cut**, **Move…**, **Copy to…**, **Download**, **Share…** and **Delete** to the whole selection (one confirmation that names the count). The menu of a selected item offers the same actions. Operations run one item after the other with a progress line; a failure does not stop the rest and the errors are listed at the end (they were silent before when the folder was not empty). Paste handles several items too. On Apple TV: *Select* in the header or in the long-press menu, a checkmark per item, *Select all*, *Copy*, *Cut*, *Delete*, *Done*.
