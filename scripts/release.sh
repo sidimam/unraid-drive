@@ -20,6 +20,7 @@ for PLAT in ${=PLATFORMS:-iOS visionOS macOS tvOS}; do   # PLATFORMS="iOS macOS"
   xcodebuild archive -project UnraidDrive.xcodeproj -scheme $SCHEME -destination "generic/platform=$PLAT" \
     -archivePath "$DD_ROOT/UnraidDrive-$PLAT.xcarchive" -derivedDataPath "$DD_ROOT/dd-$PLAT" "${AUTH[@]}" "${EXTRA[@]}" 2>&1 | tee "$DD_ROOT/archive-$PLAT.log" | grep -E "error:|detritus|ARCHIVE"
   [ -d "$DD_ROOT/UnraidDrive-$PLAT.xcarchive" ] || { echo "archive $PLAT failed (full log: $DD_ROOT/archive-$PLAT.log)"; exit 1; }
+  xattr -cr "$DD_ROOT/UnraidDrive-$PLAT.xcarchive" 2>/dev/null   # SwiftPM frameworks may carry provenance/quarantine attributes
   for try in 1 2 3; do
     echo "=== export $PLAT (try $try)"
     EO=ExportOptions-$PLAT.plist; [ -f "$EO" ] || EO=ExportOptions.plist   # manual signing with the API-created profiles when present
