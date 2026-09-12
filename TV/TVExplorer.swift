@@ -36,8 +36,11 @@ struct TVBrowserView: View {
     @State private var loading = true
     @State private var opened: FSEntry?
     @State private var info: FSEntry?
-    @State private var deleting: FSEntry?
+    @State private var deleting: [FSEntry]?
     @State private var renaming: FSEntry?
+    @State private var selecting = false
+    @State private var selection = Set<String>()
+    @State private var opError: String?
     @State private var newFolder = false
     @State private var busy: String?
     @AppStorage("tv.explorer.grid") private var grid = false
@@ -54,25 +57,43 @@ struct TVBrowserView: View {
         }
     }
 
+    private var selected: [FSEntry] { sorted.filter { selection.contains($0.id) } }
+    private func toggle(_ e: FSEntry) { if selection.contains(e.id) { selection.remove(e.id) } else { selection.insert(e.id) } }
+
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 24) {
-                Text(path == "/" ? server.name : path).font(.callout).foregroundStyle(.secondary).lineLimit(1)
-                Spacer()
-                if !entries.isEmpty { Text("\(entries.count) items").font(.callout).foregroundStyle(.secondary) }
-                if let c = clipboard.pasteable(into: path, server: server) {
-                    Button { Task { await paste(into: path) } } label: { Label(c.cut ? "Paste (move) \(c.entry.name)" : "Paste \(c.entry.name)", systemImage: "doc.on.clipboard") }
-                }
-                if path != "/" { Button { newFolder = true } label: { Label("New folder", systemImage: "folder.badge.plus") } }
-                Menu {
-                    Picker("Sort by", selection: $sortKey) {
-                        Text("Name").tag("name"); Text("Date").tag("date"); Text("Size").tag("size")
+                if selecting {
+                    // Select mode: every action applies to the whole selection.
+                    Text("\(selection.count) selected").font(.callout).foregroundStyle(.secondary)
+                    Spacer()
+                    Button { selection = Set(sorted.map(\.id)) } label: { Label("Select all", systemImage: "checklist.checked") }.disabled(selection.count == sorted.count)
+                    if path != "/" {
+                        Button { clipboard.copy(selected, server: server); selecting = false } label: { Label("Copy", systemImage: "doc.on.doc") }.disabled(selection.isEmpty)
+                        Button { clipboard.cut(selected, server: server); selecting = false } label: { Label("Cut", systemImage: "scissors") }.disabled(selection.isEmpty)
+                        Button(role: .destructive) { deleting = selected } label: { Label("Delete", systemImage: "trash") }.disabled(selection.isEmpty)
                     }
-                } label: { Label("Sort by", systemImage: "arrow.up.arrow.down") }
-                Button { grid.toggle() } label: { Label(grid ? "List" : "Grid", systemImage: grid ? "list.bullet" : "square.grid.2x2") }
+                    Button { selecting = false } label: { Label("Done", systemImage: "checkmark") }
+                } else {
+                    Text(path == "/" ? server.name : path).font(.callout).foregroundStyle(.secondary).lineLimit(1)
+                    Spacer()
+                    if !entries.isEmpty { Text("\(entries.count) items").font(.callout).foregroundStyle(.secondary) }
+                    if let c = clipboard.pasteable(into: path, server: server) {
+                        Button { Task { await paste(into: path) } } label: { Label(c.cut ? "Paste (move) \(c.label)" : "Paste \(c.label)", systemImage: "doc.on.clipboard") }
+                    }
+                    if !entries.isEmpty { Button { selecting = true } label: { Label("Select", systemImage: "checkmark.circle") } }
+                    if path != "/" { Button { newFolder = true } label: { Label("New folder", systemImage: "folder.badge.plus") } }
+                    Menu {
+                        Picker("Sort by", selection: $sortKey) {
+                            Text("Name").tag("name"); Text("Date").tag("date"); Text("Size").tag("size")
+                        }
+                    } label: { Label("Sort by", systemImage: "arrow.up.arrow.down") }
+                    Button { grid.toggle() } label: { Label(grid ? "List" : "Grid", systemImage: grid ? "list.bullet" : "square.grid.2x2") }
+                }
             }
             .buttonStyle(TVPillButtonStyle())
             .padding(.horizontal, 60).padding(.vertical, 16)
+            .onChange(of: selecting) { _, on in if !on { selection.removeAll() } }
             Group {
                 if let error { ContentUnavailableView("Cannot load this folder", systemImage: "exclamationmark.triangle", description: Text(error)) }
                 else if loading && entries.isEmpty { ProgressView() }
@@ -84,9 +105,14 @@ struct TVBrowserView: View {
         .task { await load() }
         .fullScreenCover(item: $opened) { e in TVFileOpener(server: server, entry: e) }
         .sheet(item: $info) { e in TVFileInfoView(server: server, entry: e) { info = nil; opened = e } }
-        .confirmationDialog("Delete?", isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } }), titleVisibility: .visible) {
-            Button(role: .destructive) { if let d = deleting { Task { await remove(d) } } } label: { Text("Delete \(deleting?.name ?? "")") }
-        } message: { Text("The file is removed from the NAS. There is no trash on the gateway.") }
+        .confirmationDialog(deleting.map { $0.count > 1 } == true ? Text("Delete \(deleting?.count ?? 0) items?") : Text("Delete?"), isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } }), titleVisibility: .visible) {
+            Button(role: .destructive) { if let d = deleting { Task { await remove(d) } } } label: {
+                if let d = deleting, d.count == 1 { Text("Delete \(d[0].name)") } else { Text("Delete \(deleting?.count ?? 0) items") }
+            }
+        } message: { Text("The files are removed from the NAS. There is no trash on the gateway.") }
+        .alert("Something went wrong", isPresented: Binding(get: { opError != nil }, set: { if !$0 { opError = nil } })) {
+            Button("OK", role: .cancel) {}
+        } message: { Text(opError ?? "") }
         .sheet(item: $renaming) { e in
             TVTextPromptView(title: "Rename", initial: e.name, confirm: "Rename") { name in Task { await rename(e, to: name) } }
         }
@@ -101,28 +127,38 @@ struct TVBrowserView: View {
     private func paste(into folder: String) async {
         guard let c = model.client(for: server) else { return }
         busy = String(localized: "Pasting…"); defer { busy = nil }
-        if let err = await clipboard.paste(into: folder, server: server, client: c) { error = err }
+        if let err = await clipboard.paste(into: folder, server: server, client: c, progress: { n, total in
+            busy = total > 1 ? String(localized: "Pasting \(n) of \(total)…") : String(localized: "Pasting…")
+        }) { opError = err }
         await load()
     }
 
-    private func remove(_ e: FSEntry) async {
+    /// Deletes the entries one after the other; a failure does not stop the others.
+    private func remove(_ items: [FSEntry]) async {
         guard let c = model.client(for: server) else { return }
-        busy = e.name; defer { busy = nil }
-        do { try await c.delete(e.path); await load() } catch { self.error = error.localizedDescription }
+        var errors: [String] = []
+        for (n, e) in items.enumerated() {
+            busy = items.count > 1 ? String(localized: "Deleting \(n + 1) of \(items.count)…") : e.name
+            do { try await c.delete(e.path) } catch { errors.append("\(e.name): \(error.localizedDescription)") }
+        }
+        busy = nil
+        if !errors.isEmpty { opError = errors.joined(separator: "\n") }
+        selecting = false
+        await load()
     }
 
     private func rename(_ e: FSEntry, to name: String) async {
         let n = name.trimmingCharacters(in: .whitespaces)
         guard !n.isEmpty, n != e.name, let c = model.client(for: server) else { return }
         busy = e.name; defer { busy = nil }
-        do { _ = try await c.move(e.path, to: GatewayPath.join(GatewayPath.parent(e.path), n)); await load() } catch { self.error = error.localizedDescription }
+        do { _ = try await c.move(e.path, to: GatewayPath.join(GatewayPath.parent(e.path), n)); await load() } catch { opError = error.localizedDescription }
     }
 
     private func create(_ name: String) async {
         let n = name.trimmingCharacters(in: .whitespaces)
         guard !n.isEmpty, let c = model.client(for: server) else { return }
         busy = String(localized: "Creating folder…"); defer { busy = nil }
-        do { _ = try await c.mkdir(GatewayPath.join(path, n)); await load() } catch { self.error = error.localizedDescription }
+        do { _ = try await c.mkdir(GatewayPath.join(path, n)); await load() } catch { opError = error.localizedDescription }
     }
 
     private var listView: some View {
@@ -137,7 +173,9 @@ struct TVBrowserView: View {
         ScrollView {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 40), count: 5), spacing: 40) {
                 ForEach(sorted) { e in
-                    if e.isDirectory {
+                    if selecting {
+                        Button { toggle(e) } label: { tile(e).overlay(alignment: .topTrailing) { checkmark(e) } }.buttonStyle(.card).contextMenu { contextItems(e) }
+                    } else if e.isDirectory {
                         NavigationLink { TVBrowserView(server: server, path: e.path, title: e.name) } label: { tile(e) }.buttonStyle(.card).contextMenu { contextItems(e) }
                     } else {
                         Button { open(e) } label: { tile(e) }.buttonStyle(.card).contextMenu { contextItems(e) }
@@ -147,9 +185,16 @@ struct TVBrowserView: View {
         }
     }
 
+    private func checkmark(_ e: FSEntry) -> some View {
+        Image(systemName: selection.contains(e.id) ? "checkmark.circle.fill" : "circle")
+            .font(.title2).foregroundStyle(selection.contains(e.id) ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary)).padding(12)
+    }
+
     @ViewBuilder private func row(_ e: FSEntry) -> some View {
         let kind = FileKind.of(e)
-        if e.isDirectory {
+        if selecting {
+            Button { toggle(e) } label: { HStack(spacing: 16) { checkmark(e).padding(0); rowLabel(e, kind) } }
+        } else if e.isDirectory {
             NavigationLink { TVBrowserView(server: server, path: e.path, title: e.name) } label: { rowLabel(e, kind) }
         } else {
             Button { open(e) } label: { rowLabel(e, kind) }
@@ -171,16 +216,27 @@ struct TVBrowserView: View {
     }
 
     @ViewBuilder private func contextItems(_ e: FSEntry) -> some View {
-        Button { info = e } label: { Label("Info", systemImage: "info.circle") }
-        if !e.isDirectory { Button { open(e) } label: { Label("Open", systemImage: "arrow.up.right.square") } }
-        if GatewayPath.depth(e.path) > 1 {
-            Button { clipboard.copy(e, server: server) } label: { Label("Copy", systemImage: "doc.on.doc") }
-            Button { clipboard.cut(e, server: server) } label: { Label("Cut", systemImage: "scissors") }
-            if e.isDirectory, let c = clipboard.pasteable(into: e.path, server: server) {
-                Button { Task { await paste(into: e.path) } } label: { Label(c.cut ? "Paste (move) into folder" : "Paste into folder", systemImage: "doc.on.clipboard") }
+        if selecting, selection.contains(e.id), selection.count > 1 {
+            let items = selected
+            Text("\(items.count) selected")
+            if path != "/" {
+                Button { clipboard.copy(items, server: server); selecting = false } label: { Label("Copy", systemImage: "doc.on.doc") }
+                Button { clipboard.cut(items, server: server); selecting = false } label: { Label("Cut", systemImage: "scissors") }
+                Button(role: .destructive) { deleting = items } label: { Label("Delete", systemImage: "trash") }
             }
-            Button { renaming = e } label: { Label("Rename", systemImage: "pencil") }
-            Button(role: .destructive) { deleting = e } label: { Label("Delete", systemImage: "trash") }
+        } else {
+            Button { info = e } label: { Label("Info", systemImage: "info.circle") }
+            if !e.isDirectory { Button { open(e) } label: { Label("Open", systemImage: "arrow.up.right.square") } }
+            if !selecting { Button { selecting = true; selection = [e.id] } label: { Label("Select", systemImage: "checkmark.circle") } }
+            if GatewayPath.depth(e.path) > 1 {
+                Button { clipboard.copy(e, server: server) } label: { Label("Copy", systemImage: "doc.on.doc") }
+                Button { clipboard.cut(e, server: server) } label: { Label("Cut", systemImage: "scissors") }
+                if e.isDirectory, let c = clipboard.pasteable(into: e.path, server: server) {
+                    Button { Task { await paste(into: e.path) } } label: { Label(c.cut ? "Paste (move) into folder" : "Paste into folder", systemImage: "doc.on.clipboard") }
+                }
+                Button { renaming = e } label: { Label("Rename", systemImage: "pencil") }
+                Button(role: .destructive) { deleting = [e] } label: { Label("Delete", systemImage: "trash") }
+            }
         }
     }
 
@@ -201,6 +257,7 @@ struct TVBrowserView: View {
             let cfg = model.current(server)
             entries = try await c.list(path).entries.filter { path != "/" || cfg.isVisible(path: $0.path) }
             error = nil
+            selection = selection.intersection(entries.map(\.id))
         } catch { self.error = error.localizedDescription }
         loading = false
     }
