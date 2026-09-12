@@ -245,7 +245,7 @@ struct TVBrowserView: View {
     private func tile(_ e: FSEntry) -> some View {
         let kind = FileKind.of(e)
         return VStack(spacing: 12) {
-            Image(systemName: kind.symbol).font(.system(size: 64)).foregroundStyle(e.isDirectory ? AnyShapeStyle(.tint) : AnyShapeStyle(.primary)).frame(height: 90)
+            Image(systemName: kind.symbol).font(.largeTitle).imageScale(.large).foregroundStyle(e.isDirectory ? AnyShapeStyle(.tint) : AnyShapeStyle(.primary)).frame(height: 90)
             Text(e.name).font(.callout).lineLimit(2).multilineTextAlignment(.center)
             if !e.isDirectory { Text(ByteCountFormatter.string(fromByteCount: e.size, countStyle: .file)).font(.caption2).foregroundStyle(.secondary) }
         }.frame(width: 300, height: 220).padding(12)
@@ -321,7 +321,7 @@ struct TVFileInfoView: View {
     var body: some View {
         let kind = FileKind.of(entry)
         VStack(spacing: 24) {
-            Image(systemName: kind.symbol).font(.system(size: 72)).foregroundStyle(.tint)
+            Image(systemName: kind.symbol).font(.largeTitle).imageScale(.large).foregroundStyle(.tint)
             Text(entry.name).font(.title2).multilineTextAlignment(.center).lineLimit(3)
             Grid(alignment: .leading, horizontalSpacing: 40, verticalSpacing: 10) {
                 GridRow { Text("Type").foregroundStyle(.secondary); Text(LocalizedStringKey(kind.labelKey)) }
@@ -492,7 +492,7 @@ struct TVEPUBView: View {
                 Button("Close") { dismiss() }.buttonStyle(TVPillButtonStyle())
             }
             if !chapters.isEmpty {
-                ScrollView { Text(chapters[index].text).font(.system(size: 30)).frame(maxWidth: 1400, alignment: .leading).padding(24).focusable() }
+                ScrollView { Text(chapters[index].text).font(.body).frame(maxWidth: 1400, alignment: .leading).padding(24).focusable() }
                     .id(index)
                 Text("Left/right: previous or next chapter").font(.footnote).foregroundStyle(.secondary)
             } else if let error {

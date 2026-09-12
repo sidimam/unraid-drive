@@ -112,7 +112,7 @@ struct TVPairView: View {
             }
         } else if paired.count > 1 {
             VStack(spacing: 24) {
-                Image(systemName: "checkmark.circle.fill").font(.system(size: 80)).foregroundStyle(.green)
+                Image(systemName: "checkmark.circle.fill").font(.largeTitle).imageScale(.large).foregroundStyle(.green)
                 Text("Configuration restored: \(paired.count) servers").font(.title)
                 Text(paired.map(\.name).joined(separator: " · ")).foregroundStyle(.secondary)
                 Text("Every server keeps the shares chosen on your other device; change them any time from the server's page, Shares to show.")
@@ -129,7 +129,7 @@ struct TVPairView: View {
 
     private var pairingView: some View {
         VStack(spacing: 28) {
-            Image(systemName: waitingInCloud.isEmpty ? "appletv" : "icloud.and.arrow.down").font(.system(size: 80)).foregroundStyle(.tint)
+            Image(systemName: waitingInCloud.isEmpty ? "appletv" : "icloud.and.arrow.down").font(.largeTitle).imageScale(.large).foregroundStyle(.tint)
             if waitingInCloud.isEmpty {
                 Text("Add a server from another device").font(.title)
                 Text("Open Unraid Drive on your iPhone, iPad or Mac, go to Settings › Pair an Apple TV and enter this code. The server and its credentials arrive here encrypted with the code; the TV then connects through your unraid-gateway with your own permissions.")
@@ -141,7 +141,7 @@ struct TVPairView: View {
                     .multilineTextAlignment(.center).foregroundStyle(.secondary).frame(maxWidth: 900)
             }
             Text(code.enumerated().map { $0.offset == 3 ? " \($0.element)" : String($0.element) }.joined())
-                .font(.system(size: 110, weight: .bold, design: .rounded)).monospacedDigit().foregroundStyle(.tint)
+                .font(.system(.largeTitle, design: .rounded).weight(.bold)).monospacedDigit().foregroundStyle(.tint)
             Label(status, systemImage: done ? "checkmark.circle.fill" : "hourglass").foregroundStyle(done ? .green : .secondary)
             HStack {
                 Button("New code") { code = TVPairing.generateCode() }

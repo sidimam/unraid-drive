@@ -487,7 +487,7 @@ struct MenuBarPanel: View {
 
     private func emptyState(_ symbol: String, _ title: LocalizedStringKey, _ text: LocalizedStringKey) -> some View {
         VStack(spacing: 8) {
-            Image(systemName: symbol).font(.system(size: 44)).foregroundStyle(AppIconColor.currentTint).padding(.top, 30)
+            Image(systemName: symbol).font(.largeTitle).imageScale(.large).foregroundStyle(AppIconColor.currentTint).padding(.top, 30)
             Text(title).font(.headline)
             Text(text).font(.callout).foregroundStyle(.secondary).multilineTextAlignment(.center)
         }.frame(maxWidth: .infinity).padding()
@@ -616,7 +616,7 @@ struct ErrorListView: View {
             Text("Error list").font(.title2.weight(.semibold)).foregroundStyle(AppIconColor.currentTint)
             if feed.errors.isEmpty {
                 VStack(spacing: 8) {
-                    Image(systemName: "checkmark.icloud.fill").font(.system(size: 56)).foregroundStyle(.green).padding(.top, 30)
+                    Image(systemName: "checkmark.icloud.fill").font(.largeTitle).imageScale(.large).foregroundStyle(.green).padding(.top, 30)
                     Text("Everything is fine").font(.headline)
                     Text("Files that could not be uploaded or downloaded are listed here.").foregroundStyle(.secondary)
                 }.frame(maxWidth: .infinity)
