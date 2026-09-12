@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3 (build 35) — 2026-09-12
+
+- **Transient network errors are retried.** Every request to the gateway (listing, download, upload, sign-in) now retries up to two times, after 0.4 s and 1.6 s, when the transport fails — connection refused or reset, DNS hiccup, a VPN interface that is up but dead, a Wi-Fi hand-over — before the error surfaces. Timeouts and cancellations are not retried. Why: on a Mac where a WireGuard tunnel was listed as disconnected but still owned the routes to the gateway's Cloudflare address, every first connection was refused and the system fell back to Wi-Fi only ~0.8 s later; the Finder extension gave up on the first refusal and showed *"Unraid Drive" ha riscontrato un errore* (File Provider -1005, server unreachable) while the app, retrying by hand, looked fine.
+
 ## 1.3 (build 34) — 2026-09-12
 
 - **Files / Finder location maintained automatically.** On the first launch and after every update the app, by itself and for every server: checks the connection to the gateway with the stored credentials, **rebuilds the Files app / Finder location** (removed and registered again, so the system starts from a clean database that matches the extension) and nudges it. The manual *Refresh the Files app / Finder location* and *Rebuild the location* rows are gone; the server page now shows **Files location / Finder location: checked and rebuilt automatically (build N, date)**. If the gateway cannot be reached, or the credentials have not arrived from iCloud Keychain yet, the row says *Automatic check pending* with the reason and a *Check now* button, and the pass is repeated every time the app becomes active until it succeeds. A server you add gets a fresh location, so nothing runs for it until the next update.

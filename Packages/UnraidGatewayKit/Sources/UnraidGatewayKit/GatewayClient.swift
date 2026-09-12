@@ -363,10 +363,10 @@ public actor GatewayClient {
         var req = request
         req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
         func send(_ r: URLRequest) async throws -> (Data, URLResponse) {
-            do {
+            try await withTransportRetry {
                 if let file { return try await session.upload(for: decorate(r), fromFile: file) }
                 return try await session.upload(for: decorate(r), from: body ?? Data())
-            } catch { throw GatewayError.network(error.localizedDescription) }
+            }
         }
         var (data, resp) = try await send(req)
         if (resp as? HTTPURLResponse)?.statusCode == 401 {
@@ -382,7 +382,7 @@ public actor GatewayClient {
         var req = request
         req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
         func send(_ r: URLRequest) async throws -> (URL, URLResponse) {
-            do { return try await session.download(for: decorate(r)) } catch { throw GatewayError.network(error.localizedDescription) }
+            try await withTransportRetry { try await session.download(for: decorate(r)) }
         }
         var (tmp, resp) = try await send(req)
         if (resp as? HTTPURLResponse)?.statusCode == 401 {
@@ -398,8 +398,27 @@ public actor GatewayClient {
         return (tmp, resp)
     }
 
+    /// Transport failures (connection refused/reset, DNS, a VPN interface that is up but dead, a
+    /// Wi-Fi hand-over) are retried a couple of times with a short pause before they surface as
+    /// `GatewayError.network`: the File Provider extension turns the first failure into a sticky
+    /// "server unreachable" banner in the Finder, so one refused connection must not be the end.
+    /// Timeouts and cancellations are not retried (they already waited, or the caller went away).
+    static let transientRetries = 2
+    private func withTransportRetry<T>(_ op: () async throws -> T) async throws -> T {
+        var attempt = 0
+        while true {
+            do { return try await op() } catch {
+                let e = error as NSError
+                let transient = e.domain == NSURLErrorDomain && ![NSURLErrorCancelled, NSURLErrorTimedOut, NSURLErrorUserCancelledAuthentication].contains(e.code)
+                if !transient || attempt >= Self.transientRetries || Task.isCancelled { throw GatewayError.network(error.localizedDescription) }
+                attempt += 1
+                try? await Task.sleep(for: .milliseconds(400 * attempt * attempt))
+            }
+        }
+    }
+
     private func perform(_ req: URLRequest) async throws -> (Data, URLResponse) {
-        do { return try await session.data(for: decorate(req)) } catch { throw GatewayError.network(error.localizedDescription) }
+        try await withTransportRetry { try await session.data(for: decorate(req)) }
     }
 
     private func decorate(_ req: URLRequest) -> URLRequest {

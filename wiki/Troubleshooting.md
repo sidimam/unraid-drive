@@ -100,6 +100,10 @@ Cloudflare limits a request to 100 MB. The **app** chunks uploads and is not aff
 
 The gateway preserves the file modification time you send and reports the server's time. Make sure `TZ` in the container matches your timezone (display only; timestamps are UTC internally).
 
+## Finder: "Unraid Drive ha riscontrato un errore. Gli elementi potrebbero non essere aggiornati"
+
+The Finder shows this banner when the extension reported the gateway as unreachable (File Provider error -1005) — one failed connection is enough, and the banner stays until *Riprova* or the next successful sync. Since build 35 the app retries transient failures twice before giving up. If it keeps happening, check the network path of the Mac rather than the app: a VPN (WireGuard, corporate client) that is *disconnected* but still owns routes to the gateway's address makes every first connection fail with *connection refused* — `route -n get <your gateway host>` shows the interface (a `utun*` means the tunnel); disconnect the tunnel completely or exclude the gateway's address from its allowed IPs. To see what the extension is doing: `/usr/bin/log show --last 5m --predicate 'processImagePath CONTAINS "UnraidDriveFileProvider"'` (`/usr/bin/log`: in zsh `log` is a shell builtin).
+
 ## "Cannot play this file" (mpv) on Apple TV, iPhone, iPad or Mac
 
 **On the Mac, builds 27–30 crashed** (the app simply vanished) the moment an MKV, AVI or another mpv format started: the hardened runtime killed mpv's LuaJIT scripts. Build 31 turns those scripts off; update from the Releases page or `brew upgrade --cask unraid-drive`.

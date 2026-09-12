@@ -65,6 +65,8 @@ After the first launch enable the extension under System Settings › General �
 
 ## What's new
 
+**1.3 (build 35):** transient network errors (connection refused/reset, a dead VPN interface, a Wi-Fi hand-over) are retried twice before the Files app / Finder sees them.
+
 **1.3 (build 34):** the Files / Finder location is checked and rebuilt automatically on the first launch and after every update (connection check included); the manual Refresh and Rebuild rows are gone.
 
 **1.3 (build 33):** multi-selection in the explorer on every device (Copy, Cut, Move…, Copy to…, Download, Share…, Delete on the whole selection; Apple TV too), *Download* of files and folders to a place you choose, and on the Mac *Start without a window* (menu bar only, or menu bar + Dock).
