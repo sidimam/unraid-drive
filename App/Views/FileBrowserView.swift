@@ -71,7 +71,7 @@ struct FileBrowserView: View {
             else if let error, entries.isEmpty { ContentUnavailableView("Cannot load this folder", systemImage: "exclamationmark.triangle", description: Text(error)) }
             else if !loading && entries.isEmpty { ContentUnavailableView(path == "/" ? "No shares" : "Empty folder", systemImage: "folder") }
         }
-        .searchable(text: $search, prompt: Text("Search in this folder"))
+        .modifier(SearchableUnlessRoot(root: path == "/", text: $search))
         .navigationTitle(selecting ? Text("\(selection.count) selected") : Text(path == "/" ? server.name : GatewayPath.name(path)))
         .inlineNavigationTitle()
         .toolbar { toolbarItems }
@@ -495,6 +495,15 @@ struct FileBrowserView: View {
 }
 
 extension URL: @retroactive Identifiable { public var id: String { absoluteString } }
+
+/// The share root lists a handful of mount points: a search field there is noise.
+struct SearchableUnlessRoot: ViewModifier {
+    let root: Bool
+    @Binding var text: String
+    func body(content: Content) -> some View {
+        if root { content } else { content.searchable(text: $text, prompt: Text("Search in this folder")) }
+    }
+}
 
 // MARK: - Info
 
