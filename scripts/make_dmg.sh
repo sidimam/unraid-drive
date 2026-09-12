@@ -18,6 +18,9 @@ if [ "$EXPORTED" != "$BUILD" ]; then
   AUTH=(-allowProvisioningUpdates)   # Developer ID Application certificate is in the login keychain
   xcodebuild archive -project UnraidDrive.xcodeproj -scheme UnraidDriveMac -destination "generic/platform=macOS" \
     -archivePath "$DD_ROOT/UnraidDrive-macOS.xcarchive" -derivedDataPath "$DD_ROOT/dd-macOS" "${AUTH[@]}" 2>&1 | tee "$DD_ROOT/archive-devid.log" | grep -E "error:|detritus|ARCHIVE"
+  # Frameworks pulled by SwiftPM (MPVKit) can carry com.apple.provenance / quarantine attributes;
+  # codesign then fails with "replacing existing signature" during the export. Strip them first.
+  xattr -cr "$DD_ROOT/UnraidDrive-macOS.xcarchive" 2>/dev/null
   xcodebuild -exportArchive -archivePath "$DD_ROOT/UnraidDrive-macOS.xcarchive" -exportOptionsPlist ExportOptions-DeveloperID.plist \
     -exportPath "$DD_ROOT/export-devid" "${AUTH[@]}" 2>&1 | grep -E "error:|EXPORT"
   [ -d "$APP" ] || { echo "export failed"; exit 1; }
