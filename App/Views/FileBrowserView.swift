@@ -71,9 +71,10 @@ struct FileBrowserView: View {
         .sheet(isPresented: Binding(get: { moving != nil }, set: { if !$0 { moving = nil } })) {
             if let m = moving {
                 NavigationStack {
-                    FolderPickerView(server: server, title: m.copy ? "Copy to" : "Move to", excluding: m.entry.path) { dest in
+                    FolderPickerView(server: server, title: m.copy ? "Copy to" : "Move to", excluding: m.entry.path, copy: m.copy, onChoose: { dest in
+                        moving = nil
                         Task { await transfer(m.entry, to: dest, copy: m.copy) }
-                    }
+                    }, onCancel: { moving = nil })
                 }.sheetFrame()
             }
         }
@@ -193,9 +194,11 @@ struct FileBrowserView: View {
 
     @ViewBuilder private func contextItems(_ e: FSEntry) -> some View {
         if !e.isDirectory {
+            // One "Open" for every file: it picks the right viewer (mpv for MKV/AVI…, the EPUB, comic
+            // and archive readers, Quick Look for everything else). Quick Look stays as a separate
+            // entry only where Open does something else.
             Button { open(e) } label: { Label("Open", systemImage: "arrow.up.right.square") }
-            Button { quickLook(e) } label: { Label("Quick Look", systemImage: "eye") }
-            if FileKind.of(e).isMedia { Button { viewer = e } label: { Label("Play with mpv", systemImage: "play.rectangle") } }
+            if opensInViewer(e) { Button { quickLook(e) } label: { Label("Quick Look", systemImage: "eye") } }
             Button { Task { await share(e) } } label: { Label("Share…", systemImage: "square.and.arrow.up") }
         }
         Button { info = e } label: { Label("Info", systemImage: "info.circle") }
@@ -238,11 +241,15 @@ struct FileBrowserView: View {
         loading = false
     }
 
-    private func open(_ e: FSEntry) {
+    private func opensInViewer(_ e: FSEntry) -> Bool {
         switch FileKind.of(e) {
-        case .mpvVideo, .mpvAudio, .epub, .comic, .archive: viewer = e
-        default: quickLook(e)
+        case .mpvVideo, .mpvAudio, .epub, .comic, .archive: return true
+        default: return false
         }
+    }
+
+    private func open(_ e: FSEntry) {
+        if opensInViewer(e) { viewer = e } else { quickLook(e) }
     }
 
     /// Quick Look handles images, PDF, text, Office documents and Apple formats.
@@ -348,19 +355,20 @@ struct FileInfoView: View {
 
 struct FolderPickerView: View {
     @EnvironmentObject private var model: ServersModel
-    @Environment(\.dismiss) private var dismiss
     let server: ServerConfig
     let title: LocalizedStringKey
     var excluding: String
     var path: String = "/"
+    var copy = false
     let onChoose: (String) -> Void
+    var onCancel: () -> Void = {}
     @State private var folders: [FSEntry] = []
     @State private var loading = true
 
     var body: some View {
         List {
             ForEach(folders) { f in
-                NavigationLink { FolderPickerView(server: server, title: title, excluding: excluding, path: f.path, onChoose: onChoose) } label: {
+                NavigationLink { FolderPickerView(server: server, title: title, excluding: excluding, path: f.path, copy: copy, onChoose: onChoose, onCancel: onCancel) } label: {
                     Label(f.name, systemImage: GatewayPath.depth(f.path) == 1 ? "externaldrive" : "folder")
                 }
             }
@@ -370,8 +378,26 @@ struct FolderPickerView: View {
         .navigationTitle(path == "/" ? Text(title) : Text(GatewayPath.name(path)))
         .inlineNavigationTitle()
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
-            if path != "/" { ToolbarItem(placement: .confirmationAction) { Button("Choose") { onChoose(path); dismiss() } } }
+            ToolbarItem(placement: .cancellationAction) { Button("Cancel") { onCancel() } }
+        }
+        // The destination is always confirmed explicitly: the bar names the folder that is open and
+        // the button does the move/copy *here*. At the root there is no destination yet (a share
+        // must be opened first), so the button is disabled and the text says so.
+        .safeAreaInset(edge: .bottom) {
+            VStack(spacing: 10) {
+                if path == "/" {
+                    Text("Open a share, then the folder you want, and confirm with the button.").font(.footnote).foregroundStyle(.secondary).multilineTextAlignment(.center)
+                } else {
+                    Text("Destination: \(path)").font(.footnote).foregroundStyle(.secondary).lineLimit(2).multilineTextAlignment(.center)
+                }
+                Button { onChoose(path) } label: {
+                    Label(copy ? "Copy here" : "Move here", systemImage: copy ? "doc.on.doc" : "folder")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent).controlSize(.large).disabled(path == "/")
+            }
+            .padding()
+            .background(.bar)
         }
         .task {
             guard let c = model.client(for: server) else { loading = false; return }
