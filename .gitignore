@@ -7,3 +7,6 @@ build/
 *.xcworkspace
 .DS_Store
 __pycache__/
+
+# Recovery kit (credenziali, chiavi, runbook): vive qui ma NON va mai in git
+Unraid-Drive-RecoveryKit/
