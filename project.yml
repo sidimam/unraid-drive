@@ -26,7 +26,7 @@ settings:
     MARKETING_VERSION: "1.3.1"
     # MPVKit ships arm64-only slices for the visionOS simulator.
     "EXCLUDED_ARCHS[sdk=xrsimulator*]": x86_64
-    CURRENT_PROJECT_VERSION: "38"
+    CURRENT_PROJECT_VERSION: "39"
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     SWIFT_STRICT_CONCURRENCY: minimal
 packages:
@@ -81,6 +81,11 @@ targets:
       properties:
         com.apple.security.application-groups: [group.com.sdimambro.unraid-drive]
         com.apple.developer.ubiquity-kvstore-identifier: $(TeamIdentifierPrefix)$(CFBundleIdentifier)
+        # iCloud Drive › Unraid Drive › servers.json (build 39+). XcodeGen writes the .entitlements
+        # files from these properties: edit them HERE, never the files.
+        com.apple.developer.icloud-services: [CloudDocuments]
+        com.apple.developer.icloud-container-identifiers: [iCloud.com.sdimambro.unraid-drive]
+        com.apple.developer.ubiquity-container-identifiers: [iCloud.com.sdimambro.unraid-drive]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.sdimambro.unraid-drive
@@ -139,6 +144,11 @@ targets:
         com.apple.security.network.client: true
         com.apple.security.application-groups: [group.com.sdimambro.unraid-drive]
         com.apple.developer.ubiquity-kvstore-identifier: $(TeamIdentifierPrefix)$(CFBundleIdentifier)
+        # iCloud Drive › Unraid Drive › servers.json (build 39+). XcodeGen writes the .entitlements
+        # files from these properties: edit them HERE, never the files.
+        com.apple.developer.icloud-services: [CloudDocuments]
+        com.apple.developer.icloud-container-identifiers: [iCloud.com.sdimambro.unraid-drive]
+        com.apple.developer.ubiquity-container-identifiers: [iCloud.com.sdimambro.unraid-drive]
     settings:
       base:
         INFOPLIST_FILE: App/Info-macOS.plist
