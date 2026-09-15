@@ -2,9 +2,9 @@
 
 All notable changes to Unraid Drive. The server side has its own changelog in [unraid-gateway](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
 
-## 1.3.1 (build 38) — 2026-09-15
+## 1.3.1 (build 39) — 2026-09-15
 
-Version 1.3.1 because the Mac App Store approved 1.3 (build 36) on 15 September while this build was being prepared: a new build for macOS and visionOS needs a higher version.
+Version 1.3.1 because the Mac App Store approved 1.3 (build 36) on 15 September while this build was being prepared: a new build for macOS and visionOS needs a higher version. Build 39 replaces build 38 (same day): 38 was signed without the iCloud Documents entitlement because the project generator rewrote the entitlement files.
 
 - **Registration that heals itself.** When a gateway answers *device not registered* to an installation that has valid credentials, the app registers again on the spot (the gateway's registry was reset, or the device came back with an id the gateway never saw) instead of failing until you re-enter the secrets. Restoring from iCloud from Settings or the server list now also registers the device on every gateway (only the walkthrough did). The device id is written to iCloud only after a gateway confirmed it, so a fresh install whose iCloud data has not arrived yet can no longer overwrite the id the previous installation left there; the id iCloud remembers is adopted as soon as it arrives.
 - **Secrets are never destroyed by the app.** Turning iCloud sync on or off, and restoring, used to delete all five Keychain items of a server and re-add only what could be read at that moment — a locked Keychain or an item still travelling through iCloud Keychain meant *the API key disappeared*. Every secret is now copied first and only then re-flagged, one by one; *Edit server* overwrites only the fields you filled in.
