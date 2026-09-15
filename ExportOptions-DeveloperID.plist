@@ -2,13 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>method</key>
-	<string>developer-id</string>
-	<key>teamID</key>
-	<string>X5SR67A8AL</string>
-	<key>signingStyle</key>
-	<string>automatic</string>
 	<key>destination</key>
 	<string>export</string>
+	<key>method</key>
+	<string>developer-id</string>
+	<key>signingStyle</key>
+	<string>manual</string>
+	<key>signingCertificate</key>
+	<string>Developer ID Application</string>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>com.sdimambro.unraid-drive</key>
+		<string>UnraidDrive Mac Developer ID</string>
+		<key>com.sdimambro.unraid-drive.fileprovider</key>
+		<string>UnraidDrive FP Mac Developer ID</string>
+	</dict>
+	<key>teamID</key>
+	<string>X5SR67A8AL</string>
 </dict>
 </plist>

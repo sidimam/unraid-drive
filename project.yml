@@ -9,6 +9,12 @@ options:
     tvOS: "17.0"
   createIntermediateGroups: true
   generateEmptyDirectories: true
+# DeveloperID = Release signed manually with the Developer ID profiles created through the App Store
+# Connect API (they carry the iCloud container; Xcode's automatic "Mac Team Direct" profile did not).
+configs:
+  Debug: debug
+  Release: release
+  DeveloperID: release
 settings:
   base:
     SWIFT_VERSION: "5.0"
@@ -144,6 +150,11 @@ targets:
         ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
         ENABLE_HARDENED_RUNTIME: YES
         LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks"
+      configs:
+        DeveloperID:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: Developer ID Application
+          PROVISIONING_PROFILE_SPECIFIER: UnraidDrive Mac Developer ID
   UnraidDriveFileProviderMac:
     type: app-extension
     platform: macOS
@@ -184,6 +195,11 @@ targets:
         PRODUCT_MODULE_NAME: UnraidDriveFileProvider
         ASSETCATALOG_COMPILER_APPICON_NAME: FPIcon
         ENABLE_HARDENED_RUNTIME: YES
+      configs:
+        DeveloperID:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: Developer ID Application
+          PROVISIONING_PROFILE_SPECIFIER: UnraidDrive FP Mac Developer ID
   UnraidDriveTV:
     type: application
     platform: tvOS
