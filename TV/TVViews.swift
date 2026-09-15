@@ -30,6 +30,14 @@ struct TVRootView: View {
         #endif
         return nil
     }
+    /// Debug: `-tvDiagnostics` opens the demo server's Diagnostics screen directly.
+    private var debugDiagnostics: Bool {
+        #if DEBUG
+        return ProcessInfo.processInfo.arguments.contains("-tvDiagnostics")
+        #else
+        return false
+        #endif
+    }
     /// Debug: `-tvDashboard` opens the demo server's dashboard directly.
     private var debugDashboard: Bool {
         #if DEBUG
@@ -46,6 +54,7 @@ struct TVRootView: View {
             }
             else if let p = debugPath, let demo = model.servers.first(where: \.isDemo) { TVBrowserView(server: demo, path: p, title: (p as NSString).lastPathComponent.isEmpty ? demo.name : (p as NSString).lastPathComponent) }
             else if debugDashboard, let demo = model.servers.first(where: \.isDemo) { TVDashboardView(server: demo) }
+            else if debugDiagnostics, let demo = model.servers.first(where: \.isDemo) { TVDiagnosticsView(server: demo) }
             else if model.servers.isEmpty { TVPairView() } else { TVServersView() }
         }
     }

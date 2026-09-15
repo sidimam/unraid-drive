@@ -90,7 +90,7 @@ struct FileBrowserView: View {
                 if !on { selection.removeAll() }
             }
         }
-        .sensoryFeedback(.selection, trigger: selecting)
+        .modifier(SelectionFeedback(trigger: selecting))
         .animation(.default, value: selecting)
         .quickLookPreview($preview)
         .sheet(item: $viewer) { e in FileViewerSheet(server: server, entry: e).sheetFrame() }
@@ -618,5 +618,18 @@ struct ShareSheet: View {
             }
             Button("Done") { dismiss() }
         }.padding(32)
+    }
+}
+
+/// Light haptic when Select mode toggles, where the system offers one (visionOS gained
+/// `sensoryFeedback` only in visionOS 26; the deployment target is visionOS 1).
+struct SelectionFeedback: ViewModifier {
+    let trigger: Bool
+    func body(content: Content) -> some View {
+        #if os(visionOS)
+        content
+        #else
+        content.sensoryFeedback(.selection, trigger: trigger)
+        #endif
     }
 }

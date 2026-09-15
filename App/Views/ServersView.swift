@@ -6,6 +6,7 @@ struct ServersView: View {
     @EnvironmentObject private var cloud: CloudSync
     @State private var adding = false
     @State private var showSettings = false
+    @State private var showDiagnostics = false
     @State private var showWalkthrough = false
     #if os(macOS)
     private let compact = false
@@ -112,6 +113,7 @@ struct ServersView: View {
                 AddServerView().presentationDetents([.large])
             }
             .sheet(isPresented: $showSettings) { SettingsView() }
+            .sheet(isPresented: $showDiagnostics) { NavigationStack { DiagnosticsView().environmentObject(model) }.sheetFrame() }
             #if os(iOS)
             .onReceive(NotificationCenter.default.publisher(for: QuickAction.notification)) { note in
                 guard let raw = note.userInfo?["action"] as? String, let action = QuickAction(rawValue: raw) else { return }
@@ -132,6 +134,8 @@ struct ServersView: View {
                 #endif
                 #if DEBUG
                 if ProcessInfo.processInfo.arguments.contains("-testConnection") { WalkthroughView.markSeen(); quickTestServer = model.servers.first { !$0.isDemo } ?? model.servers.first }
+                // `-openDiagnostics`: Settings › Diagnostics and log directly (screenshots, regression).
+                if ProcessInfo.processInfo.arguments.contains("-openDiagnostics") { WalkthroughView.markSeen(); showDiagnostics = true }
                 // Screenshots without personal data: open the demo server (and its connection test).
                 if ProcessInfo.processInfo.arguments.contains("-openDemo"), let demo = model.servers.first(where: { $0.isDemo }) {
                     WalkthroughView.markSeen(); path = [demo]
