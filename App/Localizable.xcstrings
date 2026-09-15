@@ -1602,6 +1602,46 @@
         }
       }
     },
+    "Apple grants an iCloud Drive folder only to App Store apps: this Homebrew build reads and writes the servers.json that iCloud Drive syncs from your other devices, and always keeps the list in iCloud key-value storage.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمنح Apple مجلد iCloud Drive لتطبيقات App Store فقط: يقرأ إصدار Homebrew هذا ويكتب ملف servers.json الذي يزامنه iCloud Drive من أجهزتك الأخرى، ويحتفظ دائمًا بالقائمة في مخزن القيم والمفاتيح في iCloud."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple gewährt einen iCloud-Drive-Ordner nur App-Store-Apps: diese Homebrew-Version liest und schreibt die servers.json, die iCloud Drive von deinen anderen Geräten synchronisiert, und hält die Liste immer im iCloud-Schlüssel-Wert-Speicher."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple concede una carpeta de iCloud Drive solo a las apps del App Store: esta versión Homebrew lee y escribe el servers.json que iCloud Drive sincroniza desde tus otros dispositivos, y mantiene siempre la lista en el almacenamiento clave-valor de iCloud."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple n’accorde un dossier iCloud Drive qu’aux apps de l’App Store : cette version Homebrew lit et écrit le servers.json qu’iCloud Drive synchronise depuis vos autres appareils, et garde toujours la liste dans le stockage clé-valeur d’iCloud."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple concede una cartella iCloud Drive solo alle app dell’App Store: questa versione Homebrew legge e scrive il servers.json che iCloud Drive sincronizza dagli altri tuoi dispositivi, e tiene sempre l’elenco nell’archivio chiave-valore di iCloud."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple 仅向 App Store 应用授予 iCloud 云盘文件夹：此 Homebrew 版本读写 iCloud 云盘从你其他设备同步来的 servers.json，并始终把列表保存在 iCloud 键值存储中。"
+          }
+        }
+      }
+    },
     "Archive": {
       "localizations": {
         "ar": {
@@ -7564,6 +7604,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "主页"
+          }
+        }
+      }
+    },
+    "Homebrew build": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إصدار Homebrew"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Homebrew-Version"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versión Homebrew"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version Homebrew"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versione Homebrew"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Homebrew 版本"
           }
         }
       }
@@ -19495,6 +19575,46 @@
         }
       }
     },
+    "appears after another device saves it": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يظهر بعد أن يحفظه جهاز آخر"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "erscheint, sobald ein anderes Gerät sie gesichert hat"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "aparece después de que otro dispositivo lo guarde"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "apparaît après qu’un autre appareil l’a enregistré"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "appare dopo che un altro dispositivo l’ha salvato"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "其他设备保存后出现"
+          }
+        }
+      }
+    },
     "created and removed a test folder in %@": {
       "localizations": {
         "ar": {
@@ -19852,6 +19972,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "已在网关上注册"
+          }
+        }
+      }
+    },
+    "synced folder": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مجلد متزامن"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "synchronisierter Ordner"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "carpeta sincronizada"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dossier synchronisé"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cartella sincronizzata"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已同步的文件夹"
           }
         }
       }

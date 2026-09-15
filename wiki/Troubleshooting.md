@@ -149,3 +149,7 @@ The gateway container runs as Unraid's `nobody:users`. Folders created on the NA
 ## "This device was removed from the gateway"
 
 Someone removed this installation from the gateway's device list (web UI › Devices, or `gw devices rm`). Open the server in Unraid Drive, choose **Edit server or credentials** and **Connect**: that registers the device again (the gateway sends a notification). Test connection alone does not register.
+
+## The Settings row "iCloud Drive › Unraid Drive › servers.json" says "appears after another device saves it" (Mac, Homebrew)
+
+Apple grants an iCloud Drive container only to apps distributed through the App Store. The Homebrew build is signed with Developer ID, so it cannot create the folder itself: it reads and writes the `servers.json` that iCloud Drive syncs to `~/Library/Mobile Documents/iCloud~com~sdimambro~unraid-drive/Documents/` once an iPhone, iPad, Vision Pro or the Mac App Store version has saved the list. Until then the list still syncs through iCloud key-value storage and the secrets through iCloud Keychain, so nothing is lost. Check that iCloud Drive is on for this Mac (System Settings › Apple Account › iCloud › iCloud Drive).

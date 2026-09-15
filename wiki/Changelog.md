@@ -2,9 +2,9 @@
 
 All notable changes to Unraid Drive. The server side has its own changelog in [unraid-gateway](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
 
-## 1.3.1 (build 39) — 2026-09-15
+## 1.3.1 (build 40) — 2026-09-15
 
-Version 1.3.1 because the Mac App Store approved 1.3 (build 36) on 15 September while this build was being prepared: a new build for macOS and visionOS needs a higher version. Build 39 replaces build 38 (same day): 38 was signed without the iCloud Documents entitlement because the project generator rewrote the entitlement files.
+Version 1.3.1 because the Mac App Store approved 1.3 (build 36) on 15 September while this build was being prepared: a new build for macOS and visionOS needs a higher version. Build 40 replaces builds 38 and 39 (same day): they were signed without the iCloud Documents entitlement because the project generator rewrote the entitlement files.
 
 - **Registration that heals itself.** When a gateway answers *device not registered* to an installation that has valid credentials, the app registers again on the spot (the gateway's registry was reset, or the device came back with an id the gateway never saw) instead of failing until you re-enter the secrets. Restoring from iCloud from Settings or the server list now also registers the device on every gateway (only the walkthrough did). The device id is written to iCloud only after a gateway confirmed it, so a fresh install whose iCloud data has not arrived yet can no longer overwrite the id the previous installation left there; the id iCloud remembers is adopted as soon as it arrives.
 - **Secrets are never destroyed by the app.** Turning iCloud sync on or off, and restoring, used to delete all five Keychain items of a server and re-add only what could be read at that moment — a locked Keychain or an item still travelling through iCloud Keychain meant *the API key disappeared*. Every secret is now copied first and only then re-flagged, one by one; *Edit server* overwrites only the fields you filled in.
@@ -13,6 +13,9 @@ Version 1.3.1 because the Mac App Store approved 1.3 (build 36) on 15 September 
 - **Diagnostics and log.** Settings › Support › *Diagnostics and log*: a rotating log (5 × 1 MB, never larger) written by the app and by the Files/Finder extension with errors, warnings and the main events — sign-ins, iCloud pulls/pushes, Keychain moves, location maintenance, device registration, connection tests. *Debug logging* adds every request to the gateway and the details of iCloud and Keychain operations. *Share log and report*, *Copy report* (app, device, servers without secrets, iCloud state, registered locations, last lines) and *Show log files in Finder*; the connection test has *Copy report for support*. Apple TV: *Diagnostics and log* behind the gear, with *Send log to the server* (a text file in `<share>/Unraid Drive/Logs/`).
 - **Apple TV: icons only.** The explorer's header shows the symbols alone (gear, sort, grid, Select, New folder, Paste…); the name appears under the focused icon after a moment, the way tvOS reveals labels, and VoiceOver reads it.
 - **Built with Xcode 27 for iOS 27, macOS 27, tvOS 27 and visionOS 27.** Bars, sheets and controls take the current system look on every platform; navigation titles use the system colour again (the accent stays on controls); the connection-test icons use the system symbol transitions. Deployment targets unchanged (iOS/tvOS 17, macOS 14, visionOS 1).
+- **Homebrew (Developer ID) build on the Mac:** Apple grants an iCloud Drive container only to App Store apps, so this build reads and writes the `servers.json` that iCloud Drive syncs from your other devices (folder `~/Library/Mobile Documents/iCloud~com~sdimambro~unraid-drive`), and always keeps the list in iCloud key-value storage. The Settings row says so.
+- Release builds now sign with the App Store profiles created through the App Store Connect API (the Xcode-managed profiles could not pick up the iCloud container).
+
 
 ## 1.3 (build 36) — 2026-09-12
 

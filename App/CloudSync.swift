@@ -20,12 +20,17 @@ final class CloudSync: ObservableObject {
     /// State of `iCloud Drive › Unraid Drive › servers.json` for the Settings row.
     @Published private(set) var documentAvailable = false
     @Published private(set) var documentDate: Date?
+    /// Container, synced folder (Developer ID build) or unavailable — the Settings row explains each.
+    @Published private(set) var documentMode: CloudDocumentsStore.Mode = .unavailable
 
     private let kvs = NSUbiquitousKeyValueStore.default
     private let store = ServerStore()
     private let keychain = KeychainStore()
     private var observer: NSObjectProtocol?
     private var docWatcher: CloudDocumentsWatcher?
+    #if os(macOS)
+    private var folderWatcher: FolderWatcher?
+    #endif
     /// The last snapshot read from servers.json (merged with the Key-Value Store copy).
     private var documentServers: [ServerConfig] = []
     /// Called after a pull changed the local list (the model re-registers File Provider domains).
@@ -63,8 +68,14 @@ final class CloudSync: ObservableObject {
         let snap = await store.read()
         documentAvailable = await store.isAvailable
         documentDate = await store.modificationDate()
+        documentMode = await store.mode
         documentServers = snap?.servers.filter { !$0.isDemo } ?? []
         refreshRemoteCount()
+        #if os(macOS)
+        if documentMode == .syncedFolder, folderWatcher == nil, let url = await store.fileURL() {
+            folderWatcher = FolderWatcher(directory: url.deletingLastPathComponent()) { [weak self] in Task { @MainActor in await self?.handleDocumentChange() } }
+        }
+        #endif
     }
 
     private func handleDocumentChange() async {

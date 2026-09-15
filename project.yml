@@ -26,7 +26,7 @@ settings:
     MARKETING_VERSION: "1.3.1"
     # MPVKit ships arm64-only slices for the visionOS simulator.
     "EXCLUDED_ARCHS[sdk=xrsimulator*]": x86_64
-    CURRENT_PROJECT_VERSION: "39"
+    CURRENT_PROJECT_VERSION: "40"
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     SWIFT_STRICT_CONCURRENCY: minimal
 packages:
@@ -96,6 +96,11 @@ targets:
         "ASSETCATALOG_COMPILER_APPICON_NAME[sdk=xros*]": AppIconVision
         "ASSETCATALOG_COMPILER_APPICON_NAME[sdk=xrsimulator*]": AppIconVision
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: Apple Distribution
+          PROVISIONING_PROFILE_SPECIFIER: UnraidDrive iOS AppStore
   UnraidDriveFileProvider:
     type: app-extension
     supportedDestinations: [iOS, visionOS]
@@ -161,10 +166,19 @@ targets:
         ENABLE_HARDENED_RUNTIME: YES
         LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks"
       configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: Apple Distribution
+          PROVISIONING_PROFILE_SPECIFIER: UnraidDrive Mac AppStore
         DeveloperID:
           CODE_SIGN_STYLE: Manual
           CODE_SIGN_IDENTITY: Developer ID Application
           PROVISIONING_PROFILE_SPECIFIER: UnraidDrive Mac Developer ID
+          # Apple grants iCloud Drive containers only to App Store apps: the Homebrew build drops the
+          # container entitlements and instead reads/writes the folder iCloud Drive syncs from the other
+          # devices (sandbox exception). Hand-maintained file: XcodeGen does not regenerate it.
+          CODE_SIGN_ENTITLEMENTS: App/UnraidDrive-macOS-DeveloperID.entitlements
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) DEVELOPER_ID
   UnraidDriveFileProviderMac:
     type: app-extension
     platform: macOS

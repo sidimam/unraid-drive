@@ -24,26 +24,63 @@ actor CloudDocumentsStore {
         var servers: [ServerConfig]
     }
 
-    private var cachedURL: URL??
+    /// How servers.json is reached.
+    /// - `container`: the app's own iCloud Drive container (App Store / TestFlight / development builds).
+    /// - `syncedFolder`: the Developer ID (Homebrew) build on the Mac. Apple grants iCloud Drive containers
+    ///   only to App Store apps, so `url(forUbiquityContainerIdentifier:)` is nil there; iCloud Drive still
+    ///   syncs the container written by the other devices to `~/Library/Mobile Documents/iCloud~com~sdimambro~unraid-drive`,
+    ///   and that build reads and writes the folder directly (sandbox exception in UnraidDrive-macOS-DeveloperID.entitlements).
+    ///   The folder exists only after another device has saved the list once.
+    /// - `unavailable`: iCloud Drive off, or nothing to fall back to.
+    enum Mode: Sendable { case container, syncedFolder, unavailable }
+    private(set) var mode: Mode = .unavailable
+    private var ubiquityDocs: URL??
+    private var warned = false
 
-    /// `…/Documents/servers.json` inside the container, or nil when iCloud Drive is not available.
+    /// `…/Documents/servers.json`, or nil when iCloud Drive is not available.
     func fileURL() -> URL? {
-        if let cachedURL { return cachedURL }
-        // `url(forUbiquityContainerIdentifier:)` may take a moment the first time: this actor is
-        // never called from the main thread synchronously.
-        guard let base = FileManager.default.url(forUbiquityContainerIdentifier: Self.containerID) else {
-            Diag.warning("icloud-drive", "container \(Self.containerID) not available (iCloud Drive off, or the app was signed without it)")
-            cachedURL = .some(nil)
-            return nil
+        if ubiquityDocs == nil {
+            // `url(forUbiquityContainerIdentifier:)` may take a moment the first time: this actor is
+            // never called from the main thread synchronously. The answer does not change while the app runs.
+            ubiquityDocs = .some(FileManager.default.url(forUbiquityContainerIdentifier: Self.containerID)?.appendingPathComponent("Documents", isDirectory: true))
         }
-        let docs = base.appendingPathComponent("Documents", isDirectory: true)
+        if case .some(.some(let docs)) = ubiquityDocs {
+            mode = .container
+            return file(in: docs)
+        }
+        #if os(macOS)
+        // Re-checked every time: the synced folder appears as soon as iCloud Drive brings it down.
+        if let folder = Self.syncedContainerFolder() {
+            if mode != .syncedFolder { Diag.info("icloud-drive", "container not granted to this build; using the folder synced by iCloud Drive: \(folder.path)") }
+            mode = .syncedFolder
+            return file(in: folder.appendingPathComponent("Documents", isDirectory: true))
+        }
+        #endif
+        mode = .unavailable
+        if !warned {
+            warned = true
+            Diag.warning("icloud-drive", "container \(Self.containerID) not available (iCloud Drive off, or this build is not granted a container: Developer ID builds get one only after another device saved servers.json)")
+        }
+        return nil
+    }
+
+    private func file(in docs: URL) -> URL {
         if !FileManager.default.fileExists(atPath: docs.path) {
             try? FileManager.default.createDirectory(at: docs, withIntermediateDirectories: true)
         }
-        let url = docs.appendingPathComponent(Self.fileName)
-        cachedURL = .some(url)
-        return url
+        return docs.appendingPathComponent(Self.fileName)
     }
+
+    #if os(macOS)
+    /// `~/Library/Mobile Documents/iCloud~com~sdimambro~unraid-drive` (the real home, not the sandbox
+    /// container) when iCloud Drive has already synced it to this Mac.
+    nonisolated static func syncedContainerFolder() -> URL? {
+        guard let pw = getpwuid(getuid()), let home = pw.pointee.pw_dir.map({ String(cString: $0) }) else { return nil }
+        let folder = URL(fileURLWithPath: home).appendingPathComponent("Library/Mobile Documents/" + Self.containerID.replacingOccurrences(of: ".", with: "~"), isDirectory: true)
+        var isDir: ObjCBool = false
+        return FileManager.default.fileExists(atPath: folder.path, isDirectory: &isDir) && isDir.boolValue ? folder : nil
+    }
+    #endif
 
     var isAvailable: Bool { fileURL() != nil }
 
@@ -128,3 +165,30 @@ final class CloudDocumentsWatcher {
 
     deinit { query.stop() }
 }
+
+#if os(macOS)
+/// Watches the synced iCloud Drive folder of the Developer ID build (outside the ubiquity scope,
+/// `NSMetadataQuery` sees nothing there): a change in the Documents folder triggers a re-read.
+@MainActor
+final class FolderWatcher {
+    private var source: DispatchSourceFileSystemObject?
+    private var pending: DispatchWorkItem?
+
+    init?(directory: URL, onChange: @escaping () -> Void) {
+        let fd = open(directory.path, O_EVTONLY)
+        guard fd >= 0 else { return nil }
+        let src = DispatchSource.makeFileSystemObjectSource(fileDescriptor: fd, eventMask: [.write, .extend, .attrib, .rename, .delete], queue: .main)
+        src.setEventHandler { [weak self] in
+            self?.pending?.cancel()
+            let work = DispatchWorkItem { onChange() }
+            self?.pending = work
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: work)   // iCloud writes arrive in bursts
+        }
+        src.setCancelHandler { close(fd) }
+        src.resume()
+        source = src
+    }
+
+    deinit { source?.cancel() }
+}
+#endif

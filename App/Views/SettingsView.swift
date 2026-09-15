@@ -81,9 +81,18 @@ struct SettingsView: View {
                         if cloud.documentAvailable {
                             Text(cloud.documentDate.map { String(localized: "updated \($0.formatted(date: .abbreviated, time: .shortened))") } ?? String(localized: "not written yet"))
                         } else {
+                            #if DEVELOPER_ID
+                            Text("appears after another device saves it").foregroundStyle(.secondary)
+                            #else
                             Text("not available").foregroundStyle(.secondary)
+                            #endif
                         }
                     } label: { Label("iCloud Drive › Unraid Drive › servers.json", systemImage: "doc.text") }
+                    #if DEVELOPER_ID
+                    if cloud.documentMode == .syncedFolder {
+                        LabeledContent { Text("synced folder") } label: { Label("Homebrew build", systemImage: "shippingbox") }
+                    }
+                    #endif
                     if let d = cloud.lastSync { LabeledContent { Text(d.formatted(date: .abbreviated, time: .shortened)) } label: { Label("Last sync", systemImage: "clock.arrow.2.circlepath") } }
                     Button { Task { busy = true; _ = await cloud.pull(); cloud.push(); busy = false } } label: { Label("Sync now", systemImage: "arrow.triangle.2.circlepath.icloud") }
                         .disabled(busy || !cloud.enabled)
@@ -100,6 +109,9 @@ struct SettingsView: View {
                     if let e = cloud.lastError { Label(e, systemImage: "exclamationmark.triangle").foregroundStyle(.red) }
                 } header: { SectionTitle("iCloud") } footer: {
                     Text("When on, the server list (names, URLs, connection mode, shares to show) is saved as a readable servers.json in iCloud Drive › Unraid Drive and in iCloud's key-value storage, and the API keys, Cloudflare tokens and Unraid passwords in iCloud Keychain (the Passwords of your Apple account), end-to-end encrypted — never in the file. After restoring or replacing a device, Restore brings the servers back and registers this device on each gateway. Turning sync off keeps the copies in iCloud for the other devices. The demo server is never synced.")
+                    #if DEVELOPER_ID
+                    Text("Apple grants an iCloud Drive folder only to App Store apps: this Homebrew build reads and writes the servers.json that iCloud Drive syncs from your other devices, and always keeps the list in iCloud key-value storage.")
+                    #endif
                 }
 
                 Section {
