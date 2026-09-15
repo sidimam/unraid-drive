@@ -142,23 +142,19 @@ targets:
         product: MPVKit
       - package: UnraidGatewayKit
       - target: UnraidDriveFileProviderMac
-    entitlements:
-      path: App/UnraidDrive-macOS.entitlements
-      properties:
-        com.apple.security.app-sandbox: true
-        com.apple.security.network.client: true
-        com.apple.security.application-groups: [group.com.sdimambro.unraid-drive]
-        com.apple.developer.ubiquity-kvstore-identifier: $(TeamIdentifierPrefix)$(CFBundleIdentifier)
-        # iCloud Drive › Unraid Drive › servers.json (build 39+). XcodeGen writes the .entitlements
-        # files from these properties: edit them HERE, never the files.
-        com.apple.developer.icloud-services: [CloudDocuments]
-        com.apple.developer.icloud-container-identifiers: [iCloud.com.sdimambro.unraid-drive]
-        com.apple.developer.ubiquity-container-identifiers: [iCloud.com.sdimambro.unraid-drive]
+    # Entitlements per configuration (hand-maintained files — XcodeGen only regenerates files declared
+    # under `entitlements:`, and a declared file would override the per-config setting below):
+    #  - Debug/Release (Mac App Store): App/UnraidDrive-macOS.entitlements — sandbox, network, app group,
+    #    KVS and the iCloud Drive container iCloud.com.sdimambro.unraid-drive (servers.json).
+    #  - DeveloperID (Homebrew DMG): App/UnraidDrive-macOS-DeveloperID.entitlements — same without the
+    #    container (Apple grants iCloud Drive containers only to App Store apps) plus a sandbox
+    #    exception for the folder iCloud Drive syncs from the other devices.
     settings:
       base:
         INFOPLIST_FILE: App/Info-macOS.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.sdimambro.unraid-drive
         PRODUCT_NAME: Unraid Drive
+        CODE_SIGN_ENTITLEMENTS: App/UnraidDrive-macOS.entitlements
         PRODUCT_MODULE_NAME: UnraidDrive
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconMac
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
