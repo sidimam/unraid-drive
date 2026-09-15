@@ -50,3 +50,7 @@ The built-in mpv sends the same headers as the app (bearer token and, if you use
 ## Publishing note (App Store Connect)
 
 The tvOS listing cannot be submitted with only a Privacy Policy **URL**: Apple TV has no browser, so App Store Connect requires **App Information › Privacy Policy Text** in every locale. The texts live in `AppStore/store_meta.py` (`PRIVACY_TEXT`) and mirror `PRIVACY.md`.
+
+## Header icons and diagnostics (build 37+)
+
+The explorer's header shows **icons only** (gear, sort, list/grid, Select, New folder, Paste, and in Select mode Select all, Copy, Cut, Delete, Done); rest the focus on an icon for a moment and its name appears underneath. Behind the gear, **Diagnostics and log** shows the app's rotating log, offers **Debug logging**, and **Send log to the server** uploads the report and log as a text file to `<share>/Unraid Drive/Logs/` on the NAS, where you can read it from any other device.

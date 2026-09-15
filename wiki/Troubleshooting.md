@@ -100,9 +100,25 @@ Cloudflare limits a request to 100 MB. The **app** chunks uploads and is not aff
 
 The gateway preserves the file modification time you send and reports the server's time. Make sure `TZ` in the container matches your timezone (display only; timestamps are UTC internally).
 
+## "The application cannot be used right now" / "In questo momento non è possibile utilizzare l'applicazione" (File Provider -2001)
+
+The system says the Unraid Drive **extension is switched off**: macOS does that after some updates (the bundle in /Applications was replaced), and on iOS a location can be turned off in the Files app. Nothing is lost — do **not** remove and re-add the server:
+
+- **Mac:** System Settings › General › Login Items & Extensions › **File Providers** → turn *Unraid Drive* on (off and on again if it already looks on). Since build 37 the server page shows *Needs your attention* with an **Open System Settings** button, and the connection test's *What to do* says the same; the automatic location check leaves the location alone until the switch is on, then completes by itself.
+- **iPhone / iPad:** Files › Browse › ⋯ › **Edit** → turn *Unraid Drive* on, then run the connection test again.
+
+## Diagnostics and log (build 37+)
+
+**Settings › Support › Diagnostics and log** (Apple TV: gear › *Diagnostics and log*). The app and the Files/Finder extension write one shared, rotating log (5 files × 1 MB at most) with errors, warnings and the main events: sign-ins and device registration, iCloud pulls and pushes, Keychain moves, location maintenance, connection tests. Turn on **Debug logging** to add every request to the gateway and the details of iCloud and Keychain operations while you reproduce a problem, then turn it off again.
+
+- **Share log and report** / **Copy report**: the report lists app, device, servers (names and hosts only), iCloud state, the registered Files/Finder locations and the last lines of the log — never API keys, tokens or passwords. The connection test has **Copy report for support** with its results included.
+- **Mac:** *Show log files in Finder* opens the group container (`~/Library/Group Containers/group.com.sdimambro.unraid-drive/Logs/`).
+- **Apple TV:** *Send log to the server* writes the report and log as a text file in `<share>/Unraid Drive/Logs/`, readable from any other device.
+- Every line is also in the unified log: `/usr/bin/log show --last 10m --predicate 'subsystem == "com.sdimambro.unraid-drive"'`.
+
 ## Finder: "Unraid Drive ha riscontrato un errore. Gli elementi potrebbero non essere aggiornati"
 
-The Finder shows this banner when the extension reported the gateway as unreachable (File Provider error -1005) — one failed connection is enough, and the banner stays until *Riprova* or the next successful sync. Since build 35 the app retries transient failures twice before giving up. If it keeps happening, check the network path of the Mac rather than the app: a VPN (WireGuard, corporate client) that is *disconnected* but still owns routes to the gateway's address makes every first connection fail with *connection refused* — `route -n get <your gateway host>` shows the interface (a `utun*` means the tunnel); disconnect the tunnel completely or exclude the gateway's address from its allowed IPs. To see what the extension is doing: `/usr/bin/log show --last 5m --predicate 'processImagePath CONTAINS "UnraidDriveFileProvider"'` (`/usr/bin/log`: in zsh `log` is a shell builtin).
+The Finder shows this banner when the extension reported the gateway as unreachable (File Provider error -1005) — one failed connection is enough, and the banner stays until *Riprova* or the next successful sync. Since build 35 the app retries transient failures twice before giving up. If it keeps happening, check the network path of the Mac rather than the app: a VPN (WireGuard, corporate client) that is *disconnected* but still owns routes to the gateway's address makes every first connection fail with *connection refused* — `route -n get <your gateway host>` shows the interface (a `utun*` means the tunnel); disconnect the tunnel completely or exclude the gateway's address from its allowed IPs. To see what the extension is doing: since build 37 open **Settings › Support › Diagnostics and log** (the extension writes to the same rotating log; *Share log and report* exports it), or `/usr/bin/log show --last 5m --predicate 'subsystem == "com.sdimambro.unraid-drive"'` (`/usr/bin/log`: in zsh `log` is a shell builtin).
 
 ## "Cannot play this file" (mpv) on Apple TV, iPhone, iPad or Mac
 

@@ -9,8 +9,16 @@ public enum AppGroup {
         FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: identifier)
     }
     public static var defaults: UserDefaults {
-        UserDefaults(suiteName: identifier) ?? .standard
+        if let d = UserDefaults(suiteName: identifier) { return d }
+        // Never expected: without the app group the app and its extension would each keep their
+        // own server list and device id. Say so loudly instead of silently diverging.
+        if !fallbackReported {
+            fallbackReported = true
+            Diag.error("appgroup", "UserDefaults(suiteName: \(identifier)) unavailable — falling back to standard defaults")
+        }
+        return .standard
     }
+    nonisolated(unsafe) private static var fallbackReported = false
 }
 
 /// How the app reaches the gateway.

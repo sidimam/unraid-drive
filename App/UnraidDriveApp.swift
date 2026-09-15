@@ -23,6 +23,8 @@ struct UnraidDriveApp: App {
     #endif
 
     init() {
+        Diag.process = "App"
+        Diag.info("app", "launch \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?") (\(ServersModel.currentBuild)) on \(ProcessInfo.processInfo.operatingSystemVersionString) · device \(DeviceIdentity.hasLocalID ? String(DeviceIdentity.id.prefix(8)) : "new") · debug log \(Diag.debugEnabled ? "on" : "off")")
         NavigationBarStyle.apply()
         #if os(macOS)
         DockPolicy.apply()
@@ -111,7 +113,7 @@ struct UnraidDriveApp: App {
             let spec = args[i + 1].split(separator: ":", maxSplits: 1).map(String.init)
             await servers.setSelectedShares(s, spec.count > 1 && spec[1] != "all" ? spec[1].split(separator: ",").map(String.init) : nil)
         }
-        if args.contains("-rebuildDomains") { for s in servers.servers { await FileProviderDomains.rebuild(s) } }
+        if args.contains("-rebuildDomains") { for s in servers.servers { try? await FileProviderDomains.rebuild(s) } }
         if args.contains("-testIntent") {
             do {
                 let intent = SaveClipboardIntent(); intent.server = ServerStore().all().first { $0.isDemo }.map(ServerEntity.init)

@@ -82,11 +82,16 @@ struct FileBrowserView: View {
         .refreshable { await load() }
         .task { await load() }
         .onChange(of: selecting) { _, on in
-            #if os(iOS) || os(visionOS)
-            editMode = on ? .active : .inactive
-            #endif
-            if !on { selection.removeAll() }
+            // Select mode comes and goes with the system's own edit-mode animation and a light haptic.
+            withAnimation(.snappy) {
+                #if os(iOS) || os(visionOS)
+                editMode = on ? .active : .inactive
+                #endif
+                if !on { selection.removeAll() }
+            }
         }
+        .sensoryFeedback(.selection, trigger: selecting)
+        .animation(.default, value: selecting)
         .quickLookPreview($preview)
         .sheet(item: $viewer) { e in FileViewerSheet(server: server, entry: e).sheetFrame() }
         .sheet(item: $info) { e in NavigationStack { FileInfoView(server: server, entry: e) }.sheetFrame() }

@@ -176,11 +176,13 @@ struct SectionTitle: View {
 
 /// Navigation titles in the Unraid colour (UIKit-drawn, so styled through the appearance proxy).
 enum NavigationBarStyle {
+    /// Build 37: navigation titles use the system colour again. Tinting them with the icon colour
+    /// (builds 20–36) fought the system look — on iOS 26+ the bars are Liquid Glass and titles are
+    /// expected in the label colour; the accent stays on controls through `.tint`.
     static func apply() {
         #if os(iOS)
-        let color = UIColor(AppIconColor.currentTint)
-        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: color]
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: color]
+        UINavigationBar.appearance().largeTitleTextAttributes = nil
+        UINavigationBar.appearance().titleTextAttributes = nil
         #endif
     }
 }

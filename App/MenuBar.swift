@@ -55,6 +55,36 @@ enum DockPolicy {
 /// only") or the menu bar icon plus the Dock icon. Always on when macOS launched the app as a
 /// login item. The window comes back from the menu bar panel ("Open Unraid Drive") or the Dock.
 /// A first launch (nothing configured yet) or a new build (walkthrough due) always shows the window.
+/// Build 37: the Mac app registers itself as a **login item** (System Settings › General › Login
+/// Items & Extensions) the first time it runs, so the menu bar panel and the Finder locations are
+/// there after every login without the user having to think about it. The switch stays in the
+/// app's Preferences and in the menu bar panel, and the system's own toggle wins: unregistering
+/// there is respected (the app only registers once, and never re-registers after the user opted out).
+enum LoginItem {
+    static let offeredKey = "loginItem.registeredOnce"
+    static var isEnabled: Bool { SMAppService.mainApp.status == .enabled }
+
+    static func registerOnFirstLaunch() {
+        guard !AppGroup.defaults.bool(forKey: offeredKey) else { return }
+        AppGroup.defaults.set(true, forKey: offeredKey)
+        // Debug builds run from Xcode / build folders must not become login items.
+        guard Bundle.main.bundleURL.path.hasPrefix("/Applications/") else { return }
+        switch SMAppService.mainApp.status {
+        case .notRegistered, .notFound:
+            do { try SMAppService.mainApp.register(); Diag.info("app", "registered as a login item") }
+            catch { Diag.error("app", "login item registration", error) }
+        default: break
+        }
+    }
+
+    static func set(_ on: Bool) {
+        do {
+            if on { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() }
+            Diag.info("app", "login item \(on ? "enabled" : "disabled") by the user")
+        } catch { Diag.error("app", "login item change", error) }
+    }
+}
+
 enum LaunchPolicy {
     static let key = "startMinimized"
     static var startMinimized: Bool { AppGroup.defaults.bool(forKey: key) }
@@ -110,6 +140,7 @@ final class MacAppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         LaunchPolicy.decideAtLaunch(hasServers: !ServerStore().all().filter { !$0.isDemo }.isEmpty)
         if LaunchPolicy.hideWindowAtLaunch { LaunchPolicy.hideLaunchWindow() }
+        LoginItem.registerOnFirstLaunch()
     }
     /// Dock icon clicked (or a reopen event) with no window: show the one hidden at launch; if there
     /// is none, let SwiftUI recreate the main WindowGroup window.
@@ -516,9 +547,8 @@ struct MenuBarPanel: View {
     private func showMainWindow() { open("main") }
 
     private func setLaunchAtLogin(_ on: Bool) {
-        do { if on { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() } }
-        catch { NSLog("launch at login: \(error)") }
-        launchAtLogin = SMAppService.mainApp.status == .enabled
+        LoginItem.set(on)
+        launchAtLogin = LoginItem.isEnabled
     }
 }
 

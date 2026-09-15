@@ -51,8 +51,18 @@ struct ConnectionTestView: View {
                     }
                 }
                 if let hint = hint {
-                    Section(header: SectionTitle("What to do")) { Text(hint).font(.callout) }
+                    Section(header: SectionTitle("What to do")) {
+                        Text(hint).font(.callout)
+                        #if os(macOS)
+                        if locationNeedsSwitch { Button { LocationErrorText.openExtensionsSettings() } label: { Label("Open System Settings", systemImage: "gearshape") } }
+                        #endif
+                    }
                 }
+                Section {
+                    Button { copyReport() } label: { Label(copied ? "Report copied" : "Copy report for support", systemImage: copied ? "checkmark" : "doc.on.clipboard") }
+                        .disabled(running)
+                    NavigationLink { DiagnosticsView() } label: { Label("Diagnostics and log", systemImage: "waveform.path.ecg") }
+                } footer: { Text("The report contains the results above, the app and device details and the last lines of the log. It never includes API keys or tokens.") }
             }
             .navigationTitle("Test connection")
             .inlineNavigationTitle()
@@ -67,6 +77,22 @@ struct ConnectionTestView: View {
         .sheetFrame()
     }
 
+    @State private var copied = false
+    @State private var locationNeedsSwitch = false
+
+    private func copyReport() {
+        var lines = [String]()
+        for s in steps {
+            let mark: String
+            switch s.state { case .ok: mark = "OK  "; case .failed: mark = "FAIL"; case .running: mark = "…   "; case .pending: mark = "-   " }
+            lines.append("\(mark) \(s.id): \(detail(s.state) ?? "")")
+        }
+        let report = DiagnosticsReport.text(model: model, server: server, extra: ["Connection test:"] + lines)
+        Clipboard.copy(report)
+        copied = true
+        Task { try? await Task.sleep(for: .seconds(2)); copied = false }
+    }
+
     private func label(_ m: AccessMode) -> String {
         switch m {
         case .direct: return String(localized: "Direct")
@@ -74,15 +100,22 @@ struct ConnectionTestView: View {
         case .demo: return String(localized: "Demo")
         }
     }
+    /// The outcome icons replace each other with the system symbol transition and bounce once when a
+    /// step ends, like a native checklist; no custom drawing.
     private func icon(_ s: Step.State) -> some View {
         Group {
             switch s {
             case .pending: Image(systemName: "circle").foregroundStyle(.secondary)
             case .running: ProgressView()
-            case .ok: Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-            case .failed: Image(systemName: "xmark.circle.fill").foregroundStyle(.red)
+            case .ok: Image(systemName: "checkmark.circle.fill").foregroundStyle(.green).symbolEffect(.bounce, options: .nonRepeating)
+            case .failed: Image(systemName: "xmark.circle.fill").foregroundStyle(.red).symbolEffect(.bounce, options: .nonRepeating)
             }
         }
+        .contentTransition(.symbolEffect(.replace))
+        .animation(.default, value: stateKey(s))
+    }
+    private func stateKey(_ s: Step.State) -> Int {
+        switch s { case .pending: 0; case .running: 1; case .ok: 2; case .failed: 3 }
     }
     private func detail(_ s: Step.State) -> String? {
         switch s { case .ok(let d), .failed(let d): return d; default: return nil }
@@ -96,17 +129,36 @@ struct ConnectionTestView: View {
         case "auth": return "The gateway is up but rejected the key or the request never reached it. Use Edit to paste the API key again; with Cloudflare Access, check the two service token values and that the policy action is Service Auth."
         case "shares": return "Authenticated, but no shares are mounted in the container. Add Path mappings under /data/<name> in the container settings."
         case "write": return "Shares are read-only or the gateway runs with READ_ONLY=true. Check the volume access mode in the container settings."
-        case "files": return "The Files app location is missing. Remove and re-add the server; if the problem persists, restart the device."
+        case "files":
+            if locationNeedsSwitch {
+                #if os(macOS)
+                return "The Finder extension of Unraid Drive is switched off (this happens after some updates). Turn it on in System Settings › General › Login Items & Extensions › File Providers, then run the test again: the location comes back by itself, nothing to remove or re-add."
+                #else
+                return "The Files extension of Unraid Drive is switched off. In the Files app open Browse, tap ⋯ › Edit and turn on Unraid Drive, then run the test again."
+                #endif
+            }
+            #if os(macOS)
+            return "The Finder location is missing. Run the test again (it registers the location); if it keeps failing, quit and reopen Unraid Drive, then restart the Mac."
+            #else
+            return "The Files app location is missing. Run the test again (it registers the location); if it keeps failing, restart the device."
+            #endif
         default: return nil
         }
     }
 
     private func set(_ id: String, _ state: Step.State) {
         if let i = steps.firstIndex(where: { $0.id == id }) { steps[i].state = state }
+        switch state {
+        case .ok(let d): Diag.info("test", "\(server.name) \(id): ok — \(d)")
+        case .failed(let d): Diag.error("test", "\(server.name) \(id): FAILED — \(d)")
+        default: break
+        }
     }
 
     private func run() async {
         running = true; defer { running = false }
+        locationNeedsSwitch = false
+        Diag.info("test", "connection test for \(server.name) (\(server.accessMode), \(server.url.host ?? "?"))")
         for i in steps.indices { steps[i].state = .pending }
         guard let client = model.client(for: server) else {
             set("reach", .failed(String(localized: "Credentials missing from the Keychain. Use Edit to enter them again."))); return
@@ -184,7 +236,8 @@ struct ConnectionTestView: View {
                 set("files", .ok(String(localized: "registered now")))
             }
         } catch {
-            set("files", .failed(error.localizedDescription))
+            locationNeedsSwitch = LocationErrorText.needsUserAction(error)
+            set("files", .failed(LocationErrorText.describe(error)))
         }
     }
 }

@@ -41,7 +41,7 @@ struct ServersView: View {
         if cloud.shouldOfferRestore(localServers: model.servers) {
             Section {
                 Button {
-                    Task { await cloud.restoreFromCloud(); await model.reloadAndRegisterDomains() }
+                    Task { await model.restoreFromCloudAndRegister() }
                 } label: { Label("Restore \(cloud.remoteServerCount) server(s) from iCloud", systemImage: "icloud.and.arrow.down") }
             } footer: { Text("A configuration saved by Unraid Drive was found in your iCloud account.") }
         }
@@ -58,7 +58,7 @@ struct ServersView: View {
                     } actions: {
                         Button("Add server") { adding = true }.buttonStyle(.borderedProminent)
                         if cloud.remoteServerCount > 0 {
-                            Button("Restore \(cloud.remoteServerCount) server(s) from iCloud") { Task { await cloud.restoreFromCloud(); await model.reloadAndRegisterDomains() } }.buttonStyle(.bordered)
+                            Button("Restore \(cloud.remoteServerCount) server(s) from iCloud") { Task { await model.restoreFromCloudAndRegister() } }.buttonStyle(.bordered)
                         }
                         Button("Try the demo") { Task { await model.addDemo() } }.buttonStyle(.bordered)
                     }
@@ -80,6 +80,7 @@ struct ServersView: View {
                             let victims = idx.map { model.servers[$0] }
                             Task { for s in victims { await model.remove(s) } }
                         }
+                        .animation(.default, value: model.servers.map(\.id))
                         Section {
                             Button { adding = true } label: { Label("Add another server", systemImage: "plus.circle") }
                         } footer: {

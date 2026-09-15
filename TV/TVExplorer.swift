@@ -67,34 +67,34 @@ struct TVBrowserView: View {
                     // Select mode: every action applies to the whole selection.
                     Text("\(selection.count) selected").font(.callout).foregroundStyle(.secondary)
                     Spacer()
-                    Button { selection = Set(sorted.map(\.id)) } label: { Label("Select all", systemImage: "checklist.checked") }.disabled(selection.count == sorted.count)
+                    Button { selection = Set(sorted.map(\.id)) } label: { TVIconLabel("Select all", systemImage: "checklist.checked") }.disabled(selection.count == sorted.count)
                     if path != "/" {
-                        Button { clipboard.copy(selected, server: server); selecting = false } label: { Label("Copy", systemImage: "doc.on.doc") }.disabled(selection.isEmpty)
-                        Button { clipboard.cut(selected, server: server); selecting = false } label: { Label("Cut", systemImage: "scissors") }.disabled(selection.isEmpty)
-                        Button(role: .destructive) { deleting = selected } label: { Label("Delete", systemImage: "trash") }.disabled(selection.isEmpty)
+                        Button { clipboard.copy(selected, server: server); selecting = false } label: { TVIconLabel("Copy", systemImage: "doc.on.doc") }.disabled(selection.isEmpty)
+                        Button { clipboard.cut(selected, server: server); selecting = false } label: { TVIconLabel("Cut", systemImage: "scissors") }.disabled(selection.isEmpty)
+                        Button(role: .destructive) { deleting = selected } label: { TVIconLabel("Delete", systemImage: "trash") }.disabled(selection.isEmpty)
                     }
-                    Button { selecting = false } label: { Label("Done", systemImage: "checkmark") }
+                    Button { selecting = false } label: { TVIconLabel("Done", systemImage: "checkmark") }
                 } else {
                     Text(path == "/" ? server.name : path).font(.callout).foregroundStyle(.secondary).lineLimit(1)
                     Spacer()
                     if !entries.isEmpty { Text("\(entries.count) items").font(.callout).foregroundStyle(.secondary) }
                     if let c = clipboard.pasteable(into: path, server: server) {
-                        Button { Task { await paste(into: path) } } label: { Label(c.cut ? "Paste (move) \(c.label)" : "Paste \(c.label)", systemImage: "doc.on.clipboard") }
+                        Button { Task { await paste(into: path) } } label: { TVIconLabel(c.cut ? "Paste (move) \(c.label)" : "Paste \(c.label)", systemImage: "doc.on.clipboard") }
                     }
                     // Share roots are mount points: nothing to copy, cut or delete there.
-                    if !entries.isEmpty && path != "/" { Button { selecting = true } label: { Label("Select", systemImage: "checkmark.circle") } }
-                    if path != "/" { Button { newFolder = true } label: { Label("New folder", systemImage: "folder.badge.plus") } }
-                    if path == "/" { NavigationLink { TVServerHome(server: server) } label: { Label("Settings", systemImage: "gearshape") } }
+                    if !entries.isEmpty && path != "/" { Button { selecting = true } label: { TVIconLabel("Select", systemImage: "checkmark.circle") } }
+                    if path != "/" { Button { newFolder = true } label: { TVIconLabel("New folder", systemImage: "folder.badge.plus") } }
+                    if path == "/" { NavigationLink { TVServerHome(server: server) } label: { TVIconLabel("Settings", systemImage: "gearshape") } }
                     Menu {
                         Picker("Sort by", selection: $sortKey) {
                             Text("Name").tag("name"); Text("Date").tag("date"); Text("Size").tag("size")
                         }
-                    } label: { Label("Sort by", systemImage: "arrow.up.arrow.down") }
-                    Button { grid.toggle() } label: { Label(grid ? "List" : "Grid", systemImage: grid ? "list.bullet" : "square.grid.2x2") }
+                    } label: { TVIconLabel("Sort by", systemImage: "arrow.up.arrow.down") }
+                    Button { grid.toggle() } label: { TVIconLabel(grid ? "List" : "Grid", systemImage: grid ? "list.bullet" : "square.grid.2x2") }
                 }
             }
-            .buttonStyle(TVPillButtonStyle())
-            .padding(.horizontal, 60).padding(.vertical, 16)
+            .buttonStyle(TVIconButtonStyle())
+            .padding(.horizontal, 60).padding(.top, 16).padding(.bottom, 40)
             .onChange(of: selecting) { _, on in if !on { selection.removeAll() } }
             Group {
                 if let error { ContentUnavailableView("Cannot load this folder", systemImage: "exclamationmark.triangle", description: Text(error)) }

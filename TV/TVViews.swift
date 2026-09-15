@@ -90,6 +90,58 @@ struct TVPillButtonStyle: ButtonStyle {
     }
 }
 
+/// Header buttons on the TV show only their symbol (a caption next to every icon cluttered the
+/// screen); the name appears under the icon after the focus has rested on it for a moment, the
+/// way tvOS itself reveals labels, and VoiceOver always reads it.
+struct TVIconLabel: View {
+    @Environment(\.isFocused) private var focused
+    @State private var showCaption = false
+    let title: LocalizedStringKey
+    let systemImage: String
+    init(_ title: LocalizedStringKey, systemImage: String) { self.title = title; self.systemImage = systemImage }
+
+    var body: some View {
+        Image(systemName: systemImage)
+            .font(.title3.weight(.semibold))
+            .frame(width: 40, height: 40)
+            .accessibilityLabel(Text(title))
+            .overlay(alignment: .top) {
+                if showCaption {
+                    Text(title)
+                        .font(.caption)
+                        .lineLimit(1)
+                        .fixedSize()
+                        .padding(.horizontal, 14).padding(.vertical, 6)
+                        .background(.regularMaterial, in: Capsule())
+                        .foregroundStyle(.primary)
+                        .offset(y: 58)
+                        .transition(.opacity.combined(with: .move(edge: .top)))
+                        .allowsHitTesting(false)
+                }
+            }
+            .task(id: focused) {
+                guard focused else { withAnimation(.easeOut(duration: 0.12)) { showCaption = false }; return }
+                try? await Task.sleep(for: .milliseconds(650))
+                guard !Task.isCancelled, focused else { return }
+                withAnimation(.spring(duration: 0.3)) { showCaption = true }
+            }
+    }
+}
+
+/// Round, icon-only button for the explorer header (pairs with `TVIconLabel`).
+struct TVIconButtonStyle: ButtonStyle {
+    @Environment(\.isFocused) private var focused
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(10)
+            .background(focused ? AnyShapeStyle(.tint) : AnyShapeStyle(.regularMaterial), in: Circle())
+            .foregroundStyle(focused ? Color.white : Color.primary)
+            .scaleEffect(focused ? 1.12 : 1)
+            .opacity(configuration.isPressed ? 0.7 : 1)
+            .animation(.easeOut(duration: 0.15), value: focused)
+    }
+}
+
 // MARK: - Pairing
 
 /// Shows a 6-digit code; the phone/Mac app sends the server and its secrets, encrypted with the
@@ -207,6 +259,7 @@ struct TVServerHome: View {
             Section {
                 NavigationLink { TVDashboardView(server: server) } label: { TVMenuRow(title: "Dashboard", symbol: "gauge.with.dots.needle.33percent") }
                 NavigationLink { TVSharesView(server: server) } label: { TVMenuRow(title: "Shares to show", symbol: "externaldrive.badge.checkmark") }
+                NavigationLink { TVDiagnosticsView(server: server) } label: { TVMenuRow(title: "Diagnostics and log", symbol: "waveform.path.ecg") }
             }
             Section {
                 Button(role: .destructive) { confirmRemove = true } label: { TVMenuRow(title: "Remove this server from the TV", symbol: "trash", destructive: true) }

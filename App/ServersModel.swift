@@ -21,9 +21,23 @@ final class ServersModel: ObservableObject {
     /// After servers arrived from iCloud: reload and make sure each has a Files app location.
     func reloadAndRegisterDomains() async {
         reload()
-        let existing = (try? await NSFileProviderManager.domains().map(\.identifier.rawValue)) ?? []
-        for s in servers where !existing.contains(s.id) { try? await FileProviderDomains.add(s) }
+        do {
+            let existing = try await NSFileProviderManager.domains().map(\.identifier.rawValue)
+            for s in servers where !existing.contains(s.id) {
+                do { try await FileProviderDomains.add(s); Diag.info("location", "\(s.name): location registered") }
+                catch { Diag.error("location", "\(s.name): register", error) }
+            }
+        } catch { Diag.error("location", "listing locations", error) }
         await maintainLocationsIfNeeded()
+    }
+
+    /// Restore from iCloud in one go: merge the list, register the locations and sign in on every
+    /// server with `register: true`, so this installation is known to each gateway (the Settings
+    /// and server-list buttons used to skip the registration step).
+    func restoreFromCloudAndRegister() async {
+        await cloud.restoreFromCloud()
+        await reloadAndRegisterDomains()
+        await registerRestoredDevices()
     }
 
     /// The system keeps a Files location's database across an uninstall when the same server comes
@@ -42,7 +56,14 @@ final class ServersModel: ObservableObject {
         var date: Date
         var gatewayOK: Bool
         var detail: String
-        var done: Bool { gatewayOK }
+        /// Build 37+: whether the Files/Finder location really exists after the pass (nil for
+        /// records written by older builds). Until build 36 a pass counted as done as soon as the
+        /// gateway answered, even when the location could not be registered again — which then
+        /// never got retried.
+        var locationOK: Bool?
+        /// True when the pass ended in a state that only the user can fix (extension switched off).
+        var needsUserAction: Bool?
+        var done: Bool { gatewayOK && (locationOK ?? true) }
     }
     /// Per server id: the outcome of the last automatic pass (also persisted in the app group).
     @Published private(set) var maintenance: [String: LocationMaintenance] = [:]
@@ -69,21 +90,41 @@ final class ServersModel: ObservableObject {
             if !force, let stored, stored.build == Self.currentBuild, stored.done { continue }
             // 1. Connection check with the stored credentials.
             guard let c = client(for: s) else {
+                Diag.warning("location", "\(s.name): maintenance skipped, credentials not readable yet")
                 record(LocationMaintenance(build: Self.currentBuild, date: Date(), gatewayOK: false, detail: String(localized: "credentials not available yet")), for: s.id)
                 continue
             }
+            var gatewayOK = false
+            var version = ""
             do {
                 let h = try await c.health()
                 _ = try await c.list("/")
-                // 2. Rebuild the location, 3. nudge it.
-                await FileProviderDomains.rebuild(s)
+                gatewayOK = true
+                version = h.version ?? ""
+                Diag.info("location", "\(s.name): gateway \(version) reachable, rebuilding the location (build \(Self.currentBuild))")
+                // 2. Is the extension available at all? `domains()` throws `providerNotFound` when it
+                //    is switched off: leave the location alone and say so (removing it now would
+                //    not be undoable until the user flips the switch).
+                _ = try await NSFileProviderManager.domains()
+                // 3. Rebuild the location and verify it is really there, 4. nudge it.
+                try await FileProviderDomains.rebuild(s)
+                let present = try await NSFileProviderManager.domains().contains { $0.identifier.rawValue == s.id }
+                guard present else { throw LocationError.missingAfterRebuild }
                 await FileProviderDomains.signal(s)
                 AppGroup.defaults.set(true, forKey: "fp.rebuilt.g\(Self.iconGeneration)." + s.id)
-                record(LocationMaintenance(build: Self.currentBuild, date: Date(), gatewayOK: true, detail: String(localized: "gateway \(h.version ?? "")")), for: s.id)
+                record(LocationMaintenance(build: Self.currentBuild, date: Date(), gatewayOK: true, detail: String(localized: "gateway \(version)"), locationOK: true, needsUserAction: false), for: s.id)
+                Diag.info("location", "\(s.name): location registered and checked")
             } catch {
-                record(LocationMaintenance(build: Self.currentBuild, date: Date(), gatewayOK: false, detail: error.localizedDescription), for: s.id)
+                Diag.error("location", "\(s.name): maintenance failed (gateway \(gatewayOK ? "ok" : "unreachable"))", error)
+                let detail = gatewayOK ? LocationErrorText.describe(error) : error.localizedDescription
+                record(LocationMaintenance(build: Self.currentBuild, date: Date(), gatewayOK: gatewayOK, detail: detail, locationOK: gatewayOK ? false : nil, needsUserAction: gatewayOK ? LocationErrorText.needsUserAction(error) : false), for: s.id)
             }
         }
+    }
+
+    enum LocationError: LocalizedError {
+        case missingAfterRebuild
+        var errorDescription: String? { String(localized: "The location could not be registered again. Try once more; if it keeps failing, restart the device.") }
     }
 
     /// Bump when the app icon changes: the Files app shows the icon it saw when the location was
@@ -96,13 +137,13 @@ final class ServersModel: ObservableObject {
         guard !server.isDemo, entries.contains(where: { $0.itemID != nil }) else { return }
         let key = "fp.serverIDs." + server.id
         guard !AppGroup.defaults.bool(forKey: key) else { return }
-        await FileProviderDomains.rebuild(server)
+        do { try await FileProviderDomains.rebuild(server) } catch { Diag.error("location", "\(server.name): rebuild for server ids", error); return }
         AppGroup.defaults.set(true, forKey: key)
     }
 
     /// Explicit rebuild from the UI (discards local changes not yet uploaded).
     func rebuildDomain(_ server: ServerConfig) async {
-        await FileProviderDomains.rebuild(server)
+        do { try await FileProviderDomains.rebuild(server) } catch { Diag.error("location", "\(server.name): manual rebuild", error); return }
         AppGroup.defaults.set(true, forKey: "fp.rebuilt.g\(Self.iconGeneration)." + server.id)
     }
 
@@ -129,17 +170,25 @@ final class ServersModel: ObservableObject {
         for s in targets { restoreRegistration[s.id] = .waitingSecrets }
         var pending = Set(targets.map(\.id))
         let deadline = Date().addingTimeInterval(timeout)
+        Diag.info("device", "registering this installation on \(targets.count) restored server(s)")
         while !pending.isEmpty, Date() < deadline {
             for s in targets where pending.contains(s.id) {
                 guard let c = client(for: s) else { continue }     // credentials not here yet
                 do {
                     _ = try await c.login(register: true)
                     restoreRegistration[s.id] = .registered
+                    pending.remove(s.id)
+                    await FileProviderDomains.signal(s)
                 } catch {
-                    restoreRegistration[s.id] = .failed(error.localizedDescription)
+                    // Wrong key / revoked device: final. Anything else (network, gateway restarting)
+                    // is retried until the deadline instead of giving up on the first hiccup.
+                    if (error as? GatewayError)?.isAuthFailure == true {
+                        restoreRegistration[s.id] = .failed(error.localizedDescription)
+                        pending.remove(s.id)
+                    } else {
+                        Diag.warning("device", "\(s.name): registration retry after: \(error.localizedDescription)")
+                    }
                 }
-                pending.remove(s.id)
-                await FileProviderDomains.signal(s)
             }
             if !pending.isEmpty { try? await Task.sleep(for: .seconds(5)) }
         }
@@ -188,10 +237,13 @@ final class ServersModel: ObservableObject {
         var updated = server
         updated.name = name; updated.url = url; updated.accessMode = cloudflare == nil ? .direct : .cloudflareAccess
         updated.username = user?.username
-        keychain.remove(for: server.id)
+        // Overwrite only what was provided: the old code deleted every secret first, so a save that
+        // failed half-way (or dropped a field) left the server without credentials.
         try keychain.set(apiKey: apiKey, for: server.id, synchronizable: cloud.enabled)
         if let cloudflare { try keychain.set(cloudflareToken: cloudflare, for: server.id, synchronizable: cloud.enabled) }
         if let user { try keychain.set(username: user.username, password: user.password, for: server.id, synchronizable: cloud.enabled) }
+        else { keychain.removeUserCredentials(for: server.id) }
+        Diag.info("servers", "updated \(updated.name) (\(updated.accessMode)) credentials rewritten")
         store.upsert(updated)
         cloud.push()
         if updated.name != server.name {
@@ -233,6 +285,7 @@ final class ServersModel: ObservableObject {
     }
 
     func remove(_ server: ServerConfig) async {
+        Diag.info("servers", "removing \(server.name) at the user's request (location, secrets, config)")
         try? await FileProviderDomains.remove(server)
         keychain.remove(for: server.id)
         store.remove(id: server.id)
@@ -253,16 +306,22 @@ enum FileProviderDomains {
     }
     /// Removes the location (and everything the system cached for it, including our item index)
     /// and registers it again, so the Files app rebuilds the tree from the gateway.
-    static func rebuild(_ server: ServerConfig) async {
-        try? await remove(server)
+    /// Throws when the location could not be registered again (the caller records it and retries
+    /// on the next activation, instead of believing everything went fine).
+    static func rebuild(_ server: ServerConfig) async throws {
+        do { try await remove(server) } catch { Diag.debug("location", "\(server.name): remove before rebuild: \(error.localizedDescription)") }
         if let dir = AppGroup.containerURL?.appendingPathComponent("FileProvider/\(server.id)", isDirectory: true) {
             try? FileManager.default.removeItem(at: dir)
         }
+        var last: Error?
         for attempt in 0..<5 {
             do { try await add(server); return } catch {
+                last = error
+                Diag.warning("location", "\(server.name): add attempt \(attempt + 1) failed: \(error.localizedDescription)")
                 try? await Task.sleep(for: .milliseconds(500 * (attempt + 1)))
             }
         }
+        throw last ?? NSFileProviderError(.providerNotFound)
     }
 
     /// Asks the system to refresh the domain's root and working set.

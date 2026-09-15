@@ -1402,6 +1402,46 @@
         }
       }
     },
+    "Another version of the Unraid Drive extension is still running. Quit the app, wait a moment and open it again (or restart the device).": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ما زالت نسخة أخرى من ملحق Unraid Drive تعمل. أغلق التطبيق وانتظر قليلاً ثم افتحه مجدداً (أو أعد تشغيل الجهاز)."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine andere Version der Unraid Drive-Erweiterung läuft noch. Beende die App, warte kurz und öffne sie erneut (oder starte das Gerät neu)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otra versión de la extensión de Unraid Drive sigue en ejecución. Cierra la app, espera un momento y ábrela de nuevo (o reinicia el dispositivo)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une autre version de l'extension Unraid Drive est encore en cours d'exécution. Quittez l'app, patientez un instant et rouvrez-la (ou redémarrez l'appareil)."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un'altra versione dell'estensione di Unraid Drive è ancora in esecuzione. Esci dall'app, attendi un momento e riaprila (oppure riavvia il dispositivo)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "另一个版本的 Unraid Drive 扩展仍在运行。请退出 App，稍等片刻后重新打开（或重启设备）。"
+          }
+        }
+      }
+    },
     "App colour": {
       "localizations": {
         "ar": {
@@ -2766,6 +2806,86 @@
         }
       }
     },
+    "Clear log": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مسح السجل"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protokoll löschen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vaciar registro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effacer le journal"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Svuota il log"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除日志"
+          }
+        }
+      }
+    },
+    "Clear the log?": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مسح السجل؟"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protokoll löschen?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Vaciar el registro?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effacer le journal ?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Svuotare il log?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要清除日志吗？"
+          }
+        }
+      }
+    },
     "Close": {
       "localizations": {
         "ar": {
@@ -3327,6 +3447,86 @@
         }
       }
     },
+    "Copy report": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نسخ التقرير"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bericht kopieren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar informe"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copier le rapport"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copia il rapporto"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "复制报告"
+          }
+        }
+      }
+    },
+    "Copy report for support": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "انسخ التقرير للدعم"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bericht für den Support kopieren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar informe para soporte"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copier le rapport pour l'assistance"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copia il rapporto per l'assistenza"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "复制支持报告"
+          }
+        }
+      }
+    },
     "Copy to": {
       "localizations": {
         "ar": {
@@ -3443,6 +3643,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "正在拷贝第 %lld 项，共 %lld 项…"
+          }
+        }
+      }
+    },
+    "Could not build the report.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر إنشاء التقرير."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Bericht konnte nicht erstellt werden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se ha podido crear el informe."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de créer le rapport."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile creare il rapporto."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法生成报告。"
           }
         }
       }
@@ -4167,6 +4407,46 @@
         }
       }
     },
+    "Debug logging": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سجل التصحيح"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Debug-Protokoll"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registro de depuración"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Journalisation de débogage"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log di debug"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "调试日志"
+          }
+        }
+      }
+    },
     "Delete": {
       "localizations": {
         "ar": {
@@ -4524,6 +4804,86 @@
           "stringUnit": {
             "state": "translated",
             "value": "目标位置：%@"
+          }
+        }
+      }
+    },
+    "Diagnostics": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التشخيص"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnose"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnóstico"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnostic"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnostica"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "诊断"
+          }
+        }
+      }
+    },
+    "Diagnostics and log": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التشخيص والسجل"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnose und Protokoll"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnóstico y registro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnostic et journal"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnostica e log"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "诊断与日志"
           }
         }
       }
@@ -5408,6 +5768,86 @@
         }
       }
     },
+    "Errors and warnings only": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأخطاء والتحذيرات فقط"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur Fehler und Warnungen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo errores y avisos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erreurs et avertissements seulement"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo errori e avvisi"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "仅显示错误与警告"
+          }
+        }
+      }
+    },
+    "Errors, warnings and the main events are always recorded, by the app and by the Files/Finder extension, in files that rotate at %lld × %lld MB. Debug logging adds every request to the gateway and the details of iCloud and Keychain operations; turn it on to reproduce a problem, then off.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تُسجَّل الأخطاء والتحذيرات والأحداث الرئيسية دائماً، من التطبيق ومن ملحق الملفات/Finder، في ملفات تتناوب عند %lld × %lld ميغابايت. يضيف سجل التصحيح كل طلب إلى البوّابة وتفاصيل عمليات iCloud وسلسلة المفاتيح؛ فعّله لإعادة إنتاج مشكلة ثم أوقفه."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fehler, Warnungen und die wichtigsten Ereignisse werden immer aufgezeichnet, von der App und der Dateien-/Finder-Erweiterung, in Dateien, die bei %lld × %lld MB rotieren. Das Debug-Protokoll ergänzt jede Anfrage an das Gateway und die Details der iCloud- und Schlüsselbund-Vorgänge; schalte es ein, um ein Problem nachzustellen, und danach wieder aus."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los errores, avisos y eventos principales se registran siempre, por la app y por la extensión de Archivos/Finder, en archivos que rotan a %lld × %lld MB. El registro de depuración añade cada petición al gateway y los detalles de las operaciones de iCloud y del llavero; actívalo para reproducir un problema y luego desactívalo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les erreurs, avertissements et événements principaux sont toujours enregistrés, par l'app et par l'extension Fichiers/Finder, dans des fichiers qui tournent à %lld × %lld Mo. La journalisation de débogage ajoute chaque requête vers la passerelle et les détails des opérations iCloud et Trousseau ; activez-la pour reproduire un problème, puis désactivez-la."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Errori, avvisi ed eventi principali vengono sempre registrati, dall'app e dall'estensione File/Finder, in file che ruotano a %lld × %lld MB. Il log di debug aggiunge ogni richiesta al gateway e i dettagli delle operazioni iCloud e Portachiavi: attivalo per riprodurre un problema, poi disattivalo."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "错误、警告和主要事件始终由 App 与“文件”/“访达”扩展记录到按 %lld × %lld MB 轮转的文件中。调试日志会额外记录对网关的每个请求以及 iCloud 和钥匙串操作的细节；重现问题时开启，之后关闭。"
+          }
+        }
+      }
+    },
     "Every server keeps the shares chosen on your other device; change them any time from the server's page, Shares to show.": {
       "localizations": {
         "ar": {
@@ -5564,6 +6004,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "一切正常"
+          }
+        }
+      }
+    },
+    "Export": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تصدير"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exporter"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esportazione"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导出"
           }
         }
       }
@@ -7562,6 +8042,46 @@
         }
       }
     },
+    "Latest entries": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آخر الإدخالات"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neueste Einträge"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Últimas entradas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernières entrées"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ultime voci"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最新条目"
+          }
+        }
+      }
+    },
     "Launch at login": {
       "localizations": {
         "ar": {
@@ -8122,6 +8642,86 @@
         }
       }
     },
+    "Log size": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حجم السجل"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protokollgröße"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tamaño del registro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taille du journal"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dimensione del log"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日志大小"
+          }
+        }
+      }
+    },
+    "Logging": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "السجل"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protokoll"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Journal"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日志"
+          }
+        }
+      }
+    },
     "Modified": {
       "localizations": {
         "ar": {
@@ -8396,6 +8996,46 @@
         }
       }
     },
+    "Needs your attention": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يحتاج إلى تدخّلك"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Braucht deine Aufmerksamkeit"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requiere tu atención"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nécessite votre attention"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Richiede il tuo intervento"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "需要你的处理"
+          }
+        }
+      }
+    },
     "New code": {
       "localizations": {
         "ar": {
@@ -8552,6 +9192,86 @@
           "stringUnit": {
             "state": "translated",
             "value": "尚未找到备份。开启同步会为其他设备保存此设备上的服务器。"
+          }
+        }
+      }
+    },
+    "No credentials for this server on the TV.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد بيانات اعتماد لهذا الخادم على التلفاز."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Zugangsdaten für diesen Server auf dem TV."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay credenciales para este servidor en el TV."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun identifiant pour ce serveur sur la TV."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna credenziale per questo server sulla TV."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这台 TV 上没有此服务器的凭据。"
+          }
+        }
+      }
+    },
+    "No log entries yet.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد إدخالات في السجل بعد."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch keine Protokolleinträge."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aún no hay entradas en el registro."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune entrée dans le journal pour l'instant."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna voce nel log per ora."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂无日志条目。"
           }
         }
       }
@@ -8792,6 +9512,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "没有服务器"
+          }
+        }
+      }
+    },
+    "No share available for the upload.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد مشاركة متاحة للتحميل."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Freigabe für den Upload verfügbar."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay ningún recurso compartido disponible para la carga."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun partage disponible pour l'envoi."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna share disponibile per il caricamento."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有可用于上传的共享。"
           }
         }
       }
@@ -9792,6 +10552,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "打开 %@ 文件夹"
+          }
+        }
+      }
+    },
+    "Open System Settings": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "افتح إعدادات النظام"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Systemeinstellungen öffnen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir Ajustes del Sistema"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir Réglages Système"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apri Impostazioni di Sistema"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开系统设置"
           }
         }
       }
@@ -12036,6 +12836,126 @@
         }
       }
     },
+    "Remove from iCloud": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إزالة من iCloud"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus iCloud entfernen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar de iCloud"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer d'iCloud"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rimuovi da iCloud"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从 iCloud 移除"
+          }
+        }
+      }
+    },
+    "Remove the configuration from iCloud": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إزالة الإعدادات من iCloud"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfiguration aus iCloud entfernen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar la configuración de iCloud"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer la configuration d'iCloud"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rimuovi la configurazione da iCloud"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从 iCloud 移除配置"
+          }
+        }
+      }
+    },
+    "Remove the server list from iCloud?": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إزالة قائمة الخوادم من iCloud؟"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serverliste aus iCloud entfernen?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Eliminar la lista de servidores de iCloud?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer la liste des serveurs d'iCloud ?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rimuovere l'elenco dei server da iCloud?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要从 iCloud 移除服务器列表吗？"
+          }
+        }
+      }
+    },
     "Remove this server from the TV": {
       "localizations": {
         "ar": {
@@ -12192,6 +13112,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "报告问题"
+          }
+        }
+      }
+    },
+    "Report copied": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم نسخ التقرير"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bericht kopiert"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informe copiado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rapport copié"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rapporto copiato"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "报告已复制"
           }
         }
       }
@@ -12426,6 +13386,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "角色"
+          }
+        }
+      }
+    },
+    "Rotating log of app and extension, debug logging and a report to share when something does not work.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سجل متناوب للتطبيق والملحق، وسجل تصحيح، وتقرير للمشاركة عندما لا يعمل شيء."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotierendes Protokoll von App und Erweiterung, Debug-Protokoll und ein Bericht zum Teilen, wenn etwas nicht funktioniert."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registro rotativo de la app y la extensión, registro de depuración y un informe para compartir cuando algo no funciona."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Journal tournant de l'app et de l'extension, journalisation de débogage et rapport à partager quand quelque chose ne fonctionne pas."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log a rotazione di app ed estensione, log di debug e un rapporto da condividere quando qualcosa non funziona."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App 与扩展的轮转日志、调试日志，以及出现问题时可分享的报告。"
           }
         }
       }
@@ -13070,6 +14070,126 @@
         }
       }
     },
+    "Send log to the server": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إرسال السجل إلى الخادم"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protokoll an den Server senden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviar el registro al servidor"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer le journal au serveur"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invia il log al server"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将日志发送到服务器"
+          }
+        }
+      }
+    },
+    "Sending…": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ الإرسال…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wird gesendet…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviando…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoi…"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invio…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在发送…"
+          }
+        }
+      }
+    },
+    "Sent to %@/Unraid Drive/Logs/%@": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أُرسل إلى %@/Unraid Drive/Logs/%@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesendet an %@/Unraid Drive/Logs/%@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviado a %@/Unraid Drive/Logs/%@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyé dans %@/Unraid Drive/Logs/%@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inviato in %@/Unraid Drive/Logs/%@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已发送至 %@/Unraid Drive/Logs/%@"
+          }
+        }
+      }
+    },
     "Sent. The TV picks it up within a few seconds.": {
       "localizations": {
         "ar": {
@@ -13498,6 +14618,46 @@
         }
       }
     },
+    "Share log and report": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشاركة السجل والتقرير"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protokoll und Bericht teilen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compartir registro e informe"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager le journal et le rapport"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Condividi log e rapporto"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分享日志与报告"
+          }
+        }
+      }
+    },
     "Share or save a copy": {
       "localizations": {
         "ar": {
@@ -13774,6 +14934,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "显示"
+          }
+        }
+      }
+    },
+    "Show log files in Finder": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إظهار ملفات السجل في Finder"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protokolldateien im Finder zeigen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar los archivos de registro en el Finder"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher les fichiers journaux dans le Finder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostra i file di log nel Finder"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在“访达”中显示日志文件"
           }
         }
       }
@@ -14174,6 +15374,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "此 Mac 上的存储空间"
+          }
+        }
+      }
+    },
+    "Support": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الدعم"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Support"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soporte"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assistance"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assistenza"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "支持"
           }
         }
       }
@@ -15092,6 +16332,126 @@
         }
       }
     },
+    "The Files app location is missing. Run the test again (it registers the location); if it keeps failing, restart the device.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "موقع تطبيق الملفات مفقود. أعد الاختبار (فهو يسجّل الموقع)؛ إذا استمر الفشل، أعد تشغيل الجهاز."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Speicherort in der Dateien-App fehlt. Starte den Test erneut (er registriert den Speicherort); schlägt es weiter fehl, starte das Gerät neu."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falta la ubicación en la app Archivos. Repite la prueba (registra la ubicación); si sigue fallando, reinicia el dispositivo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'emplacement de l'app Fichiers est absent. Relancez le test (il enregistre l'emplacement) ; si l'échec persiste, redémarrez l'appareil."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La posizione nell'app File manca. Riesegui il test (registra la posizione); se continua a fallire, riavvia il dispositivo."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "缺少“文件”App 位置。请重新运行测试（它会注册该位置）；如果仍然失败，请重启设备。"
+          }
+        }
+      }
+    },
+    "The Files extension of Unraid Drive is switched off. In the Files app open Browse, tap ⋯ › Edit and turn on Unraid Drive, then run the test again.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ملحق الملفات الخاص بـ Unraid Drive متوقف. في تطبيق الملفات افتح تصفّح واضغط ⋯ › تحرير وفعّل Unraid Drive، ثم أعد الاختبار."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Dateien-Erweiterung von Unraid Drive ist ausgeschaltet. Öffne in der Dateien-App „Durchsuchen“, tippe auf ⋯ › Bearbeiten, schalte Unraid Drive ein und starte den Test erneut."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La extensión de Archivos de Unraid Drive está desactivada. En la app Archivos abre Explorar, toca ⋯ › Editar y activa Unraid Drive; luego repite la prueba."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'extension Fichiers d'Unraid Drive est désactivée. Dans l'app Fichiers, ouvrez Explorer, touchez ⋯ › Modifier et activez Unraid Drive, puis relancez le test."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'estensione File di Unraid Drive è disattivata. Nell'app File apri Sfoglia, tocca ⋯ › Modifica e attiva Unraid Drive, poi riesegui il test."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive 的“文件”扩展已关闭。请在“文件”App 中打开“浏览”，轻点 ⋯ › 编辑并开启 Unraid Drive，然后重新运行测试。"
+          }
+        }
+      }
+    },
+    "The Finder extension of Unraid Drive is switched off (this happens after some updates). Turn it on in System Settings › General › Login Items & Extensions › File Providers, then run the test again: the location comes back by itself, nothing to remove or re-add.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ملحق Finder الخاص بـ Unraid Drive متوقف (يحدث ذلك بعد بعض التحديثات). فعّله من إعدادات النظام › عام › عناصر تسجيل الدخول والملحقات › موفّرو الملفات، ثم أعد الاختبار: يعود الموقع من تلقاء نفسه دون إزالة أو إعادة إضافة."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Finder-Erweiterung von Unraid Drive ist ausgeschaltet (das passiert nach manchen Updates). Schalte sie in Systemeinstellungen › Allgemein › Anmeldeobjekte & Erweiterungen › Dateianbieter ein und starte den Test erneut: Der Speicherort kommt von selbst zurück, nichts entfernen oder neu hinzufügen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La extensión de Finder de Unraid Drive está desactivada (ocurre tras algunas actualizaciones). Actívala en Ajustes del Sistema › General › Ítems de inicio y extensiones › Proveedores de archivos y repite la prueba: la ubicación vuelve sola, sin quitar ni añadir nada."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'extension Finder d'Unraid Drive est désactivée (cela arrive après certaines mises à jour). Activez-la dans Réglages Système › Général › Ouverture et extensions › Fournisseurs de fichiers, puis relancez le test : l'emplacement revient de lui-même, rien à supprimer ni à rajouter."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'estensione Finder di Unraid Drive è disattivata (capita dopo alcuni aggiornamenti). Attivala in Impostazioni di Sistema › Generali › Elementi di login ed estensioni › Fornitori di file, poi riesegui il test: la posizione torna da sola, senza rimuovere o aggiungere nulla."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive 的“访达”扩展已关闭（某些更新后会发生）。请在“系统设置 › 通用 › 登录项与扩展 › 文件提供程序”中开启，然后重新运行测试：位置会自动恢复，无需移除或重新添加。"
+          }
+        }
+      }
+    },
     "The Finder forgets everything it cached for this server and reads the shares again from the gateway. Files created in the Finder that were never uploaded are lost. Use it when the Finder keeps showing folders that no longer exist.": {
       "localizations": {
         "ar": {
@@ -15172,6 +16532,46 @@
         }
       }
     },
+    "The Finder location is missing. Run the test again (it registers the location); if it keeps failing, quit and reopen Unraid Drive, then restart the Mac.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "موقع Finder مفقود. أعد الاختبار (فهو يسجّل الموقع)؛ إذا استمر الفشل، أغلق Unraid Drive وافتحه مجدداً ثم أعد تشغيل الـ Mac."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Finder-Speicherort fehlt. Starte den Test erneut (er registriert den Speicherort); schlägt es weiter fehl, beende Unraid Drive, öffne es erneut und starte dann den Mac neu."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falta la ubicación en el Finder. Repite la prueba (registra la ubicación); si sigue fallando, cierra y vuelve a abrir Unraid Drive y luego reinicia el Mac."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'emplacement du Finder est absent. Relancez le test (il enregistre l'emplacement) ; si l'échec persiste, quittez et rouvrez Unraid Drive, puis redémarrez le Mac."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La posizione nel Finder manca. Riesegui il test (registra la posizione); se continua a fallire, esci e riapri Unraid Drive, poi riavvia il Mac."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "缺少“访达”位置。请重新运行测试（它会注册该位置）；如果仍然失败，请退出并重新打开 Unraid Drive，然后重启 Mac。"
+          }
+        }
+      }
+    },
     "The Finder shows your shares; files download when you open them.": {
       "localizations": {
         "ar": {
@@ -15208,6 +16608,86 @@
           "stringUnit": {
             "state": "translated",
             "value": "“访达”显示你的共享；文件在打开时下载。"
+          }
+        }
+      }
+    },
+    "The Unraid Drive extension is switched off. In the Files app open Browse › ⋯ › Edit and turn on Unraid Drive, then try again.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ملحق Unraid Drive متوقف. في تطبيق الملفات افتح تصفّح › ⋯ › تحرير وفعّل Unraid Drive، ثم أعد المحاولة."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Unraid Drive-Erweiterung ist ausgeschaltet. Öffne in der Dateien-App „Durchsuchen › ⋯ › Bearbeiten“, schalte Unraid Drive ein und versuche es erneut."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La extensión de Unraid Drive está desactivada. En la app Archivos abre Explorar › ⋯ › Editar y activa Unraid Drive; luego vuelve a intentarlo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'extension Unraid Drive est désactivée. Dans l'app Fichiers, ouvrez Explorer › ⋯ › Modifier et activez Unraid Drive, puis réessayez."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'estensione di Unraid Drive è disattivata. Nell'app File apri Sfoglia › ⋯ › Modifica e attiva Unraid Drive, poi riprova."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive 扩展已关闭。请在“文件”App 中打开“浏览 › ⋯ › 编辑”并开启 Unraid Drive，然后重试。"
+          }
+        }
+      }
+    },
+    "The Unraid Drive extension is switched off. Turn it on in System Settings › General › Login Items & Extensions › File Providers, then try again.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ملحق Unraid Drive متوقف. فعّله من إعدادات النظام › عام › عناصر تسجيل الدخول والملحقات › موفّرو الملفات، ثم أعد المحاولة."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Unraid Drive-Erweiterung ist ausgeschaltet. Schalte sie in Systemeinstellungen › Allgemein › Anmeldeobjekte & Erweiterungen › Dateianbieter ein und versuche es erneut."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La extensión de Unraid Drive está desactivada. Actívala en Ajustes del Sistema › General › Ítems de inicio y extensiones › Proveedores de archivos y vuelve a intentarlo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'extension Unraid Drive est désactivée. Activez-la dans Réglages Système › Général › Ouverture et extensions › Fournisseurs de fichiers, puis réessayez."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'estensione di Unraid Drive è disattivata. Attivala in Impostazioni di Sistema › Generali › Elementi di login ed estensioni › Fornitori di file, poi riprova."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive 扩展已关闭。请在“系统设置 › 通用 › 登录项与扩展 › 文件提供程序”中开启，然后重试。"
           }
         }
       }
@@ -15528,6 +17008,286 @@
           "stringUnit": {
             "state": "translated",
             "value": "网关在运行但拒绝了密钥，或请求从未到达网关。请使用“编辑”重新粘贴 API 密钥；若使用 Cloudflare Access，请检查两个 Service Token 值以及策略操作是否为 Service Auth。"
+          }
+        }
+      }
+    },
+    "The location could not be registered again. Try once more; if it keeps failing, restart the device.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر تسجيل الموقع مجدداً. حاول مرة أخرى؛ وإذا استمر الفشل، أعد تشغيل الجهاز."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Speicherort konnte nicht erneut registriert werden. Versuche es noch einmal; schlägt es weiter fehl, starte das Gerät neu."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se ha podido volver a registrar la ubicación. Inténtalo otra vez; si sigue fallando, reinicia el dispositivo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'emplacement n'a pas pu être enregistré à nouveau. Réessayez ; si l'échec persiste, redémarrez l'appareil."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non è stato possibile registrare di nuovo la posizione. Riprova; se continua a fallire, riavvia il dispositivo."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法重新注册该位置。请再试一次；如果仍然失败，请重启设备。"
+          }
+        }
+      }
+    },
+    "The location is disabled in System Settings › General › Login Items & Extensions › File Providers.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الموقع معطّل في إعدادات النظام › عام › عناصر تسجيل الدخول والملحقات › موفّرو الملفات."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Speicherort ist in Systemeinstellungen › Allgemein › Anmeldeobjekte & Erweiterungen › Dateianbieter deaktiviert."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La ubicación está desactivada en Ajustes del Sistema › General › Ítems de inicio y extensiones › Proveedores de archivos."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'emplacement est désactivé dans Réglages Système › Général › Ouverture et extensions › Fournisseurs de fichiers."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La posizione è disattivata in Impostazioni di Sistema › Generali › Elementi di login ed estensioni › Fornitori di file."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "该位置已在“系统设置 › 通用 › 登录项与扩展 › 文件提供程序”中停用。"
+          }
+        }
+      }
+    },
+    "The location is temporarily unavailable; the system is still setting it up. Try again in a minute.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الموقع غير متاح مؤقتاً؛ لا يزال النظام يجهّزه. أعد المحاولة بعد دقيقة."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Speicherort ist vorübergehend nicht verfügbar; das System richtet ihn noch ein. Versuche es in einer Minute erneut."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La ubicación no está disponible temporalmente; el sistema aún la está preparando. Vuelve a intentarlo en un minuto."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'emplacement est temporairement indisponible ; le système est encore en train de le préparer. Réessayez dans une minute."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La posizione è temporaneamente non disponibile: il sistema la sta ancora preparando. Riprova tra un minuto."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "该位置暂时不可用，系统仍在设置中。请一分钟后重试。"
+          }
+        }
+      }
+    },
+    "The log is written by this app and rotates at %lld × %lld MB. Debug logging adds every request to the gateway; turn it on to reproduce a problem, then off.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يكتب هذا التطبيق السجل ويتناوب عند %lld × %lld ميغابايت. يضيف سجل التصحيح كل طلب إلى البوّابة؛ فعّله لإعادة إنتاج مشكلة ثم أوقفه."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Protokoll wird von dieser App geschrieben und rotiert bei %lld × %lld MB. Das Debug-Protokoll ergänzt jede Anfrage an das Gateway; schalte es ein, um ein Problem nachzustellen, und danach wieder aus."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El registro lo escribe esta app y rota a %lld × %lld MB. El registro de depuración añade cada petición al gateway; actívalo para reproducir un problema y luego desactívalo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le journal est écrit par cette app et tourne à %lld × %lld Mo. La journalisation de débogage ajoute chaque requête vers la passerelle ; activez-la pour reproduire un problème, puis désactivez-la."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il log è scritto da questa app e ruota a %lld × %lld MB. Il log di debug aggiunge ogni richiesta al gateway: attivalo per riprodurre un problema, poi disattivalo."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日志由本 App 写入，按 %lld × %lld MB 轮转。调试日志会额外记录对网关的每个请求；重现问题时开启，之后关闭。"
+          }
+        }
+      }
+    },
+    "The other devices keep their configuration; only the shared copy is deleted. Secrets in iCloud Keychain are not touched.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تحتفظ الأجهزة الأخرى بإعداداتها؛ تُحذف النسخة المشتركة فقط. لا تُمَس الأسرار في سلسلة مفاتيح iCloud."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die anderen Geräte behalten ihre Konfiguration; nur die gemeinsame Kopie wird gelöscht. Geheimnisse im iCloud-Schlüsselbund bleiben unberührt."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los demás dispositivos conservan su configuración; solo se elimina la copia compartida. Los secretos del llavero de iCloud no se tocan."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les autres appareils conservent leur configuration ; seule la copie partagée est supprimée. Les secrets du trousseau iCloud ne sont pas touchés."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gli altri dispositivi conservano la loro configurazione; viene eliminata solo la copia condivisa. I segreti nel Portachiavi iCloud non vengono toccati."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "其他设备保留各自的配置，仅删除共享副本。iCloud 钥匙串中的机密不受影响。"
+          }
+        }
+      }
+    },
+    "The report contains the results above, the app and device details and the last lines of the log. It never includes API keys or tokens.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يحتوي التقرير على النتائج أعلاه وتفاصيل التطبيق والجهاز وآخر أسطر السجل. لا يتضمن أبداً مفاتيح API أو الرموز."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Bericht enthält die Ergebnisse oben, Angaben zu App und Gerät sowie die letzten Zeilen des Protokolls. API-Schlüssel oder Token sind nie enthalten."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El informe contiene los resultados anteriores, los detalles de la app y del dispositivo y las últimas líneas del registro. Nunca incluye claves API ni tokens."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le rapport contient les résultats ci-dessus, les détails de l'app et de l'appareil et les dernières lignes du journal. Il ne contient jamais de clés API ni de jetons."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il rapporto contiene i risultati qui sopra, i dettagli di app e dispositivo e le ultime righe del log. Non include mai chiavi API o token."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "报告包含上述结果、App 与设备信息以及日志的最后几行，绝不包含 API 密钥或令牌。"
+          }
+        }
+      }
+    },
+    "The report lists app, device, servers (names and hosts only), iCloud state, the Files/Finder locations and the last lines of the log. API keys, tokens and passwords are never included.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يسرد التقرير التطبيق والجهاز والخوادم (الأسماء والمضيفين فقط) وحالة iCloud ومواقع الملفات/Finder وآخر أسطر السجل. لا تُضمَّن أبداً مفاتيح API أو الرموز أو كلمات المرور."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Bericht enthält App, Gerät, Server (nur Namen und Hosts), iCloud-Status, die Dateien-/Finder-Speicherorte und die letzten Protokollzeilen. API-Schlüssel, Token und Passwörter sind nie enthalten."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El informe incluye app, dispositivo, servidores (solo nombres y hosts), estado de iCloud, ubicaciones de Archivos/Finder y las últimas líneas del registro. Nunca incluye claves API, tokens ni contraseñas."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le rapport liste l'app, l'appareil, les serveurs (noms et hôtes seulement), l'état iCloud, les emplacements Fichiers/Finder et les dernières lignes du journal. Clés API, jetons et mots de passe n'y figurent jamais."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il rapporto elenca app, dispositivo, server (solo nomi e host), stato iCloud, posizioni File/Finder e le ultime righe del log. Chiavi API, token e password non sono mai inclusi."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "报告列出 App、设备、服务器（仅名称与主机）、iCloud 状态、“文件”/“访达”位置以及日志的最后几行，绝不包含 API 密钥、令牌或密码。"
           }
         }
       }
@@ -16171,6 +17931,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "Unraid Drive 是独立的开源项目，与 Lime Technology / Unraid 无关。Unraid 是 Lime Technology, Inc. 的商标。本应用只与你的网关通信：无账户、无分析、无第三方服务器。"
+          }
+        }
+      }
+    },
+    "Unraid Drive is running from a temporary location. Move the app to the Applications folder and open it from there.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يعمل Unraid Drive من موقع مؤقت. انقل التطبيق إلى مجلد التطبيقات وافتحه من هناك."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive läuft von einem temporären Ort. Verschiebe die App in den Ordner „Programme“ und öffne sie von dort."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive se está ejecutando desde una ubicación temporal. Mueve la app a la carpeta Aplicaciones y ábrela desde allí."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive s'exécute depuis un emplacement temporaire. Déplacez l'app dans le dossier Applications et ouvrez-la depuis là."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive è in esecuzione da una posizione temporanea. Sposta l'app nella cartella Applicazioni e aprila da lì."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid Drive 正从临时位置运行。请将 App 移到“应用程序”文件夹并从那里打开。"
           }
         }
       }
@@ -17251,6 +19051,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "此版本的新功能"
+          }
+        }
+      }
+    },
+    "When on, the server list (names, URLs, connection mode) is stored in your iCloud account and the API keys and Cloudflare tokens in iCloud Keychain, end-to-end encrypted. After restoring or replacing a device, Restore brings the servers back and registers this device on each gateway. Turning sync off keeps the copy in iCloud for the other devices. The demo server is never synced.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عند التفعيل تُحفظ قائمة الخوادم (الأسماء وعناوين URL ووضع الاتصال) في حساب iCloud الخاص بك، وتُحفظ مفاتيح API ورموز Cloudflare في سلسلة مفاتيح iCloud بتشفير من طرف إلى طرف. بعد استعادة جهاز أو استبداله، يستعيد «استعادة» الخوادم ويسجّل هذا الجهاز على كل بوّابة. إيقاف المزامنة يحتفظ بالنسخة في iCloud للأجهزة الأخرى. لا يُزامَن خادم العرض التوضيحي أبداً."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn aktiviert, wird die Serverliste (Namen, URLs, Verbindungsmodus) in deinem iCloud-Account gespeichert und die API-Schlüssel und Cloudflare-Token im iCloud-Schlüsselbund, Ende-zu-Ende verschlüsselt. Nach dem Wiederherstellen oder Ersetzen eines Geräts bringt „Wiederherstellen“ die Server zurück und registriert dieses Gerät an jedem Gateway. Das Ausschalten der Synchronisierung behält die Kopie in iCloud für die anderen Geräte. Der Demo-Server wird nie synchronisiert."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si está activo, la lista de servidores (nombres, URL, modo de conexión) se guarda en tu cuenta de iCloud y las claves API y los tokens de Cloudflare en el llavero de iCloud, con cifrado de extremo a extremo. Tras restaurar o sustituir un dispositivo, Restaurar recupera los servidores y registra este dispositivo en cada gateway. Desactivar la sincronización conserva la copia en iCloud para los demás dispositivos. El servidor de demostración nunca se sincroniza."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lorsqu'elle est activée, la liste des serveurs (noms, URL, mode de connexion) est stockée dans votre compte iCloud et les clés API et jetons Cloudflare dans le trousseau iCloud, chiffrés de bout en bout. Après la restauration ou le remplacement d'un appareil, Restaurer ramène les serveurs et enregistre cet appareil sur chaque passerelle. Désactiver la synchronisation conserve la copie dans iCloud pour les autres appareils. Le serveur de démonstration n'est jamais synchronisé."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se attiva, l'elenco dei server (nomi, URL, modalità di connessione) viene salvato nel tuo account iCloud e le chiavi API e i token Cloudflare nel Portachiavi iCloud, con cifratura end-to-end. Dopo il ripristino o la sostituzione di un dispositivo, Ripristina riporta i server e registra questo dispositivo su ogni gateway. Disattivare la sincronizzazione lascia la copia in iCloud per gli altri dispositivi. Il server demo non viene mai sincronizzato."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开启后，服务器列表（名称、URL、连接模式）保存在你的 iCloud 账户中，API 密钥和 Cloudflare 令牌保存在 iCloud 钥匙串中，端到端加密。恢复或更换设备后，“恢复”会找回服务器并在每个网关上注册此设备。关闭同步会为其他设备保留 iCloud 中的副本。演示服务器绝不同步。"
           }
         }
       }

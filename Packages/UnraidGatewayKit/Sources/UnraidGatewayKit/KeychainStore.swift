@@ -85,15 +85,24 @@ public struct KeychainStore: Sendable {
 
     /// Re-stores every secret of a server with the requested synchronizable flag
     /// (used when the user turns iCloud sync on or off).
+    ///
+    /// Non-destructive: each account is copied to the target variant first and the other variant
+    /// is dropped only after the copy succeeded; an account that cannot be read right now (keychain
+    /// still locked, item still travelling through iCloud Keychain) is left exactly as it is. Until
+    /// build 36 this removed all five items before re-adding what it had managed to read, which
+    /// silently destroyed secrets — "the API key disappeared" — whenever a read failed.
     public func setSynchronizable(_ synchronizable: Bool, for serverID: String) throws {
-        let key = apiKey(for: serverID)
-        let token = cloudflareToken(for: serverID)
-        let user = userCredentials(for: serverID)
-        remove(for: serverID)
-        if let key { try set(apiKey: key, for: serverID, synchronizable: synchronizable) }
-        if let token { try set(cloudflareToken: token, for: serverID, synchronizable: synchronizable) }
-        if let user { try set(username: user.username, password: user.password, for: serverID, synchronizable: synchronizable) }
+        var moved = 0, missing = 0
+        for acct in accounts(serverID) {
+            guard let value = get(account: acct) else { missing += 1; continue }
+            try set(value, account: acct, synchronizable: synchronizable)
+            moved += 1
+        }
+        Diag.info("keychain", "server \(serverID.prefix(8)): \(moved) secret(s) now \(synchronizable ? "synchronizable" : "local only"), \(missing) absent")
     }
+
+    /// True when at least the API key of the server is readable right now.
+    public func hasSecrets(for serverID: String) -> Bool { get(account: serverID) != nil }
 
     // MARK: Plumbing
 
@@ -112,19 +121,20 @@ public struct KeychainStore: Sendable {
 
     private func set(_ value: String, account: String, synchronizable: Bool) throws {
         let data = Data(value.utf8)
-        // One variant at a time: drop the other so reads are unambiguous.
-        SecItemDelete(query(account, synchronizable: !synchronizable) as CFDictionary)
         var q = query(account, synchronizable: synchronizable)
         if SecItemCopyMatching(q as CFDictionary, nil) == errSecSuccess {
             let s = SecItemUpdate(q as CFDictionary, [kSecValueData as String: data] as CFDictionary)
-            guard s == errSecSuccess else { throw KeychainError(status: s) }
+            guard s == errSecSuccess else { Diag.error("keychain", "update \(Self.describe(account)) failed: \(s)"); throw KeychainError(status: s) }
         } else {
             q[kSecValueData as String] = data
             // Synchronizable items cannot be "ThisDeviceOnly".
             q[kSecAttrAccessible as String] = synchronizable ? kSecAttrAccessibleAfterFirstUnlock : kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
             let s = SecItemAdd(q as CFDictionary, nil)
-            guard s == errSecSuccess else { throw KeychainError(status: s) }
+            guard s == errSecSuccess else { Diag.error("keychain", "add \(Self.describe(account)) failed: \(s)"); throw KeychainError(status: s) }
         }
+        // One variant at a time, so reads are unambiguous — dropped only now that the new copy exists.
+        SecItemDelete(query(account, synchronizable: !synchronizable) as CFDictionary)
+        Diag.debug("keychain", "stored \(Self.describe(account)) (\(synchronizable ? "sync" : "local"))")
     }
 
     private func get(account: String) -> String? {
@@ -139,8 +149,21 @@ public struct KeychainStore: Sendable {
             kSecMatchLimit as String: kSecMatchLimitOne,
         ]
         var out: CFTypeRef?
-        guard SecItemCopyMatching(q as CFDictionary, &out) == errSecSuccess, let data = out as? Data else { q.removeAll(); return nil }
+        let status = SecItemCopyMatching(q as CFDictionary, &out)
+        guard status == errSecSuccess, let data = out as? Data else {
+            q.removeAll()
+            // errSecItemNotFound is the normal "no such secret"; anything else is worth a trace
+            // (locked keychain after boot, missing entitlement, iCloud Keychain not ready…).
+            if status != errSecItemNotFound { Diag.warning("keychain", "read \(Self.describe(account)) failed: \(status)") }
+            return nil
+        }
         return String(data: data, encoding: .utf8)
+    }
+
+    /// "C78900D3.cf-id": the account with the server id shortened, safe for the log.
+    private static func describe(_ account: String) -> String {
+        guard let dot = account.firstIndex(of: ".") else { return String(account.prefix(8)) }
+        return String(account[..<dot].prefix(8)) + String(account[dot...])
     }
 }
 

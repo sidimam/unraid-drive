@@ -27,17 +27,33 @@ public enum CloudKeys {
 /// with the same name as superseded.
 public enum DeviceIdentity {
     static let key = "device.id"
+    /// Set while the local id was minted here and never confirmed by a gateway registration: such
+    /// an id may still be replaced by the one iCloud remembers for this hardware.
+    static let provisionalKey = "device.id.provisional"
 
     public static var id: String {
         if let v = AppGroup.defaults.string(forKey: key), !v.isEmpty { return v }
         let v = UUID().uuidString
         AppGroup.defaults.set(v, forKey: key)
+        AppGroup.defaults.set(true, forKey: provisionalKey)
+        Diag.info("device", "new installation id \(v.prefix(8)) (provisional until the first registration)")
         return v
     }
 
     /// True when an id already exists locally (i.e. this is not a fresh install).
     public static var hasLocalID: Bool {
         !(AppGroup.defaults.string(forKey: key) ?? "").isEmpty
+    }
+
+    /// True until a gateway accepted a `registerDevice` sign-in with the current id.
+    public static var isProvisional: Bool { AppGroup.defaults.bool(forKey: provisionalKey) }
+
+    /// The gateway registered the current id: keep it for good and remember it in iCloud for this
+    /// hardware (apps only; the extension never touches the Key-Value Store).
+    public static func markRegistered(recordInCloud: Bool) {
+        if isProvisional { Diag.info("device", "id \(id.prefix(8)) registered on a gateway") }
+        AppGroup.defaults.set(false, forKey: provisionalKey)
+        if recordInCloud { recordInCloudMap() }
     }
 
     /// A per-hardware fingerprint that survives a reinstall of this app: `identifierForVendor` on
@@ -64,21 +80,52 @@ public enum DeviceIdentity {
     /// Returns true when an id was adopted from iCloud.
     @discardableResult
     public static func adoptFromCloudIfNeeded() -> Bool {
-        guard let fp = hardwareFingerprint else { _ = id; return false }
+        guard let fp = hardwareFingerprint else {
+            Diag.warning("device", "no hardware fingerprint on this platform: id \(id.prefix(8)) cannot be recovered through iCloud")
+            return false
+        }
         let kvs = NSUbiquitousKeyValueStore.default
         kvs.synchronize()
-        var map = kvs.dictionary(forKey: CloudKeys.deviceIDs) as? [String: String] ?? [:]
+        let map = kvs.dictionary(forKey: CloudKeys.deviceIDs) as? [String: String] ?? [:]
+        let remembered = map[fp].flatMap { $0.isEmpty ? nil : $0 }
         var adopted = false
-        if !hasLocalID, let previous = map[fp], !previous.isEmpty {
-            AppGroup.defaults.set(previous, forKey: key)
-            adopted = true
+        if let remembered, remembered != AppGroup.defaults.string(forKey: key) {
+            // Adopt iCloud's id when this install has none yet, or only a provisional one that no
+            // gateway ever registered. A registered local id always wins.
+            if !hasLocalID || isProvisional {
+                AppGroup.defaults.set(remembered, forKey: key)
+                AppGroup.defaults.set(false, forKey: provisionalKey)
+                adopted = true
+                Diag.info("device", "adopted id \(remembered.prefix(8)) remembered in iCloud for this hardware")
+            }
         }
-        let current = id
-        if map[fp] != current {
-            map[fp] = current
-            kvs.set(map, forKey: CloudKeys.deviceIDs)
-            kvs.synchronize()
-        }
+        _ = id
+        // Only a confirmed (registered) id is recorded, so a fresh install whose Key-Value Store has
+        // not downloaded yet cannot overwrite the id the previous installation left there — until
+        // build 36 that overwrite happened on every reinstall done before iCloud had synced.
+        if !isProvisional { recordInCloudMap() }
+        else if remembered == nil { Diag.info("device", "iCloud has no id for this hardware yet; will adopt one if it arrives before the first registration") }
         return adopted
+    }
+
+    /// Called again when the Key-Value Store reports an external change: a fresh install that is
+    /// still provisional adopts the id iCloud remembers for this hardware.
+    @discardableResult
+    public static func reconcileWithCloud() -> Bool {
+        guard isProvisional else { return false }
+        return adoptFromCloudIfNeeded()
+    }
+
+    /// Writes "fingerprint → id" to iCloud when it differs from what is stored there.
+    static func recordInCloudMap() {
+        guard let fp = hardwareFingerprint else { return }
+        let kvs = NSUbiquitousKeyValueStore.default
+        var map = kvs.dictionary(forKey: CloudKeys.deviceIDs) as? [String: String] ?? [:]
+        let current = id
+        guard map[fp] != current else { return }
+        map[fp] = current
+        kvs.set(map, forKey: CloudKeys.deviceIDs)
+        kvs.synchronize()
+        Diag.info("device", "id \(current.prefix(8)) recorded in iCloud for this hardware")
     }
 }

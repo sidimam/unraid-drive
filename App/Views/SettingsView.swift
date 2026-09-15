@@ -17,6 +17,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var busy = false
     @State private var pairTV = false
+    @State private var confirmRemoveCloud = false
     @AppStorage(Appearance.key, store: AppGroup.defaults) private var appearance = Appearance.system.rawValue
     @AppStorage(AppLanguage.key, store: AppGroup.defaults) private var language = AppLanguage.system.rawValue
     @AppStorage(AppIconColor.storageKey, store: AppGroup.defaults) private var iconColor = "default"
@@ -54,8 +55,9 @@ struct SettingsView: View {
                     }
                     #if os(macOS)
                     Toggle(isOn: Binding(get: { launchAtLogin }, set: { v in
-                        do { if v { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() } } catch {}
-                        launchAtLogin = SMAppService.mainApp.status == .enabled })) { Label("Launch at login", systemImage: "power") }
+                        LoginItem.set(v)
+                        launchAtLogin = LoginItem.isEnabled })) { Label("Launch at login", systemImage: "power") }
+                        .onAppear { launchAtLogin = LoginItem.isEnabled }
                     Toggle(isOn: $menuBarOnly) { Label("Show only in the menu bar", systemImage: "menubar.rectangle") }
                         .onChange(of: menuBarOnly) { _, _ in DockPolicy.apply() }
                     Toggle(isOn: $startMinimized) { Label("Start without a window", systemImage: "macwindow.badge.plus") }
@@ -72,25 +74,39 @@ struct SettingsView: View {
                     Toggle(isOn: Binding(get: { cloud.enabled }, set: { v in Task { busy = true; await cloud.setEnabled(v); busy = false } })) {
                         Label("Sync configuration with iCloud", systemImage: "icloud")
                     }.disabled(busy)
-                    if cloud.enabled {
-                        LabeledContent { Text("\(cloud.remoteServerCount)") } label: { Label("Servers in iCloud", systemImage: "externaldrive.badge.icloud") }
-                        if let d = cloud.lastSync { LabeledContent { Text(d.formatted(date: .abbreviated, time: .shortened)) } label: { Label("Last sync", systemImage: "clock.arrow.2.circlepath") } }
-                        Button { Task { busy = true; _ = await cloud.pull(); cloud.push(); busy = false } } label: { Label("Sync now", systemImage: "arrow.triangle.2.circlepath.icloud") }.disabled(busy)
+                    // Always visible (build 37): until build 36 these rows only appeared while the switch
+                    // was on, which read as "the sync buttons disappeared".
+                    LabeledContent { Text("\(cloud.remoteServerCount)") } label: { Label("Servers in iCloud", systemImage: "externaldrive.badge.icloud") }
+                    LabeledContent {
+                        if cloud.documentAvailable {
+                            Text(cloud.documentDate.map { String(localized: "updated \($0.formatted(date: .abbreviated, time: .shortened))") } ?? String(localized: "not written yet"))
+                        } else {
+                            Text("not available").foregroundStyle(.secondary)
+                        }
+                    } label: { Label("iCloud Drive › Unraid Drive › servers.json", systemImage: "doc.text") }
+                    if let d = cloud.lastSync { LabeledContent { Text(d.formatted(date: .abbreviated, time: .shortened)) } label: { Label("Last sync", systemImage: "clock.arrow.2.circlepath") } }
+                    Button { Task { busy = true; _ = await cloud.pull(); cloud.push(); busy = false } } label: { Label("Sync now", systemImage: "arrow.triangle.2.circlepath.icloud") }
+                        .disabled(busy || !cloud.enabled)
+                    Button {
+                        Task { busy = true; await model.restoreFromCloudAndRegister(); busy = false }
+                    } label: { Label("Restore \(cloud.remoteServerCount) server(s) from iCloud", systemImage: "arrow.down.circle") }
+                        .disabled(busy || cloud.remoteServerCount == 0)
+                    if cloud.remoteServerCount > 0 {
+                        Button(role: .destructive) { confirmRemoveCloud = true } label: { Label("Remove the configuration from iCloud", systemImage: "icloud.slash") }
+                            .confirmationDialog("Remove the server list from iCloud?", isPresented: $confirmRemoveCloud) {
+                                Button("Remove from iCloud", role: .destructive) { cloud.removeCloudCopy() }
+                            } message: { Text("The other devices keep their configuration; only the shared copy is deleted. Secrets in iCloud Keychain are not touched.") }
                     }
                     if let e = cloud.lastError { Label(e, systemImage: "exclamationmark.triangle").foregroundStyle(.red) }
                 } header: { SectionTitle("iCloud") } footer: {
-                    Text("When on, the server list (names, URLs, connection mode) is stored in your iCloud account and the API keys and Cloudflare tokens in iCloud Keychain, end-to-end encrypted. After restoring or replacing your iPhone, the app finds its configuration again. When off, everything stays on this device only. The demo server is never synced.")
-                }
-                if !cloud.enabled && cloud.remoteServerCount > 0 {
-                    Section {
-                        Button {
-                            Task { busy = true; await cloud.restoreFromCloud(); await model.reloadAndRegisterDomains(); busy = false }
-                        } label: { Label("Restore \(cloud.remoteServerCount) server(s) from iCloud", systemImage: "arrow.down.circle") }
-                    } footer: {
-                        Text("A configuration saved by this app is present in your iCloud account. Restoring turns sync on.")
-                    }
+                    Text("When on, the server list (names, URLs, connection mode, shares to show) is saved as a readable servers.json in iCloud Drive › Unraid Drive and in iCloud's key-value storage, and the API keys, Cloudflare tokens and Unraid passwords in iCloud Keychain (the Passwords of your Apple account), end-to-end encrypted — never in the file. After restoring or replacing a device, Restore brings the servers back and registers this device on each gateway. Turning sync off keeps the copies in iCloud for the other devices. The demo server is never synced.")
                 }
 
+                Section {
+                    NavigationLink { DiagnosticsView() } label: { Label("Diagnostics and log", systemImage: "waveform.path.ecg") }
+                } header: { SectionTitle("Support") } footer: {
+                    Text("Rotating log of app and extension, debug logging and a report to share when something does not work.")
+                }
                 Section {
                     LabeledContent { Text(versionString) } label: { Label("Unraid Drive", systemImage: "app.badge") }
                     LabeledContent { Text("Simone Di Mambro") } label: { Label("Author", systemImage: "person") }

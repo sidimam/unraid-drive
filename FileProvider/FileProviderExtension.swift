@@ -19,13 +19,17 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
 
     required init(domain: NSFileProviderDomain) {
         GatewayClient.component = "File Provider"
+        Diag.process = "File Provider"
         self.domain = domain
         let serverID = domain.identifier.rawValue
         if let server = ServerStore().server(id: serverID), let c = GatewayClientFactory.client(for: server) {
             client = c
+            Diag.info("fileprovider", "extension started for \(server.name) (\(server.accessMode))")
         } else {
             client = nil
+            let known = ServerStore().server(id: serverID) != nil
             fpLog.error("no server config or api key for domain \(serverID, privacy: .public)")
+            Diag.error("fileprovider", "extension started for domain \(serverID.prefix(8)) but \(known ? "its secrets are not readable from the Keychain" : "no server with this id is stored") — every operation will report notAuthenticated")
         }
         index = ItemIndex(domainID: serverID)
         let mgr = NSFileProviderManager(for: domain)
@@ -133,7 +137,7 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     private func run(_ body: @escaping () async throws -> Void) -> Progress {
         let progress = Progress(totalUnitCount: 1)
         let task = Task {
-            do { try await body() } catch { fpLog.error("operation failed: \(String(describing: error), privacy: .public)") }
+            do { try await body() } catch { fpLog.error("operation failed: \(String(describing: error), privacy: .public)"); Diag.error("fileprovider", "operation failed", error) }
             progress.completedUnitCount = 1
         }
         progress.cancellationHandler = { task.cancel() }

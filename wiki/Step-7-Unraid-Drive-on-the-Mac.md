@@ -42,3 +42,7 @@ On the first launch and after every update the app checks the gateway and rebuil
 - **The location is greyed out / "Disabled in System Settings"**: enable *Unraid Drive* under System Settings › General › Login Items & Extensions › File Providers.
 - **Sidebar shows a plain folder icon**: the Finder caches the icon; restart the Finder (⌥-right-click its Dock icon → Relaunch) or log out and in.
 - **Nothing syncs**: check the panel is not paused (▶ button), then *Refresh*; the Error list shows what failed and why.
+
+## When something does not work (build 37+)
+
+Open the server (gear in the explorer) and read the **Finder location** row: *Needs your attention* means the Finder extension is switched off — the button **Open System Settings** takes you to General › Login Items & Extensions › File Providers; turn *Unraid Drive* on and the location comes back by itself. **Test connection** checks gateway, key, shares, write access and the location and explains each failure; **Copy report for support** puts the results, the app and device details and the last log lines on the clipboard, without any secret. The full log lives in Preferences › Support › **Diagnostics and log** (with *Show log files in Finder* and a *Debug logging* switch).

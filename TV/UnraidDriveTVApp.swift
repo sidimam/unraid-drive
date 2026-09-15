@@ -7,6 +7,9 @@ import UnraidGatewayKit
 struct UnraidDriveTVApp: App {
     @StateObject private var model = TVModel()
     init() {
+        GatewayClient.component = "Apple TV"
+        Diag.process = "Apple TV"
+        Diag.info("app", "launch \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "?")) on tvOS \(ProcessInfo.processInfo.operatingSystemVersionString)")
         // Same device id as before a reinstall when iCloud remembers it for this Apple TV.
         DeviceIdentity.adoptFromCloudIfNeeded()
     }

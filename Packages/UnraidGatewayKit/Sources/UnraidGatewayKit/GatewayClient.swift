@@ -67,19 +67,40 @@ public actor GatewayClient {
     /// it registers this installation on the gateway (0.9+). Background logins never register, so
     /// a device the admin removed stays out until the user acts.
     public func login(register: Bool = false) async throws -> LoginResponse {
+        do {
+            return try await loginOnce(register: register)
+        } catch GatewayError.deviceNotRegistered where !register {
+            // Tolerant registration (build 37): the credentials are valid but the gateway does not
+            // know this installation any more — its registry was reset, or this device came back with
+            // an id the gateway never saw. Registering again is idempotent on the gateway, so do it
+            // here instead of failing until the user re-enters the secrets. An admin who *removed*
+            // the device gets `deviceRevoked` on the existing session, which is not retried.
+            Diag.warning("gateway", "device \(DeviceIdentity.id.prefix(8)) unknown to \(baseURL.host ?? "gateway"): registering again")
+            return try await loginOnce(register: true)
+        }
+    }
+
+    private func loginOnce(register: Bool) async throws -> LoginResponse {
         var req = URLRequest(url: url("/api/v1/auth/login"))
         req.httpMethod = "POST"
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         var body: [String: Any] = ["apiKey": apiKey, "deviceId": DeviceIdentity.id, "deviceName": Self.clientDescription, "registerDevice": register]
         if let username { body["username"] = username; body["password"] = password ?? "" }
         req.httpBody = try JSONSerialization.data(withJSONObject: body)
+        let t0 = Date()
         let (data, resp) = try await perform(req)
         if (resp as? HTTPURLResponse)?.statusCode == 401, username == nil,
            let msg = (try? JSONDecoder().decode([String: String].self, from: data))?["error"], msg.contains("username") {
+            Diag.warning("gateway", "login to \(baseURL.host ?? "?") needs an Unraid user")
             throw GatewayError.userRequired
         }
-        try Self.check(resp, data)
+        do { try Self.check(resp, data) } catch {
+            Diag.error("gateway", "login to \(baseURL.host ?? "?") (register: \(register), user: \(username ?? "-"))", error)
+            throw error
+        }
         let login = try decode(LoginResponse.self, data)
+        Diag.info("gateway", "login ok \(baseURL.host ?? "?") user \(login.user ?? "-") key \(login.identity.name ?? "?") register \(register) \(Int(Date().timeIntervalSince(t0) * 1000)) ms")
+        if register { DeviceIdentity.markRegistered(recordInCloud: Self.component != "File Provider") }
         token = login.token
         currentUser = login.user
         if let shares = login.shares {
@@ -418,7 +439,23 @@ public actor GatewayClient {
     }
 
     private func perform(_ req: URLRequest) async throws -> (Data, URLResponse) {
-        try await withTransportRetry { try await session.data(for: decorate(req)) }
+        let t0 = Date()
+        do {
+            let out = try await withTransportRetry { try await session.data(for: decorate(req)) }
+            Diag.debug("http", "\(req.httpMethod ?? "GET") \(Self.brief(req.url)) → \((out.1 as? HTTPURLResponse)?.statusCode ?? 0) \(out.0.count) B \(Int(Date().timeIntervalSince(t0) * 1000)) ms")
+            return out
+        } catch {
+            Diag.error("http", "\(req.httpMethod ?? "GET") \(Self.brief(req.url)) after \(Int(Date().timeIntervalSince(t0) * 1000)) ms", error)
+            throw error
+        }
+    }
+
+    /// "host/api/v1/fs/list?path=…" without secrets in the query string (there are none: tokens travel in headers).
+    static func brief(_ url: URL?) -> String {
+        guard let url else { return "?" }
+        var s = (url.host ?? "") + url.path
+        if let q = url.query, !q.isEmpty { s += "?" + q.prefix(80) }
+        return s
     }
 
     private func decorate(_ req: URLRequest) -> URLRequest {

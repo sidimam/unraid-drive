@@ -18,8 +18,6 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -31,6 +29,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationCategoryType</key>
@@ -44,5 +44,17 @@
 	</dict>
 	<key>NSHumanReadableCopyright</key>
 	<string>© 2026 Simone Di Mambro. MIT License.</string>
+	<key>NSUbiquitousContainers</key>
+	<dict>
+		<key>iCloud.com.sdimambro.unraid-drive</key>
+		<dict>
+			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
+			<true/>
+			<key>NSUbiquitousContainerName</key>
+			<string>Unraid Drive</string>
+			<key>NSUbiquitousContainerSupportedFolderLevels</key>
+			<string>One</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

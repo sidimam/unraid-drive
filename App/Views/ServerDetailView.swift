@@ -78,19 +78,25 @@ struct ServerDetailView: View {
     @ViewBuilder private var locationStatus: some View {
         let m = model.maintenance[server.id] ?? model.storedMaintenance(server.id)
         HStack(alignment: .top, spacing: 12) {
+            let symbol = m?.done == true ? "checkmark.circle" : (m?.needsUserAction == true ? "exclamationmark.triangle" : "clock.arrow.circlepath")
             #if os(macOS)
-            Label("Finder location", systemImage: m?.gatewayOK == true ? "checkmark.circle" : "clock.arrow.circlepath")
+            Label("Finder location", systemImage: symbol)
             #else
-            Label("Files location", systemImage: m?.gatewayOK == true ? "checkmark.circle" : "clock.arrow.circlepath")
+            Label("Files location", systemImage: symbol)
             #endif
             Spacer()
             VStack(alignment: .trailing, spacing: 2) {
-                if let m, m.gatewayOK {
+                if let m, m.done {
                     Text("Checked and rebuilt automatically (build \(m.build))").multilineTextAlignment(.trailing)
                     Text(m.date.formatted(date: .abbreviated, time: .shortened)).foregroundStyle(.secondary)
                 } else {
-                    Text("Automatic check pending").multilineTextAlignment(.trailing)
-                    if let m { Text(m.detail).foregroundStyle(.secondary).lineLimit(2) }
+                    Text(m?.needsUserAction == true ? "Needs your attention" : "Automatic check pending").multilineTextAlignment(.trailing)
+                    if let m { Text(m.detail).foregroundStyle(m.needsUserAction == true ? .orange : .secondary).lineLimit(4).multilineTextAlignment(.trailing) }
+                    #if os(macOS)
+                    if m?.needsUserAction == true {
+                        Button("Open System Settings") { LocationErrorText.openExtensionsSettings() }.font(.callout)
+                    }
+                    #endif
                     Button(checking ? "Checking…" : "Check now") {
                         Task { checking = true; await model.maintainLocationsIfNeeded(force: true, only: server); checking = false }
                     }.disabled(checking).font(.callout)
