@@ -45,8 +45,8 @@ for b in builds["data"]:
     existing = {l["attributes"]["locale"]: l["id"] for l in call("GET", f"/builds/{b['id']}/betaBuildLocalizations?limit=50")["data"]}
     for locale, text in texts.items():
         if locale in existing:
-            call("PATCH", f"/betaBuildLocalizations/{existing[locale]}", {"data": {"type": "betaBuildLocalizations", "id": existing[locale], "attributes": {"whatsToTest": text}}})
+            call("PATCH", f"/betaBuildLocalizations/{existing[locale]}", {"data": {"type": "betaBuildLocalizations", "id": existing[locale], "attributes": {"whatsNew": text}}})
         else:
-            call("POST", "/betaBuildLocalizations", {"data": {"type": "betaBuildLocalizations", "attributes": {"locale": locale, "whatsToTest": text},
+            call("POST", "/betaBuildLocalizations", {"data": {"type": "betaBuildLocalizations", "attributes": {"locale": locale, "whatsNew": text},
                  "relationships": {"build": {"data": {"type": "builds", "id": b["id"]}}}}})
     print(f"{plat}: build {build_no} — What to test set in {len(texts)} locales")
