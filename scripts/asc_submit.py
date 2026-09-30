@@ -3,6 +3,9 @@
 
     ASC_ISSUER=… ASC_KEY=…/AuthKey_Z9NY29WQ4M.p8 python3 scripts/asc_submit.py <build number> <step> [--yes]
 
+Environment: ASC_VERSION (default 1.3.2), ASC_PLATFORMS (comma list, default all four), ASC_CANCEL (platforms whose
+waiting submission the cancel step withdraws; none by default).
+
 Steps (run them in order, each one prints what it finds before it writes; --yes is required to write):
   status   — versions, builds and review submissions of the app (read-only, no --yes needed)
   cancel   — withdraw the WAITING_FOR_REVIEW submissions of the platforms listed in CANCEL_PLATFORMS
@@ -21,9 +24,9 @@ History: 2026-09-12 moved 1.1 (waiting) to 1.3 build 36 and created visionOS 1.3
 import json, os, subprocess, sys, time, urllib.request, urllib.error, importlib.util
 
 APP_ID = "6809862123"; KEY_ID = "Z9NY29WQ4M"; API = "https://api.appstoreconnect.apple.com/v1"
-VERSION = os.environ.get("ASC_VERSION", "1.3.1")
-PLATFORMS = ["IOS", "MAC_OS", "TV_OS", "VISION_OS"]
-CANCEL_PLATFORMS = os.environ.get("ASC_CANCEL", "TV_OS").split(",") if os.environ.get("ASC_CANCEL", "TV_OS") else []
+VERSION = os.environ.get("ASC_VERSION", "1.3.2")
+PLATFORMS = os.environ.get("ASC_PLATFORMS", "IOS,MAC_OS,TV_OS,VISION_OS").split(",")
+CANCEL_PLATFORMS = os.environ.get("ASC_CANCEL", "").split(",") if os.environ.get("ASC_CANCEL") else []  # e.g. ASC_CANCEL=TV_OS
 EDITABLE = {"PREPARE_FOR_SUBMISSION", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED", "INVALID_BINARY", "WAITING_FOR_REVIEW"}
 LIVE = {"READY_FOR_SALE", "READY_FOR_DISTRIBUTION", "PROCESSING_FOR_APP_STORE", "PENDING_DEVELOPER_RELEASE"}
 LOCALE_MAP = {"it": "it", "es": "es-ES", "fr": "fr-FR", "de": "de-DE", "zh-Hans": "zh-Hans", "ar": "ar-SA", "en-US": "en-US"}

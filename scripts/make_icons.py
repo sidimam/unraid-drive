@@ -172,6 +172,32 @@ def write_fp_icon(light):
             images.append({"filename": name, "idiom": "mac", "scale": f"{scale}x", "size": f"{pt}x{pt}"})
     write_json(os.path.join(d, "Contents.json"), {"images": images, "info": {"author": "xcode", "version": 1}})
 
+def write_icon_documents(light):
+    """Icon Composer documents (Liquid Glass, iOS 26+/macOS 26+): App/Icons/<name>.icon = icon.json + Assets/
+    Drive.png + Bars.png (the visionOS layers), translucent glass layers over the artwork's background colour.
+    Same names as the appiconsets, which stay for iOS 17/18 and macOS 14/15: Xcode picks the .icon when the OS
+    can render it. AppIconDrive + the coloured alternates for iOS, AppIconMac for the Mac target (identical art)."""
+    root = os.path.join(HERE, "..", "App", "Icons")
+    bg = light.crop((2, 2, 10, 10)).resize((1, 1), Image.BOX).getpixel((0, 0))
+    def document(name, art):
+        _, drive, bars = vision_layers(art)
+        d = os.path.join(root, f"{name}.icon"); os.makedirs(os.path.join(d, "Assets"), exist_ok=True)
+        drive.save(os.path.join(d, "Assets", "Drive.png")); bars.save(os.path.join(d, "Assets", "Bars.png"))
+        def group(image, layer):
+            return {"layers": [{"image-name": image, "name": layer, "glass": True,
+                                "position": {"scale": 0.9, "translation-in-points": [0, 0]}}],
+                    "shadow": {"kind": "neutral", "opacity": 0.5}, "translucency": {"enabled": True, "value": 0.6},
+                    "specular": True, "blend-mode": "normal", "lighting": "individual"}
+        write_json(os.path.join(d, "icon.json"), {
+            "design-generation": 26,
+            "fill": {"automatic-gradient": "extended-srgb:%.5f,%.5f,%.5f,1.00000" % tuple(c / 255 for c in bg)},
+            "groups": [group("Drive.png", "Drive"), group("Bars.png", "Bars")],
+            "supported-platforms": {"circles": ["watchOS"], "squares": "shared"}})
+    document("AppIconDrive", light)
+    document("AppIconMac", light)
+    for key, (label, hue) in VARIANTS.items():
+        if key != "default": document(f"AppIcon-{key}", recolor(light, hue))
+
 def write_tv_brandassets(light):
     """tvOS: layered app icon (400x240 @1x/@2x), App Store icon (1280x768) and Top Shelf images."""
     from PIL import ImageDraw
@@ -236,6 +262,7 @@ def main():
     write_menubar_icon(light)
     write_fp_icon(light)
     write_tv_brandassets(light)
+    write_icon_documents(light)
     for key, (label, hue) in VARIANTS.items():
         d = os.path.join(OUT, "AppIconDrive.appiconset" if key == "default" else f"AppIcon-{key}.appiconset")
         os.makedirs(d, exist_ok=True)

@@ -99,11 +99,11 @@ struct ServersView: View {
             .navigationDestination(for: ServerConfig.self) { FileBrowserView(server: $0, path: "/") }
             .toolbar {
                 ToolbarItemGroup(placement: leadingPlacement) {
-                    Button { showWalkthrough = true } label: { Image(systemName: "questionmark.circle") }
-                    Button { showSettings = true } label: { Image(systemName: "gearshape") }
+                    Button { showWalkthrough = true } label: { Label("Help", systemImage: "questionmark.circle") }
+                    Button { showSettings = true } label: { Label("Settings", systemImage: "gearshape") }
                 }
                 ToolbarItem(placement: .primaryAction) {
-                    Button { adding = true } label: { Image(systemName: "plus") }
+                    Button { adding = true } label: { Label("Add server", systemImage: "plus") }
                 }
             }
             #if !os(macOS)

@@ -1,0 +1,68 @@
+{
+  "design-generation": 26,
+  "fill": {
+    "automatic-gradient": "extended-srgb:0.93333,0.93725,0.95294,1.00000"
+  },
+  "groups": [
+    {
+      "layers": [
+        {
+          "image-name": "Drive.png",
+          "name": "Drive",
+          "glass": true,
+          "position": {
+            "scale": 0.9,
+            "translation-in-points": [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "translucency": {
+        "enabled": true,
+        "value": 0.6
+      },
+      "specular": true,
+      "blend-mode": "normal",
+      "lighting": "individual"
+    },
+    {
+      "layers": [
+        {
+          "image-name": "Bars.png",
+          "name": "Bars",
+          "glass": true,
+          "position": {
+            "scale": 0.9,
+            "translation-in-points": [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "translucency": {
+        "enabled": true,
+        "value": 0.6
+      },
+      "specular": true,
+      "blend-mode": "normal",
+      "lighting": "individual"
+    }
+  ],
+  "supported-platforms": {
+    "circles": [
+      "watchOS"
+    ],
+    "squares": "shared"
+  }
+}

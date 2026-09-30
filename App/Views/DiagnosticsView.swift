@@ -49,7 +49,7 @@ struct DiagnosticsView: View {
                 }
                 .frame(minHeight: 120, maxHeight: 420)
             } header: {
-                HStack { SectionTitle("Latest entries"); Spacer(); Button { refresh() } label: { Image(systemName: "arrow.clockwise") }.buttonStyle(.plain) }
+                HStack { SectionTitle("Latest entries"); Spacer(); Button { refresh() } label: { Label("Refresh", systemImage: "arrow.clockwise").labelStyle(.iconOnly) }.buttonStyle(.plain) }
             }
         }
         .groupedFormStyle()

@@ -23,10 +23,10 @@ settings:
     DEVELOPMENT_TEAM: X5SR67A8AL
     CODE_SIGN_STYLE: Automatic
     TARGETED_DEVICE_FAMILY: "1,2,7"
-    MARKETING_VERSION: "1.3.1"
+    MARKETING_VERSION: "1.3.2"
     # MPVKit ships arm64-only slices for the visionOS simulator.
     "EXCLUDED_ARCHS[sdk=xrsimulator*]": x86_64
-    CURRENT_PROJECT_VERSION: "40"
+    CURRENT_PROJECT_VERSION: "41"
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     SWIFT_STRICT_CONCURRENCY: minimal
 packages:
@@ -43,7 +43,20 @@ targets:
     sources:
       - path: Shared
       - path: App
-        excludes: ["Info.plist", "Info-macOS.plist", "UnraidDrive-macOS.entitlements"]
+        excludes: ["Info.plist", "Info-macOS.plist", "UnraidDrive-macOS.entitlements", "Icons"]
+      # Icon Composer documents (Liquid Glass, iOS 26+); the appiconsets of the same names stay for iOS 17/18.
+      - path: App/Icons/AppIconDrive.icon
+        type: file
+      - path: App/Icons/AppIcon-rosso.icon
+        type: file
+      - path: App/Icons/AppIcon-blu.icon
+        type: file
+      - path: App/Icons/AppIcon-teal.icon
+        type: file
+      - path: App/Icons/AppIcon-viola.icon
+        type: file
+      - path: App/Icons/AppIcon-grafite.icon
+        type: file
     dependencies:
       - package: MPVKit
         product: MPVKit
@@ -141,7 +154,9 @@ targets:
     sources:
       - path: Shared
       - path: App
-        excludes: ["Info.plist", "Info-macOS.plist", "UnraidDrive.entitlements"]
+        excludes: ["Info.plist", "Info-macOS.plist", "UnraidDrive.entitlements", "Icons"]
+      - path: App/Icons/AppIconMac.icon
+        type: file
     dependencies:
       - package: MPVKit
         product: MPVKit
