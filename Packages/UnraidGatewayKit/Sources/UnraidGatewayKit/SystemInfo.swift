@@ -23,7 +23,9 @@ public struct SystemInfo: Decodable, Sendable {
         public struct OS: Decodable, Sendable { public var hostname: String?; public var fqdn: String?; public var distro: String?; public var release: String?; public var kernel: String?; public var arch: String?; public var uptime: String?; public var uefi: Bool? }
         public struct CPU: Decodable, Sendable { public var manufacturer: String?; public var brand: String?; public var cores: Int?; public var threads: Int?; public var processors: Int?; public var speed: Double?; public var speedmax: Double?; public var socket: String? }
         public struct Memory: Decodable, Sendable { public var layout: [Module]?
-            public struct Module: Decodable, Sendable { public var size: Int64?; public var type: String?; public var clockSpeed: Int?; public var manufacturer: String? } }
+            public struct Module: Decodable, Sendable { public var size: Int64?; public var type: String?; public var clockSpeed: Int?; public var manufacturer: String?
+                /// Module size in bytes (the API value is KiB).
+                public var bytes: Int64? { size.map { $0 * 1024 } } } }
         public struct Baseboard: Decodable, Sendable { public var manufacturer: String?; public var model: String?; public var version: String?; public var memMax: Double?; public var memSlots: Double? }
         public struct System: Decodable, Sendable { public var manufacturer: String?; public var model: String?; public var version: String?; public var virtual: Bool? }
         public struct Versions: Decodable, Sendable { public var core: Core?
@@ -52,9 +54,9 @@ public struct SystemInfo: Decodable, Sendable {
         let f = ISO8601DateFormatter(); f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         return f.date(from: s) ?? ISO8601DateFormatter().date(from: s)
     }
-    /// Installed memory from the DIMM layout, in bytes.
+    /// Installed memory from the DIMM layout, in bytes (unraid-api reports module sizes in KiB).
     public var installedMemory: Int64? {
         guard let l = info?.memory?.layout, !l.isEmpty else { return nil }
-        return l.compactMap(\.size).reduce(0, +)
+        return l.compactMap(\.size).reduce(0, +) * 1024
     }
 }

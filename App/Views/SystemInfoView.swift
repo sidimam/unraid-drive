@@ -39,7 +39,7 @@ struct SystemInfoView: View {
                     if let modules = i.info?.memory?.layout, !modules.isEmpty {
                         ForEach(Array(modules.enumerated()), id: \.offset) { n, m in
                             LabeledContent("Module \(n + 1)") {
-                                Text([m.size.map(bytes), m.type, m.clockSpeed.map { "\($0) MHz" }].compactMap { $0 }.joined(separator: " · ")).multilineTextAlignment(.trailing)
+                                Text([m.bytes.map(bytes), m.type, m.clockSpeed.map { "\($0) MHz" }].compactMap { $0 }.joined(separator: " · ")).multilineTextAlignment(.trailing)
                             }
                         }
                     }
