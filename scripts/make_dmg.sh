@@ -34,7 +34,8 @@ rm -rf "$DD_ROOT/dmg-root" "$DMG"; mkdir -p "$DD_ROOT/dmg-root"
 ditto "$APP" "$DD_ROOT/dmg-root/Unraid Drive.app"; ln -s /Applications "$DD_ROOT/dmg-root/Applications"
 hdiutil create -volname "Unraid Drive" -srcfolder "$DD_ROOT/dmg-root" -ov -format UDZO "$DMG" | tail -1
 DEVID="${DEVID:-Developer ID Application: SIMONE DI MAMBRO (X5SR67A8AL)}"
-codesign --force --sign "$DEVID" --timestamp "$DMG" || { echo "dmg codesign failed"; exit 1; }
+# Apple's timestamp server hiccups now and then ("A timestamp was expected but was not found"): retry.
+for try in 1 2 3 4; do codesign --force --sign "$DEVID" --timestamp "$DMG" && break; echo "dmg codesign failed (try $try)"; [ $try = 4 ] && exit 1; sleep 15; done
 echo "=== notarize dmg"
 xcrun notarytool submit "$DMG" --key "$KEY" --key-id "$KEY_ID" --issuer "$ISSUER" --wait | grep -E "id:|status:"
 xcrun stapler staple "$DMG" | tail -1
