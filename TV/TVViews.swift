@@ -523,7 +523,6 @@ struct TVDashboardView: View {
                         LabeledContent("Unraid", value: d.info?.os?.release ?? "—")
                         if let p = d.metrics?.cpu?.percentTotal { LabeledContent("CPU load", value: String(format: "%.0f %%", p)) }
                         if let p = d.metrics?.memory?.percentTotal { LabeledContent("Memory", value: String(format: "%.0f %%", p)) }
-                        if let n = d.notifications?.overview?.unread?.total { LabeledContent("Unread notifications", value: String(n)) }
                     }
                     if let arr = d.array {
                         Section("Array") {

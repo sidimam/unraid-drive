@@ -21890,46 +21890,6 @@
         }
       }
     },
-    "Array, disks, notifications, load and gateway container look fine.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Array, dischi, notifiche, carico e container del gateway sono a posto."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Array, discos, notificaciones, carga y contenedor del gateway están bien."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Array, disques, notifications, charge et conteneur de la passerelle sont en ordre."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Array, Datenträger, Benachrichtigungen, Auslastung und Gateway-Container sind in Ordnung."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "阵列、磁盘、通知、负载和网关容器均正常。"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "المصفوفة والأقراص والإشعارات والحمل وحاوية البوّابة كلها بخير."
-          }
-        }
-      }
-    },
     "A profile is an Unraid server reached through its unraid-gateway, with its own connection mode and credentials. The app opens on the current profile; every profile is also a location in the Files app. Open a profile for its dashboard, shares to show, connection test and credentials; swipe left to remove it.": {
       "localizations": {
         "it": {
@@ -22126,6 +22086,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "أضف ملفاً شخصياً (عند أول تشغيل أو من الإعدادات › الملفات الشخصية)، وأدخل عنوان البوّابة ومفتاح API، ثم اتصل. يفتح التطبيق على مجلداته ويظهر الخادم في تطبيق الملفات وفي Finder تحت Unraid Drive. فضولي أولاً؟ جرّب خادم العرض التوضيحي: ملفات نموذجية بلا إعداد."
+          }
+        }
+      }
+    },
+    "Array, disks, load and gateway container look fine.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Array, dischi, carico e container del gateway sono a posto."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Array, discos, carga y contenedor del gateway están bien."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Array, disques, charge et conteneur de la passerelle sont en ordre."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Array, Datenträger, Auslastung und Gateway-Container sind in Ordnung."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "阵列、磁盘、负载和网关容器均正常。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المصفوفة والأقراص والحمل وحاوية البوّابة كلها بخير."
           }
         }
       }

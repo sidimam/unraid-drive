@@ -76,7 +76,7 @@ struct ServerDetailView: View {
                 if let h, !h.reasons.isEmpty {
                     Text(h.reasons.joined(separator: " · ")).font(.footnote).foregroundStyle(h.level == .error ? .red : .orange)
                 } else if let h, h.level == .ok {
-                    Text("Array, disks, notifications, load and gateway container look fine.").font(.footnote).foregroundStyle(.secondary)
+                    Text("Array, disks, load and gateway container look fine.").font(.footnote).foregroundStyle(.secondary)
                 }
             }
         }
@@ -89,7 +89,6 @@ struct ServerDetailView: View {
             if let cpu = d.info?.cpu { LabeledContent("CPU", value: cpuLine(cpu)) }
             if let p = d.metrics?.cpu?.percentTotal { gauge("CPU load", p) }
             if let p = d.metrics?.memory?.percentTotal { gauge("Memory", p) }
-            if let n = d.notifications?.overview?.unread { notificationsRow(n) }
             NavigationLink { SystemInfoView(server: server) } label: { Label("System information", systemImage: "info.circle") }
         }
     }
@@ -131,19 +130,6 @@ struct ServerDetailView: View {
         let cores = cpu.cores ?? 0
         let threads = cpu.threads ?? 0
         return "\(brand) · \(cores)C/\(threads)T"
-    }
-
-    private func notificationsRow(_ n: Dashboard.Notifications.Overview.Counts) -> some View {
-        let total = n.total ?? 0
-        let alerts = n.alert ?? 0
-        let warnings = n.warning ?? 0
-        return LabeledContent("Unread notifications") {
-            HStack(spacing: 8) {
-                Text(String(total))
-                if alerts > 0 { Label(String(alerts), systemImage: "exclamationmark.octagon.fill").foregroundStyle(.red) }
-                if warnings > 0 { Label(String(warnings), systemImage: "exclamationmark.triangle.fill").foregroundStyle(.orange) }
-            }
-        }
     }
 
     @ViewBuilder private func arraySection(_ d: Dashboard) -> some View {

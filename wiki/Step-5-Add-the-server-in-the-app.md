@@ -47,7 +47,7 @@ Repeat 5.2 for every Unraid server you have (Settings › Profiles › **Add a p
 
 ### The health dot
 
-Next to the title of the share list a small dot sums up the server: **green** all fine, **yellow** warnings (unread warning notifications, a disk above 50 °C, a parity check with errors, CPU or memory above 90 %, the unraid-gateway container not running), **red** problems (array not started, a disk that is not OK or above 60 °C, alert notifications, gateway unreachable or refusing the credentials). Tap it to open the profile page: its first row lists the reasons, below it the dashboard with **System information** (operating system, processor, memory modules, mainboard, versions, GPUs, network interfaces).
+Next to the title of the share list a small dot sums up the server: **green** all fine, **yellow** warnings (a disk above 50 °C, a parity check with errors, CPU or memory above 90 %, the unraid-gateway container not running), **red** problems (array not started, a disk that is not OK or above 60 °C, gateway unreachable or refusing the credentials). Unraid's own notifications are left to Unraid. Tap it to open the profile page: its first row lists the reasons, below it the dashboard with **System information** (operating system, processor, memory modules, mainboard, versions, GPUs, network interfaces).
 
 ## 5.5 Appearance and language
 

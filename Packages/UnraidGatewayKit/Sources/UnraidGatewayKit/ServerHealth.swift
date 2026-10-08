@@ -21,8 +21,8 @@ public struct ServerHealth: Equatable, Sendable {
         ServerHealth(level: .error, reasons: [description])
     }
 
-    /// Red: array not started, a disk that is not OK, alert notifications, a disk above the critical
-    /// temperature. Yellow: unread warnings, a parity check with errors, CPU or memory above 90 %, a
+    /// Red: array not started, a disk that is not OK, a disk above the critical
+    /// temperature. Yellow: a parity check with errors, CPU or memory above 90 %, a
     /// disk above the warning temperature, the gateway container not running. Green otherwise.
     public static func assess(_ d: Dashboard, gatewayContainerRunning: Bool? = nil, warnTemp: Int = 50, criticalTemp: Int = 60) -> ServerHealth {
         var errors: [String] = []; var warnings: [String] = []
@@ -37,10 +37,7 @@ public struct ServerHealth: Equatable, Sendable {
             }
             if let p = a.parityCheckStatus, let s = p.status?.uppercased(), s.contains("ERROR") || s.contains("FAIL") { warnings.append(String(localized: "Parity check: \(s.lowercased())", bundle: .module)) }
         }
-        if let n = d.notifications?.overview?.unread {
-            if let x = n.alert, x > 0 { errors.append(String(localized: "\(x) alert notification(s)", bundle: .module)) }
-            if let x = n.warning, x > 0 { warnings.append(String(localized: "\(x) warning notification(s)", bundle: .module)) }
-        }
+        // Unraid's own notifications are the NAS's business, not the app's (user, 8/10/2026).
         if let p = d.metrics?.cpu?.percentTotal, p > 90 { warnings.append(String(localized: "CPU load \(Int(p.rounded()))", bundle: .module) + " %") }
         if let p = d.metrics?.memory?.percentTotal, p > 90 { warnings.append(String(localized: "Memory load \(Int(p.rounded()))", bundle: .module) + " %") }
         if gatewayContainerRunning == false { warnings.append(String(localized: "unraid-gateway container not running", bundle: .module)) }
