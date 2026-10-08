@@ -41,12 +41,12 @@ struct WalkthroughView: View {
             Page(kind: .info, icon: "externaldrive.connected.to.line.below", title: "Your Unraid shares in Files and in the Finder",
                  text: "Unraid Drive adds your Unraid shares to the Files app on iPhone, iPad and Vision Pro and to the Finder sidebar on the Mac, next to iCloud Drive. Open, save, move and share files from any app, at home or away, over HTTPS."),
             Page(kind: .info, icon: "sparkles", title: "What's new in this version",
-                 text: "Restore first: on a new or reinstalled device the walkthrough finds the configuration saved in iCloud, restores it and registers the device on the gateways again; the Apple TV shows what is waiting in iCloud and receives every server with one pairing code. Clearer errors when a video cannot stream; Rename and New folder on Apple TV."),
+                 text: "The app opens straight on your folders. One Settings screen (the gear) holds your profiles — servers, connections, credentials — and the app settings. A dot next to the title shows the server's health: green, yellow for warnings, red for problems; it opens the dashboard, where System information lists the hardware."),
         ]
         if !restoreFirst { p.append(icloudPage) }
         p += [
             Page(kind: .shares, icon: "externaldrive.badge.checkmark", title: "Choose the shares to show",
-                 text: "For each server, tick the shares you want in the Files app, the Finder, Shortcuts and on Apple TV. You can change this any time in Settings › Shares to show."),
+                 text: "For each server, tick the shares you want in the Files app, the Finder, Shortcuts and on Apple TV. You can change this any time in Settings › Profiles › your server › Shares to show."),
             Page(kind: .notifications, icon: "bell.badge", title: "Stay informed",
                  text: "Unraid Drive can tell you when a gateway is unreachable and when a file could not be uploaded or downloaded. You choose what to allow in the system Settings at any time."),
             Page(kind: .info, icon: "shippingbox", title: "1 · Install the gateway",
@@ -56,8 +56,8 @@ struct WalkthroughView: View {
                  text: "In the Unraid WebGUI open Settings › Management Access › API Keys and add a key. VIEWER is enough for files and the dashboard. The key never leaves your device except to your own gateway."),
             Page(kind: .info, icon: "cloud", title: "3 · Reach it from outside",
                  text: "Publish the gateway port through Cloudflare (works behind CGNAT, free) or a reverse proxy with a valid certificate. Optionally protect it with Cloudflare Zero Trust and a Service Token: the app supports it."),
-            Page(kind: .info, icon: "folder.badge.plus", title: "4 · Add the server",
-                 text: "Tap + , enter the gateway URL and the API key, connect. The server appears in the Files app and in the Finder under Unraid Drive. Curious first? Try the demo server: sample files, no setup."),
+            Page(kind: .info, icon: "folder.badge.plus", title: "4 · Add the profile",
+                 text: "Add a profile (first run, or Settings › Profiles), enter the gateway URL and the API key, connect. The app opens on its folders and the server appears in the Files app and in the Finder under Unraid Drive. Curious first? Try the demo server: sample files, no setup."),
         ]
         return p
     }

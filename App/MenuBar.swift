@@ -316,7 +316,7 @@ struct MenuBarPanel: View {
 
     private var gear: some View {
         Menu {
-            Button("Preferences…") { showMainWindow() }
+            Button("Preferences…") { showMainWindow(); DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { NotificationCenter.default.post(name: AppNavigation.openSettings, object: nil) } }
             Button("Offline files…") { open("storage") }
             Button("Error list…") { open("errors") }
             Divider()
@@ -363,7 +363,7 @@ struct MenuBarPanel: View {
                 card {
                     Label("No server configured", systemImage: "externaldrive.badge.questionmark").font(.headline)
                     Text("Add your Unraid server from the preferences; its shares then appear in the Finder sidebar.").foregroundStyle(.secondary)
-                    Button("Add server…") { showMainWindow() }.buttonStyle(.borderedProminent)
+                    Button("Add server…") { showMainWindow(); DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { NotificationCenter.default.post(name: AppNavigation.addProfile, object: nil) } }.buttonStyle(.borderedProminent)
                 }
             } else {
                 ForEach(model.servers) { server in

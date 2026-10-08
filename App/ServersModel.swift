@@ -10,6 +10,12 @@ final class ServersModel: ObservableObject {
     private let store = ServerStore()
     private let keychain = KeychainStore()
     let cloud = CloudSync()
+    /// The profile the app opens on (build 42: the launch lands in its folders). Persisted in the app group.
+    @Published private(set) var current: ServerConfig?
+    private static let currentKey = "servers.current"
+    /// One-glance health per server, derived from the dashboard; refreshed when the explorer root or a
+    /// profile page appears.
+    @Published private(set) var health: [String: ServerHealth] = [:]
 
     init() {
         reload()
@@ -147,7 +153,35 @@ final class ServersModel: ObservableObject {
         AppGroup.defaults.set(true, forKey: "fp.rebuilt.g\(Self.iconGeneration)." + server.id)
     }
 
-    func reload() { servers = store.all() }
+    func reload() { servers = store.all(); syncCurrent() }
+
+    /// Keeps `current` pointing at an existing profile: the remembered one, else the first real server.
+    private func syncCurrent() {
+        let id = AppGroup.defaults.string(forKey: Self.currentKey)
+        current = servers.first { $0.id == id } ?? servers.first { !$0.isDemo } ?? servers.first
+    }
+
+    /// Makes a profile the one the explorer opens on.
+    func select(_ server: ServerConfig) {
+        AppGroup.defaults.set(server.id, forKey: Self.currentKey)
+        syncCurrent()
+        Diag.info("servers", "current profile → \(server.name)")
+    }
+
+    /// Health for the status dot: is the gateway reachable, then the dashboard assessment (array,
+    /// disks, notifications, load, gateway container). Cached per server; the demo is always fine.
+    func refreshHealth(_ server: ServerConfig) async {
+        if server.isDemo { health[server.id] = ServerHealth(level: .ok); return }
+        guard let c = client(for: server) else { health[server.id] = .unreachable(String(localized: "Credentials missing from the Keychain")); return }
+        do {
+            _ = try await c.health()
+            let d = try await c.graphQL(Dashboard.query, as: Dashboard.self)
+            let gateway = (d.docker?.containers ?? []).filter { ServerDetailView.isGateway($0) }
+            health[server.id] = ServerHealth.assess(d, gatewayContainerRunning: gateway.isEmpty ? nil : gateway.contains { $0.state == "RUNNING" })
+        } catch {
+            health[server.id] = .unreachable(error.localizedDescription)
+        }
+    }
 
     func client(for server: ServerConfig) -> GatewayClient? {
         GatewayClientFactory.client(for: server, keychain: keychain)

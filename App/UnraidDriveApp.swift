@@ -58,7 +58,7 @@ struct UnraidDriveApp: App {
 
     @SceneBuilder private var mainWindow: some Scene {
         WindowGroup(id: "main") {
-            ServersView()
+            RootView()
                 .environmentObject(servers)
                 .environmentObject(servers.cloud)
                 .task { await seedFromLaunchArguments() }

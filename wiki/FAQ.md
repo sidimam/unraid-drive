@@ -44,4 +44,4 @@ Yes: [unraid-gateway](https://github.com/sidimam/unraid-gateway) (Go) and [unrai
 
 ## Are there Home Screen quick actions?
 
-Yes: long-press the app icon for **Open the Files app**, **Test connection** (first server) and **Add server**. Everything else happens inside the Files app itself, where Unraid Drive appears as a location.
+Yes: long-press the app icon for **Open the Files app**, **Test connection** (first server) and **Add server** (opens Settings › Profiles › Add a profile). Everything else happens inside the Files app itself, where Unraid Drive appears as a location.

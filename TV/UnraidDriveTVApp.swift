@@ -28,6 +28,9 @@ final class TVModel: ObservableObject {
     /// their credentials can only arrive through pairing: the list is used to tell the user what
     /// is waiting for him and to pre-fill names.
     @Published private(set) var cloudServers: [ServerConfig] = []
+    /// The server the TV opens on (build 42). Persisted; falls back to the first real server.
+    @Published private(set) var current: ServerConfig?
+    private static let currentKey = "tv.servers.current"
     private let store = ServerStore()
     private let keychain = KeychainStore()
     private let kvs = NSUbiquitousKeyValueStore.default
@@ -48,7 +51,13 @@ final class TVModel: ObservableObject {
             setSelectedShares(ServerConfig.demo, args[i + 1].split(separator: ",").map(String.init))
         }
     }
-    func reload() { servers = store.all() }
+    func reload() {
+        servers = store.all()
+        let id = UserDefaults.standard.string(forKey: Self.currentKey)
+        current = servers.first { $0.id == id } ?? servers.first { !$0.isDemo } ?? servers.first
+    }
+    /// Makes a server the one the TV opens on.
+    func select(_ s: ServerConfig) { UserDefaults.standard.set(s.id, forKey: Self.currentKey); reload() }
     func refreshCloud() {
         guard let data = kvs.data(forKey: CloudKeys.servers) else { cloudServers = []; return }
         cloudServers = ServerStore.decode(data).filter { !$0.isDemo }

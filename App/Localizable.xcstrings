@@ -20209,6 +20209,1926 @@
           }
         }
       }
+    },
+    "Welcome to Unraid Drive": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benvenuto in Unraid Drive"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bienvenido a Unraid Drive"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bienvenue dans Unraid Drive"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Willkommen bei Unraid Drive"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "欢迎使用 Unraid Drive"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مرحباً بك في Unraid Drive"
+          }
+        }
+      }
+    },
+    "Add your first profile: the unraid-gateway URL of your Unraid server and an Unraid API key. Its shares then appear here and in the Files app.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi il primo profilo: l’URL unraid-gateway del tuo server Unraid e una chiave API Unraid. Le sue share compaiono qui e nell’app File."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añade tu primer perfil: la URL de unraid-gateway de tu servidor Unraid y una clave API de Unraid. Sus recursos compartidos aparecerán aquí y en la app Archivos."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoutez votre premier profil : l’URL unraid-gateway de votre serveur Unraid et une clé API Unraid. Ses partages apparaissent ici et dans l’app Fichiers."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lege dein erstes Profil an: die unraid-gateway-URL deines Unraid-Servers und einen Unraid-API-Schlüssel. Seine Freigaben erscheinen dann hier und in der Dateien-App."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "添加你的第一个配置文件：Unraid 服务器的 unraid-gateway 地址和一个 Unraid API 密钥。其共享随后会显示在这里和“文件”App 中。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أضف ملفك الشخصي الأول: عنوان unraid-gateway لخادم Unraid ومفتاح API لـ Unraid. ستظهر مشاركاته هنا وفي تطبيق الملفات."
+          }
+        }
+      }
+    },
+    "Add a profile": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi un profilo"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir un perfil"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter un profil"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profil hinzufügen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "添加配置文件"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إضافة ملف شخصي"
+          }
+        }
+      }
+    },
+    "All fine": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tutto regolare"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todo correcto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout va bien"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alles in Ordnung"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一切正常"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كل شيء على ما يرام"
+          }
+        }
+      }
+    },
+    "Warnings": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avvisi"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avisos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avertissements"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warnungen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "警告"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تحذيرات"
+          }
+        }
+      }
+    },
+    "Problems": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Problemi"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Problemas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Problèmes"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Probleme"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "问题"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشاكل"
+          }
+        }
+      }
+    },
+    "Profile": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profilo"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perfil"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profil"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profil"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配置文件"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الملف الشخصي"
+          }
+        }
+      }
+    },
+    "Profiles": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profili"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perfiles"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profils"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profile"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配置文件"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الملفات الشخصية"
+          }
+        }
+      }
+    },
+    "Open its folders": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apri le sue cartelle"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir sus carpetas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir ses dossiers"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seine Ordner öffnen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开其文件夹"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "فتح مجلداته"
+          }
+        }
+      }
+    },
+    "System information": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informazioni di sistema"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Información del sistema"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informations système"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Systeminformationen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系统信息"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "معلومات النظام"
+          }
+        }
+      }
+    },
+    "Operating system": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistema operativo"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistema operativo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Système d’exploitation"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Betriebssystem"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "操作系统"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نظام التشغيل"
+          }
+        }
+      }
+    },
+    "Kernel": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kernel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kernel"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noyau"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kernel"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "内核"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "النواة"
+          }
+        }
+      }
+    },
+    "Architecture": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Architettura"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arquitectura"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Architecture"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Architektur"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "架构"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "البنية"
+          }
+        }
+      }
+    },
+    "Firmware": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Firmware"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Firmware"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Micrologiciel"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Firmware"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "固件"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "البرنامج الثابت"
+          }
+        }
+      }
+    },
+    "Up since": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acceso dal"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Encendido desde"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allumé depuis"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Läuft seit"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开机时间"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يعمل منذ"
+          }
+        }
+      }
+    },
+    "Processor": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Processore"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Procesador"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Processeur"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prozessor"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "处理器"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المعالج"
+          }
+        }
+      }
+    },
+    "Model": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modello"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modelo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modèle"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modell"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "型号"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الطراز"
+          }
+        }
+      }
+    },
+    "Cores / threads": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Core / thread"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Núcleos / hilos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cœurs / threads"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kerne / Threads"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "核心 / 线程"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأنوية / الخيوط"
+          }
+        }
+      }
+    },
+    "Clock": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frequenza"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frecuencia"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fréquence"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Takt"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "频率"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التردد"
+          }
+        }
+      }
+    },
+    "Socket": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Socket"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zócalo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Socket"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sockel"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插槽"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المقبس"
+          }
+        }
+      }
+    },
+    "Processors": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Processori"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Procesadores"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Processeurs"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prozessoren"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "处理器数量"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المعالجات"
+          }
+        }
+      }
+    },
+    "Memory": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Memoria"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Memoria"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mémoire"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arbeitsspeicher"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "内存"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الذاكرة"
+          }
+        }
+      }
+    },
+    "Installed": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Installata"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instalada"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Installée"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Installiert"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已安装"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المثبّتة"
+          }
+        }
+      }
+    },
+    "In use": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In uso"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En uso"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utilisée"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In Benutzung"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用中"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قيد الاستخدام"
+          }
+        }
+      }
+    },
+    "Module %lld": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modulo %lld"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Módulo %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Module %lld"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modul %lld"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "内存条 %lld"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "وحدة %lld"
+          }
+        }
+      }
+    },
+    "Mainboard": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scheda madre"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Placa base"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carte mère"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mainboard"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "主板"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اللوحة الأم"
+          }
+        }
+      }
+    },
+    "Manufacturer": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Produttore"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fabricante"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fabricant"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hersteller"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "制造商"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الشركة المصنّعة"
+          }
+        }
+      }
+    },
+    "Version": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versione"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versión"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "版本"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإصدار"
+          }
+        }
+      }
+    },
+    "Memory slots": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slot memoria"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ranuras de memoria"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emplacements mémoire"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speichersteckplätze"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "内存插槽"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "فتحات الذاكرة"
+          }
+        }
+      }
+    },
+    "Virtual machine": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Macchina virtuale"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Máquina virtual"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Machine virtuelle"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Virtuelle Maschine"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "虚拟机"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جهاز افتراضي"
+          }
+        }
+      }
+    },
+    "yes": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sì"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sí"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "oui"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ja"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "是"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نعم"
+          }
+        }
+      }
+    },
+    "Versions": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versioni"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versiones"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versions"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versionen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "版本信息"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإصدارات"
+          }
+        }
+      }
+    },
+    "Unraid API": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API Unraid"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API de Unraid"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API Unraid"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid-API"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unraid API"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "واجهة Unraid API"
+          }
+        }
+      }
+    },
+    "Graphics": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grafica"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gráficos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carte graphique"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grafik"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "显卡"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الرسوميات"
+          }
+        }
+      }
+    },
+    "Network": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rete"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Red"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réseau"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Netzwerk"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "网络"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الشبكة"
+          }
+        }
+      }
+    },
+    "Loading…": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caricamento…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cargando…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chargement…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wird geladen …"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在载入…"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ التحميل…"
+          }
+        }
+      }
+    },
+    "Credentials missing from the Keychain": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Credenziali assenti dal Portachiavi"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faltan las credenciales en el llavero"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identifiants absents du trousseau"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zugangsdaten fehlen im Schlüsselbund"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "钥匙串中缺少凭据"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بيانات الاعتماد غير موجودة في سلسلة المفاتيح"
+          }
+        }
+      }
+    },
+    "The demo server has no hardware to describe.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il server demo non ha hardware da descrivere."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El servidor de demostración no tiene hardware que describir."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le serveur de démonstration n’a pas de matériel à décrire."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Demo-Server hat keine Hardware zu beschreiben."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "演示服务器没有可描述的硬件。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يوجد لدى خادم العرض التوضيحي عتاد لوصفه."
+          }
+        }
+      }
+    },
+    "current": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "attuale"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "actual"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "actuel"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "aktuell"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当前"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحالي"
+          }
+        }
+      }
+    },
+    "The selected server opens when Unraid Drive starts on this TV.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il server selezionato si apre all’avvio di Unraid Drive su questa TV."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El servidor seleccionado se abre al iniciar Unraid Drive en este Apple TV."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le serveur sélectionné s’ouvre au lancement d’Unraid Drive sur cette TV."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der ausgewählte Server wird beim Start von Unraid Drive auf diesem TV geöffnet."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在此 Apple TV 上启动 Unraid Drive 时会打开所选服务器。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يُفتح الخادم المحدد عند بدء Unraid Drive على هذا التلفاز."
+          }
+        }
+      }
+    },
+    "System information unavailable": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informazioni di sistema non disponibili"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Información del sistema no disponible"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informations système indisponibles"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Systeminformationen nicht verfügbar"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系统信息不可用"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "معلومات النظام غير متاحة"
+          }
+        }
+      }
+    },
+    "4 · Add the profile": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4 · Aggiungi il profilo"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4 · Añade el perfil"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4 · Ajoutez le profil"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4 · Profil hinzufügen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4 · 添加配置文件"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4 · أضف الملف الشخصي"
+          }
+        }
+      }
+    },
+    "Array, disks, notifications, load and gateway container look fine.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Array, dischi, notifiche, carico e container del gateway sono a posto."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Array, discos, notificaciones, carga y contenedor del gateway están bien."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Array, disques, notifications, charge et conteneur de la passerelle sont en ordre."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Array, Datenträger, Benachrichtigungen, Auslastung und Gateway-Container sind in Ordnung."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "阵列、磁盘、通知、负载和网关容器均正常。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المصفوفة والأقراص والإشعارات والحمل وحاوية البوّابة كلها بخير."
+          }
+        }
+      }
+    },
+    "A profile is an Unraid server reached through its unraid-gateway, with its own connection mode and credentials. The app opens on the current profile; every profile is also a location in the Files app. Open a profile for its dashboard, shares to show, connection test and credentials; swipe left to remove it.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un profilo è un server Unraid raggiunto tramite il suo unraid-gateway, con la propria modalità di connessione e le proprie credenziali. L’app si apre sul profilo attuale; ogni profilo è anche una posizione nell’app File. Apri un profilo per dashboard, share da mostrare, test di connessione e credenziali; scorri a sinistra per rimuoverlo."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un perfil es un servidor Unraid al que se accede a través de su unraid-gateway, con su propio modo de conexión y credenciales. La app se abre en el perfil actual; cada perfil es también una ubicación en la app Archivos. Abre un perfil para su panel, recursos que mostrar, prueba de conexión y credenciales; desliza a la izquierda para eliminarlo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un profil est un serveur Unraid joint via son unraid-gateway, avec son propre mode de connexion et ses identifiants. L’app s’ouvre sur le profil actuel ; chaque profil est aussi un emplacement dans l’app Fichiers. Ouvrez un profil pour son tableau de bord, les partages à afficher, le test de connexion et les identifiants ; balayez vers la gauche pour le supprimer."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Profil ist ein Unraid-Server, der über sein unraid-gateway erreicht wird, mit eigenem Verbindungsmodus und eigenen Zugangsdaten. Die App öffnet das aktuelle Profil; jedes Profil ist zugleich ein Speicherort in der Dateien-App. Öffne ein Profil für Dashboard, anzuzeigende Freigaben, Verbindungstest und Zugangsdaten; nach links wischen zum Entfernen."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配置文件代表一台通过 unraid-gateway 访问的 Unraid 服务器，拥有自己的连接方式和凭据。App 启动时打开当前配置文件；每个配置文件也是“文件”App 中的一个位置。打开配置文件可查看仪表盘、要显示的共享、连接测试和凭据；向左滑动可将其移除。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الملف الشخصي هو خادم Unraid يُوصل إليه عبر unraid-gateway الخاص به، بوضع اتصال وبيانات اعتماد خاصة. يفتح التطبيق على الملف الشخصي الحالي؛ وكل ملف شخصي هو أيضاً موقع في تطبيق الملفات. افتح ملفاً شخصياً للوحة المعلومات والمشاركات المعروضة واختبار الاتصال وبيانات الاعتماد؛ اسحب لليسار لإزالته."
+          }
+        }
+      }
+    },
+    "A profile is an Unraid server reached through its unraid-gateway, with its own connection mode and credentials. The app opens on the current profile; every profile is also a location in the Finder sidebar. Open a profile for its dashboard, shares to show, connection test and credentials; right-click to remove it.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un profilo è un server Unraid raggiunto tramite il suo unraid-gateway, con la propria modalità di connessione e le proprie credenziali. L’app si apre sul profilo attuale; ogni profilo è anche una posizione nella barra laterale del Finder. Apri un profilo per dashboard, share da mostrare, test di connessione e credenziali; clic destro per rimuoverlo."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un perfil es un servidor Unraid al que se accede a través de su unraid-gateway, con su propio modo de conexión y credenciales. La app se abre en el perfil actual; cada perfil es también una ubicación en la barra lateral del Finder. Abre un perfil para su panel, recursos que mostrar, prueba de conexión y credenciales; clic derecho para eliminarlo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un profil est un serveur Unraid joint via son unraid-gateway, avec son propre mode de connexion et ses identifiants. L’app s’ouvre sur le profil actuel ; chaque profil est aussi un emplacement dans la barre latérale du Finder. Ouvrez un profil pour son tableau de bord, les partages à afficher, le test de connexion et les identifiants ; clic droit pour le supprimer."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Profil ist ein Unraid-Server, der über sein unraid-gateway erreicht wird, mit eigenem Verbindungsmodus und eigenen Zugangsdaten. Die App öffnet das aktuelle Profil; jedes Profil ist zugleich ein Speicherort in der Finder-Seitenleiste. Öffne ein Profil für Dashboard, anzuzeigende Freigaben, Verbindungstest und Zugangsdaten; Rechtsklick zum Entfernen."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配置文件代表一台通过 unraid-gateway 访问的 Unraid 服务器，拥有自己的连接方式和凭据。App 启动时打开当前配置文件；每个配置文件也是 Finder 边栏中的一个位置。打开配置文件可查看仪表盘、要显示的共享、连接测试和凭据；右键点击可将其移除。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الملف الشخصي هو خادم Unraid يُوصل إليه عبر unraid-gateway الخاص به، بوضع اتصال وبيانات اعتماد خاصة. يفتح التطبيق على الملف الشخصي الحالي؛ وكل ملف شخصي هو أيضاً موقع في الشريط الجانبي لـ Finder. افتح ملفاً شخصياً للوحة المعلومات والمشاركات المعروضة واختبار الاتصال وبيانات الاعتماد؛ انقر بزر الفأرة الأيمن لإزالته."
+          }
+        }
+      }
+    },
+    "The app opens straight on your folders. One Settings screen (the gear) holds your profiles — servers, connections, credentials — and the app settings. A dot next to the title shows the server's health: green, yellow for warnings, red for problems; it opens the dashboard, where System information lists the hardware.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’app si apre direttamente sulle tue cartelle. Un’unica schermata Impostazioni (l’ingranaggio) contiene i profili — server, connessioni, credenziali — e le impostazioni dell’app. Un pallino accanto al titolo mostra lo stato del server: verde, giallo per gli avvisi, rosso per i problemi; apre la dashboard, dove Informazioni di sistema elenca l’hardware."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La app se abre directamente en tus carpetas. Una sola pantalla de Ajustes (el engranaje) reúne tus perfiles — servidores, conexiones, credenciales — y los ajustes de la app. Un punto junto al título muestra la salud del servidor: verde, amarillo para avisos, rojo para problemas; abre el panel, donde Información del sistema enumera el hardware."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’app s’ouvre directement sur vos dossiers. Un seul écran Réglages (l’engrenage) regroupe vos profils — serveurs, connexions, identifiants — et les réglages de l’app. Un point à côté du titre indique l’état du serveur : vert, jaune pour les avertissements, rouge pour les problèmes ; il ouvre le tableau de bord, où Informations système liste le matériel."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die App öffnet sich direkt in deinen Ordnern. Ein einziger Einstellungsbildschirm (das Zahnrad) enthält deine Profile — Server, Verbindungen, Zugangsdaten — und die App-Einstellungen. Ein Punkt neben dem Titel zeigt den Zustand des Servers: grün, gelb bei Warnungen, rot bei Problemen; er öffnet das Dashboard, in dem Systeminformationen die Hardware auflistet."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App 直接打开你的文件夹。唯一的“设置”界面（齿轮）包含你的配置文件（服务器、连接、凭据）和 App 设置。标题旁的圆点显示服务器状态：绿色正常、黄色有警告、红色有问题；点按可打开仪表盘，其中“系统信息”列出硬件。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يفتح التطبيق مباشرة على مجلداتك. شاشة إعدادات واحدة (الترس) تضم ملفاتك الشخصية — الخوادم والاتصالات وبيانات الاعتماد — وإعدادات التطبيق. نقطة بجانب العنوان تُظهر حالة الخادم: أخضر، أصفر للتحذيرات، أحمر للمشاكل؛ وتفتح لوحة المعلومات حيث تسرد «معلومات النظام» العتاد."
+          }
+        }
+      }
+    },
+    "For each server, tick the shares you want in the Files app, the Finder, Shortcuts and on Apple TV. You can change this any time in Settings › Profiles › your server › Shares to show.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per ogni server, spunta le share che vuoi nell’app File, nel Finder, nei Comandi rapidi e su Apple TV. Puoi cambiarle in ogni momento in Impostazioni › Profili › il tuo server › Share da mostrare."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para cada servidor, marca los recursos compartidos que quieres en la app Archivos, el Finder, Atajos y el Apple TV. Puedes cambiarlo cuando quieras en Ajustes › Perfiles › tu servidor › Recursos compartidos que mostrar."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour chaque serveur, cochez les partages voulus dans l’app Fichiers, le Finder, Raccourcis et sur l’Apple TV. Modifiable à tout moment dans Réglages › Profils › votre serveur › Partages à afficher."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle für jeden Server die Freigaben, die du in der Dateien-App, im Finder, in Kurzbefehlen und auf dem Apple TV sehen willst. Jederzeit änderbar unter Einstellungen › Profile › dein Server › Anzuzeigende Freigaben."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "为每台服务器勾选要在“文件”App、Finder、快捷指令和 Apple TV 中显示的共享。随时可在“设置 › 配置文件 › 你的服务器 › 要显示的共享”中更改。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لكل خادم، حدّد المشاركات التي تريدها في تطبيق الملفات وFinder والاختصارات وApple TV. يمكنك تغييرها في أي وقت من الإعدادات › الملفات الشخصية › خادمك › المشاركات المعروضة."
+          }
+        }
+      }
+    },
+    "Add a profile (first run, or Settings › Profiles), enter the gateway URL and the API key, connect. The app opens on its folders and the server appears in the Files app and in the Finder under Unraid Drive. Curious first? Try the demo server: sample files, no setup.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi un profilo (al primo avvio o da Impostazioni › Profili), inserisci l’URL del gateway e la chiave API, connetti. L’app si apre sulle sue cartelle e il server compare nell’app File e nel Finder sotto Unraid Drive. Vuoi prima dare un’occhiata? Prova il server demo: file di esempio, nessuna configurazione."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añade un perfil (al primer inicio o en Ajustes › Perfiles), introduce la URL del gateway y la clave API, conecta. La app se abre en sus carpetas y el servidor aparece en la app Archivos y en el Finder bajo Unraid Drive. ¿Curiosidad primero? Prueba el servidor de demostración: archivos de ejemplo, sin configuración."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoutez un profil (au premier lancement ou via Réglages › Profils), saisissez l’URL de la passerelle et la clé API, connectez-vous. L’app s’ouvre sur ses dossiers et le serveur apparaît dans l’app Fichiers et dans le Finder sous Unraid Drive. Curieux d’abord ? Essayez le serveur de démonstration : fichiers d’exemple, aucune configuration."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lege ein Profil an (beim ersten Start oder unter Einstellungen › Profile), gib Gateway-URL und API-Schlüssel ein, verbinde dich. Die App öffnet seine Ordner und der Server erscheint in der Dateien-App und im Finder unter Unraid Drive. Erst neugierig? Probiere den Demo-Server: Beispieldateien, keine Einrichtung."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "添加配置文件（首次启动时或在“设置 › 配置文件”中），输入网关地址和 API 密钥并连接。App 会打开其文件夹，服务器会出现在“文件”App 和 Finder 的 Unraid Drive 下。想先看看？试试演示服务器：示例文件，无需设置。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أضف ملفاً شخصياً (عند أول تشغيل أو من الإعدادات › الملفات الشخصية)، وأدخل عنوان البوّابة ومفتاح API، ثم اتصل. يفتح التطبيق على مجلداته ويظهر الخادم في تطبيق الملفات وفي Finder تحت Unraid Drive. فضولي أولاً؟ جرّب خادم العرض التوضيحي: ملفات نموذجية بلا إعداد."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

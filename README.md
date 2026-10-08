@@ -65,6 +65,8 @@ After the first launch enable the extension under System Settings › General �
 
 ## What's new
 
+**1.4 (build 42):** the app opens on your folders; one Settings screen with a Profiles section (servers, connections, credentials); a health dot (green / yellow / red) next to the title that opens the dashboard; System information; the same on Apple TV and the Mac.
+
 **1.3.2 (build 41):** Liquid Glass app icon (Icon Composer documents in `App/Icons`, translucent glass layers, coloured alternates included) and toolbar items with title + symbol for iPhone Duo's vertical bars; built with Xcode 27.
 
 **1.3.1 (build 40):** device registration heals itself; the app never deletes API keys or tokens on its own; the Files/Finder location row tells the truth and names the exact switch when the extension is off after an update (with *Open System Settings* on the Mac); iCloud rows always visible and a readable `servers.json` in iCloud Drive › Unraid Drive; *Diagnostics and log* (rotating log of app and extension, debug logging, shareable report without secrets; Apple TV sends its log to the server); Apple TV header shows icons only; the Mac registers as a login item; built with Xcode 27 for the current system look.

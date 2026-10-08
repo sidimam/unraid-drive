@@ -55,37 +55,13 @@ struct TVRootView: View {
             else if let p = debugPath, let demo = model.servers.first(where: \.isDemo) { TVBrowserView(server: demo, path: p, title: (p as NSString).lastPathComponent.isEmpty ? demo.name : (p as NSString).lastPathComponent) }
             else if debugDashboard, let demo = model.servers.first(where: \.isDemo) { TVDashboardView(server: demo) }
             else if debugDiagnostics, let demo = model.servers.first(where: \.isDemo) { TVDiagnosticsView(server: demo) }
-            else if model.servers.isEmpty { TVPairView() } else { TVServersView() }
+            // Build 42: with a server configured the TV opens straight on its shares; the gear in the
+            // explorer header leads to the settings (servers, dashboard, shares, diagnostics).
+            else if let cur = model.current { TVBrowserView(server: cur, path: "/", title: cur.name).id(cur.id) } else { TVPairView() }
         }
     }
 }
 
-/// Servers on this TV + pairing entry point.
-struct TVServersView: View {
-    @EnvironmentObject private var model: TVModel
-    var body: some View {
-        List {
-            Section {
-                ForEach(model.servers) { s in
-                    // A configured server opens its shares directly; Dashboard, Shares to show and
-                    // Remove live behind the gear in the explorer's header.
-                    NavigationLink { TVBrowserView(server: s, path: "/", title: s.name) } label: { TVServerRow(server: s) }
-                }
-            } header: { Text("Servers") }
-            Section {
-                NavigationLink { TVPairView() } label: { Label("Pair with iPhone, iPad or Mac", systemImage: "qrcode") }
-                if !model.servers.contains(where: \.isDemo) { Button { model.addDemo() } label: { Label("Try the demo", systemImage: "sparkles") } }
-            }
-        }
-        .navigationTitle("Unraid Drive")
-    }
-}
-
-// MARK: - Buttons
-
-/// Stand-alone buttons on tvOS: with the app tint applied globally, the system style paints the
-/// focused button *and* its text in the tint, which makes the label unreadable. This style keeps
-/// the text white on the tinted focus background and dark on the resting material.
 struct TVPillButtonStyle: ButtonStyle {
     @Environment(\.isFocused) private var focused
     func makeBody(configuration: Configuration) -> some View {
@@ -257,7 +233,8 @@ struct TVServerRow: View {
     }
 }
 
-/// Behind the gear of the explorer: dashboard, shares to show, removal.
+/// Behind the gear of the explorer (build 42: the TV's single settings screen): this server's
+/// dashboard, shares to show and diagnostics, the list of servers to switch between, pairing, removal.
 struct TVServerHome: View {
     @EnvironmentObject private var model: TVModel
     @Environment(\.dismiss) private var dismiss
@@ -270,6 +247,15 @@ struct TVServerHome: View {
                 NavigationLink { TVSharesView(server: server) } label: { TVMenuRow(title: "Shares to show", symbol: "externaldrive.badge.checkmark") }
                 NavigationLink { TVDiagnosticsView(server: server) } label: { TVMenuRow(title: "Diagnostics and log", symbol: "waveform.path.ecg") }
             }
+            Section {
+                ForEach(model.servers) { s in
+                    Button { model.select(s); dismiss() } label: {
+                        HStack { TVServerRow(server: s); if s.id == model.current?.id { Image(systemName: "checkmark").foregroundStyle(.secondary) } }
+                    }
+                }
+                NavigationLink { TVPairView() } label: { TVMenuRow(title: "Pair with iPhone, iPad or Mac", symbol: "qrcode") }
+                if !model.servers.contains(where: \.isDemo) { Button { model.addDemo() } label: { TVMenuRow(title: "Try the demo", symbol: "sparkles") } }
+            } header: { Text("Servers") } footer: { Text("The selected server opens when Unraid Drive starts on this TV.") }
             Section {
                 Button(role: .destructive) { confirmRemove = true } label: { TVMenuRow(title: "Remove this server from the TV", symbol: "trash", destructive: true) }
                     .confirmationDialog("Remove \(server.name)?", isPresented: $confirmRemove) { Button("Remove", role: .destructive) { model.remove(server); dismiss() } }
@@ -494,6 +480,7 @@ struct TVDashboardView: View {
     @State private var health: HealthResponse?
     @State private var healthError: String?
     @State private var error: String?
+    @State private var assessment: ServerHealth?
     private static func isGateway(_ c: Dashboard.Container) -> Bool {
         ([c.image ?? ""] + c.names).joined(separator: " ").lowercased().contains("unraid-gateway")
     }
@@ -501,6 +488,16 @@ struct TVDashboardView: View {
         Group {
             if let d {
                 List {
+                    Section {
+                        HStack(spacing: 16) {
+                            Circle().fill(assessment.map { $0.level == .ok ? Color.green : ($0.level == .warning ? Color.yellow : Color.red) } ?? Color.gray).frame(width: 18, height: 18)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(assessment.map { $0.level == .ok ? "All fine" : ($0.level == .warning ? "Warnings" : "Problems") } ?? "Checking…")
+                                if let a = assessment, !a.reasons.isEmpty { Text(a.reasons.joined(separator: " · ")).font(.caption).opacity(0.75) }
+                            }
+                        }
+                        NavigationLink { TVSystemInfoView(server: server) } label: { TVMenuRow(title: "System information", symbol: "info.circle") }
+                    }
                     Section("unraid-gateway") {
                         LabeledContent("Server URL", value: server.url.host ?? server.url.absoluteString)
                         if let health { LabeledContent("Gateway version", value: health.version ?? "—") }
@@ -545,7 +542,58 @@ struct TVDashboardView: View {
         .task {
             guard let c = model.client(for: server) else { error = String(localized: "Credentials for this server are missing on the TV. Pair it again from your iPhone, iPad or Mac."); return }
             do { health = try await c.health() } catch { healthError = error.localizedDescription }
-            do { d = try await c.graphQL(Dashboard.query, as: Dashboard.self) } catch { self.error = error.localizedDescription }
+            do {
+                let dash = try await c.graphQL(Dashboard.query, as: Dashboard.self); d = dash
+                let gw = (dash.docker?.containers ?? []).filter { Self.isGateway($0) }
+                assessment = ServerHealth.assess(dash, gatewayContainerRunning: gw.isEmpty ? nil : gw.contains { $0.state == "RUNNING" })
+            } catch { self.error = error.localizedDescription; assessment = .unreachable(error.localizedDescription) }
+        }
+    }
+}
+
+/// System information on the TV (build 42): the same query as the other devices, as a plain list.
+struct TVSystemInfoView: View {
+    @EnvironmentObject private var model: TVModel
+    let server: ServerConfig
+    @State private var info: SystemInfo?
+    @State private var error: String?
+    private func bytes(_ n: Int64) -> String { ByteCountFormatter.string(fromByteCount: n, countStyle: .binary) }
+    var body: some View {
+        Group {
+            if let i = info {
+                List {
+                    if let os = i.info?.os {
+                        Section("Operating system") {
+                            LabeledContent("Hostname", value: os.fqdn ?? os.hostname ?? "—")
+                            LabeledContent("Unraid", value: [os.distro, os.release].compactMap { $0 }.joined(separator: " "))
+                            LabeledContent("Kernel", value: os.kernel ?? "—")
+                            if let boot = i.bootDate { LabeledContent("Up since", value: boot.formatted(date: .abbreviated, time: .shortened)) }
+                        }
+                    }
+                    if let cpu = i.info?.cpu {
+                        Section("Processor") {
+                            LabeledContent("Model", value: [cpu.manufacturer, cpu.brand].compactMap { $0 }.joined(separator: " "))
+                            if let c = cpu.cores, let t = cpu.threads { LabeledContent("Cores / threads", value: "\(c) / \(t)") }
+                            if let s = cpu.speed { LabeledContent("Clock", value: cpu.speedmax.map { String(format: "%.2f – %.2f GHz", s, $0) } ?? String(format: "%.2f GHz", s)) }
+                        }
+                    }
+                    Section("Memory") {
+                        if let total = i.installedMemory { LabeledContent("Installed", value: bytes(total)) }
+                        if let m = i.metrics?.memory, let used = m.used, let total = m.total { LabeledContent("In use", value: bytes(used) + " / " + bytes(total)) }
+                    }
+                    if let b = i.info?.baseboard { Section("Mainboard") { LabeledContent("Model", value: [b.manufacturer, b.model].compactMap { $0 }.joined(separator: " ")) } }
+                    if let v = i.info?.versions?.core { Section("Versions") { LabeledContent("Unraid", value: v.unraid ?? "—"); LabeledContent("Unraid API", value: v.api ?? "—") } }
+                    let nics = (i.info?.networkInterfaces ?? []).filter(\.isRelevant)
+                    if !nics.isEmpty { Section("Network") { ForEach(nics) { n in LabeledContent(n.name, value: [n.ipAddress, n.speed.map { "\($0) Mb/s" }].compactMap { $0 }.joined(separator: " · ")) } } }
+                }
+            } else if let error { ContentUnavailableView("System information unavailable", systemImage: "exclamationmark.triangle", description: Text(error)) }
+            else { ProgressView() }
+        }
+        .navigationTitle("System information")
+        .task {
+            guard let c = model.client(for: server) else { error = String(localized: "Credentials for this server are missing on the TV. Pair it again from your iPhone, iPad or Mac."); return }
+            if server.isDemo { error = String(localized: "The demo server has no hardware to describe."); return }
+            do { info = try await c.graphQL(SystemInfo.query, as: SystemInfo.self) } catch { self.error = error.localizedDescription }
         }
     }
 }

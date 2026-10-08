@@ -2,14 +2,14 @@
 
 ## 5.1 First launch
 
-1. Open **Unraid Drive**. A short welcome walkthrough explains the four steps; swipe through it or tap **Skip**. You can reopen it any time with the **?** button.
-2. You land on the server list, empty for now, with two buttons: **Add server** and **Try the demo**.
+1. Open **Unraid Drive**. A short welcome walkthrough explains the four steps; swipe through it or tap **Skip**. You can reopen it any time with the **?** button of the welcome screen.
+2. With no profile yet you land on the **welcome screen**: **Add a profile**, **Restore … from iCloud** (when a configuration is waiting in your iCloud account) and **Try the demo**. Since version 1.4 a *profile* is an Unraid server reached through its unraid-gateway, with its own connection mode and credentials; once one exists the app opens straight on its folders.
 
 **Try the demo** adds a sample server with a few folders and files that live only on your device. It also appears in the Files app, so you can see exactly how the integration behaves before touching your NAS. Swipe left on it to remove it later.
 
 ## 5.2 Add your server
 
-1. Tap **+** (or **Add server**).
+1. Tap **Add a profile** (on the welcome screen, or later in **Settings › Profiles**; the gear in the explorer header opens Settings).
 2. **Name**: anything, e.g. `Home NAS`. This is the name shown in the Files app.
 3. **Gateway URL**:
    - from outside your home: the public hostname from Step 3, e.g. `https://unraidfile.example.com`
@@ -43,17 +43,21 @@ Tap the server to open its page:
 
 ## 5.4 Several servers
 
-Repeat 5.2 for every Unraid server you have. Each one becomes its own location in the Files app.
+Repeat 5.2 for every Unraid server you have (Settings › Profiles › **Add a profile**). Each one becomes its own location in the Files app. The app opens on the *current* profile; with several profiles a **Profile** menu in the explorer header switches between them, and Settings › Profiles marks the current one. Swipe left on a profile in Settings to remove it.
+
+### The health dot
+
+Next to the title of the share list a small dot sums up the server: **green** all fine, **yellow** warnings (unread warning notifications, a disk above 50 °C, a parity check with errors, CPU or memory above 90 %, the unraid-gateway container not running), **red** problems (array not started, a disk that is not OK or above 60 °C, alert notifications, gateway unreachable or refusing the credentials). Tap it to open the profile page: its first row lists the reasons, below it the dashboard with **System information** (operating system, processor, memory modules, mainboard, versions, GPUs, network interfaces).
 
 ## 5.5 Appearance and language
 
-The gear icon on the server list opens **Settings**. The *Appearance* section has a **System / Light / Dark** theme switch and a **Language** picker. The app ships in English, Italian, Spanish, French, German, Simplified Chinese and Arabic; with *System* (the default) it follows the language of your iPhone, exactly like the installer does. Forcing a language changes the interface immediately; a few texts provided by iOS itself (error messages from the network stack, formatters) switch at the next launch.
+The gear icon in the explorer header opens **Settings** (profiles at the top, then the app settings). The *Appearance* section has a **System / Light / Dark** theme switch and a **Language** picker. The app ships in English, Italian, Spanish, French, German, Simplified Chinese and Arabic; with *System* (the default) it follows the language of your iPhone, exactly like the installer does. Forcing a language changes the interface immediately; a few texts provided by iOS itself (error messages from the network stack, formatters) switch at the next launch.
 
 The same section has the **App icon** colour dots (Unraid orange, red, blue, teal, purple, graphite). The icon shows the three Unraid bars feeding a network drive, on purpose different from the unraid-gateway container icon (bars, arrow and gateway arch), and it follows the iOS light, dark and tinted Home Screen styles. Interface accents, headers and titles use the Unraid orange from unraid.net.
 
 ## 5.6 Keep the configuration after a restore (iCloud sync)
 
-Tap the gear icon on the server list → **Sync configuration with iCloud**. When on:
+Tap the gear icon → **Sync configuration with iCloud**. When on:
 
 - the server list (names, URLs, connection modes) is stored in your iCloud account (Key-Value Storage);
 - API keys and Cloudflare service tokens are stored in **iCloud Keychain**, end-to-end encrypted by Apple;

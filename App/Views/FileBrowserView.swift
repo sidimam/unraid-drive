@@ -79,8 +79,8 @@ struct FileBrowserView: View {
         .environment(\.editMode, $editMode)
         #endif
         .safeAreaInset(edge: .bottom) { if selecting { selectionBar } }
-        .refreshable { await load() }
-        .task { await load() }
+        .refreshable { await load(); if path == "/" { await model.refreshHealth(server) } }
+        .task { await load(); if path == "/" { await model.refreshHealth(server) } }
         .onChange(of: selecting) { _, on in
             // Select mode comes and goes with the system's own edit-mode animation and a light haptic.
             withAnimation(.snappy) {
@@ -172,8 +172,20 @@ struct FileBrowserView: View {
                 if path != "/" {
                     Button { selecting = true } label: { Label("Select", systemImage: "checkmark.circle") }.disabled(visible.isEmpty)
                 } else {
-                    // Server settings: dashboard, shares to show, connection test, location, credentials.
-                    NavigationLink { ServerDetailView(server: server) } label: { Label("Settings", systemImage: "gearshape") }
+                    // Build 42: the dot is the server's health and opens its dashboard; with several
+                    // profiles a menu switches between them; the gear is the app's single Settings.
+                    NavigationLink { ServerDetailView(server: server) } label: { HealthDot(health: model.health[server.id]) }
+                        .help(Text(HealthDot.title(model.health[server.id])))
+                    if model.servers.count > 1 {
+                        Menu {
+                            ForEach(model.servers) { s in
+                                Button { model.select(s) } label: {
+                                    if s.id == server.id { Label(s.name, systemImage: "checkmark") } else { Text(s.name) }
+                                }
+                            }
+                        } label: { Label("Profile", systemImage: "externaldrive") }
+                    }
+                    Button { NotificationCenter.default.post(name: AppNavigation.openSettings, object: nil) } label: { Label("Settings", systemImage: "gearshape") }
                 }
                 if canModify {
                     Menu {

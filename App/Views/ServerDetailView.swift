@@ -15,6 +15,10 @@ struct ServerDetailView: View {
     var body: some View {
         List {
             Section {
+                healthRow
+                if model.current?.id != server.id {
+                    Button { model.select(server); NotificationCenter.default.post(name: AppNavigation.showFolders, object: nil) } label: { Label("Open its folders", systemImage: "folder.badge.gearshape") }
+                }
                 if let filesURL {
                     #if os(macOS)
                     Button { Task { await FileProviderDomains.revealInFinder(server) } } label: { Label("Open in Finder", systemImage: "folder") }
@@ -55,11 +59,27 @@ struct ServerDetailView: View {
                 Section { HStack { ProgressView(); Text("Loading dashboard…") } }
             }
         }
-        .navigationTitle(Text("Settings") + Text(verbatim: " · \(server.name)"))
+        .navigationTitle(Text(verbatim: server.name))
         .sheet(isPresented: $testing) { ConnectionTestView(server: server) }
         .sheet(isPresented: $editing, onDismiss: { Task { await load() } }) { AddServerView(editing: model.servers.first { $0.id == server.id } ?? server) }
         .refreshable { await load() }
-        .task { await load(); filesURL = await FileProviderDomains.filesAppURL(server) }
+        .task { await load(); filesURL = await FileProviderDomains.filesAppURL(server); await model.refreshHealth(server) }
+    }
+
+    /// Build 42: the server's health at a glance, with the reasons behind a yellow or red dot.
+    @ViewBuilder private var healthRow: some View {
+        let h = model.health[server.id]
+        HStack(alignment: .firstTextBaseline, spacing: 12) {
+            HealthDot(health: h).padding(.top, 2)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(HealthDot.title(h)).font(.body)
+                if let h, !h.reasons.isEmpty {
+                    Text(h.reasons.joined(separator: " · ")).font(.footnote).foregroundStyle(h.level == .error ? .red : .orange)
+                } else if let h, h.level == .ok {
+                    Text("Array, disks, notifications, load and gateway container look fine.").font(.footnote).foregroundStyle(.secondary)
+                }
+            }
+        }
     }
 
     @ViewBuilder private func systemSection(_ d: Dashboard) -> some View {
@@ -70,6 +90,7 @@ struct ServerDetailView: View {
             if let p = d.metrics?.cpu?.percentTotal { gauge("CPU load", p) }
             if let p = d.metrics?.memory?.percentTotal { gauge("Memory", p) }
             if let n = d.notifications?.overview?.unread { notificationsRow(n) }
+            NavigationLink { SystemInfoView(server: server) } label: { Label("System information", systemImage: "info.circle") }
         }
     }
 

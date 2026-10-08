@@ -7,6 +7,9 @@ import UnraidGatewayKit
 /// App settings, laid out like aMule Remote: one "App settings" group (theme, language, icon colour),
 /// iCloud sync, and an "App info" group with version, author, license and links.
 struct SettingsView: View {
+    /// Present the "Add a profile" form as soon as the sheet appears (quick action, menu bar panel).
+    var addProfileOnAppear = false
+    @State private var adding = false
     #if os(macOS)
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @AppStorage(DockPolicy.key, store: AppGroup.defaults) private var menuBarOnly = false
@@ -31,6 +34,27 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
+                // Build 42: the profiles (servers, connections, credentials) live here, nowhere else.
+                Section {
+                    ForEach(model.servers) { s in
+                        NavigationLink { ServerDetailView(server: s) } label: { ProfileRow(server: s, isCurrent: model.current?.id == s.id, health: model.health[s.id]) }
+                    }
+                    .onDelete { idx in
+                        let victims = idx.map { model.servers[$0] }
+                        Task { for v in victims { await model.remove(v) } }
+                    }
+                    if cloud.shouldOfferRestore(localServers: model.servers) {
+                        Button { Task { busy = true; await model.restoreFromCloudAndRegister(); busy = false } } label: { Label("Restore \(cloud.remoteServerCount) server(s) from iCloud", systemImage: "icloud.and.arrow.down") }.disabled(busy)
+                    }
+                    Button { adding = true } label: { Label("Add a profile", systemImage: "plus.circle") }
+                    if !model.hasDemo { Button { Task { await model.addDemo() } } label: { Label("Try the demo", systemImage: "sparkles") } }
+                } header: { SectionTitle("Profiles") } footer: {
+                    #if os(macOS)
+                    Text("A profile is an Unraid server reached through its unraid-gateway, with its own connection mode and credentials. The app opens on the current profile; every profile is also a location in the Finder sidebar. Open a profile for its dashboard, shares to show, connection test and credentials; right-click to remove it.")
+                    #else
+                    Text("A profile is an Unraid server reached through its unraid-gateway, with its own connection mode and credentials. The app opens on the current profile; every profile is also a location in the Files app. Open a profile for its dashboard, shares to show, connection test and credentials; swipe left to remove it.")
+                    #endif
+                }
                 Section {
                     Picker(selection: $appearance) {
                         ForEach(Appearance.allCases) { a in Label(a.label, systemImage: a.icon).tag(a.rawValue) }
@@ -46,7 +70,6 @@ struct SettingsView: View {
                     }
                     .onChange(of: iconColor) { _, v in AppIconColor.apply(v) }
                     #endif
-                    NavigationLink { SharesSettingsView() } label: { Label("Shares to show", systemImage: "externaldrive.badge.checkmark") }
                     Button { AppNotifications.openSystemSettings() } label: {
                         HStack { Label("Notifications", systemImage: "bell.badge"); Spacer(); Image(systemName: "chevron.right").foregroundStyle(.tertiary) }
                     }
@@ -77,17 +100,6 @@ struct SettingsView: View {
                     // Always visible (build 37): until build 36 these rows only appeared while the switch
                     // was on, which read as "the sync buttons disappeared".
                     LabeledContent { Text("\(cloud.remoteServerCount)") } label: { Label("Servers in iCloud", systemImage: "externaldrive.badge.icloud") }
-                    LabeledContent {
-                        if cloud.documentAvailable {
-                            Text(cloud.documentDate.map { String(localized: "updated \($0.formatted(date: .abbreviated, time: .shortened))") } ?? String(localized: "not written yet"))
-                        } else {
-                            #if DEVELOPER_ID
-                            Text("appears after another device saves it").foregroundStyle(.secondary)
-                            #else
-                            Text("not available").foregroundStyle(.secondary)
-                            #endif
-                        }
-                    } label: { Label("iCloud Drive › Unraid Drive › servers.json", systemImage: "doc.text") }
                     #if DEVELOPER_ID
                     if cloud.documentMode == .syncedFolder {
                         LabeledContent { Text("synced folder") } label: { Label("Homebrew build", systemImage: "shippingbox") }
@@ -134,6 +146,9 @@ struct SettingsView: View {
             }
             .groupedFormStyle()
             .sheet(isPresented: $pairTV) { PairTVView() }
+            .sheet(isPresented: $adding) { AddServerView().presentationDetents([.large]) }
+            .onAppear { if addProfileOnAppear { adding = true } }
+            .onReceive(NotificationCenter.default.publisher(for: AppNavigation.addProfile)) { _ in adding = true }
             .navigationTitle("Settings")
             .inlineNavigationTitle()
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
@@ -141,3 +156,25 @@ struct SettingsView: View {
         .sheetFrame()
     }
 }
+
+/// A profile in Settings: icon by connection mode, name, user · host, the health dot and a mark on the current one.
+struct ProfileRow: View {
+    let server: ServerConfig
+    let isCurrent: Bool
+    let health: ServerHealth?
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: server.isDemo ? "sparkles" : (server.accessMode == .cloudflareAccess ? "cloud.fill" : "externaldrive.fill")).foregroundStyle(.tint).frame(minWidth: 24)
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: 6) {
+                    Text(server.name).font(.headline)
+                    if isCurrent { Text("current").font(.caption2).padding(.horizontal, 6).padding(.vertical, 2).background(.tint.opacity(0.15), in: Capsule()).foregroundStyle(.tint) }
+                }
+                Text(server.isDemo ? String(localized: "Sample data, offline") : (server.username.map { "\($0) · " } ?? "") + (server.url.host ?? server.url.absoluteString)).font(.caption).foregroundStyle(.secondary).lineLimit(1)
+            }
+            Spacer()
+            HealthDot(health: health)
+        }
+    }
+}
+
