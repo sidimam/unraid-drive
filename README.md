@@ -65,6 +65,8 @@ After the first launch enable the extension under System Settings â€º General â€
 
 ## What's new
 
+**1.4.1 (build 43):** System information shows the real installed memory; Unraid's own notifications are left to Unraid (no longer in the health dot nor in the dashboard).
+
 **1.4 (build 42):** the app opens on your folders; one Settings screen with a Profiles section (servers, connections, credentials); a health dot (green / yellow / red) next to the title that opens the dashboard; System information; the same on Apple TV and the Mac.
 
 **1.3.2 (build 41):** Liquid Glass app icon (Icon Composer documents in `App/Icons`, translucent glass layers, coloured alternates included) and toolbar items with title + symbol for iPhone Duo's vertical bars; built with Xcode 27.

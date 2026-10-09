@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased (build 43)
+## 1.4.1 (build 43) — 2026-10-09
 
 - **System information:** the Unraid API reports memory module sizes in KiB; installed memory and modules were shown 1024× too small.
 - **Unraid's notifications are the NAS's business, not the app's.** The health dot no longer turns yellow or red for unread Unraid notifications, and the *Unread notifications* row is gone from the dashboard (iPhone, iPad, Vision Pro, Mac and Apple TV). unraid-gateway 0.12.2 does the same in its health.
