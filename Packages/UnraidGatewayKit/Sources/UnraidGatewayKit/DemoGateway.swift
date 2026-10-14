@@ -147,6 +147,7 @@ final class DemoURLProtocol: URLProtocol {
             return err(401, "authentication required")
         }
         if path == "/api/v1/auth/logout" { return (204, [:], Data()) }
+        if path == "/api/v1/health" { return json(200, ["status": "ok", "version": "demo", "level": "ok", "reasons": [], "checks": [["name": "shares", "level": "ok", "detail": "3 mounted"]]]) }
         if path == "/api/v1/auth/session" || path == "/api/v1/info" { return json(200, ["identity": ["name": "demo", "roles": ["VIEWER"]], "readOnly": false, "version": "demo"]) }
         if path == "/api/v1/graphql" { return json(200, demoDashboard) }
 

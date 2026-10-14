@@ -104,7 +104,14 @@ struct TVBrowserView: View {
             }
         }
         .navigationTitle(title)
-        .task { await load() }
+        .task {
+            await load()
+            #if DEBUG
+            // Regression screenshots: `-tvSelecting` starts in selection mode, `-tvGrid` in the grid layout.
+            if ProcessInfo.processInfo.arguments.contains("-tvGrid") { grid = true }
+            if ProcessInfo.processInfo.arguments.contains("-tvSelecting"), path != "/" { selecting = true }
+            #endif
+        }
         .fullScreenCover(item: $opened) { e in TVFileOpener(server: server, entry: e) }
         .sheet(item: $info) { e in TVFileInfoView(server: server, entry: e) { info = nil; opened = e } }
         .confirmationDialog(deleting.map { $0.count > 1 } == true ? Text("Delete \(deleting?.count ?? 0) items?") : Text("Delete?"), isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } }), titleVisibility: .visible) {

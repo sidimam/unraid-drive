@@ -253,9 +253,9 @@ extension ActivityEvent {
 // MARK: - Menu bar panel
 
 /// The panel behind the menu bar icon, laid out like the desktop clients of the big cloud drives:
-/// a button to open the folder, the sync status, the recent activity, notifications, and a gear menu.
+/// a button to open the folder, the sync status, the recent activity, the health dot and a gear menu.
 struct MenuBarPanel: View {
-    enum Tab: Hashable { case home, activity, notifications }
+    enum Tab: Hashable { case home, activity }
     @EnvironmentObject private var model: ServersModel
     @EnvironmentObject private var feed: ActivityFeed
     @Environment(\.openWindow) private var openWindow
@@ -267,7 +267,6 @@ struct MenuBarPanel: View {
     @AppStorage(LaunchPolicy.key, store: AppGroup.defaults) private var startMinimized = false
     @AppStorage(Appearance.key, store: AppGroup.defaults) private var appearance = Appearance.system.rawValue
     @AppStorage(AppIconColor.storageKey, store: AppGroup.defaults) private var iconColor = "default"
-    @State private var notifications: [String: Dashboard.Notifications.Overview.Counts] = [:]
     @State private var refreshing = false
     @State private var lastRefresh: Date?
 
@@ -277,7 +276,6 @@ struct MenuBarPanel: View {
             Picker("", selection: $tab) {
                 Label("Home", systemImage: "house").tag(Tab.home)
                 Label("Activity", systemImage: "arrow.triangle.2.circlepath").tag(Tab.activity)
-                Label("Notifications", systemImage: "bell").tag(Tab.notifications)
             }
             .pickerStyle(.segmented).labelsHidden().padding(.horizontal, 14).padding(.bottom, 8)
             Divider()
@@ -285,7 +283,6 @@ struct MenuBarPanel: View {
                 switch tab {
                 case .home: home
                 case .activity: activity(feed.events)
-                case .notifications: notificationsView
                 }
             }
             .frame(height: 380)
@@ -305,6 +302,10 @@ struct MenuBarPanel: View {
         HStack(spacing: 10) {
             Image(nsImage: NSApp.applicationIconImage).resizable().frame(width: 30, height: 30)
             Text("Unraid Drive").font(.title3.weight(.semibold)).foregroundStyle(AppIconColor.currentTint)
+            // Build 44: the same health dot as the explorer — the worst of the configured servers,
+            // only about Unraid Drive and the gateway; hover for the reasons, click opens the window.
+            Button { showMainWindow() } label: { HealthDot(health: worstHealth) }.buttonStyle(.plain)
+                .help(Text(worstHealth.map { $0.reasons.isEmpty ? String(localized: "All fine") : $0.reasons.joined(separator: " · ") } ?? String(localized: "Checking…")))
             Spacer()
             Button {
                 Task { paused.toggle(); await FileProviderDomains.setPaused(paused, servers: model.servers); await refresh() }
@@ -454,34 +455,6 @@ struct MenuBarPanel: View {
         .help(Text(verbatim: e.path))
     }
 
-    // MARK: Notifications
-
-    private var notificationsView: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            let total = notifications.values.reduce(0) { $0 + ($1.total ?? 0) }
-            if total == 0 {
-                emptyState("bell.badge", "You're all caught up", "Unread Unraid notifications from your servers appear here.")
-            } else {
-                ForEach(model.servers.filter { (notifications[$0.id]?.total ?? 0) > 0 }) { s in
-                    let n = notifications[s.id]!
-                    card {
-                        Text(s.name).font(.headline)
-                        HStack(spacing: 14) {
-                            Label("\(n.total ?? 0) unread", systemImage: "bell")
-                            if (n.alert ?? 0) > 0 { Label("\(n.alert ?? 0) alerts", systemImage: "exclamationmark.octagon.fill").foregroundStyle(.red) }
-                            if (n.warning ?? 0) > 0 { Label("\(n.warning ?? 0) warnings", systemImage: "exclamationmark.triangle.fill").foregroundStyle(.orange) }
-                        }.font(.callout)
-                        Text("Open the Unraid web interface to read them.").font(.caption).foregroundStyle(.secondary)
-                    }
-                }
-            }
-            if !model.servers.isEmpty {
-                Button("Refresh") { Task { await loadNotifications() } }.buttonStyle(.link)
-            }
-        }
-        .padding(14)
-    }
-
     // MARK: Footer
 
     private var footer: some View {
@@ -503,7 +476,7 @@ struct MenuBarPanel: View {
                 }
             } label: { Label("Refresh", systemImage: "arrow.clockwise") }
                 .disabled(model.servers.isEmpty || refreshing)
-                .help(Text("Asks the Finder to re-read every location from the gateway and reloads status, activity and notifications."))
+                .help(Text("Asks the Finder to re-read every location from the gateway and reloads status, activity and health."))
         }
         .buttonStyle(.borderless).font(.callout)
     }
@@ -528,14 +501,14 @@ struct MenuBarPanel: View {
         states = await FileProviderDomains.states()
         paused = FileProviderDomains.paused
         feed.reload()
-        await loadNotifications()
+        for s in model.servers { await model.refreshHealth(s) }
     }
 
-    private func loadNotifications() async {
-        for s in model.servers where !s.isDemo {
-            guard let c = model.client(for: s), let d = try? await c.graphQL(Dashboard.query, as: Dashboard.self) else { continue }
-            if let n = d.notifications?.overview?.unread { notifications[s.id] = n }
-        }
+    /// The worst health among the configured servers (nil while nothing was checked yet).
+    private var worstHealth: ServerHealth? {
+        let all = model.servers.compactMap { model.health[$0.id] }
+        guard !all.isEmpty else { return nil }
+        return all.max { $0.level < $1.level }
     }
 
     private func open(_ id: String) {

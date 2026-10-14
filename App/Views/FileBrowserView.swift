@@ -100,6 +100,7 @@ struct FileBrowserView: View {
                 NavigationStack {
                     FolderPickerView(server: server, title: m.copy ? "Copy to" : "Move to", excluding: Set(m.entries.map(\.path)), copy: m.copy, onChoose: { dest in
                         moving = nil
+                        RecentDestinations.record(dest, server: server.id)
                         Task { await transfer(m.entries, to: dest, copy: m.copy) }
                     }, onCancel: { moving = nil })
                 }.sheetFrame()
@@ -292,6 +293,13 @@ struct FileBrowserView: View {
     private func row(_ e: FSEntry) -> some View {
         let kind = FileKind.of(e)
         return HStack(spacing: 12) {
+            #if os(macOS)
+            // Build 44: the Mac List has no Edit-mode circles; draw them while selecting (iOS/visionOS get them from EditMode).
+            if selecting {
+                Image(systemName: selection.contains(e.id) ? "checkmark.circle.fill" : "circle")
+                    .font(.title3).foregroundStyle(selection.contains(e.id) ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
+            }
+            #endif
             Image(systemName: e.isDirectory && GatewayPath.depth(e.path) == 1 ? "externaldrive" : kind.symbol)
                 .font(.title3).frame(width: 30).foregroundStyle(e.isDirectory ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
             VStack(alignment: .leading, spacing: 2) {
@@ -564,9 +572,28 @@ struct FolderPickerView: View {
     var onCancel: () -> Void = {}
     @State private var folders: [FSEntry] = []
     @State private var loading = true
+    @State private var newFolder = false
+    @State private var newFolderName = ""
+    @State private var error: String?
+
+    /// Build 44: after the same destination was used twice, from the third time it is offered here.
+    private var recents: [String] { path == "/" ? RecentDestinations.shortcuts(server: server.id).filter { !excluding.contains($0) } : [] }
 
     var body: some View {
         List {
+            if !recents.isEmpty {
+                Section {
+                    ForEach(recents, id: \.self) { p in
+                        Button { onChoose(p) } label: {
+                            HStack {
+                                Label(p, systemImage: "clock.arrow.circlepath").lineLimit(1)
+                                Spacer()
+                                Text(copy ? "Copy here" : "Move here").font(.callout).foregroundStyle(.tint)
+                            }
+                        }
+                    }
+                } header: { Text("Recent destinations") }
+            }
             ForEach(folders) { f in
                 NavigationLink { FolderPickerView(server: server, title: title, excluding: excluding, path: f.path, copy: copy, onChoose: onChoose, onCancel: onCancel) } label: {
                     Label(f.name, systemImage: GatewayPath.depth(f.path) == 1 ? "externaldrive" : "folder")
@@ -579,7 +606,20 @@ struct FolderPickerView: View {
         .inlineNavigationTitle()
         .toolbar {
             ToolbarItem(placement: .cancellationAction) { Button("Cancel") { onCancel() } }
+            if path != "/" {
+                // Build 44: create the missing subfolder right here, then step into it to confirm.
+                ToolbarItem(placement: .primaryAction) { Button { newFolderName = ""; newFolder = true } label: { Label("New folder", systemImage: "folder.badge.plus") } }
+            }
         }
+        .alert("New folder", isPresented: $newFolder) {
+            TextField("Name", text: $newFolderName)
+            Button("Create") { Task { await createFolder() } }
+            Button("Cancel", role: .cancel) {}
+        }
+        .alert("Something went wrong", isPresented: Binding(get: { error != nil }, set: { if !$0 { error = nil } })) {
+            Button("OK", role: .cancel) {}
+        } message: { Text(error ?? "") }
+        .navigationDestination(item: $created) { f in FolderPickerView(server: server, title: title, excluding: excluding, path: f, copy: copy, onChoose: onChoose, onCancel: onCancel) }
         // The destination is always confirmed explicitly: the bar names the folder that is open and
         // the button does the move/copy *here*. At the root there is no destination yet (a share
         // must be opened first), so the button is disabled and the text says so.
@@ -599,13 +639,55 @@ struct FolderPickerView: View {
             .padding()
             .background(.bar)
         }
-        .task {
-            guard let c = model.client(for: server) else { loading = false; return }
-            let cfg = model.current(server)
-            folders = ((try? await c.list(path).entries) ?? []).filter { $0.isDirectory && !excluding.contains($0.path) && (path != "/" || cfg.isVisible(path: $0.path)) }
-                .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
-            loading = false
+        .task { await load() }
+    }
+
+    @State private var created: String?
+
+    private func load() async {
+        guard let c = model.client(for: server) else { loading = false; return }
+        let cfg = model.current(server)
+        folders = ((try? await c.list(path).entries) ?? []).filter { $0.isDirectory && !excluding.contains($0.path) && (path != "/" || cfg.isVisible(path: $0.path)) }
+            .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+        loading = false
+    }
+
+    private func createFolder() async {
+        let n = newFolderName.trimmingCharacters(in: .whitespaces)
+        guard !n.isEmpty, let c = model.client(for: server) else { return }
+        do {
+            let dest = GatewayPath.join(path, n)
+            _ = try await c.mkdir(dest)
+            await load()
+            created = dest
+        } catch { self.error = error.localizedDescription }
+    }
+}
+
+/// Build 44: destinations of Move…/Copy to… per server; a path used at least twice becomes a shortcut.
+enum RecentDestinations {
+    private static func key(_ server: String) -> String { "explorer.recentDestinations." + server }
+    private static let keep = 10
+
+    static func record(_ path: String, server: String) {
+        var all = (AppGroup.defaults.dictionary(forKey: key(server)) as? [String: [String: Any]]) ?? [:]
+        var e = all[path] ?? [:]
+        e["count"] = ((e["count"] as? Int) ?? 0) + 1
+        e["last"] = Date().timeIntervalSince1970
+        all[path] = e
+        if all.count > keep {
+            let victims = all.sorted { (($0.value["last"] as? Double) ?? 0) < (($1.value["last"] as? Double) ?? 0) }.prefix(all.count - keep)
+            for v in victims { all.removeValue(forKey: v.key) }
         }
+        AppGroup.defaults.set(all, forKey: key(server))
+    }
+
+    /// Paths used twice or more, most recent first.
+    static func shortcuts(server: String) -> [String] {
+        let all = (AppGroup.defaults.dictionary(forKey: key(server)) as? [String: [String: Any]]) ?? [:]
+        return all.filter { (($0.value["count"] as? Int) ?? 0) >= 2 }
+            .sorted { (($0.value["last"] as? Double) ?? 0) > (($1.value["last"] as? Double) ?? 0) }
+            .map(\.key)
     }
 }
 

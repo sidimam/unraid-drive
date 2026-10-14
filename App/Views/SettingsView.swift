@@ -128,6 +128,7 @@ struct SettingsView: View {
 
                 Section {
                     NavigationLink { DiagnosticsView() } label: { Label("Diagnostics and log", systemImage: "waveform.path.ecg") }
+                    Button { NotificationCenter.default.post(name: AppNavigation.showWalkthrough, object: nil) } label: { Label("Help and what's new", systemImage: "questionmark.circle") }
                 } header: { SectionTitle("Support") } footer: {
                     Text("Rotating log of app and extension, debug logging and a report to share when something does not work.")
                 }

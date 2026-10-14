@@ -69,6 +69,7 @@ struct RootView: View {
                 if model.servers.isEmpty { adding = true } else { addOnSettings = true; showSettings = true }
             }
             .onReceive(NotificationCenter.default.publisher(for: AppNavigation.showFolders)) { _ in showSettings = false }
+            .onReceive(NotificationCenter.default.publisher(for: AppNavigation.showWalkthrough)) { _ in showSettings = false; DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { showWalkthrough = true } }
             .sheet(isPresented: $showWalkthrough, onDismiss: { WalkthroughView.markSeen() }) {
                 WalkthroughView(onTryDemo: model.hasDemo ? nil : { Task { await model.addDemo() } })
             }
@@ -93,7 +94,9 @@ struct RootView: View {
                     WalkthroughView.markSeen()
                     if let first = model.servers.first(where: { !$0.isDemo }) ?? model.servers.first { model.select(first) }
                 } else if WalkthroughView.shouldShow {
-                    showWalkthrough = true
+                    // Build 44: the walkthrough is for the first run only; with a profile configured
+                    // the app opens on the folders and nothing pops up (Help in Settings reopens it).
+                    if model.servers.isEmpty { showWalkthrough = true } else { WalkthroughView.markSeen() }
                 }
                 #if DEBUG
                 // `-openDashboard`: the current profile's page (health row, dashboard, System information).

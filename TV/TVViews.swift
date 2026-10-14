@@ -493,7 +493,16 @@ struct TVDashboardView: View {
                             Circle().fill(assessment.map { $0.level == .ok ? Color.green : ($0.level == .warning ? Color.yellow : Color.red) } ?? Color.gray).frame(width: 18, height: 18)
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(assessment.map { $0.level == .ok ? "All fine" : ($0.level == .warning ? "Warnings" : "Problems") } ?? "Checking…")
-                                if let a = assessment, !a.reasons.isEmpty { Text(a.reasons.joined(separator: " · ")).font(.caption).opacity(0.75) }
+                                if let a = assessment, a.level == .ok { Text("Gateway and credentials look fine.").font(.caption).opacity(0.75) }
+                            }
+                        }
+                        if let a = assessment {
+                            ForEach(a.issues) { issue in
+                                HStack(alignment: .top, spacing: 16) {
+                                    Image(systemName: issue.level == .error ? "exclamationmark.octagon.fill" : "exclamationmark.triangle.fill")
+                                        .foregroundStyle(issue.level == .error ? .red : .orange)
+                                    Text(issue.detail).font(.caption)
+                                }
                             }
                         }
                         NavigationLink { TVSystemInfoView(server: server) } label: { TVMenuRow(title: "System information", symbol: "info.circle") }
@@ -540,12 +549,14 @@ struct TVDashboardView: View {
         .navigationTitle("Dashboard")
         .task {
             guard let c = model.client(for: server) else { error = String(localized: "Credentials for this server are missing on the TV. Pair it again from your iPhone, iPad or Mac."); return }
-            do { health = try await c.health() } catch { healthError = error.localizedDescription }
+            do { health = try await c.health() } catch { healthError = error.localizedDescription; assessment = .unreachable(error.localizedDescription) }
+            if assessment == nil {
+                // Build 44: only the gateway's own checks colour the dot; Unraid's state is information below.
+                if let g = try? await c.gatewayHealth() { assessment = .from(g.issues) } else { assessment = .fine }
+            }
             do {
                 let dash = try await c.graphQL(Dashboard.query, as: Dashboard.self); d = dash
-                let gw = (dash.docker?.containers ?? []).filter { Self.isGateway($0) }
-                assessment = ServerHealth.assess(dash, gatewayContainerRunning: gw.isEmpty ? nil : gw.contains { $0.state == "RUNNING" })
-            } catch { self.error = error.localizedDescription; assessment = .unreachable(error.localizedDescription) }
+            } catch { self.error = error.localizedDescription }
         }
     }
 }

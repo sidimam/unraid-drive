@@ -32,7 +32,6 @@ struct ServerDetailView: View {
                     }
                 }
                 Button { testing = true } label: { Label("Test connection", systemImage: "stethoscope") }
-                if !server.isDemo { locationStatus }
                 if !server.isDemo {
                     Button { editing = true } label: { Label("Edit server or credentials", systemImage: "pencil") }
                 }
@@ -66,20 +65,73 @@ struct ServerDetailView: View {
         .task { await load(); filesURL = await FileProviderDomains.filesAppURL(server); await model.refreshHealth(server) }
     }
 
-    /// Build 42: the server's health at a glance, with the reasons behind a yellow or red dot.
+    /// Build 42/44: the server's health at a glance — only what concerns Unraid Drive and the
+    /// gateway — with every warning or error listed and, when there is one, the action that fixes it.
     @ViewBuilder private var healthRow: some View {
         let h = model.health[server.id]
         HStack(alignment: .firstTextBaseline, spacing: 12) {
             HealthDot(health: h).padding(.top, 2)
             VStack(alignment: .leading, spacing: 2) {
                 Text(HealthDot.title(h)).font(.body)
-                if let h, !h.reasons.isEmpty {
-                    Text(h.reasons.joined(separator: " · ")).font(.footnote).foregroundStyle(h.level == .error ? .red : .orange)
-                } else if let h, h.level == .ok {
-                    Text("Array, disks, load and gateway container look fine.").font(.footnote).foregroundStyle(.secondary)
+                if let h, h.level == .ok {
+                    Text("Gateway, credentials, Files/Finder location and transfers look fine.").font(.footnote).foregroundStyle(.secondary)
+                } else if h == nil {
+                    Text("Checking the gateway…").font(.footnote).foregroundStyle(.secondary)
                 }
             }
         }
+        if let h, !h.issues.isEmpty {
+            ForEach(h.issues) { issue in issueRow(issue) }
+        }
+    }
+
+    private func issueRow(_ issue: ServerHealth.Issue) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: issue.level == .error ? "exclamationmark.octagon.fill" : "exclamationmark.triangle.fill")
+                .foregroundStyle(issue.level == .error ? .red : .orange).padding(.top, 2)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(sourceTitle(issue.source)).font(.footnote).foregroundStyle(.secondary)
+                Text(issue.detail).font(.callout)
+                switch issue.action {
+                case .openSystemSettings:
+                    #if os(macOS)
+                    Button("Open System Settings") { LocationErrorText.openExtensionsSettings() }.font(.callout)
+                    #else
+                    Button(checking ? "Checking…" : "Check now") { Task { checking = true; await model.maintainLocationsIfNeeded(force: true, only: server); await model.refreshHealth(server); checking = false } }.disabled(checking).font(.callout)
+                    #endif
+                case .checkLocation:
+                    Button(checking ? "Checking…" : "Check now") { Task { checking = true; await model.maintainLocationsIfNeeded(force: true, only: server); await model.refreshHealth(server); checking = false } }.disabled(checking).font(.callout)
+                case .signIn:
+                    Button("Edit server or credentials") { editing = true }.font(.callout)
+                case .openDiagnostics:
+                    NavigationLink { DiagnosticsView() } label: { Text("Open Diagnostics and log") }.font(.callout)
+                case .reRegister:
+                    Button("Connect again") { Task { await model.registerRestoredDevices(timeout: 20); await model.refreshHealth(server) } }.font(.callout)
+                case .retryTransfers:
+                    Button("Refresh the Files location") { Task { await FileProviderDomains.signal(server); await model.refreshHealth(server) } }.font(.callout)
+                case .none:
+                    EmptyView()
+                }
+            }
+        }
+    }
+
+    private func sourceTitle(_ s: ServerHealth.Source) -> LocalizedStringKey {
+        switch s {
+        case .gateway: return "Gateway"
+        case .credentials: return "Credentials"
+        case .location: return "Files / Finder location"
+        case .transfers: return "Transfers"
+        case .device: return "Device registration"
+        case .shares: return "Shares"
+        }
+    }
+
+    private func cpuLine(_ cpu: Dashboard.Info.CPU) -> String {
+        let brand = cpu.brand ?? ""
+        let cores = cpu.cores ?? 0
+        let threads = cpu.threads ?? 0
+        return "\(brand) · \(cores)C/\(threads)T"
     }
 
     @ViewBuilder private func systemSection(_ d: Dashboard) -> some View {
@@ -91,45 +143,6 @@ struct ServerDetailView: View {
             if let p = d.metrics?.memory?.percentTotal { gauge("Memory", p) }
             NavigationLink { SystemInfoView(server: server) } label: { Label("System information", systemImage: "info.circle") }
         }
-    }
-
-    /// The automatic pass (connection check + location rebuild) runs on the first launch and after
-    /// every update; this row says when it last happened, or why it is still pending.
-    @ViewBuilder private var locationStatus: some View {
-        let m = model.maintenance[server.id] ?? model.storedMaintenance(server.id)
-        HStack(alignment: .top, spacing: 12) {
-            let symbol = m?.done == true ? "checkmark.circle" : (m?.needsUserAction == true ? "exclamationmark.triangle" : "clock.arrow.circlepath")
-            #if os(macOS)
-            Label("Finder location", systemImage: symbol)
-            #else
-            Label("Files location", systemImage: symbol)
-            #endif
-            Spacer()
-            VStack(alignment: .trailing, spacing: 2) {
-                if let m, m.done {
-                    Text("Checked and rebuilt automatically (build \(m.build))").multilineTextAlignment(.trailing)
-                    Text(m.date.formatted(date: .abbreviated, time: .shortened)).foregroundStyle(.secondary)
-                } else {
-                    Text(m?.needsUserAction == true ? "Needs your attention" : "Automatic check pending").multilineTextAlignment(.trailing)
-                    if let m { Text(m.detail).foregroundStyle(m.needsUserAction == true ? .orange : .secondary).lineLimit(4).multilineTextAlignment(.trailing) }
-                    #if os(macOS)
-                    if m?.needsUserAction == true {
-                        Button("Open System Settings") { LocationErrorText.openExtensionsSettings() }.font(.callout)
-                    }
-                    #endif
-                    Button(checking ? "Checking…" : "Check now") {
-                        Task { checking = true; await model.maintainLocationsIfNeeded(force: true, only: server); checking = false }
-                    }.disabled(checking).font(.callout)
-                }
-            }.font(.footnote)
-        }
-    }
-
-    private func cpuLine(_ cpu: Dashboard.Info.CPU) -> String {
-        let brand = cpu.brand ?? ""
-        let cores = cpu.cores ?? 0
-        let threads = cpu.threads ?? 0
-        return "\(brand) · \(cores)C/\(threads)T"
     }
 
     @ViewBuilder private func arraySection(_ d: Dashboard) -> some View {

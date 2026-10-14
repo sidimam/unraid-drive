@@ -61,6 +61,12 @@ public actor GatewayClient {
         return try decode(HealthResponse.self, data)
     }
 
+    /// The gateway's own health summary (0.12+): level, reasons and checks. Authenticated.
+    public func gatewayHealth() async throws -> GatewayHealth {
+        let (data, _) = try await authorized(URLRequest(url: url("/api/v1/health")))
+        return try decode(GatewayHealth.self, data)
+    }
+
     /// Validates the API key and caches the session token.
     @discardableResult
     /// Signs in. `register` is set by the user's own actions (adding a server, "connect again"):

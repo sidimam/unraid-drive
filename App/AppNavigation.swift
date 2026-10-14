@@ -9,4 +9,6 @@ enum AppNavigation {
     static let addProfile = Notification.Name("com.sdimambro.unraid-drive.addProfile")
     /// Close Settings and show the folders of the current profile.
     static let showFolders = Notification.Name("com.sdimambro.unraid-drive.showFolders")
+    /// Close Settings and open the walkthrough (Settings › Support › Help and what's new).
+    static let showWalkthrough = Notification.Name("com.sdimambro.unraid-drive.showWalkthrough")
 }

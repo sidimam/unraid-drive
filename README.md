@@ -65,6 +65,8 @@ After the first launch enable the extension under System Settings â€º General â€
 
 ## What's new
 
+**1.4.2 (build 44):** the health dot concerns only Unraid Drive and its gateway (gateway checks, credentials, Files/Finder location, failed transfers, device registration), each reason listed with its fix; Mac menu bar panel aligned; selection circles on the Mac; no walkthrough when a profile exists; New folder and Recent destinations in the move/copy picker.
+
 **1.4.1 (build 43):** System information shows the real installed memory; Unraid's own notifications are left to Unraid (no longer in the health dot nor in the dashboard).
 
 **1.4 (build 42):** the app opens on your folders; one Settings screen with a Profiles section (servers, connections, credentials); a health dot (green / yellow / red) next to the title that opens the dashboard; System information; the same on Apple TV and the Mac.

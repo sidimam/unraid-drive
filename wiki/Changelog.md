@@ -2,6 +2,18 @@
 
 All notable changes to Unraid Drive. The server side has its own changelog in [unraid-gateway](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
 
+## 1.4.2 (build 44) — 2026-10-14
+
+The health dot is about Unraid Drive and its gateway, and nothing else — and every reason is explorable.
+
+- **Health dot, redefined.** Green, yellow or red now reflect only what concerns Unraid Drive and unraid-gateway: the gateway answering and its own checks (shares mounted and writable, `/config`, user-auth prerequisites — read from the new `GET /api/v1/health` of gateway 0.13), the credentials in the Keychain, the Files/Finder location (needs you → red, check pending → yellow), failed uploads/downloads in the last 24 hours, and the device registration after an iCloud restore. Unraid's array, disks, parity, load and notifications are information in the dashboard and never colour the dot. Each warning or error is listed under the dot on the profile page with the action that fixes it (*Open System Settings*, *Check now*, *Edit server or credentials*, *Open Diagnostics and log*, *Connect again*). Same on Apple TV.
+- **Mac menu bar panel.** The dot in the panel's header is the worst of your profiles' health, with the same rules (the 1.4.1 panel still coloured it from Unraid's notifications); its Notifications tab is gone — the panel has *Home* and *Activity*.
+- **Selection circles on the Mac.** In selection mode every row shows the circle / checkmark, like iPhone and iPad; on Apple TV the circles in list and grid were verified (debug launch arguments `-tvSelecting` and `-tvGrid` for the regression screenshots).
+- **No walkthrough when a profile exists.** The walkthrough appears only on the very first run, when no profile is configured; after an update the app opens straight on the folders. *Settings › Support › Help and what's new* reopens it.
+- **Move / copy picker.** A **New folder** button creates the destination on the spot and enters it; a **Recent destinations** section lists the last folders you moved or copied to on that server (kept per server, up to ten, shown once you used at least two).
+- Copy and move were already server-side (the gateway performs them; nothing crosses the client): confirmed and documented.
+- Requires nothing new from the gateway; with unraid-gateway 0.13 the dot also reads the gateway's own checks.
+
 ## 1.4.1 (build 43) — 2026-10-09
 
 - **System information:** the Unraid API reports memory module sizes in KiB; installed memory and modules were shown 1024× too small.

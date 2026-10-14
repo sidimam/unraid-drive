@@ -168,23 +168,54 @@ final class ServersModel: ObservableObject {
         Diag.info("servers", "current profile → \(server.name)")
     }
 
-    /// Health for the status dot: is the gateway reachable, then the dashboard assessment (array,
-    /// disks, notifications, load, gateway container). Cached per server; the demo is always fine.
-    func refreshHealth(_ server: ServerConfig) async {
-        if server.isDemo { health[server.id] = ServerHealth(level: .ok); return }
-        guard let c = client(for: server) else { health[server.id] = .unreachable(String(localized: "Credentials missing from the Keychain")); return }
-        do {
-            _ = try await c.health()
-            let d = try await c.graphQL(Dashboard.query, as: Dashboard.self)
-            let gateway = (d.docker?.containers ?? []).filter { ServerDetailView.isGateway($0) }
-            health[server.id] = ServerHealth.assess(d, gatewayContainerRunning: gateway.isEmpty ? nil : gateway.contains { $0.state == "RUNNING" })
-        } catch {
-            health[server.id] = .unreachable(error.localizedDescription)
-        }
-    }
-
     func client(for server: ServerConfig) -> GatewayClient? {
         GatewayClientFactory.client(for: server, keychain: keychain)
+    }
+
+    /// Health for the status dot (rule of 13/10/2026: only what concerns Unraid Drive and the gateway).
+    /// Red: gateway unreachable or credentials refused, Files/Finder location that needs the user,
+    /// gateway errors (no share mounted). Yellow: gateway warnings (unwritable share, /config, user
+    /// auth), location check pending, failed uploads/downloads in the last 24 h, device not
+    /// registered yet. Unraid's own state is never part of it. The demo is always fine.
+    func refreshHealth(_ server: ServerConfig) async {
+        if server.isDemo { health[server.id] = .fine; return }
+        guard let c = client(for: server) else {
+            health[server.id] = ServerHealth(level: .error, issues: [.init(.error, .credentials, String(localized: "Credentials missing from the Keychain: sign in again."), action: .signIn)])
+            return
+        }
+        var issues: [ServerHealth.Issue] = []
+        do {
+            _ = try await c.health()
+            if let g = try? await c.gatewayHealth() { issues += g.issues }
+        } catch {
+            health[server.id] = .unreachable(error.localizedDescription)
+            return
+        }
+        // Files / Finder location: the automatic pass and its outcome.
+        if let m = maintenance[server.id] ?? storedMaintenance(server.id) {
+            if m.needsUserAction == true {
+                issues.append(.init(.error, .location, m.detail, action: .openSystemSettings))
+            } else if !m.done {
+                issues.append(.init(.warning, .location, String(localized: "Files/Finder location check pending: \(m.detail)"), action: .checkLocation))
+            }
+        } else {
+            issues.append(.init(.warning, .location, String(localized: "Files/Finder location not checked yet on this build."), action: .checkLocation))
+        }
+        // Transfers of the last 24 hours that failed (extension's activity log).
+        let dayAgo = Date().addingTimeInterval(-86_400)
+        let failed = ActivityLog.recent().filter { $0.serverID == server.id && $0.failed && $0.date > dayAgo }
+        if !failed.isEmpty {
+            issues.append(.init(.warning, .transfers, String(localized: "\(failed.count) failed transfer(s) in the last 24 hours (last: \(failed[0].name))"), action: .openDiagnostics))
+        }
+        // Device registration (restore from iCloud still waiting for the secrets / failed).
+        if let r = restoreRegistration[server.id] {
+            switch r {
+            case .waitingSecrets: issues.append(.init(.warning, .device, String(localized: "Device registration waiting for the credentials from iCloud Keychain."), action: .reRegister))
+            case .failed(let why): issues.append(.init(.warning, .device, why, action: .reRegister))
+            case .registered: break
+            }
+        }
+        health[server.id] = .from(issues)
     }
 
     // MARK: Restore from iCloud → register this device again
