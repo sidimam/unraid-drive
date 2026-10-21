@@ -30,25 +30,17 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
     private let ext: FileProviderExtension
     private let container: NSFileProviderItemIdentifier
 
-    private var refresh: Timer?
-
     init(ext: FileProviderExtension, container: NSFileProviderItemIdentifier) {
         self.ext = ext; self.container = container
         super.init()
-        // Build 45: while a folder is on screen (Finder window, Files app), ask the system to pull
-        // its changes every 30 s, so files written straight on the NAS (downloads, other apps)
-        // appear without waiting for the gateway's directory scan or a manual refresh.
-        if container != .rootContainer, let mgr = NSFileProviderManager(for: ext.domain) {
-            let id = container
-            DispatchQueue.main.async { [weak self] in
-                self?.refresh = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in mgr.signalEnumerator(for: id) { _ in } }
-            }
-        }
+        // Build 45: a folder the system enumerates is "recently viewed": the extension re-lists it
+        // live every 30 s for a while and pushes what changed through the working set (see
+        // FileProviderExtension.watchRecentFolders), so files written straight on the NAS appear
+        // without waiting for the gateway's directory scan.
+        Task { if let path = await ext.index.path(for: container), path != "/" { await ext.noteViewed(path) } }
     }
 
-    func invalidate() {
-        DispatchQueue.main.async { [weak self] in self?.refresh?.invalidate(); self?.refresh = nil }
-    }
+    func invalidate() {}
 
     func enumerateItems(for observer: NSFileProviderEnumerationObserver, startingAt page: NSFileProviderPage) {
         Task {
@@ -66,7 +58,7 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
                 observer.finishEnumerating(upTo: nil)
                 // A plain listing cannot delete items; the working set can. Wake it up.
                 if !vanished.isEmpty { ext.nudgeWorkingSet() }
-            } catch { observer.finishEnumeratingWithError(FileProviderExtension.mapError(error)) }
+            } catch { Diag.error("enumerate", "items of \(await ext.index.path(for: container) ?? container.rawValue)", error); observer.finishEnumeratingWithError(FileProviderExtension.mapError(error)) }
         }
     }
 
@@ -112,7 +104,7 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
                 } else {
                     observer.finishEnumeratingChanges(upTo: SyncAnchor(cursor: page.cursor).raw, moreComing: false)
                 }
-            } catch { observer.finishEnumeratingWithError(FileProviderExtension.mapError(error)) }
+            } catch { Diag.error("enumerate", "changes of \(path)", error); observer.finishEnumeratingWithError(FileProviderExtension.mapError(error)) }
         }
     }
 
@@ -191,11 +183,15 @@ final class WorkingSetEnumerator: NSObject, NSFileProviderEnumerator {
                         }
                     }
                 }
+                // Build 45: what the recent-folders watcher found on the NAS since the last pass.
+                let (wu, wd) = await ext.takePendingChanges()
+                for e in wu { updated.append(await ext.makeItem(e)) }
+                deleted += wd
                 deleted += await ext.index.takeRetired()
                 if !updated.isEmpty { observer.didUpdate(updated) }
                 if !deleted.isEmpty { observer.didDeleteItems(withIdentifiers: deleted) }
                 observer.finishEnumeratingChanges(upTo: Self.anchor(seq: page.seq), moreComing: page.truncated)
-            } catch { observer.finishEnumeratingWithError(FileProviderExtension.mapError(error)) }
+            } catch { Diag.error("enumerate", "working set changes", error); observer.finishEnumeratingWithError(FileProviderExtension.mapError(error)) }
         }
     }
 

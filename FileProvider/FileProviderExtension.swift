@@ -38,6 +38,7 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     }
 
     func invalidate() {
+        watchLock.lock(); watchTimer?.cancel(); watchTimer = nil; watchLock.unlock()
         Task { await index.flush() }
     }
 
@@ -84,6 +85,76 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     }
 
     /// Asks the system to enumerate the working set soon (deletions can only be reported there).
+    // MARK: Recently viewed folders (build 45)
+
+    /// Folders the system enumerated lately (path → when). Every 30 s they are re-listed live and
+    /// the differences pushed through the working set, because the gateway's change feed only
+    /// learns about files written straight on the NAS at its next directory scan.
+    private let watchLock = NSLock()
+    private var viewed: [String: Date] = [:]
+    private var snapshots: [String: [String: String]] = [:]   // path → name → etag|size|mtime
+    private var pendingUpdates: [FSEntry] = []
+    private var pendingDeletes: [NSFileProviderItemIdentifier] = []
+    private var watchTimer: DispatchSourceTimer?
+    static let watchFor: TimeInterval = 15 * 60
+    static let watchEvery: TimeInterval = 30
+
+    func noteViewed(_ path: String) async {
+        watchLock.lock()
+        viewed[path] = Date()
+        let start = watchTimer == nil
+        watchLock.unlock()
+        if snapshots[path] == nil, let client, let l = try? await client.list(path, hidden: true) {
+            watchLock.lock(); snapshots[path] = Self.snapshot(visibleEntries(l.entries, in: path)); watchLock.unlock()
+        }
+        if start { startWatching() }
+    }
+
+    private func startWatching() {
+        let t = DispatchSource.makeTimerSource(queue: DispatchQueue.global(qos: .utility))
+        t.schedule(deadline: .now() + Self.watchEvery, repeating: Self.watchEvery)
+        t.setEventHandler { [weak self] in Task { await self?.watchRecentFolders() } }
+        watchLock.lock(); watchTimer = t; watchLock.unlock()
+        t.resume()
+    }
+
+    private static func snapshot(_ entries: [FSEntry]) -> [String: String] {
+        Dictionary(uniqueKeysWithValues: entries.map { ($0.name, "\($0.etag)|\($0.size)|\($0.mtime.timeIntervalSince1970)") })
+    }
+
+    private func watchRecentFolders() async {
+        guard let client else { return }
+        watchLock.lock()
+        let cutoff = Date().addingTimeInterval(-Self.watchFor)
+        viewed = viewed.filter { $0.value > cutoff }
+        let paths = Array(viewed.keys)
+        watchLock.unlock()
+        var changed = false
+        for path in paths where isVisible(path) {
+            guard let l = try? await client.list(path, hidden: true) else { continue }
+            let entries = visibleEntries(l.entries, in: path)
+            let now = Self.snapshot(entries)
+            watchLock.lock(); let old = snapshots[path] ?? [:]; snapshots[path] = now; watchLock.unlock()
+            let fresh = entries.filter { old[$0.name] != now[$0.name] }
+            let gone = await index.vanishedIdentifiers(in: path, current: entries.map(\.name))
+            await index.rememberListing(path, names: entries.map(\.name))
+            if !fresh.isEmpty || !gone.isEmpty {
+                // Vanished items are already queued as "retired" by the index; only updates go here.
+                watchLock.lock(); pendingUpdates += fresh; watchLock.unlock()
+                changed = true
+                Diag.info("watch", "\(path): \(fresh.count) new or changed, \(gone.count) gone")
+            }
+        }
+        if changed { nudgeWorkingSet() }
+    }
+
+    func takePendingChanges() async -> ([FSEntry], [NSFileProviderItemIdentifier]) {
+        watchLock.lock(); defer { watchLock.unlock() }
+        let u = pendingUpdates, d = pendingDeletes
+        pendingUpdates = []; pendingDeletes = []
+        return (u, d)
+    }
+
     func nudgeWorkingSet() {
         guard let mgr = NSFileProviderManager(for: domain) else { return }
         mgr.signalEnumerator(for: .workingSet) { _ in }
