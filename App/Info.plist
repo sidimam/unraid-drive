@@ -5,6 +5,7 @@
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>com.sdimambro.unraid-drive.refresh</string>
+		<string>com.sdimambro.unraid-drive.sync</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
@@ -42,6 +43,12 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Unraid Drive backs your photos and videos up to your Unraid server when you add a Photos backup in Settings › Profiles › Sync.</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>com.sdimambro.unraid-drive.browse</string>
+	</array>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
@@ -72,6 +79,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>processing</string>
 	</array>
 	<key>UILaunchScreen</key>
 	<dict/>

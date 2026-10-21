@@ -15,6 +15,7 @@ struct RootView: View {
     @State private var showDiagnostics = false
     @State private var showDashboard = false
     @State private var showWalkthrough = false
+    @State private var route: [String] = []
     #if os(macOS)
     private let compact = false
     #else
@@ -36,13 +37,21 @@ struct RootView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $route) {
             Group {
                 if let current = model.current {
                     FileBrowserView(server: current, path: "/").id(current.id)
+                        .navigationDestination(for: String.self) { p in FileBrowserView(server: current, path: p) }
                 } else {
                     welcome
                 }
+            }
+            .onContinueUserActivity(Continuity.browseActivity) { a in
+                guard let (serverID, path) = Continuity.read(a), let s = model.servers.first(where: { $0.id == serverID }) else { return }
+                showSettings = false; showWalkthrough = false
+                model.select(s)
+                route = Continuity.chain(path)
+                Diag.info("continuity", "handoff → \(s.name) \(path)")
             }
             #if !os(macOS)
             .fullScreenCover(isPresented: Binding(get: { adding && compact }, set: { adding = $0 })) { AddServerView() }
@@ -93,6 +102,9 @@ struct RootView: View {
                 if ProcessInfo.processInfo.arguments.contains("-openServer") {
                     WalkthroughView.markSeen()
                     if let first = model.servers.first(where: { !$0.isDemo }) ?? model.servers.first { model.select(first) }
+                } else if Continuity.resumeEnabled, let (sid, p) = Continuity.lastFolderFromAnotherDevice(), let s = model.servers.first(where: { $0.id == sid }) {
+                    WalkthroughView.markSeen(); model.select(s); route = Continuity.chain(p)
+                    Diag.info("continuity", "resumed \(s.name) \(p) from another device")
                 } else if WalkthroughView.shouldShow {
                     // Build 44: the walkthrough is for the first run only; with a profile configured
                     // the app opens on the folders and nothing pops up (Help in Settings reopens it).

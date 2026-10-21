@@ -46,3 +46,7 @@ On the first launch and after every update the app checks the gateway and rebuil
 ## When something does not work (build 37+)
 
 Open the server (gear in the explorer) and read the **Finder location** row: *Needs your attention* means the Finder extension is switched off — the button **Open System Settings** takes you to General › Login Items & Extensions › File Providers; turn *Unraid Drive* on and the location comes back by itself. **Test connection** checks gateway, key, shares, write access and the location and explains each failure; **Copy report for support** puts the results, the app and device details and the last log lines on the clipboard, without any secret. The full log lives in Preferences › Support › **Diagnostics and log** (with *Show log files in Finder* and a *Debug logging* switch).
+
+## Folder sync and Photos backup (1.5)
+
+Beyond the Finder location, the Mac can keep whole folders aligned with Unraid (two-way or one-way, with conflict and deletion policies) and back the Photos library up: *Settings › Profiles › server › Sync*. The menu bar panel shows every pair with its progress. Details in [Sync and backup](Sync-and-Backup).

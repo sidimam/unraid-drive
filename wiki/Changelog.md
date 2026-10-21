@@ -2,6 +2,20 @@
 
 All notable changes to Unraid Drive. The server side has its own changelog in [unraid-gateway](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
 
+## 1.5 (build 45) — 2026-10-21
+
+Your folders and photos, kept on Unraid — and the gateway knows about it.
+
+- **Folder sync (Mac).** *Settings › Profiles › server › Sync › Add a sync*: a folder of this Mac and a folder of Unraid kept aligned through the gateway. Direction (Mac → Unraid, Unraid → Mac, two-way), what to do when a file changed on both sides (newest wins, keep both with a rename, keep the existing copy, ask), whether deletions are mirrored or kept, exclusion patterns (`.DS_Store` and partial downloads always), schedule (continuous: the folder is watched and a pass runs every 15 minutes; hourly; daily; manual). Three-way comparison with the state of the last run, downloads land next to the final name and are moved into place, nothing ever crosses the Mac for Unraid → Unraid work. The menu bar panel shows every pair with its progress and last result; *Run now* and *Recent files* on each pair.
+- **Photos backup (Mac, iPhone, iPad, Vision Pro).** Originals of photos and videos (RAW, HEIC, both halves of a Live Photo), incremental by asset, into `<folder>/<year>/<year-month>/`, plus an `albums.json` with your albums. iCloud-optimised originals are fetched on demand. Nothing is ever deleted on Unraid. On iPhone and iPad it also runs in the background (processing task) when the system allows, with a Wi-Fi-only option.
+- **Downloads sync (iPhone, iPad, Vision Pro).** Pick the Downloads folder (or any folder) once; what appears there is sent to Unraid.
+- **The gateway keeps the registry** (unraid-gateway 0.14): every pair is registered with its direction and last run, each run is reported with the files that moved, and the web UI's new *Users* view shows — per Unraid user — the devices, their syncs and the files they moved, with a switch to **pause a sync on the gateway**: the app sees it at the next run, shows the pair as paused and cannot override it. The health dot reports paused pairs and failed or partial runs, with *Open Sync* as the action.
+- **Share extension "Save to Unraid Drive"** (iPhone, iPad, Vision Pro, Mac): from the share sheet of any app — files, images, movies, text and links — pick the profile and the folder (last destination preselected, recent ones at hand, new folder on the spot) and upload. Text becomes a `.txt`/`.md`, a link a `.webloc` or, if you ask, the file it points to.
+- **Continuity.** Handoff between iPhone, iPad, Mac and Vision Pro: the folder you are browsing on one device can be opened on another from its Dock / app switcher. *Settings › iCloud › Open where I left off on another device*: at launch, the app opens the folder another device opened in the last hour.
+- **Finder shows new files sooner (Mac).** A folder on screen is re-listed live on every change pass and refreshed every 30 seconds while it stays open, so files written straight on the NAS (downloads, other apps) appear without waiting for the gateway's directory scan. iPhone and iPad benefit the same way in the Files app.
+- Recent move/copy destinations are shared with the share extension; a debug `-seedSync <local> <remote>` argument runs the engine against a local gateway; the kit gained an integration test of the sync engine.
+- Requires unraid-gateway 0.14 for the registry and the Users view (pairs still run against 0.13, without the gateway-side pause).
+
 ## 1.4.2 (build 44) — 2026-10-14
 
 The health dot is about Unraid Drive and its gateway, and nothing else — and every reason is explorable.

@@ -10,8 +10,8 @@ public struct ServerHealth: Equatable, Sendable {
         case unknown = 0, ok, warning, error
         public static func < (a: Level, b: Level) -> Bool { a.rawValue < b.rawValue }
     }
-    public enum Source: String, Sendable { case gateway, credentials, location, transfers, device, shares }
-    public enum Action: String, Sendable { case none, openSystemSettings, checkLocation, signIn, openDiagnostics, retryTransfers, reRegister }
+    public enum Source: String, Sendable { case gateway, credentials, location, transfers, device, shares, sync }
+    public enum Action: String, Sendable { case none, openSystemSettings, checkLocation, signIn, openDiagnostics, retryTransfers, reRegister, openSync }
     public struct Issue: Equatable, Sendable, Identifiable {
         public var id: String { source.rawValue + "|" + detail }
         public var level: Level

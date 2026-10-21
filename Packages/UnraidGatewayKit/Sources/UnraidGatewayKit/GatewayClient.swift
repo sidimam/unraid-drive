@@ -348,13 +348,13 @@ public actor GatewayClient {
         baseURL.appendingPathComponent(path)
     }
 
-    private func get(_ path: String, _ items: [URLQueryItem]) -> URLRequest {
+    func get(_ path: String, _ items: [URLQueryItem]) -> URLRequest {
         var comps = URLComponents(url: url(path), resolvingAgainstBaseURL: false)!
         comps.queryItems = items
         return URLRequest(url: comps.url!)
     }
 
-    private func post(_ path: String, _ body: [String: Any]) -> URLRequest {
+    func post(_ path: String, _ body: [String: Any]) -> URLRequest {
         var req = URLRequest(url: url(path))
         req.httpMethod = "POST"
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -371,7 +371,7 @@ public actor GatewayClient {
         return try await t.value
     }
 
-    private func authorized(_ request: URLRequest) async throws -> (Data, URLResponse) {
+    func authorized(_ request: URLRequest) async throws -> (Data, URLResponse) {
         var req = request
         req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
         let (data, resp) = try await perform(req)
@@ -386,7 +386,7 @@ public actor GatewayClient {
         return (data, resp)
     }
 
-    private func authorizedUpload(_ request: URLRequest, fromFile file: URL? = nil, data body: Data? = nil) async throws -> (Data, URLResponse) {
+    func authorizedUpload(_ request: URLRequest, fromFile file: URL? = nil, data body: Data? = nil) async throws -> (Data, URLResponse) {
         var req = request
         req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
         func send(_ r: URLRequest) async throws -> (Data, URLResponse) {
@@ -405,7 +405,7 @@ public actor GatewayClient {
         return (data, resp)
     }
 
-    private func authorizedDownload(_ request: URLRequest) async throws -> (URL, URLResponse) {
+    func authorizedDownload(_ request: URLRequest) async throws -> (URL, URLResponse) {
         var req = request
         req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
         func send(_ r: URLRequest) async throws -> (URL, URLResponse) {
@@ -509,7 +509,7 @@ public actor GatewayClient {
         return id
     }
 
-    private func decode<T: Decodable>(_ type: T.Type, _ data: Data) throws -> T {
+    func decode<T: Decodable>(_ type: T.Type, _ data: Data) throws -> T {
         do { return try GatewayJSON.decoder.decode(type, from: data) } catch { throw GatewayError.decoding(String(describing: error)) }
     }
 

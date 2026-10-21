@@ -73,6 +73,10 @@ struct FileBrowserView: View {
         }
         .modifier(SearchableUnlessRoot(root: path == "/", text: $search))
         .navigationTitle(selecting ? Text("\(selection.count) selected") : Text(path == "/" ? server.name : GatewayPath.name(path)))
+        // 1.5 Continuity: Handoff to the other devices ("browsing <folder> on <server>") and the
+        // last folder opened, for the "open where I left off" option.
+        .userActivity(Continuity.browseActivity, isActive: !server.isDemo) { a in Continuity.fill(a, server: server, path: path) }
+        .onAppear { Continuity.rememberLastFolder(server: server, path: path) }
         .inlineNavigationTitle()
         .toolbar { toolbarItems }
         #if os(iOS) || os(visionOS)
@@ -665,31 +669,6 @@ struct FolderPickerView: View {
 }
 
 /// Build 44: destinations of Move…/Copy to… per server; a path used at least twice becomes a shortcut.
-enum RecentDestinations {
-    private static func key(_ server: String) -> String { "explorer.recentDestinations." + server }
-    private static let keep = 10
-
-    static func record(_ path: String, server: String) {
-        var all = (AppGroup.defaults.dictionary(forKey: key(server)) as? [String: [String: Any]]) ?? [:]
-        var e = all[path] ?? [:]
-        e["count"] = ((e["count"] as? Int) ?? 0) + 1
-        e["last"] = Date().timeIntervalSince1970
-        all[path] = e
-        if all.count > keep {
-            let victims = all.sorted { (($0.value["last"] as? Double) ?? 0) < (($1.value["last"] as? Double) ?? 0) }.prefix(all.count - keep)
-            for v in victims { all.removeValue(forKey: v.key) }
-        }
-        AppGroup.defaults.set(all, forKey: key(server))
-    }
-
-    /// Paths used twice or more, most recent first.
-    static func shortcuts(server: String) -> [String] {
-        let all = (AppGroup.defaults.dictionary(forKey: key(server)) as? [String: [String: Any]]) ?? [:]
-        return all.filter { (($0.value["count"] as? Int) ?? 0) >= 2 }
-            .sorted { (($0.value["last"] as? Double) ?? 0) > (($1.value["last"] as? Double) ?? 0) }
-            .map(\.key)
-    }
-}
 
 // MARK: - Share sheet
 

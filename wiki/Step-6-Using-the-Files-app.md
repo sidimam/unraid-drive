@@ -48,3 +48,7 @@ If you add files on the NAS via SMB or another device, the Files app picks them 
 - **Battery**: like every cloud provider, syncing happens when you use Files or when iOS schedules background refresh. Nothing runs continuously.
 
 → See also: [Troubleshooting](Troubleshooting), [Security notes](Security)
+
+## Photos backup, Downloads sync and the share sheet (1.5)
+
+On iPhone, iPad and Vision Pro the app can back the Photos library up to Unraid and send the Downloads folder (*Settings › Profiles › server › Sync*), also in the background when the system allows it. *Save to Unraid Drive* in the share sheet of any app uploads files, images, text and links to a folder of your choice. Details in [Sync and backup](Sync-and-Backup).

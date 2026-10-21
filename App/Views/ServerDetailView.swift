@@ -11,6 +11,7 @@ struct ServerDetailView: View {
     @State private var testing = false
     @State private var editing = false
     @State private var checking = false
+    @State private var openSyncDebug = false
 
     var body: some View {
         List {
@@ -32,6 +33,15 @@ struct ServerDetailView: View {
                     }
                 }
                 Button { testing = true } label: { Label("Test connection", systemImage: "stethoscope") }
+                if !server.isDemo {
+                    NavigationLink { SyncSettingsView(server: server) } label: {
+                        LabeledContent { Text(syncSummary) } label: { Label("Sync", systemImage: "arrow.triangle.2.circlepath") }
+                    }
+                }
+                #if DEBUG
+                // `-openSync`: straight into the Sync screen (regression screenshots).
+                NavigationLink(isActive: $openSyncDebug) { SyncSettingsView(server: server) } label: { EmptyView() }.hidden()
+                #endif
                 if !server.isDemo {
                     Button { editing = true } label: { Label("Edit server or credentials", systemImage: "pencil") }
                 }
@@ -63,6 +73,11 @@ struct ServerDetailView: View {
         .sheet(isPresented: $editing, onDismiss: { Task { await load() } }) { AddServerView(editing: model.servers.first { $0.id == server.id } ?? server) }
         .refreshable { await load() }
         .task { await load(); filesURL = await FileProviderDomains.filesAppURL(server); await model.refreshHealth(server) }
+        .onAppear {
+            #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("-openSync") { DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { openSyncDebug = true } }
+            #endif
+        }
     }
 
     /// Build 42/44: the server's health at a glance — only what concerns Unraid Drive and the
@@ -105,6 +120,8 @@ struct ServerDetailView: View {
                     Button("Edit server or credentials") { editing = true }.font(.callout)
                 case .openDiagnostics:
                     NavigationLink { DiagnosticsView() } label: { Text("Open Diagnostics and log") }.font(.callout)
+                case .openSync:
+                    NavigationLink { SyncSettingsView(server: server) } label: { Text("Open Sync") }.font(.callout)
                 case .reRegister:
                     Button("Connect again") { Task { await model.registerRestoredDevices(timeout: 20); await model.refreshHealth(server) } }.font(.callout)
                 case .retryTransfers:
@@ -124,7 +141,15 @@ struct ServerDetailView: View {
         case .transfers: return "Transfers"
         case .device: return "Device registration"
         case .shares: return "Shares"
+        case .sync: return "Sync"
         }
+    }
+
+    private var syncSummary: String {
+        let pairs = SyncStore.pairs(for: server.id)
+        if pairs.isEmpty { return String(localized: "Off") }
+        let active = pairs.filter(\.isActive).count
+        return String(localized: "\(active) of \(pairs.count) active")
     }
 
     private func cpuLine(_ cpu: Dashboard.Info.CPU) -> String {

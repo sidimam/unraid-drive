@@ -44,6 +44,8 @@
 	</dict>
 	<key>NSHumanReadableCopyright</key>
 	<string>© 2026 Simone Di Mambro. MIT License.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Unraid Drive backs your photos and videos up to your Unraid server when you add a Photos backup in Settings › Profiles › Sync.</string>
 	<key>NSUbiquitousContainers</key>
 	<dict>
 		<key>iCloud.com.sdimambro.unraid-drive</key>
@@ -56,5 +58,9 @@
 			<string>One</string>
 		</dict>
 	</dict>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>com.sdimambro.unraid-drive.browse</string>
+	</array>
 </dict>
 </plist>

@@ -23,10 +23,10 @@ settings:
     DEVELOPMENT_TEAM: X5SR67A8AL
     CODE_SIGN_STYLE: Automatic
     TARGETED_DEVICE_FAMILY: "1,2,7"
-    MARKETING_VERSION: "1.4.2"
+    MARKETING_VERSION: "1.5"
     # MPVKit ships arm64-only slices for the visionOS simulator.
     "EXCLUDED_ARCHS[sdk=xrsimulator*]": x86_64
-    CURRENT_PROJECT_VERSION: "44"
+    CURRENT_PROJECT_VERSION: "45"
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     SWIFT_STRICT_CONCURRENCY: minimal
 packages:
@@ -62,6 +62,7 @@ targets:
         product: MPVKit
       - package: UnraidGatewayKit
       - target: UnraidDriveFileProvider
+      - target: UnraidDriveShare
     info:
       path: App/Info.plist
       properties:
@@ -74,7 +75,8 @@ targets:
         ITSAppUsesNonExemptEncryption: false
         NSAppTransportSecurity:
           NSAllowsLocalNetworking: true
-        UIBackgroundModes: [fetch]
+        UIBackgroundModes: [fetch, processing]
+        NSPhotoLibraryUsageDescription: Unraid Drive backs your photos and videos up to your Unraid server when you add a Photos backup in Settings › Profiles › Sync.
         UIApplicationShortcutItems:
           - UIApplicationShortcutItemType: com.sdimambro.unraid-drive.openFiles
             UIApplicationShortcutItemTitle: Open the Files app
@@ -85,7 +87,8 @@ targets:
           - UIApplicationShortcutItemType: com.sdimambro.unraid-drive.addServer
             UIApplicationShortcutItemTitle: Add server
             UIApplicationShortcutItemIconSymbolName: plus
-        BGTaskSchedulerPermittedIdentifiers: [com.sdimambro.unraid-drive.refresh]
+        BGTaskSchedulerPermittedIdentifiers: [com.sdimambro.unraid-drive.refresh, com.sdimambro.unraid-drive.sync]
+        NSUserActivityTypes: [com.sdimambro.unraid-drive.browse]
         CFBundleURLTypes:
           - CFBundleURLName: com.sdimambro.unraid-drive
             CFBundleURLSchemes: [unraiddrive]
@@ -162,6 +165,7 @@ targets:
         product: MPVKit
       - package: UnraidGatewayKit
       - target: UnraidDriveFileProviderMac
+      - target: UnraidDriveShareMac
     # Entitlements per configuration (hand-maintained files — XcodeGen only regenerates files declared
     # under `entitlements:`, and a declared file would override the per-config setting below):
     #  - Debug/Release (Mac App Store): App/UnraidDrive-macOS.entitlements — sandbox, network, app group,
@@ -244,6 +248,98 @@ targets:
           CODE_SIGN_STYLE: Manual
           CODE_SIGN_IDENTITY: Developer ID Application
           PROVISIONING_PROFILE_SPECIFIER: UnraidDrive FP Mac Developer ID
+  # 1.5: "Save to Unraid Drive" share sheet (files, images, movies, text, links → a profile + folder).
+  UnraidDriveShare:
+    type: app-extension
+    supportedDestinations: [iOS, visionOS]
+    sources:
+      - path: ShareExtension
+        excludes: ['Info.plist', 'Info-macOS.plist', 'UnraidDriveShare-macOS.entitlements']
+      - path: App/Localizable.xcstrings
+    dependencies:
+      - package: UnraidGatewayKit
+    info:
+      path: ShareExtension/Info.plist
+      properties:
+        CFBundleDisplayName: Save to Unraid Drive
+        CFBundleName: Save to Unraid Drive
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsFileWithMaxCount: 50
+              NSExtensionActivationSupportsImageWithMaxCount: 50
+              NSExtensionActivationSupportsMovieWithMaxCount: 20
+              NSExtensionActivationSupportsText: true
+              NSExtensionActivationSupportsWebURLWithMaxCount: 1
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+    entitlements:
+      path: ShareExtension/UnraidDriveShare.entitlements
+      properties:
+        com.apple.security.application-groups: [group.com.sdimambro.unraid-drive]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.sdimambro.unraid-drive.share
+        PRODUCT_MODULE_NAME: UnraidDriveShare
+        PRODUCT_NAME: UnraidDriveShare
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: Apple Distribution
+          PROVISIONING_PROFILE_SPECIFIER: UnraidDrive Share iOS AppStore
+  UnraidDriveShareMac:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: ShareExtension
+        excludes: ['Info.plist', 'Info-macOS.plist', 'UnraidDriveShare.entitlements']
+      - path: App/Localizable.xcstrings
+    dependencies:
+      - package: UnraidGatewayKit
+    info:
+      path: ShareExtension/Info-macOS.plist
+      properties:
+        CFBundleDisplayName: Save to Unraid Drive
+        CFBundleName: Save to Unraid Drive
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsFileWithMaxCount: 50
+              NSExtensionActivationSupportsImageWithMaxCount: 50
+              NSExtensionActivationSupportsMovieWithMaxCount: 20
+              NSExtensionActivationSupportsText: true
+              NSExtensionActivationSupportsWebURLWithMaxCount: 1
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+    entitlements:
+      path: ShareExtension/UnraidDriveShare-macOS.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.network.client: true
+        com.apple.security.application-groups: [group.com.sdimambro.unraid-drive]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.sdimambro.unraid-drive.share
+        PRODUCT_MODULE_NAME: UnraidDriveShare
+        PRODUCT_NAME: UnraidDriveShare
+        ENABLE_HARDENED_RUNTIME: YES
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: Apple Distribution
+          PROVISIONING_PROFILE_SPECIFIER: UnraidDrive Share Mac AppStore
+        DeveloperID:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: Developer ID Application
+          PROVISIONING_PROFILE_SPECIFIER: UnraidDrive Share Mac Developer ID
   UnraidDriveTV:
     type: application
     platform: tvOS
@@ -302,6 +398,7 @@ schemes:
       targets:
         UnraidDriveMac: all
         UnraidDriveFileProviderMac: all
+        UnraidDriveShareMac: all
     run:
       config: Debug
     test:
@@ -312,6 +409,7 @@ schemes:
       targets:
         UnraidDrive: all
         UnraidDriveFileProvider: all
+        UnraidDriveShare: all
     run:
       config: Debug
     test:

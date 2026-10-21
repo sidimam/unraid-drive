@@ -11,6 +11,7 @@
 - [7 · On the Mac](Step-7-Unraid-Drive-on-the-Mac)
 - [8 · On Apple TV](Step-8-Unraid-Drive-on-Apple-TV)
 - [Shortcuts & Siri](Shortcuts-and-Siri)
+- [Sync and backup](Sync-and-Backup)
 - [Changelog](Changelog)
 - [Alternatives](Alternatives-to-Cloudflare)
 - [Troubleshooting](Troubleshooting)

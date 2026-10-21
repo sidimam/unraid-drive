@@ -258,6 +258,7 @@ struct MenuBarPanel: View {
     enum Tab: Hashable { case home, activity }
     @EnvironmentObject private var model: ServersModel
     @EnvironmentObject private var feed: ActivityFeed
+    @ObservedObject private var sync = SyncCoordinator.shared
     @Environment(\.openWindow) private var openWindow
     @State private var tab: Tab = .home
     @State private var states: [String: LocationState] = [:]
@@ -392,6 +393,14 @@ struct MenuBarPanel: View {
                         ForEach(model.servers) { s in
                             let st = state(of: s)
                             HStack { Image(systemName: st.symbol).foregroundStyle(st.color); Text(s.name); Spacer(); Text(st.label).foregroundStyle(.secondary) }.font(.callout)
+                        }
+                    }
+                }
+                if !sync.pairs.isEmpty {
+                    card {
+                        HStack { Text("Sync").font(.headline); Spacer(); Button("Manage…") { showMainWindow(); DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { NotificationCenter.default.post(name: AppNavigation.openSettings, object: nil) } }.buttonStyle(.link) }
+                        ForEach(sync.pairs) { p in
+                            SyncPairRow(pair: p, progress: sync.progress[p.id]).font(.callout)
                         }
                     }
                 }

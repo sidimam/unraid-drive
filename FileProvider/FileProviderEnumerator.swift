@@ -30,11 +30,25 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
     private let ext: FileProviderExtension
     private let container: NSFileProviderItemIdentifier
 
+    private var refresh: Timer?
+
     init(ext: FileProviderExtension, container: NSFileProviderItemIdentifier) {
         self.ext = ext; self.container = container
+        super.init()
+        // Build 45: while a folder is on screen (Finder window, Files app), ask the system to pull
+        // its changes every 30 s, so files written straight on the NAS (downloads, other apps)
+        // appear without waiting for the gateway's directory scan or a manual refresh.
+        if container != .rootContainer, let mgr = NSFileProviderManager(for: ext.domain) {
+            let id = container
+            DispatchQueue.main.async { [weak self] in
+                self?.refresh = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in mgr.signalEnumerator(for: id) { _ in } }
+            }
+        }
     }
 
-    func invalidate() {}
+    func invalidate() {
+        DispatchQueue.main.async { [weak self] in self?.refresh?.invalidate(); self?.refresh = nil }
+    }
 
     func enumerateItems(for observer: NSFileProviderEnumerationObserver, startingAt page: NSFileProviderPage) {
         Task {
@@ -72,14 +86,21 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
                 let dirChanged = path == "/" || page.dirs.contains(path)
                 if path == "/" {
                     await ext.reconcileRoot(client: client, updated: &updated, deleted: &deleted)
-                } else if dirChanged {
-                    let listing = try await client.list(path)
-                    deleted = await ext.index.vanishedIdentifiers(in: path, current: listing.entries.map(\.name))
-                    for e in listing.entries { updated.append(await ext.makeItem(e)) }
-                    await ext.index.rememberListing(path, names: listing.entries.map(\.name))
                 } else {
-                    for f in page.files where GatewayPath.parent(f.path) == path && ext.isVisible(f.path) { updated.append(await ext.makeItem(f)) }
-                    for d in page.dirs where GatewayPath.parent(d) == path && ext.isVisible(d) {
+                    // Build 45: the folder itself is always re-listed live (one request). The feed
+                    // above learns about files written straight on the NAS only at the gateway's next
+                    // directory scan, which left an open Finder window showing a stale listing for
+                    // minutes. Only entries that are new or newer than the anchor are reported,
+                    // unless the feed says the directory changed (then everything is).
+                    let listing = try await client.list(path)
+                    let entries = ext.visibleEntries(listing.entries, in: path)
+                    let previous = await ext.index.previousListing(path) ?? []
+                    let since = Date(timeIntervalSince1970: Double(a.cursor) / 1_000_000_000)
+                    deleted = await ext.index.vanishedIdentifiers(in: path, current: entries.map(\.name))
+                    for e in entries where dirChanged || !previous.contains(e.name) || e.mtime > since { updated.append(await ext.makeItem(e)) }
+                    await ext.index.rememberListing(path, names: entries.map(\.name))
+                    // Subfolders the feed reports as changed deeper down still get their fresh stat.
+                    for d in page.dirs where GatewayPath.parent(d) == path && ext.isVisible(d) && !entries.contains(where: { $0.path == d }) {
                         if let e = try? await client.stat(d) { updated.append(await ext.makeItem(e)) }
                     }
                 }

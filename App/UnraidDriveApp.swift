@@ -61,7 +61,6 @@ struct UnraidDriveApp: App {
             RootView()
                 .environmentObject(servers)
                 .environmentObject(servers.cloud)
-                .task { await seedFromLaunchArguments() }
                 .onAppear { (Appearance(rawValue: appearance) ?? .system).applyToWindows() }
                 .onChange(of: appearance) { _, v in (Appearance(rawValue: v) ?? .system).applyToWindows() }
                 .onChange(of: iconColor) { _, _ in NavigationBarStyle.apply() }
@@ -69,9 +68,9 @@ struct UnraidDriveApp: App {
                     if phase == .active {
                         (Appearance(rawValue: appearance) ?? .system).applyToWindows()
                         AppIconColor.apply(iconColor)
-                        Task { await servers.maintainLocationsIfNeeded(); await servers.signalAllDomains(); await servers.checkHealthAndAlerts() }
+                        Task { await servers.maintainLocationsIfNeeded(); await servers.signalAllDomains(); await servers.checkHealthAndAlerts(); await SyncCoordinator.shared.runDue(trigger: "active") }
                     }
-                    if phase == .background { Self.scheduleRefresh() }
+                    if phase == .background { Self.scheduleRefresh(); Self.scheduleSync() }
                 }
                 .modifier(AppLocaleModifier(language: AppLanguage(rawValue: language) ?? .system))
                 .tint(AppIconColor.tint(for: iconColor))
@@ -91,6 +90,24 @@ struct UnraidDriveApp: App {
             await servers.checkHealthAndAlerts()
             Self.scheduleRefresh()
         }
+        // 1.5: Photos backup and Downloads sync in the background (processing task: minutes of work).
+        .backgroundTask(.appRefresh(Self.syncTaskID)) {
+            await SyncCoordinator.shared.runDue(trigger: "background")
+            Self.scheduleSync()
+        }
+        #endif
+    }
+
+    static let syncTaskID = "com.sdimambro.unraid-drive.sync"
+    /// iOS: a processing task (minutes, network, ideally on power) for Photos backups and Downloads syncs.
+    static func scheduleSync() {
+        #if os(iOS)
+        guard !SyncStore.all().filter(\.isActive).isEmpty else { return }
+        let req = BGProcessingTaskRequest(identifier: syncTaskID)
+        req.requiresNetworkConnectivity = true
+        req.requiresExternalPower = false
+        req.earliestBeginDate = Date(timeIntervalSinceNow: 30 * 60)
+        try? BGTaskScheduler.shared.submit(req)
         #endif
     }
 
@@ -102,35 +119,4 @@ struct UnraidDriveApp: App {
         #endif
     }
 
-    /// Debug builds only: `-seedServer <url> <apiKey>` adds a Direct server and `-seedDemo` the demo server without touching the UI; `-rebuildDomains` re-registers every location
-    /// (used by simulator tests against a local gateway).
-    private func seedFromLaunchArguments() async {
-        #if DEBUG
-        let args = CommandLine.arguments
-        if args.contains("-seedDemo"), !servers.hasDemo { await servers.addDemo() }
-        // `-selectShares <serverID>:<share,share>` (or `<serverID>:all`) stores a share selection (tests).
-        if let i = args.firstIndex(of: "-selectShares"), args.count > i + 1, let s = servers.servers.first(where: { $0.id == args[i + 1].split(separator: ":")[0] }) {
-            let spec = args[i + 1].split(separator: ":", maxSplits: 1).map(String.init)
-            await servers.setSelectedShares(s, spec.count > 1 && spec[1] != "all" ? spec[1].split(separator: ",").map(String.init) : nil)
-        }
-        if args.contains("-rebuildDomains") { for s in servers.servers { try? await FileProviderDomains.rebuild(s) } }
-        if args.contains("-testIntent") {
-            do {
-                let intent = SaveClipboardIntent(); intent.server = ServerStore().all().first { $0.isDemo }.map(ServerEntity.init)
-                intent.folder = "documents"; intent.fileName = "Intent test {date}"
-                let r = try await intent.perform(); NSLog("intent result: %@", String(describing: r.value ?? ""))
-                let l = ListFolderIntent(); l.server = intent.server; l.folder = "documents"
-                NSLog("list: %@", String(describing: try await l.perform().value ?? []))
-            } catch { NSLog("intent failed: %@", error.localizedDescription) }
-        }
-        #if os(macOS)
-        if args.contains("-evictAll") {   // test hook for the "Free up space" path
-            for s in servers.servers { let n = await MaterializedItems.evictAll(for: FileProviderDomains.domain(for: s)); NSLog("evicted %d items for %@", n, s.name) }
-        }
-        #endif
-        guard let i = args.firstIndex(of: "-seedServer"), args.count > i + 2, let url = URL(string: args[i + 1]) else { return }
-        guard !servers.servers.contains(where: { $0.url == url }) else { return }
-        _ = try? await servers.add(name: "Local test", url: url, apiKey: args[i + 2], cloudflare: nil)
-        #endif
-    }
 }

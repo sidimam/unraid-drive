@@ -22,6 +22,10 @@ final class ServersModel: ObservableObject {
         cloud.onRemoteChange = { [weak self] in await self?.reloadAndRegisterDomains() }
         if cloud.enabled { Task { await cloud.pull() } }
         Task { await maintainLocationsIfNeeded() }
+        #if DEBUG
+        // Launch-argument seeding runs here (not in a view): on the Mac the window may never appear.
+        Task { await seedFromLaunchArguments() }
+        #endif
     }
 
     /// After servers arrived from iCloud: reload and make sure each has a Files app location.
@@ -206,6 +210,15 @@ final class ServersModel: ObservableObject {
         let failed = ActivityLog.recent().filter { $0.serverID == server.id && $0.failed && $0.date > dayAgo }
         if !failed.isEmpty {
             issues.append(.init(.warning, .transfers, String(localized: "\(failed.count) failed transfer(s) in the last 24 hours (last: \(failed[0].name))"), action: .openDiagnostics))
+        }
+        // Sync pairs (1.5): a pair paused on the gateway or whose last run failed / had problems.
+        for p in SyncStore.pairs(for: server.id) {
+            if let by = p.pausedByGateway {
+                issues.append(.init(.warning, .sync, String(localized: "Sync \(p.localLabel) paused on the gateway by \(by)."), action: .openSync))
+            } else if p.enabled, let r = p.lastRun {
+                if r.status == .failed { issues.append(.init(.error, .sync, String(localized: "Sync \(p.localLabel) failed: \(r.error ?? "")"), action: .openSync)) }
+                else if r.status == .partial { issues.append(.init(.warning, .sync, String(localized: "Sync \(p.localLabel): \(r.conflicts) conflicts, \(r.errors) errors at the last run."), action: .openSync)) }
+            }
         }
         // Device registration (restore from iCloud still waiting for the secrets / failed).
         if let r = restoreRegistration[server.id] {
@@ -405,6 +418,64 @@ enum FileProviderDomains {
         return try? await mgr.getUserVisibleURL(for: .rootContainer)
         #else
         URL(string: "shareddocuments://")
+        #endif
+    }
+}
+
+extension ServersModel {
+    /// Debug builds only: `-seedServer <url> <apiKey>` adds a Direct server and `-seedDemo` the demo server without touching the UI; `-rebuildDomains` re-registers every location
+    /// (used by simulator tests against a local gateway).
+    func seedFromLaunchArguments() async {
+        #if DEBUG
+        let args = CommandLine.arguments
+        if args.contains("-seedDemo"), !hasDemo { await addDemo() }
+        // `-selectShares <serverID>:<share,share>` (or `<serverID>:all`) stores a share selection (tests).
+        if let i = args.firstIndex(of: "-selectShares"), args.count > i + 1, let s = servers.first(where: { $0.id == args[i + 1].split(separator: ":")[0] }) {
+            let spec = args[i + 1].split(separator: ":", maxSplits: 1).map(String.init)
+            await setSelectedShares(s, spec.count > 1 && spec[1] != "all" ? spec[1].split(separator: ",").map(String.init) : nil)
+        }
+        if args.contains("-rebuildDomains") { for s in servers { try? await FileProviderDomains.rebuild(s) } }
+        if args.contains("-testIntent") {
+            do {
+                let intent = SaveClipboardIntent(); intent.server = ServerStore().all().first { $0.isDemo }.map(ServerEntity.init)
+                intent.folder = "documents"; intent.fileName = "Intent test {date}"
+                let r = try await intent.perform(); NSLog("intent result: %@", String(describing: r.value ?? ""))
+                let l = ListFolderIntent(); l.server = intent.server; l.folder = "documents"
+                NSLog("list: %@", String(describing: try await l.perform().value ?? []))
+            } catch { NSLog("intent failed: %@", error.localizedDescription) }
+        }
+        #if os(macOS)
+        if args.contains("-evictAll") {   // test hook for the "Free up space" path
+            for s in servers { let n = await MaterializedItems.evictAll(for: FileProviderDomains.domain(for: s)); NSLog("evicted %d items for %@", n, s.name) }
+        }
+        #endif
+        if let i = args.firstIndex(of: "-seedServer"), args.count > i + 2, let url = URL(string: args[i + 1]), !servers.contains(where: { $0.url == url }) {
+            _ = try? await add(name: "Local test", url: url, apiKey: args[i + 2], cloudflare: nil)
+        }
+        // `-seedSync <localFolder> <remotePath> [mode]`: creates (once) a folder pair on the first non-demo
+        // server and runs it — the automated regression of the sync engine against a local gateway.
+        // `-removeSync <remotePath>`: drops the pair created by -seedSync (app and gateway) — test cleanup.
+        if let i = args.firstIndex(of: "-removeSync"), args.count > i + 1 {
+            for p in SyncStore.all() where p.remotePath == args[i + 1] { await SyncCoordinator.shared.remove(p); Diag.info("sync", "-removeSync: removed \(p.id)") }
+        }
+        if let i = args.firstIndex(of: "-seedSync"), args.count > i + 2, let s = servers.first(where: { !$0.isDemo }) {
+            var local = URL(fileURLWithPath: args[i + 1]), remote = args[i + 2]
+            // `@container`: a sample folder inside the app's sandbox (the shell cannot write there, the sandboxed app can).
+            if args[i + 1] == "@container", let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
+                local = base.appendingPathComponent("synctest", isDirectory: true)
+                try? FileManager.default.createDirectory(at: local.appendingPathComponent("sub"), withIntermediateDirectories: true)
+                try? "from the \(SyncCoordinator.deviceTag) \(Date())".write(to: local.appendingPathComponent("hello.txt"), atomically: true, encoding: .utf8)
+                try? "deep".write(to: local.appendingPathComponent("sub/deep.txt"), atomically: true, encoding: .utf8)
+            }
+            let bm = try? SyncPair.bookmark(for: local)
+            if bm == nil { Diag.error("sync", "-seedSync: cannot bookmark \(local.path) (sandbox?)") }
+            if !SyncStore.pairs(for: s.id).contains(where: { $0.remotePath == remote }), let bm {
+                var p = SyncPair(serverID: s.id, kind: .folder, localLabel: local.path, localBookmark: bm, remotePath: remote, mode: SyncMode(rawValue: args.count > i + 3 ? args[i + 3] : "both") ?? .both)
+                p.schedule = .manual
+                await SyncCoordinator.shared.save(p)
+            }
+            if let p = SyncStore.pairs(for: s.id).first(where: { $0.remotePath == remote }) { await SyncCoordinator.shared.run(p, trigger: "manual") }
+        }
         #endif
     }
 }

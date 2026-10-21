@@ -14,6 +14,8 @@
 		<string>UnraidDrive Mac AppStore</string>
 		<key>com.sdimambro.unraid-drive.fileprovider</key>
 		<string>UnraidDrive FP Mac AppStore</string>
+		<key>com.sdimambro.unraid-drive.share</key>
+		<string>UnraidDrive Share Mac AppStore</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>3rd Party Mac Developer Application</string>
