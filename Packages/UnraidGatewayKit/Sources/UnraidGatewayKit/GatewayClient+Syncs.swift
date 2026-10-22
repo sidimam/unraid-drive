@@ -20,6 +20,7 @@ public extension GatewayClient {
         req.httpBody = try JSONSerialization.data(withJSONObject: [
             "kind": pair.kind.rawValue, "localLabel": pair.localLabel, "remotePath": pair.remotePath,
             "mode": pair.mode.rawValue, "enabled": pair.enabled,
+            "conflicts": pair.conflicts.rawValue, "hashCheck": pair.hashCheck,
         ])
         let (data, _) = try await authorized(req)
         return try decode(RemoteSync.self, data)

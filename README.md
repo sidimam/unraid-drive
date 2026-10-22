@@ -65,6 +65,8 @@ After the first launch enable the extension under System Settings › General �
 
 ## What's new
 
+**1.5.1 (build 46):** sync conflicts between your own devices solved with a quick content fingerprint (same bytes → nothing moves, no conflict), the *This device wins* rule (also for Downloads sync), the File Provider stops re-signing-in at every item and caches its session in the Keychain. Needs unraid-gateway 0.16 for the fingerprint (older gateways: old behaviour).
+
 **1.5 (build 45):** folder sync on the Mac and Photos backup on every device (plus Downloads sync on iPhone/iPad/Vision Pro), registered on the gateway and pausable from its web UI; the *Save to Unraid Drive* share extension; Handoff and "open where I left off"; the Finder shows new NAS files within seconds.
 
 **1.4.2 (build 44):** the health dot concerns only Unraid Drive and its gateway (gateway checks, credentials, Files/Finder location, failed transfers, device registration), each reason listed with its fix; Mac menu bar panel aligned; selection circles on the Mac; no walkthrough when a profile exists; New folder and Recent destinations in the move/copy picker.

@@ -23,3 +23,15 @@ Every pair is registered on the gateway (kind, local label, Unraid folder, direc
 
 ## Continuity
 Handoff: the folder you are browsing appears on your other devices (Dock on the Mac, app switcher on iPhone/iPad). *Settings › iCloud › Open where I left off on another device* opens, at launch, the folder another device opened in the last hour.
+
+### Two devices, one Unraid folder (1.5.1)
+
+Your iPhone and your iPad may both send their Downloads (or any folder) to the same Unraid folder. A file the other device already uploaded shows up on both sides with different dates — in 1.5 that was a conflict. Since 1.5.1 the engine first compares a **quick content fingerprint** with the gateway (unraid-gateway 0.16: first and last MiB plus the size; whole file under 2 MiB): same bytes → recorded as in sync, nothing transferred, no conflict. Turn it off per pair with *Skip identical files (quick checksum)* if you ever need to. Files that really differ follow the pair's rule:
+
+- *Newest wins* — the most recent copy replaces the other (in a one-way pair, a newer copy on the side the pair never writes to is just kept);
+- *This device wins (overwrite)* — this device's copy always replaces the Unraid one (Unraid → device pairs: Unraid wins);
+- *Keep both (rename)* — your copy becomes `name (iPhone).ext` on both sides, the Unraid copy keeps the name;
+- *Keep the existing copy* — nothing moves;
+- *Ask me* — the conflict is recorded in *Recent files* and nothing is touched.
+
+The rule and the fingerprint flag are registered on the gateway and shown in its web UI (Users › user › syncs), so you can see how each device behaves on a shared folder.

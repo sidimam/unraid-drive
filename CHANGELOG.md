@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.5.1 (build 46) — 2026-10-22
+
+Two devices on the same folder, and a File Provider that stops knocking.
+
+- **Sync conflicts between your own devices.** An iPhone and an iPad (or any two devices of the same user) can sync into the same Unraid folder. Before deciding anything about a file that exists on both sides, the engine now compares a **quick content fingerprint** with the gateway (unraid-gateway 0.16 `/fs/hash`: first and last MiB plus the size, whole file under 2 MiB): same bytes → the file is recorded as in sync and **nothing is transferred, no conflict is raised**, whatever the dates say. Only files that really differ follow the pair's rule. The check is on by default (*Skip identical files (quick checksum)* in the pair's settings) and falls back silently to the old behaviour with an older gateway.
+- **New rule: "This device wins (overwrite)"** — its copy replaces the Unraid one (in an Unraid → device pair, Unraid wins). The rule picker is now available for **Downloads sync** too, not only for folder pairs. *Newest wins* in a one-way pair no longer pulls the Unraid copy into a device → Unraid pair (nor pushes into an Unraid → device one): the newer copy on the side the pair never writes to is simply kept and recorded.
+- **The gateway shows the rule**: each pair is registered with its conflict policy and fingerprint flag; the web UI prints them in the sync cards (user and device detail), so you can see from the server how each device resolves a clash on the same folder.
+- **File Provider: no more sign-in storm.** The extension signed in to the gateway again for every single item it listed when the session had no per-share permissions (API-key-only profiles): one *Sign-in* every 3–6 seconds in the gateway log, 500+ "logins" per device. Fixed: the extension logs in once per process, and the **session is now cached in the Keychain** (token, user, share permissions, this device only, invalidated when the API key changes) so a relaunched extension or the app reuses it instead of logging in again; a 401 still triggers one transparent re-login. Together with unraid-gateway 0.15/0.16, the device log and the Logins counter now count sessions, not requests.
+- Kit: `GatewayClient.fingerprint(_:quick:)`, `QuickFingerprint.md5(of:)` (same bytes as the gateway's `Fingerprint()`), `SessionCache` / `CachedSession`, `permissionsKnown`; `SyncPair.hashCheck` (default on, pairs saved by 1.5 decode fine). Tests: fingerprint layout, legacy pair decoding, two-device sync against a local gateway.
+
 ## 1.5 (build 45) — 2026-10-21
 
 Your folders and photos, kept on Unraid — and the gateway knows about it.

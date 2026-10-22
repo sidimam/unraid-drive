@@ -153,6 +153,7 @@ struct SyncPairEditorView: View {
     @State private var remotePath: String
     @State private var mode: SyncMode
     @State private var conflicts: ConflictPolicy
+    @State private var hashCheck: Bool
     @State private var deletions: DeletionPolicy
     @State private var schedule: SyncSchedule
     @State private var excludes: String
@@ -175,6 +176,7 @@ struct SyncPairEditorView: View {
         _remotePath = State(initialValue: pair?.remotePath ?? "")
         _mode = State(initialValue: pair?.mode ?? .up)
         _conflicts = State(initialValue: pair?.conflicts ?? .newest)
+        _hashCheck = State(initialValue: pair?.hashCheck ?? true)
         _deletions = State(initialValue: pair?.deletions ?? .keep)
         _schedule = State(initialValue: pair?.schedule ?? .continuous)
         _excludes = State(initialValue: (pair?.excludes ?? []).joined(separator: ", "))
@@ -208,17 +210,27 @@ struct SyncPairEditorView: View {
                 if kind == .photos { Text("Originals of photos and videos (RAW, HEIC, both halves of a Live Photo) are copied into year/month folders under the Unraid folder, with an albums.json listing your albums. Nothing is ever deleted on Unraid.") }
                 else if kind == .downloads { Text("Files that appear in the chosen folder are sent to Unraid. Pick the Downloads folder of this device (or any folder you like).") }
             }
-            if kind == .folder {
+            if kind != .photos {
                 Section {
-                    Picker("Direction", selection: $mode) {
-                        ForEach(SyncMode.allCases, id: \.self) { m in Text(modeTitle(m)).tag(m) }
+                    if kind == .folder {
+                        Picker("Direction", selection: $mode) {
+                            ForEach(SyncMode.allCases, id: \.self) { m in Text(modeTitle(m)).tag(m) }
+                        }
                     }
                     Picker("When a file changed on both sides", selection: $conflicts) {
                         Text("Newest wins").tag(ConflictPolicy.newest)
+                        Text("This device wins (overwrite)").tag(ConflictPolicy.overwrite)
                         Text("Keep both (rename)").tag(ConflictPolicy.keepBoth)
                         Text("Keep the existing copy").tag(ConflictPolicy.keepExisting)
                         Text("Ask me").tag(ConflictPolicy.ask)
                     }
+                    Toggle("Skip identical files (quick checksum)", isOn: $hashCheck)
+                } footer: {
+                    Text("Two devices (an iPhone and an iPad, say) can sync into the same Unraid folder: the checksum recognises a file the other device already uploaded and skips it, whatever its date. Only files that really differ follow the rule above.")
+                }
+            }
+            if kind == .folder {
+                Section {
                     Picker("Deleted files", selection: $deletions) {
                         Text("Keep them on the other side").tag(DeletionPolicy.keep)
                         Text("Delete on the other side too").tag(DeletionPolicy.mirror)
@@ -292,7 +304,7 @@ struct SyncPairEditorView: View {
         var p = pair ?? SyncPair(serverID: server.id, kind: kind, localLabel: localLabel, remotePath: remotePath)
         p.kind = kind; p.localLabel = kind == .photos ? String(localized: "Photos library") : localLabel; p.localBookmark = kind == .photos ? nil : bookmark
         p.remotePath = GatewayPath.clean(remotePath); p.mode = kind == .folder ? mode : .up
-        p.conflicts = conflicts; p.deletions = deletions; p.schedule = schedule; p.wifiOnly = wifiOnly
+        p.conflicts = conflicts; p.hashCheck = hashCheck; p.deletions = deletions; p.schedule = schedule; p.wifiOnly = wifiOnly
         p.excludes = excludes.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
         if kind == .photos, !(await PhotosBackup.authorize()) {
             error = String(localized: "Photos access is not allowed: enable it in Settings › Privacy › Photos."); return

@@ -95,8 +95,8 @@ public struct LoginResponse: Codable, Sendable {
 }
 
 /// Per-share access as reported by the gateway for the logged-in user.
-public enum ShareAccess: Sendable, Equatable {
-    case readWrite, readOnly
+public enum ShareAccess: String, Codable, Sendable, Equatable {
+    case readWrite = "rw", readOnly = "ro"
     public init?(_ s: String) {
         switch s { case "rw": self = .readWrite; case "ro": self = .readOnly; default: return nil }
     }

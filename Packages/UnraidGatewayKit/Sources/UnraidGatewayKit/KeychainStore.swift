@@ -104,9 +104,23 @@ public struct KeychainStore: Sendable {
     /// True when at least the API key of the server is readable right now.
     public func hasSecrets(for serverID: String) -> Bool { get(account: serverID) != nil }
 
+    // MARK: Cached gateway session (1.5.1) — this device only, never synchronised
+
+    public func set(session: CachedSession, for serverID: String) {
+        guard let data = try? JSONEncoder().encode(session), let text = String(data: data, encoding: .utf8) else { return }
+        try? set(text, account: serverID + ".session", synchronizable: false)
+    }
+    public func session(for serverID: String) -> CachedSession? {
+        guard let text = get(account: serverID + ".session") else { return nil }
+        return try? JSONDecoder().decode(CachedSession.self, from: Data(text.utf8))
+    }
+    public func removeSession(for serverID: String) {
+        SecItemDelete(query(serverID + ".session", synchronizable: false) as CFDictionary)
+    }
+
     // MARK: Plumbing
 
-    private func accounts(_ serverID: String) -> [String] { [serverID, serverID + ".cf-id", serverID + ".cf-secret", serverID + ".user", serverID + ".pass"] }
+    private func accounts(_ serverID: String) -> [String] { [serverID, serverID + ".cf-id", serverID + ".cf-secret", serverID + ".user", serverID + ".pass", serverID + ".session"] }
 
     private func query(_ account: String, synchronizable: Bool) -> [String: Any] {
         [

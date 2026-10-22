@@ -198,7 +198,9 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
         // Share permissions come from the last login (per-user gateways); unknown → writable.
         var readOnly = false
         if let client, let share = entry.path.split(separator: "/").first {
-            if await client.sharePermissions == nil { _ = try? await client.login() }
+            // 1.5.1: log in only when the permissions are unknown — an unrestricted session has
+            // `sharePermissions == nil` and the old test re-authenticated on every single item.
+            if await !client.permissionsKnown { _ = try? await client.login() }
             readOnly = await client.access(forShare: String(share)) == .readOnly
         }
         return FileProviderItem(entry: entry, identifier: id, parent: parent, readOnly: readOnly)

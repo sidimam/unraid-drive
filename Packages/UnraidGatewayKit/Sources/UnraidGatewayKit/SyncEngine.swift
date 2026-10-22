@@ -82,6 +82,7 @@ public actor SyncEngine {
 
         // 3. Plan.
         var actions: [Action] = []
+        var identical = 0
         for d in localDirs where !remoteDirs.contains(d) && canUp { actions.append(.mkdirRemote(d)) }
         for d in remoteDirs where !localDirs.contains(d) && canDown { actions.append(.mkdirLocal(d)) }
         let all = Set(localFiles.keys).union(remoteFiles.keys).union(state.entries.keys)
@@ -111,6 +112,11 @@ public actor SyncEngine {
                     state.entries[rel] = .init(localMtime: l.mtime, localSize: l.size, remoteEtag: r.etag, remoteMtime: r.mtime, remoteSize: r.size)
                 } else if !localChanged && !remoteChanged {
                     continue
+                } else if (s == nil || (localChanged && remoteChanged)), l.size == r.size, pair.hashCheck, await sameContent(l, remotePath: remote(rel)) {
+                    // Same bytes on both sides (another device of this user uploaded it, or the dates
+                    // differ for no reason): record it as in sync, move nothing, raise no conflict (1.5.1).
+                    state.entries[rel] = .init(localMtime: l.mtime, localSize: l.size, remoteEtag: r.etag, remoteMtime: r.mtime, remoteSize: r.size)
+                    identical += 1
                 } else if localChanged && !remoteChanged {
                     actions.append(canUp ? .upload(rel) : .conflict(rel))
                 } else if remoteChanged && !localChanged {
@@ -178,6 +184,7 @@ public actor SyncEngine {
             done += 1
         }
         summary.bytes = bytes
+        if identical > 0 { Diag.info("sync", "\(pair.localLabel): \(identical) file(s) already identical on Unraid, skipped") }
         SyncStore.saveState(pair.id, state)
         if summary.status != .partial { summary.status = summary.errors > 0 ? (summary.files > 0 ? .partial : .failed) : .ok }
         if summary.errors > 0, summary.error == nil { summary.error = records.first { $0.outcome == .failed }?.detail }
@@ -231,6 +238,15 @@ public actor SyncEngine {
         return (files, dirs)
     }
 
+    /// True when the local file and the Unraid file have the same quick fingerprint. Any failure
+    /// (older gateway without `/fs/hash`, unreadable file) means "unknown" → false, so the normal
+    /// conflict handling applies.
+    private func sameContent(_ l: LocalItem, remotePath: String) async -> Bool {
+        guard let local = try? QuickFingerprint.md5(of: l.url) else { return false }
+        guard let remote = try? await client.fingerprint(remotePath, quick: true) else { return false }
+        return remote.quick && remote.algo == "md5" && remote.hash == local
+    }
+
     private func ensureRemoteRoot() async throws {
         do { _ = try await client.stat(pair.remotePath) } catch GatewayError.notFound {
             guard pair.mode != .down else { throw Failure.remoteFolderUnavailable(pair.remotePath) }
@@ -270,17 +286,34 @@ public actor SyncEngine {
             // Whatever is at the destination of the pair's direction stays; two-way keeps both as they are.
             state.entries[rel] = .init(localMtime: l.mtime, localSize: l.size, remoteEtag: r.etag, remoteMtime: r.mtime, remoteSize: r.size)
             return ([.init(path: path, direction: .conflict, outcome: .skipped, detail: "kept existing copies")], 0)
+        case .overwrite:
+            // This device wins. In an Unraid → device pair the only possible winner is Unraid.
+            if pair.mode != .down {
+                let e = try await client.upload(fileURL: l.url, to: path, overwrite: true, mtime: l.mtime)
+                state.entries[rel] = .init(localMtime: l.mtime, localSize: l.size, remoteEtag: e.etag, remoteMtime: e.mtime, remoteSize: e.size)
+                return ([.init(path: path, direction: .up, bytes: l.size, outcome: .ok, detail: "\(deviceTag) wins (overwrite)")], l.size)
+            }
+            try await downloadInto(l.url, remotePath: path, mtime: r.mtime)
+            let (m, sz) = Self.attrs(l.url)
+            state.entries[rel] = .init(localMtime: m, localSize: sz, remoteEtag: r.etag, remoteMtime: r.mtime, remoteSize: r.size)
+            return ([.init(path: path, direction: .down, bytes: r.size, outcome: .ok, detail: "Unraid wins (overwrite)")], r.size)
         case .newest:
-            if l.mtime >= r.mtime, pair.mode != .down {
+            let localWins = l.mtime >= r.mtime
+            if localWins, pair.mode != .down {
                 let e = try await client.upload(fileURL: l.url, to: path, overwrite: true, mtime: l.mtime)
                 state.entries[rel] = .init(localMtime: l.mtime, localSize: l.size, remoteEtag: e.etag, remoteMtime: e.mtime, remoteSize: e.size)
                 return ([.init(path: path, direction: .up, bytes: l.size, outcome: .ok, detail: "newest wins (\(deviceTag))")], l.size)
-            } else {
+            }
+            if !localWins, pair.mode != .up {
                 try await downloadInto(l.url, remotePath: path, mtime: r.mtime)
                 let (m, sz) = Self.attrs(l.url)
                 state.entries[rel] = .init(localMtime: m, localSize: sz, remoteEtag: r.etag, remoteMtime: r.mtime, remoteSize: r.size)
                 return ([.init(path: path, direction: .down, bytes: r.size, outcome: .ok, detail: "newest wins (Unraid)")], r.size)
             }
+            // One-way pair and the newest copy is on the side we never write to: keep it, move nothing
+            // (1.5 used to pull the Unraid copy into a device → Unraid pair).
+            state.entries[rel] = .init(localMtime: l.mtime, localSize: l.size, remoteEtag: r.etag, remoteMtime: r.mtime, remoteSize: r.size)
+            return ([.init(path: path, direction: .conflict, outcome: .skipped, detail: localWins ? "newer on \(deviceTag), pair is Unraid → device: kept" : "newer on Unraid, pair is device → Unraid: kept")], 0)
         case .keepBoth:
             // The local copy becomes "name (<device>).ext" on both sides; the Unraid copy takes the original name on both sides.
             let ext = (rel as NSString).pathExtension

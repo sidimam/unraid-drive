@@ -26329,6 +26329,126 @@
           }
         }
       }
+    },
+    "This device wins (overwrite)": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vince questo dispositivo (sovrascrivi)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gana este dispositivo (sobrescribir)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cet appareil gagne (écraser)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Gerät gewinnt (überschreiben)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此设备优先（覆盖）"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هذا الجهاز يفوز (استبدال)"
+          }
+        }
+      }
+    },
+    "Skip identical files (quick checksum)": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salta i file identici (checksum rapido)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omitir archivos idénticos (suma de verificación rápida)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ignorer les fichiers identiques (somme de contrôle rapide)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identische Dateien überspringen (schnelle Prüfsumme)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "跳过相同文件（快速校验）"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تخطي الملفات المتطابقة (مجموع تحقق سريع)"
+          }
+        }
+      }
+    },
+    "Two devices (an iPhone and an iPad, say) can sync into the same Unraid folder: the checksum recognises a file the other device already uploaded and skips it, whatever its date. Only files that really differ follow the rule above.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Due dispositivi (per esempio un iPhone e un iPad) possono sincronizzare la stessa cartella di Unraid: il checksum riconosce un file già caricato dall'altro dispositivo e lo salta, qualunque sia la data. Solo i file davvero diversi seguono la regola qui sopra."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dos dispositivos (un iPhone y un iPad, por ejemplo) pueden sincronizar la misma carpeta de Unraid: la suma de verificación reconoce un archivo que el otro dispositivo ya subió y lo omite, sea cual sea su fecha. Solo los archivos realmente distintos siguen la regla de arriba."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deux appareils (un iPhone et un iPad, par exemple) peuvent synchroniser le même dossier Unraid : la somme de contrôle reconnaît un fichier déjà envoyé par l'autre appareil et l'ignore, quelle que soit sa date. Seuls les fichiers vraiment différents suivent la règle ci-dessus."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zwei Geräte (etwa ein iPhone und ein iPad) können in denselben Unraid-Ordner synchronisieren: die Prüfsumme erkennt eine Datei, die das andere Gerät bereits hochgeladen hat, und überspringt sie, egal welches Datum sie trägt. Nur wirklich unterschiedliche Dateien folgen der Regel oben."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "两台设备（例如 iPhone 和 iPad）可以同步到同一个 Unraid 文件夹：校验和能识别另一台设备已上传的文件并跳过它，无论日期如何。只有真正不同的文件才按上面的规则处理。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يمكن لجهازين (آيفون وآيباد مثلاً) المزامنة إلى مجلد Unraid نفسه: يتعرّف مجموع التحقق على ملف رفعه الجهاز الآخر مسبقًا ويتخطاه مهما كان تاريخه. الملفات المختلفة فعلاً فقط تتبع القاعدة أعلاه."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

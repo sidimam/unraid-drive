@@ -47,6 +47,32 @@ final class SyncEngineTests: XCTestCase {
         return try String(contentsOf: tmp, encoding: .utf8)
     }
 
+    /// Two devices of the same user sync into the same Unraid folder: the second one finds the file
+    /// already there with another date — same bytes → recorded as in sync, nothing moved, no conflict (1.5.1).
+    func testIdenticalFileFromAnotherDeviceIsSkipped() async throws {
+        let p = try pair(mode: .up, conflicts: .ask)
+        let up = FileManager.default.temporaryDirectory.appendingPathComponent("other-device-\(UUID().uuidString)")
+        try "SAME BYTES".write(to: up, atomically: true, encoding: .utf8)
+        _ = try await client.mkdir(remote, parents: true)
+        _ = try await client.upload(fileURL: up, to: remote + "/photo.jpg", mtime: Date().addingTimeInterval(-86400))
+        try write("photo.jpg", "SAME BYTES", mtime: Date())
+        var (run, files) = await SyncEngine(client: client, pair: p, deviceTag: "Test").run(trigger: "manual")
+        XCTAssertEqual(run.conflicts, 0, "identical content must not be a conflict")
+        XCTAssertEqual(run.files, 0); XCTAssertTrue(files.isEmpty)
+        // A real difference with the same size on BOTH sides follows the policy (ask → recorded as a conflict);
+        // a change on this device alone is just an upload, as before.
+        try "SAME BYTEZ".write(to: up, atomically: true, encoding: .utf8)
+        _ = try await client.upload(fileURL: up, to: remote + "/photo.jpg", mtime: Date().addingTimeInterval(30))
+        try write("photo.jpg", "SAME BYTEX", mtime: Date().addingTimeInterval(60))
+        (run, files) = await SyncEngine(client: client, pair: p, deviceTag: "Test").run(trigger: "manual")
+        XCTAssertEqual(run.conflicts, 1)
+        // "This device wins" pushes it.
+        var q = p; q.conflicts = .overwrite
+        (run, files) = await SyncEngine(client: client, pair: q, deviceTag: "Test").run(trigger: "manual")
+        XCTAssertEqual(run.errors, 0, run.error ?? "")
+        let r = try await remoteText("photo.jpg"); XCTAssertEqual(r, "SAME BYTEX")
+    }
+
     func testUploadDownloadDeleteAndConflicts() async throws {
         let p = try pair(mode: .both, conflicts: .newest, deletions: .mirror)
         try write("a.txt", "A1")

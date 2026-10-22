@@ -25,6 +25,12 @@ public actor GatewayClient {
     /// Share permissions of the last login (nil when the session is unrestricted).
     public private(set) var sharePermissions: [String: ShareAccess]?
     public private(set) var currentUser: String?
+    /// True once a login (or a restored session) told us the share permissions — also when they are
+    /// unrestricted (nil). Callers used to test `sharePermissions == nil` and re-logged in forever (1.5.1).
+    public private(set) var permissionsKnown = false
+    /// Where the session survives the process (the File Provider extension is relaunched by the
+    /// system all the time): the token, user and share permissions of the last login. Nil = memory only.
+    private let sessionCache: SessionCache?
 
     /// Uploads larger than this use the resumable protocol.
     public private(set) var resumableThreshold: Int64 = 16 * 1024 * 1024
@@ -35,12 +41,20 @@ public actor GatewayClient {
     /// - Parameters:
     ///   - username/password: optional Unraid user; the gateway then applies that user's share permissions.
     ///   - extraHeaders: sent on every request, e.g. a Cloudflare Access service token.
-    public init(baseURL: URL, apiKey: String, username: String? = nil, password: String? = nil, extraHeaders: [String: String] = [:], session: URLSession? = nil) {
+    public init(baseURL: URL, apiKey: String, username: String? = nil, password: String? = nil, extraHeaders: [String: String] = [:], session: URLSession? = nil, sessionCache: SessionCache? = nil) {
         self.baseURL = baseURL
         self.apiKey = apiKey
         self.username = (username?.isEmpty ?? true) ? nil : username
         self.password = password
         self.extraHeaders = extraHeaders
+        self.sessionCache = sessionCache
+        if let cached = sessionCache?.load(), cached.apiKeyHash == SessionCache.hash(apiKey) {
+            token = cached.token
+            currentUser = cached.user
+            sharePermissions = cached.shares
+            permissionsKnown = true
+            Diag.debug("gateway", "session restored for \(baseURL.host ?? "?") (user \(cached.user ?? "-"))")
+        }
         if let session {
             self.session = session
         } else {
@@ -116,6 +130,8 @@ public actor GatewayClient {
         } else {
             sharePermissions = nil
         }
+        permissionsKnown = true
+        sessionCache?.save(.init(token: login.token, user: login.user, shares: sharePermissions, apiKeyHash: SessionCache.hash(apiKey)))
         return login
     }
 
@@ -131,6 +147,14 @@ public actor GatewayClient {
         req.setValue("Bearer \(t)", forHTTPHeaderField: "Authorization")
         _ = try? await session.data(for: req)
         token = nil
+        sessionCache?.clear()
+    }
+
+    /// Content fingerprint of a file (gateway 0.16+ `GET /fs/hash`): quick = head + tail + size, else the
+    /// whole file. `GatewayError.notFound` with an older gateway (the route does not exist).
+    public func fingerprint(_ path: String, quick: Bool = true, algo: String = "md5") async throws -> FileFingerprint {
+        let (data, _) = try await authorized(get("/api/v1/fs/hash", [URLQueryItem(name: "path", value: path), URLQueryItem(name: "quick", value: quick ? "1" : "0"), URLQueryItem(name: "algo", value: algo)]))
+        return try decode(FileFingerprint.self, data)
     }
 
     public func list(_ path: String, hidden: Bool = false) async throws -> ListResponse {
@@ -376,7 +400,7 @@ public actor GatewayClient {
         req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
         let (data, resp) = try await perform(req)
         if (resp as? HTTPURLResponse)?.statusCode == 401 {
-            token = nil
+            token = nil; sessionCache?.clear()
             req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
             let (d2, r2) = try await perform(req)
             try Self.check(r2, d2)
@@ -397,7 +421,7 @@ public actor GatewayClient {
         }
         var (data, resp) = try await send(req)
         if (resp as? HTTPURLResponse)?.statusCode == 401 {
-            token = nil
+            token = nil; sessionCache?.clear()
             req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
             (data, resp) = try await send(req)
         }
@@ -413,7 +437,7 @@ public actor GatewayClient {
         }
         var (tmp, resp) = try await send(req)
         if (resp as? HTTPURLResponse)?.statusCode == 401 {
-            token = nil
+            token = nil; sessionCache?.clear()
             req.setValue("Bearer \(try await ensureToken())", forHTTPHeaderField: "Authorization")
             (tmp, resp) = try await send(req)
         }

@@ -25,6 +25,8 @@ public enum ConflictPolicy: String, Codable, Sendable, CaseIterable {
     case keepBoth    // keep both, the loser renamed "name (Mac).ext" / "name (Unraid).ext"
     case keepExisting // keep the copy already at the destination, skip
     case ask         // record the conflict, touch nothing until the user decides
+    /// This device wins: its copy replaces the Unraid one (Unraid → device pairs: the Unraid copy replaces the local one).
+    case overwrite
 }
 
 /// What to do with files deleted on one side.
@@ -53,6 +55,10 @@ public struct SyncPair: Codable, Identifiable, Hashable, Sendable {
     public var remotePath: String
     public var mode: SyncMode
     public var conflicts: ConflictPolicy
+    /// Before deciding a conflict (or at the first meeting of a file present on both sides), compare a quick
+    /// content fingerprint (gateway 0.16 `/fs/hash`): identical files are recorded as in sync and skipped,
+    /// whatever their dates. Two devices syncing into the same Unraid folder then never fight over the same file.
+    public var hashCheck: Bool
     public var deletions: DeletionPolicy
     public var schedule: SyncSchedule
     /// Patterns (glob-ish, case-insensitive) never synced; `.DS_Store` and `.gwpart` always are.
@@ -68,7 +74,31 @@ public struct SyncPair: Codable, Identifiable, Hashable, Sendable {
                 conflicts: ConflictPolicy = .newest, deletions: DeletionPolicy = .keep, schedule: SyncSchedule = .continuous, excludes: [String] = [], wifiOnly: Bool = false) {
         id = UUID().uuidString; self.serverID = serverID; self.kind = kind; self.localLabel = localLabel; self.localBookmark = localBookmark
         self.remotePath = remotePath; self.mode = mode; self.conflicts = conflicts; self.deletions = deletions; self.schedule = schedule
-        self.excludes = excludes; self.wifiOnly = wifiOnly; enabled = true; createdAt = Date()
+        self.excludes = excludes; self.wifiOnly = wifiOnly; enabled = true; createdAt = Date(); hashCheck = true
+    }
+
+    enum CodingKeys: String, CodingKey { case id, serverID, kind, localLabel, localBookmark, remotePath, mode, conflicts, hashCheck, deletions, schedule, excludes, wifiOnly, enabled, pausedByGateway, createdAt, lastRun }
+
+    /// Pairs saved by 1.5 (build 45) have no `hashCheck`: it defaults to on.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(String.self, forKey: .id)
+        serverID = try c.decode(String.self, forKey: .serverID)
+        kind = try c.decode(SyncKind.self, forKey: .kind)
+        localLabel = try c.decode(String.self, forKey: .localLabel)
+        localBookmark = try c.decodeIfPresent(Data.self, forKey: .localBookmark)
+        remotePath = try c.decode(String.self, forKey: .remotePath)
+        mode = try c.decode(SyncMode.self, forKey: .mode)
+        conflicts = try c.decode(ConflictPolicy.self, forKey: .conflicts)
+        hashCheck = try c.decodeIfPresent(Bool.self, forKey: .hashCheck) ?? true
+        deletions = try c.decode(DeletionPolicy.self, forKey: .deletions)
+        schedule = try c.decode(SyncSchedule.self, forKey: .schedule)
+        excludes = try c.decodeIfPresent([String].self, forKey: .excludes) ?? []
+        wifiOnly = try c.decodeIfPresent(Bool.self, forKey: .wifiOnly) ?? false
+        enabled = try c.decodeIfPresent(Bool.self, forKey: .enabled) ?? true
+        pausedByGateway = try c.decodeIfPresent(String.self, forKey: .pausedByGateway)
+        createdAt = try c.decodeIfPresent(Date.self, forKey: .createdAt) ?? Date()
+        lastRun = try c.decodeIfPresent(SyncRunSummary.self, forKey: .lastRun)
     }
 
     /// Both enabled locally and not paused on the gateway.
@@ -147,6 +177,9 @@ public struct RemoteSync: Codable, Sendable {
     public var mode: String
     public var enabled: Bool
     public var disabledBy: String?
+    /// Conflict policy and fingerprint flag as the gateway stored them (0.16+).
+    public var conflicts: String?
+    public var hashCheck: Bool?
     public var runs: Int64?
     public var totalFiles: Int64?
     public var totalBytes: Int64?

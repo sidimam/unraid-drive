@@ -126,11 +126,11 @@ public enum GatewayClientFactory {
         case .direct:
             guard let key = keychain.apiKey(for: server.id) else { return nil }
             let u = keychain.userCredentials(for: server.id)
-            return GatewayClient(baseURL: server.url, apiKey: key, username: u?.username, password: u?.password)
+            return GatewayClient(baseURL: server.url, apiKey: key, username: u?.username, password: u?.password, sessionCache: .keychain(serverID: server.id, store: keychain))
         case .cloudflareAccess:
             guard let key = keychain.apiKey(for: server.id), let token = keychain.cloudflareToken(for: server.id) else { return nil }
             let u = keychain.userCredentials(for: server.id)
-            return GatewayClient(baseURL: server.url, apiKey: key, username: u?.username, password: u?.password, extraHeaders: token.headers)
+            return GatewayClient(baseURL: server.url, apiKey: key, username: u?.username, password: u?.password, extraHeaders: token.headers, sessionCache: .keychain(serverID: server.id, store: keychain))
         }
     }
 }
