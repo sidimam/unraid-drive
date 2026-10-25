@@ -454,6 +454,30 @@ extension ServersModel {
         }
         // `-seedSync <localFolder> <remotePath> [mode]`: creates (once) a folder pair on the first non-demo
         // server and runs it — the automated regression of the sync engine against a local gateway.
+        // `-listLocation [subpath]`: lists the Files/Finder location like the Files app does (the system
+        // enumerates through the extension) — regression of the File Provider where Files is absent (simulator).
+        if let i = args.firstIndex(of: "-listLocation"), let s = servers.first(where: { !$0.isDemo }) {
+            let sub = args.count > i + 1 && !args[i + 1].hasPrefix("-") ? args[i + 1] : ""
+            try? await Task.sleep(for: .seconds(3))
+            if let mgr = NSFileProviderManager(for: FileProviderDomains.domain(for: s)) {
+                do {
+                    try? await mgr.signalEnumerator(for: .workingSet)
+                    try? await mgr.signalEnumerator(for: .rootContainer)
+                    let root = try await mgr.getUserVisibleURL(for: .rootContainer)
+                    for dir in sub.isEmpty ? [""] : ["", sub] {
+                        let url = dir.isEmpty ? root : root.appendingPathComponent(dir)
+                        var names: [String] = []
+                        for attempt in 1...10 {
+                            names = (try? FileManager.default.contentsOfDirectory(atPath: url.path)) ?? []
+                            if !names.isEmpty { break }
+                            NSFileCoordinator().coordinate(readingItemAt: url, options: [], error: nil) { _ in }
+                            try? await Task.sleep(for: .seconds(2)); _ = attempt
+                        }
+                        Diag.info("listLocation", "\(dir.isEmpty ? "/" : dir): \(names.count) entries: \(names.sorted().prefix(12).joined(separator: ", "))")
+                    }
+                } catch { Diag.error("listLocation", "user-visible URL", error) }
+            }
+        }
         // `-removeSync <remotePath>`: drops the pair created by -seedSync (app and gateway) — test cleanup.
         if let i = args.firstIndex(of: "-removeSync"), args.count > i + 1 {
             for p in SyncStore.all() where p.remotePath == args[i + 1] { await SyncCoordinator.shared.remove(p); Diag.info("sync", "-removeSync: removed \(p.id)") }

@@ -37,7 +37,7 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
         // live every 30 s for a while and pushes what changed through the working set (see
         // FileProviderExtension.watchRecentFolders), so files written straight on the NAS appear
         // without waiting for the gateway's directory scan.
-        Task { if let path = await ext.index.path(for: container), path != "/" { await ext.noteViewed(path) } }
+        Task { if let path = await ext.path(for: container), path != "/" { await ext.noteViewed(path) } }
     }
 
     func invalidate() {}
@@ -46,7 +46,7 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
         Task {
             // A folder inside a share the user hid is gone as far as the system is concerned: only
             // then can it delete the (non-empty) share folder from the Files app / Finder.
-            guard let path = await ext.index.path(for: container), ext.isVisible(path) else { observer.finishEnumeratingWithError(NSFileProviderError(.noSuchItem)); return }
+            guard let path = await ext.path(for: container), ext.isVisible(path) else { observer.finishEnumeratingWithError(NSFileProviderError(.noSuchItem)); return }
             do {
                 guard let client = ext.client else { throw NSFileProviderError(.notAuthenticated) }
                 let entries = ext.visibleEntries(try await client.list(path).entries, in: path)
@@ -58,13 +58,13 @@ final class DirectoryEnumerator: NSObject, NSFileProviderEnumerator {
                 observer.finishEnumerating(upTo: nil)
                 // A plain listing cannot delete items; the working set can. Wake it up.
                 if !vanished.isEmpty { ext.nudgeWorkingSet() }
-            } catch { Diag.error("enumerate", "items of \(await ext.index.path(for: container) ?? container.rawValue)", error); observer.finishEnumeratingWithError(FileProviderExtension.mapError(error)) }
+            } catch { Diag.error("enumerate", "items of \(await ext.path(for: container) ?? container.rawValue)", error); observer.finishEnumeratingWithError(FileProviderExtension.mapError(error)) }
         }
     }
 
     func enumerateChanges(for observer: NSFileProviderChangeObserver, from anchor: NSFileProviderSyncAnchor) {
         Task {
-            guard let path = await ext.index.path(for: container), ext.isVisible(path) else { observer.finishEnumeratingWithError(NSFileProviderError(.noSuchItem)); return }
+            guard let path = await ext.path(for: container), ext.isVisible(path) else { observer.finishEnumeratingWithError(NSFileProviderError(.noSuchItem)); return }
             guard let a = SyncAnchor(anchor) else { observer.finishEnumeratingWithError(NSFileProviderError(.syncAnchorExpired)); return }
             do {
                 guard let client = ext.client else { throw NSFileProviderError(.notAuthenticated) }
@@ -177,6 +177,14 @@ final class WorkingSetEnumerator: NSObject, NSFileProviderEnumerator {
                     case .upsert, .move:
                         if let e = c.entry {
                             if let old = c.oldPath { await ext.index.move(from: old, to: e.path) }
+                            // 1.5.2: only items the system knows, or whose folder it has listed:
+                            // reporting every file that changes anywhere on the NAS (downloads in
+                            // progress…) made the index grow without bound. Unknown items show up
+                            // when their folder is opened.
+                            let parent = GatewayPath.parent(e.path)
+                            let known = await ext.index.knows(id: c.id)
+                            let parentListed = parent == "/" ? true : await ext.index.hasListing(parent)
+                            guard known || parentListed else { continue }
                             updated.append(await ext.makeItem(e))
                         } else {
                             deleted.append(NSFileProviderItemIdentifier(c.id))

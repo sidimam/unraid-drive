@@ -12,6 +12,7 @@ struct ServerDetailView: View {
     @State private var editing = false
     @State private var checking = false
     @State private var openSyncDebug = false
+    @State private var confirmRebuild = false
 
     var body: some View {
         List {
@@ -44,6 +45,18 @@ struct ServerDetailView: View {
                 #endif
                 if !server.isDemo {
                     Button { editing = true } label: { Label("Edit server or credentials", systemImage: "pencil") }
+                    // 1.5.2: the Files/Finder location rebuilt on demand (fresh database and item cache) —
+                    // the remedy when Files shows "Content unavailable" for this server.
+                    Button { confirmRebuild = true } label: {
+                        Label(checking ? String(localized: "Rebuilding…") : String(localized: "Rebuild the Files location"), systemImage: "arrow.clockwise.icloud")
+                    }
+                    .disabled(checking)
+                    .confirmationDialog("Rebuild the Files location?", isPresented: $confirmRebuild, titleVisibility: .visible) {
+                        Button("Rebuild") { Task { checking = true; await model.maintainLocationsIfNeeded(force: true, only: server); await model.refreshHealth(server); checking = false } }
+                        Button("Cancel", role: .cancel) {}
+                    } message: {
+                        Text("The location is removed and registered again: files already downloaded on this device are downloaded again when you open them, changes not yet uploaded are lost. Use it when Files shows \"Content unavailable\" for this server.")
+                    }
                 }
             }
             #if os(macOS)

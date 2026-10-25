@@ -153,3 +153,7 @@ Someone removed this installation from the gateway's device list (web UI › Dev
 ## The Homebrew build on the Mac and iCloud Drive › Unraid Drive › servers.json (the Settings row was removed in 1.4; the Diagnostics report still tells whether the file is available)
 
 Apple grants an iCloud Drive container only to apps distributed through the App Store. The Homebrew build is signed with Developer ID, so it cannot create the folder itself: it reads and writes the `servers.json` that iCloud Drive syncs to `~/Library/Mobile Documents/iCloud~com~sdimambro~unraid-drive/Documents/` once an iPhone, iPad, Vision Pro or the Mac App Store version has saved the list. Until then the list still syncs through iCloud key-value storage and the secrets through iCloud Keychain, so nothing is lost. Check that iCloud Drive is on for this Mac (System Settings › Apple Account › iCloud › iCloud Drive).
+
+## Files shows "Content unavailable — unknown error" for Unraid Drive (iPhone, iPad)
+
+Fixed in **1.5.2**: up to 1.5.1 the Files extension's item index could grow past the 20 MB memory limit iOS gives to Files extensions and the system killed it at launch (the location shows a circular error badge in *Browse › Locations*). Update to 1.5.2 or later and open Unraid Drive once: the oversized index is discarded and the location rebuilt. If it ever happens again, *Settings › Profiles › your server › Rebuild the Files location*.

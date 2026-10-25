@@ -26449,6 +26449,86 @@
           }
         }
       }
+    },
+    "Rebuilding…": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ricostruzione…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reconstruyendo…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reconstruction…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wird neu aufgebaut …"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在重建…"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ إعادة البناء…"
+          }
+        }
+      }
+    },
+    "The location is removed and registered again: files already downloaded on this device are downloaded again when you open them, changes not yet uploaded are lost. Use it when Files shows \"Content unavailable\" for this server.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La posizione viene rimossa e registrata di nuovo: i file già scaricati su questo dispositivo vengono riscaricati quando li apri, le modifiche non ancora caricate vanno perse. Usala quando File mostra «Contenuto non disponibile» per questo server."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La ubicación se elimina y se registra de nuevo: los archivos ya descargados en este dispositivo se descargan otra vez al abrirlos y se pierden los cambios aún no subidos. Úsalo cuando Archivos muestre «Contenido no disponible» para este servidor."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’emplacement est supprimé puis réenregistré : les fichiers déjà téléchargés sur cet appareil sont retéléchargés à l’ouverture, les modifications pas encore envoyées sont perdues. À utiliser quand Fichiers affiche « Contenu indisponible » pour ce serveur."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Speicherort wird entfernt und neu registriert: bereits auf diesem Gerät geladene Dateien werden beim Öffnen erneut geladen, noch nicht hochgeladene Änderungen gehen verloren. Verwenden, wenn Dateien für diesen Server „Inhalt nicht verfügbar“ zeigt."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "该位置将被移除并重新注册：此设备上已下载的文件在打开时会重新下载，尚未上传的更改将丢失。当“文件”对此服务器显示“内容不可用”时使用。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تُزال الموقع ويُسجَّل من جديد: الملفات التي نُزّلت على هذا الجهاز تُنزَّل مرة أخرى عند فتحها، والتغييرات التي لم تُرفع بعد تضيع. استخدمه عندما يعرض تطبيق الملفات «المحتوى غير متاح» لهذا الخادم."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

@@ -2,6 +2,14 @@
 
 All notable changes to Unraid Drive. The server side has its own changelog in [unraid-gateway](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
 
+## 1.5.2 (build 47) — 2026-10-25
+
+Urgent fix for the Files app on iPhone and iPad.
+
+- **Files: "Content unavailable — unknown error" fixed (iPhone, iPad, Vision Pro).** The Files extension kept an index of every item the gateway ever reported — every file that changed anywhere on the NAS, downloads in progress included — plus the listing of every folder ever opened, and loaded it all at launch. iOS gives a Files extension a hard 20 MB memory limit: once the index grew past it (a 7–8 MB file takes about 50 MB to load), the system killed the extension before its first request and Files showed the location with an error badge. The index is now a bounded cache (2,500 items and 6,000 folder names, least recently used dropped, about 400 KB on disk); paths missing from it are asked to the gateway. An oversized index left by an older build is discarded at launch without being read, so Files works again as soon as 1.5.2 is installed. The working set reports only changes in folders the system already knows.
+- **Rebuild the Files location** in *Settings › Profiles › server*: removes the location and registers it again (fresh database and cache), with a confirmation. The remedy when Files shows "Content unavailable" for a server.
+- Measured on the Mac with the extension's own index code: a 60,000-item history now ends in a 390 KB index (was unbounded) and loading it costs a few hundred KB.
+
 ## 1.5.1 (build 46) — 2026-10-22
 
 Two devices on the same folder, and a File Provider that stops knocking.
