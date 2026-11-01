@@ -15,7 +15,8 @@ Steps (run them in order, each one prints what it finds before it writes; --yes 
              has none, then write the What's New of AppStore/store_meta.py for every locale
   review   — make sure every new version has an App Review detail (copied from the live version when missing)
   submit   — create a review submission per platform (or reuse an open READY_FOR_REVIEW one), add the version, submit
-  all      — cancel, versions, texts, review, submit
+  privacy  — App Information › Privacy Policy Text of every locale from store_meta.PRIVACY_TEXT
+  all      — cancel, versions, texts, privacy, review, submit
 
 The JWT comes from the kit's ascjwt.swift (same folder as the key). Nothing secret is printed.
 History: 2026-09-12 moved 1.1 (waiting) to 1.3 build 36 and created visionOS 1.3; 2026-09-16 withdrew tvOS 1.3
@@ -141,6 +142,18 @@ def texts():
                 write("POST", "/appStoreVersionLocalizations", {"data": {"type": "appStoreVersionLocalizations", "attributes": attrs,
                       "relationships": {"appStoreVersion": {"data": {"type": "appStoreVersions", "id": new["id"]}}}}})
 
+def privacy():
+    """App Information › Privacy Policy Text (shown on tvOS, where there is no browser) from
+    AppStore/store_meta.py PRIVACY_TEXT, on the app info that is still editable for the new version."""
+    infos = call("GET", f"/apps/{APP_ID}/appInfos")["data"]
+    editable = [i for i in infos if (i["attributes"].get("appStoreState") or i["attributes"].get("state")) in EDITABLE | {"PREPARE_FOR_SUBMISSION", "READY_FOR_REVIEW", "DEVELOPER_REJECTED"}]
+    if not editable: print("-- no editable app info (privacy text left alone)"); return
+    for l in call("GET", f"/appInfos/{editable[0]['id']}/appInfoLocalizations?limit=50")["data"]:
+        loc = l["attributes"]["locale"]; t = meta.PRIVACY_TEXT.get(loc)
+        if not t or l["attributes"].get("privacyPolicyText") == t: continue
+        print(f"   privacy {loc}: {len(t)} chars")
+        write("PATCH", f"/appInfoLocalizations/{l['id']}", {"data": {"type": "appInfoLocalizations", "id": l["id"], "attributes": {"privacyPolicyText": t}}})
+
 def review():
     vs = versions()
     for p in PLATFORMS:
@@ -180,8 +193,8 @@ def submit():
         r = write("PATCH", f"/reviewSubmissions/{sid}", {"data": {"type": "reviewSubmissions", "id": sid, "attributes": {"submitted": True}}})
         if YES: print(f"   {p}: submission {sid} → {r.get('data', {}).get('attributes', {}).get('state')}")
 
-steps = {"status": status, "cancel": cancel, "versions": step_versions, "texts": texts, "review": review, "submit": submit}
+steps = {"status": status, "cancel": cancel, "versions": step_versions, "texts": texts, "privacy": privacy, "review": review, "submit": submit}
 if STEP == "all":
-    for s in ("cancel", "versions", "texts", "review", "submit"): print(f"===== {s}"); steps[s]()
+    for s in ("cancel", "versions", "texts", "privacy", "review", "submit"): print(f"===== {s}"); steps[s]()
 elif STEP in steps: steps[STEP]()
 else: sys.exit(f"unknown step {STEP}")

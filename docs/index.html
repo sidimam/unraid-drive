@@ -9,7 +9,7 @@
 <p>Unraid Drive is an app for iPhone, iPad, Apple Vision Pro, Mac and Apple TV that connects to <strong>your own</strong> Unraid server through the <code>unraid-gateway</code> container you run yourself. It does not use any server operated by the developer.</p>
 <h2>Data the app processes</h2>
 <ul>
-<li><strong>Gateway URL, Unraid API key, optional Unraid username and password, optional Cloudflare Access service token.</strong> Entered by you. Stored on your device in the iOS Keychain. Sent only to the gateway URL you entered, to authenticate. If you turn on <em>Sync configuration with iCloud</em> in Settings, the server list is stored in your iCloud account (Key-Value Storage) and the secrets in iCloud Keychain, both provided by Apple and end-to-end encrypted; this is off by default.</li>
+<li><strong>Gateway URL, Unraid API key, optional Unraid username and password, optional Cloudflare Access service token.</strong> Entered by you. Stored on your device as part of the server profile, in the app's own container shared only with its extensions. Sent only to the gateway URL you entered, to authenticate. With <em>Sync configuration with iCloud</em> on (Settings › iCloud; on by default, you can turn it off), the profiles, credentials included, are stored in your own iCloud account (Key-Value Storage, provided and encrypted by Apple; end-to-end with Advanced Data Protection) so your other devices and a reinstall get them; the readable <code>servers.json</code> in iCloud Drive never contains credentials.</li>
 <li><strong>Your files.</strong> Files you open, save or move are transferred directly between your device and your gateway. Files opened in the Files app are cached on your device like with any cloud provider and can be removed with <em>Remove Download</em>.</li>
 <li><strong>Server information</strong> shown in the dashboard (array, shares, containers, notifications) is read from your Unraid API through your gateway and displayed; it is not stored beyond the app's cache.</li>
 </ul>
@@ -20,7 +20,7 @@
 <h2>Demo server</h2>
 <p>The demo server is a simulation that lives entirely on your device. Nothing is sent anywhere.</p>
 <h2>Your choices</h2>
-<p>You can delete all data by removing servers in the app (which also deletes their Keychain entries and Files app locations), turning iCloud sync off (which deletes the iCloud copy) and uninstalling the app.</p>
+<p>You can delete all data by removing servers in the app (which also deletes their credentials and Files app locations), <em>Remove the copy from iCloud</em> in Settings › iCloud and uninstalling the app.</p>
 <h2>Contact</h2>
 <p>Questions: <a href="https://github.com/sidimam/unraid-drive/issues">github.com/sidimam/unraid-drive/issues</a>.</p>
 <footer>Unraid Drive is an independent project, not affiliated with Lime Technology / Unraid. <a href="https://github.com/sidimam/unraid-drive">Source code and setup guide</a>.</footer>

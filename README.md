@@ -45,8 +45,8 @@ It talks to [`unraid-gateway`](https://github.com/sidimam/unraid-gateway), a 10 
 - **Walkthrough at every update**: features and what's new, iCloud step (restore the configuration found in iCloud, or turn sync on — one backup shared by iPhone, iPad, Vision Pro and Mac), notification permission. Every step can be skipped; iCloud stays available in Settings.
 - **Background refresh**: the app wakes its Files locations about once an hour, so a gateway restart (update, nightly backup) does not leave them paused until the next launch.
 - **Walkthrough** on first launch, re-openable with **?**.
-- **Secrets in the Keychain**, shared only with the extension. No analytics, no third-party servers.
-- **Optional iCloud sync** (Settings): the server list goes to iCloud Key-Value Storage and the secrets to iCloud Keychain (end-to-end encrypted), so a restored or new iPhone finds its configuration. Off by default; a restore banner appears when iCloud holds a configuration and the device has none.
+- **Self-contained profiles** (1.5.3): URL, mode, shares and credentials (API key, Cloudflare service token, Unraid user/password) are one profile, shared with the app's own extensions through the app group. No analytics, no third-party servers.
+- **iCloud sync** (Settings, on by default): the profiles, credentials included, go to your iCloud Key-Value Storage, so a new or reinstalled iPhone, iPad, Mac, Vision Pro or Apple TV gets them complete and registers itself on each gateway; the readable `servers.json` in iCloud Drive has everything but the credentials. A restore page appears when iCloud holds a configuration and the device has none.
 - **Connection test** with five checks (reachability, key, shares, write probe, Files location) and **edit server** without losing the Files app location.
 - **Choose which shares to show** (1.2): after connecting, in the walkthrough, from Settings › Shares to show or in the server's details, tick the shares you want in Files, the Finder, Shortcuts and on Apple TV. The gateway already limits the list to what your Unraid user may see; this filter is yours, like the folder selection of Google Drive/OneDrive, and travels with the iCloud configuration.
 - **File explorer in the app** (1.3): Files-style browser on every device — list/icons, sort, search, Info, new folder, upload, rename, move, copy, share, download, delete, multi-selection with batch actions — with Quick Look and built-in viewers (mpv for MKV/AVI/WebM/FLAC…, EPUB, CBZ, ZIP; text and PDF on Apple TV).
@@ -64,6 +64,8 @@ It talks to [`unraid-gateway`](https://github.com/sidimam/unraid-gateway), a 10 
 After the first launch enable the extension under System Settings › General › Login Items & Extensions › File Providers ([Step 7 of the wiki](https://github.com/sidimam/unraid-drive/wiki/Step-7-Unraid-Drive-on-the-Mac)). `scripts/make_dmg.sh` builds, notarizes and staples the DMG.
 
 ## What's new
+
+**1.5.3 (build 48):** the iCloud configuration survives a reinstall from scratch — the API key, the Cloudflare service token and the Unraid login are now part of the profile and sync with it (before, they depended on iCloud Keychain and often did not arrive: "API key and Cloudflare headers missing" on a new iPhone). Existing Keychain items are moved into the profiles at the first launch; Apple TV can take the configuration straight from iCloud.
 
 **1.5.2 (build 47):** urgent fix — on iPhone and iPad the Files location showed "Content unavailable": the extension's item index grew past iOS's 20 MB limit for Files extensions; it is now a small bounded cache, an oversized one is discarded at launch, and *Rebuild the Files location* is in the profile page.
 
@@ -105,7 +107,7 @@ UnraidDrive/
 ├── App/                         SwiftUI app (servers, dashboard, browser, walkthrough)
 ├── FileProvider/                File Provider extension (items, enumerators, stable ID index,
 │                                activity log; macOS: sidebar symbol + extension icon)
-├── Packages/UnraidGatewayKit/   Shared Swift package: gateway client, models, Keychain,
+├── Packages/UnraidGatewayKit/   Shared Swift package: gateway client, models (profiles with credentials), legacy Keychain,
 │                                dashboard query, offline demo gateway (URLProtocol)
 ├── Screenshots/                 App Store screenshots (iPhone 6.9", iPad 13", visionOS, Mac)
 └── wiki/                        Source of the GitHub wiki pages

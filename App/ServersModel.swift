@@ -18,7 +18,10 @@ final class ServersModel: ObservableObject {
     @Published private(set) var health: [String: ServerHealth] = [:]
 
     init() {
+        // 1.5.3: credentials move from the Keychain into the profile (once; then they sync with it).
+        let migrated = store.migrateSecretsFromKeychain(keychain)
         reload()
+        if !migrated.isEmpty { cloud.push() }
         cloud.onRemoteChange = { [weak self] in await self?.reloadAndRegisterDomains() }
         if cloud.enabled { Task { await cloud.pull() } }
         Task { await maintainLocationsIfNeeded() }
@@ -57,7 +60,7 @@ final class ServersModel: ObservableObject {
     /// automatically**: the gateway is contacted with the stored credentials, then the location is
     /// removed and registered again so the Files app / Finder starts from a clean database, and
     /// finally nudged. Nothing to do by hand: the server page shows when it last happened. If the
-    /// gateway cannot be reached (or the credentials are still arriving from iCloud Keychain) the
+    /// gateway cannot be reached (or the profile has no credentials yet) the
     /// pass is retried the next time the app becomes active.
     static let currentBuild = (Bundle.main.infoDictionary?["CFBundleVersion"] as? String) ?? "0"
 
@@ -184,7 +187,7 @@ final class ServersModel: ObservableObject {
     func refreshHealth(_ server: ServerConfig) async {
         if server.isDemo { health[server.id] = .fine; return }
         guard let c = client(for: server) else {
-            health[server.id] = ServerHealth(level: .error, issues: [.init(.error, .credentials, String(localized: "Credentials missing from the Keychain: sign in again."), action: .signIn)])
+            health[server.id] = ServerHealth(level: .error, issues: [.init(.error, .credentials, String(localized: "This profile has no credentials: open it and use Edit to enter them."), action: .signIn)])
             return
         }
         var issues: [ServerHealth.Issue] = []
@@ -223,7 +226,7 @@ final class ServersModel: ObservableObject {
         // Device registration (restore from iCloud still waiting for the secrets / failed).
         if let r = restoreRegistration[server.id] {
             switch r {
-            case .waitingSecrets: issues.append(.init(.warning, .device, String(localized: "Device registration waiting for the credentials from iCloud Keychain."), action: .reRegister))
+            case .waitingSecrets: issues.append(.init(.warning, .device, String(localized: "Device registration waiting for the profile credentials from iCloud."), action: .reRegister))
             case .failed(let why): issues.append(.init(.warning, .device, why, action: .reRegister))
             case .registered: break
             }
@@ -241,8 +244,9 @@ final class ServersModel: ObservableObject {
 
     /// After `CloudSync.restoreFromCloud()`: sign in on every restored server with `register: true`,
     /// so this installation (new id, or the previous one recovered through iCloud) is registered on
-    /// the gateway and the Files locations work right away. The secrets travel through iCloud
-    /// Keychain and may arrive a little after the server list: keep trying for `timeout` seconds.
+    /// the gateway and the Files locations work right away. The credentials travel with the profile;
+    /// a profile saved by an older version may get them a little later (when that device updates):
+    /// keep trying for `timeout` seconds.
     func registerRestoredDevices(timeout: TimeInterval = 120) async {
         let targets = servers.filter { !$0.isDemo }
         for s in targets { restoreRegistration[s.id] = .waitingSecrets }
@@ -271,7 +275,7 @@ final class ServersModel: ObservableObject {
             if !pending.isEmpty { try? await Task.sleep(for: .seconds(5)) }
         }
         for id in pending {
-            restoreRegistration[id] = .failed(String(localized: "The credentials have not arrived from iCloud Keychain yet. Open the server and use Connect again."))
+            restoreRegistration[id] = .failed(String(localized: "This profile arrived from iCloud without credentials. Open it and use Edit to enter them, or update Unraid Drive on the device that saved it."))
         }
     }
 
@@ -295,10 +299,8 @@ final class ServersModel: ObservableObject {
         let client = GatewayClient(baseURL: url, apiKey: apiKey, username: user?.username, password: user?.password, extraHeaders: cloudflare?.headers ?? [:])
         let login = try await client.login(register: true)
         var server = ServerConfig(name: name, url: url, accessMode: cloudflare == nil ? .direct : .cloudflareAccess)
-        server.username = user?.username
-        try keychain.set(apiKey: apiKey, for: server.id, synchronizable: cloud.enabled)
-        if let cloudflare { try keychain.set(cloudflareToken: cloudflare, for: server.id, synchronizable: cloud.enabled) }
-        if let user { try keychain.set(username: user.username, password: user.password, for: server.id, synchronizable: cloud.enabled) }
+        // 1.5.3: the credentials are part of the profile (and sync with it through iCloud).
+        server.setCredentials(apiKey: apiKey, cloudflare: cloudflare, user: user)
         store.upsert(server)
         try await FileProviderDomains.add(server)
         reload()
@@ -312,16 +314,12 @@ final class ServersModel: ObservableObject {
     func update(_ server: ServerConfig, name: String, url: URL, apiKey: String, cloudflare: CloudflareServiceToken?, user: (username: String, password: String)? = nil) async throws -> LoginResponse {
         let client = GatewayClient(baseURL: url, apiKey: apiKey, username: user?.username, password: user?.password, extraHeaders: cloudflare?.headers ?? [:])
         let login = try await client.login(register: true)
-        var updated = server
+        var updated = store.server(id: server.id) ?? server
         updated.name = name; updated.url = url; updated.accessMode = cloudflare == nil ? .direct : .cloudflareAccess
-        updated.username = user?.username
-        // Overwrite only what was provided: the old code deleted every secret first, so a save that
-        // failed half-way (or dropped a field) left the server without credentials.
-        try keychain.set(apiKey: apiKey, for: server.id, synchronizable: cloud.enabled)
-        if let cloudflare { try keychain.set(cloudflareToken: cloudflare, for: server.id, synchronizable: cloud.enabled) }
-        if let user { try keychain.set(username: user.username, password: user.password, for: server.id, synchronizable: cloud.enabled) }
-        else { keychain.removeUserCredentials(for: server.id) }
-        Diag.info("servers", "updated \(updated.name) (\(updated.accessMode)) credentials rewritten")
+        updated.setCredentials(apiKey: apiKey, cloudflare: cloudflare, user: user)
+        // The gateway session cached for the old credentials no longer applies.
+        keychain.removeSession(for: server.id)
+        Diag.info("servers", "updated \(updated.name) (\(updated.accessMode)) credentials rewritten in the profile")
         store.upsert(updated)
         cloud.push()
         if updated.name != server.name {
@@ -435,6 +433,13 @@ extension ServersModel {
             await setSelectedShares(s, spec.count > 1 && spec[1] != "all" ? spec[1].split(separator: ",").map(String.init) : nil)
         }
         if args.contains("-rebuildDomains") { for s in servers { try? await FileProviderDomains.rebuild(s) } }
+        // `-dryRunRestore`: what a fresh install would restore from this iCloud account right now
+        // (profiles from the Key-Value Store + servers.json, credentials from both keys) — read only.
+        if args.contains("-dryRunRestore") {
+            await cloud.refreshDocument()
+            let r = cloud.remoteServers
+            Diag.info("icloud", "dry-run restore: \(r.count) profile(s) in iCloud, \(r.filter(\.hasCredentials).count) complete with credentials: " + r.map { "\($0.name)=\($0.hasCredentials ? "ok" : "NO-CREDENTIALS")" }.joined(separator: ", "))
+        }
         if args.contains("-testIntent") {
             do {
                 let intent = SaveClipboardIntent(); intent.server = ServerStore().all().first { $0.isDemo }.map(ServerEntity.init)

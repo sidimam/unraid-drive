@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.5.3 (build 48) — 2026-11-01
+
+The configuration synced with iCloud is complete again — credentials included — on a new iPhone or after a reinstall from scratch.
+
+- **Credentials live in the profile.** The Unraid API key, the Cloudflare Access service token (Client ID and Client Secret) and the optional Unraid user and password are now part of the profile, like its name, URL and shares, and travel with it through your iCloud. Until 1.5.2 they were separate Keychain items that reached iCloud Keychain only if iCloud sync was already on when they were saved (never re-checked afterwards): a new or reinstalled device got the profiles but not their API key and Cloudflare headers, and asked to sign in again.
+- **iCloud copy.** The profiles go to iCloud Key-Value Storage with their credentials (`servers.v1`) and again, by profile id, under a second key (`credentials.v1`) that older app versions never rewrite, so a device still on 1.5.2 cannot strip them. Copies are merged per field: the newest credentials win, a copy without credentials never erases them. The readable `servers.json` in *iCloud Drive › Unraid Drive* still has everything **but** the credentials.
+- **Automatic move.** At the first launch of 1.5.3 every profile still relying on the Keychain gets its credentials copied in (local or iCloud Keychain items, whatever this device can read) and the result is pushed to iCloud. The old Keychain items are left in place for older versions on your other devices; the gateway session cache stays in the Keychain, this device only.
+- **Restore = ready to use.** A fresh install finds the profiles complete: no waiting for iCloud Keychain, each device registers itself on its gateways right away. *Edit server* shows the stored credentials instead of empty fields.
+- **Apple TV without pairing.** A new or reset Apple TV with complete profiles in iCloud offers **Use the iCloud configuration**: the profiles arrive with their credentials and the TV registers on each gateway. Pairing by code still works (and is still needed for profiles saved by a version older than 1.5.3, until that device updates).
+- Messages: a profile without credentials now says so and points to *Edit*, instead of "missing from the Keychain".
+- Kit: `ServerConfig` credential fields, `hasCredentials`, `setCredentials`, `withoutSecrets`, `mergingSecrets(from:)`, `ProfileCredentials`, `ServerStore.migrateSecretsFromKeychain()`, `CloudKeys.credentials`; `KeychainStore` reduced to legacy reads, removal and the session cache. Tests: profile round trip, 1.5.2 profiles decode, merges (stripped copy, newer set), credentials map, factory. Verified on simulators: 1.5.2 → 1.5.3 upgrade (credentials moved), uninstall + empty Keychain + reinstall (profiles restored complete, device registered), Apple TV adoption from iCloud, Vision Pro.
+
 ## 1.5.2 (build 47) — 2026-10-25
 
 Urgent fix for the Files app on iPhone and iPad.

@@ -54,8 +54,9 @@ struct PairTVView: View {
         guard !chosen.isEmpty else { return }
         var items: [PairedServer] = []
         for server in chosen {
-            guard let key = keychain.apiKey(for: server.id) else { error = String(localized: "The API key of \(server.name) is missing on this device."); return }
-            let cf = keychain.cloudflareToken(for: server.id); let u = keychain.userCredentials(for: server.id)
+            let p = ServerStore().server(id: server.id) ?? server
+            guard let key = p.apiKey ?? keychain.apiKey(for: server.id) else { error = String(localized: "The API key of \(server.name) is missing on this device."); return }
+            let cf = p.cloudflare ?? keychain.cloudflareToken(for: server.id); let u = p.userCredentials ?? keychain.userCredentials(for: server.id)
             items.append(PairedServer(server: server, apiKey: key, cloudflare: cf, username: u?.username, password: u?.password))
         }
         let payload = PairingPayload(servers: items)

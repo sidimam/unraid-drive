@@ -13,10 +13,10 @@
 
 | Item | Where | Notes |
 |---|---|---|
-| Your Unraid API key | The device Keychain, shared only with the extension | Sent only to your own gateway URL, once per session |
-| Unraid username and password (optional) | The device Keychain | Sent to your gateway at login; verified by Unraid's Samba |
-| iCloud copy (optional, Settings) | iCloud Key-Value Storage (server list) and iCloud Keychain (secrets) | Only when *Sync configuration with iCloud* is on |
-| Cloudflare service token (optional) | The device Keychain | Sent as HTTP headers on every request |
+| Your Unraid API key | The server profile (app group, shared only with the app's extensions) | Sent only to your own gateway URL, once per session |
+| Unraid username and password (optional) | The server profile | Sent to your gateway at login; verified by Unraid's Samba |
+| iCloud copy (Settings › iCloud, on by default) | iCloud Key-Value Storage (profiles with credentials) and iCloud Drive `servers.json` (without credentials) | Only when *Sync configuration with iCloud* is on |
+| Cloudflare service token (optional) | The server profile | Sent as HTTP headers on every request |
 | Session token | Memory of the gateway container | Dies when the container restarts; the app logs in again silently |
 | File contents | Your NAS | Files opened in the Files app are cached on the device like any cloud provider and can be evicted |
 | Nothing | Any third-party cloud | Cloudflare only relays encrypted traffic; it never stores your files |

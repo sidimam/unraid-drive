@@ -4,14 +4,20 @@ import UnraidGatewayKit
 
 /// Optional iCloud synchronisation of the app configuration.
 ///
-/// - The server list (names, URLs, connection modes) goes to iCloud Key-Value Storage.
-/// - Secrets (API keys, Cloudflare service tokens) go to iCloud Keychain, end-to-end encrypted,
-///   by marking the Keychain items synchronizable.
+/// Since 1.5.3 the profile is self-contained: name, URL, mode, shares **and** credentials (Unraid API
+/// key, Cloudflare service token, Unraid user/password) travel together, so a profile restored on a
+/// new or reinstalled device works right away. Until 1.5.2 the credentials depended on iCloud
+/// Keychain carrying each Keychain item, which often did not happen ("the API key is missing").
+/// - iCloud Key-Value Storage: `servers.v1` (the profiles with their credentials) and
+///   `credentials.v1` (the credentials again, by profile id: older app versions rewrite `servers.v1`
+///   without them and never touch this key).
+/// - iCloud Drive › Unraid Drive › servers.json: the readable copy, **without** credentials.
 /// Nothing leaves the device while the switch is off. The demo server is never synced.
 @MainActor
 final class CloudSync: ObservableObject {
     static let enabledKey = "icloudSync.enabled"
     private static let kvsKey = CloudKeys.servers
+    private static let credentialsKey = CloudKeys.credentials
 
     @Published private(set) var enabled: Bool
     @Published private(set) var remoteServerCount: Int = 0
@@ -25,7 +31,6 @@ final class CloudSync: ObservableObject {
 
     private let kvs = NSUbiquitousKeyValueStore.default
     private let store = ServerStore()
-    private let keychain = KeychainStore()
     private var observer: NSObjectProtocol?
     private var docWatcher: CloudDocumentsWatcher?
     #if os(macOS)
@@ -52,11 +57,18 @@ final class CloudSync: ObservableObject {
     }
 
     /// Servers currently stored in iCloud: the union of the Key-Value Store copy and servers.json,
-    /// newest `modifiedAt` per id (either may be from another device or a previous install).
+    /// newest `modifiedAt` per id (either may be from another device or a previous install), each
+    /// completed with the newest credentials found in either Key-Value Store key.
     var remoteServers: [ServerConfig] {
         var byID: [String: ServerConfig] = [:]
-        if let data = kvs.data(forKey: Self.kvsKey) { for s in ServerStore.decode(data) { byID[s.id] = s } }
-        for s in documentServers { if let e = byID[s.id], e.modifiedAt >= s.modifiedAt { continue }; byID[s.id] = s }
+        let kvsList = kvs.data(forKey: Self.kvsKey).map(ServerStore.decode) ?? []
+        for s in kvsList { byID[s.id] = s }
+        for s in documentServers {
+            if let e = byID[s.id], e.modifiedAt >= s.modifiedAt { continue }
+            byID[s.id] = byID[s.id].map { s.mergingSecrets(from: $0) } ?? s
+        }
+        let creds = kvs.data(forKey: Self.credentialsKey).map(ProfileCredentials.decode) ?? [:]
+        for (id, c) in creds { if let s = byID[id] { byID[id] = s.applying(c) } }
         return byID.values.sorted { $0.createdAt < $1.createdAt }
     }
 
@@ -92,10 +104,6 @@ final class CloudSync: ObservableObject {
         AppGroup.defaults.set(on, forKey: Self.enabledKey)
         enabled = on
         Diag.info("icloud", "sync \(on ? "enabled" : "disabled") by the user")
-        let local = store.all().filter { !$0.isDemo }
-        do {
-            for s in local { try keychain.setSynchronizable(on, for: s.id) }
-        } catch { lastError = "Keychain: \(error.localizedDescription)"; Diag.error("icloud", "keychain flag change", error) }
         if on {
             await pull()
             push()
@@ -104,10 +112,10 @@ final class CloudSync: ObservableObject {
         // devices and of the next reinstall. `removeCloudCopy()` deletes it on explicit request.
     }
 
-    /// Deletes the server list from iCloud Key-Value Storage (the secrets in iCloud Keychain are
-    /// untouched: they follow each device's own synchronizable flag).
+    /// Deletes the profiles (and their credentials) from iCloud Key-Value Storage and servers.json.
     func removeCloudCopy() {
         kvs.removeObject(forKey: Self.kvsKey)
+        kvs.removeObject(forKey: Self.credentialsKey)
         kvs.synchronize()
         documentServers = []
         refreshRemoteCount()
@@ -129,20 +137,28 @@ final class CloudSync: ObservableObject {
         }
         if let data = ServerStore.encode(servers) {
             kvs.set(data, forKey: Self.kvsKey)
+            // Credentials again on their own key, merged with what is there: a profile this device
+            // has without credentials (still arriving) must not erase those another device saved.
+            var creds = kvs.data(forKey: Self.credentialsKey).map(ProfileCredentials.decode) ?? [:]
+            for (id, c) in ProfileCredentials.map(servers) where (creds[id]?.modifiedAt ?? .distantPast) <= (c.modifiedAt ?? .distantPast) || creds[id]?.apiKey == nil { creds[id] = c }
+            creds = creds.filter { id, _ in servers.contains { $0.id == id } || remoteServers.contains { $0.id == id } }
+            if let cd = ProfileCredentials.encode(creds) { kvs.set(cd, forKey: Self.credentialsKey) }
             kvs.synchronize()
             lastSync = Date()
             refreshRemoteCount()
-            Diag.debug("icloud", "pushed \(servers.count) server(s)")
+            Diag.debug("icloud", "pushed \(servers.count) profile(s), \(servers.filter(\.hasCredentials).count) with credentials")
         }
-        // The readable copy in iCloud Drive › Unraid Drive › servers.json.
+        // The readable copy in iCloud Drive › Unraid Drive › servers.json: never the credentials.
+        let readable = servers.map(\.withoutSecrets)
         Task { [weak self] in
-            do { try await CloudDocumentsStore.shared.write(servers) } catch { await MainActor.run { self?.lastError = "iCloud Drive: \(error.localizedDescription)" } }
+            do { try await CloudDocumentsStore.shared.write(readable) } catch { await MainActor.run { self?.lastError = "iCloud Drive: \(error.localizedDescription)" } }
             await self?.refreshDocument()
         }
     }
 
     /// Merges the iCloud list into the local one: unknown ids are added, known ids take the
-    /// newer `modifiedAt`. Returns true when the local list changed.
+    /// newer `modifiedAt`; the credentials go their own way (newest set wins, a copy without
+    /// credentials never erases them). Returns true when the local list changed.
     @discardableResult
     func pull() async -> Bool {
         await refreshDocument()
@@ -152,7 +168,11 @@ final class CloudSync: ObservableObject {
         var changed = false
         for r in remote where !r.isDemo {
             if let i = local.firstIndex(where: { $0.id == r.id }) {
-                if r.modifiedAt > local[i].modifiedAt { local[i] = r; changed = true }
+                let merged = r.modifiedAt > local[i].modifiedAt ? r.mergingSecrets(from: local[i]) : local[i].mergingSecrets(from: r)
+                if merged != local[i] {
+                    if merged.apiKey != local[i].apiKey || merged.secretsModifiedAt != local[i].secretsModifiedAt { Diag.info("icloud", "\(merged.name): credentials updated from iCloud") }
+                    local[i] = merged; changed = true
+                }
             } else {
                 local.append(r); changed = true
             }
@@ -173,11 +193,8 @@ final class CloudSync: ObservableObject {
         enabled = true
         Diag.info("icloud", "restore requested (\(remoteServerCount) server(s) in iCloud)")
         await pull()
-        // Secrets arrive through iCloud Keychain on their own; mark local copies synchronizable
-        // (non-destructive: whatever has not arrived yet is left alone).
-        for s in store.all() where !s.isDemo {
-            do { try keychain.setSynchronizable(true, for: s.id) } catch { Diag.error("icloud", "restore keychain flag \(s.id.prefix(8))", error) }
-        }
+        let list = store.all().filter { !$0.isDemo }
+        Diag.info("icloud", "restored \(list.count) profile(s), \(list.filter(\.hasCredentials).count) with credentials")
     }
 
     private func handleExternalChange() async {

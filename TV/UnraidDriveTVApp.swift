@@ -20,13 +20,13 @@ struct UnraidDriveTVApp: App {
     }
 }
 
-/// Servers on this Apple TV (local store + local Keychain; secrets arrive through pairing).
+/// Servers on this Apple TV: profiles with their credentials, from iCloud (1.5.3) or from pairing.
 @MainActor
 final class TVModel: ObservableObject {
     @Published private(set) var servers: [ServerConfig] = []
-    /// Servers another device saved in iCloud (Key-Value Storage). tvOS has no iCloud Keychain, so
-    /// their credentials can only arrive through pairing: the list is used to tell the user what
-    /// is waiting for him and to pre-fill names.
+    /// Profiles another device saved in iCloud (Key-Value Storage). Since 1.5.3 they carry their
+    /// credentials, so the TV can adopt them directly; a profile saved by an older version arrives
+    /// without and still needs pairing.
     @Published private(set) var cloudServers: [ServerConfig] = []
     /// The server the TV opens on (build 42). Persisted; falls back to the first real server.
     @Published private(set) var current: ServerConfig?
@@ -38,6 +38,7 @@ final class TVModel: ObservableObject {
 
     init() {
         GatewayClient.component = "Apple TV"
+        store.migrateSecretsFromKeychain(keychain)
         reload()
         refreshCloud()
         observer = NotificationCenter.default.addObserver(forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: kvs, queue: .main) { [weak self] _ in
@@ -46,6 +47,17 @@ final class TVModel: ObservableObject {
         kvs.synchronize()
         let args = ProcessInfo.processInfo.arguments
         if args.contains("-seedDemo"), !servers.contains(where: \.isDemo) { addDemo() }
+        #if DEBUG
+        // `-seedCloudProfile <url> <apiKey>`: writes a profile into iCloud as another device would
+        // (servers.v1 + credentials.v1) to test "Use the iCloud configuration".
+        if let i = args.firstIndex(of: "-seedCloudProfile"), args.count > i + 2, let url = URL(string: args[i + 1]) {
+            var p = ServerConfig(name: "iCloud test", url: url)
+            p.setCredentials(apiKey: args[i + 2], cloudflare: nil, user: nil)
+            if let d = ServerStore.encode([p.withoutSecrets]) { kvs.set(d, forKey: CloudKeys.servers) }
+            if let d = ProfileCredentials.encode(ProfileCredentials.map([p])) { kvs.set(d, forKey: CloudKeys.credentials) }
+            refreshCloud()
+        }
+        #endif
         // Debug: `-tvSelectShares documents,media` limits the demo server to those shares (screenshots/tests).
         if let i = args.firstIndex(of: "-tvSelectShares"), args.count > i + 1 {
             setSelectedShares(ServerConfig.demo, args[i + 1].split(separator: ",").map(String.init))
@@ -60,7 +72,28 @@ final class TVModel: ObservableObject {
     func select(_ s: ServerConfig) { UserDefaults.standard.set(s.id, forKey: Self.currentKey); reload() }
     func refreshCloud() {
         guard let data = kvs.data(forKey: CloudKeys.servers) else { cloudServers = []; return }
-        cloudServers = ServerStore.decode(data).filter { !$0.isDemo }
+        let creds = kvs.data(forKey: CloudKeys.credentials).map(ProfileCredentials.decode) ?? [:]
+        cloudServers = ServerStore.decode(data).filter { !$0.isDemo }.map { s in creds[s.id].map { s.applying($0) } ?? s }
+        // Profiles already here: take newer credentials from iCloud (changed on another device).
+        var local = store.all(), changed = false
+        for i in local.indices {
+            guard let c = cloudServers.first(where: { $0.id == local[i].id }) else { continue }
+            let merged = local[i].mergingSecrets(from: c)
+            if merged != local[i] { local[i] = merged; changed = true }
+        }
+        if changed { store.save(local); reload(); Diag.info("icloud", "credentials updated from iCloud") }
+    }
+    /// Profiles in iCloud complete enough to be adopted without pairing.
+    var cloudServersReady: [ServerConfig] { cloudServersMissingHere.filter(\.hasCredentials) }
+    /// Adopts the complete profiles found in iCloud and registers this Apple TV on each gateway.
+    @discardableResult
+    func adoptFromCloud() -> [ServerConfig] {
+        let ready = cloudServersReady
+        for s in ready { store.upsert(s) }
+        reload()
+        Diag.info("icloud", "adopted \(ready.count) profile(s) from iCloud")
+        for s in ready { if let c = client(for: s) { Task { _ = try? await c.login(register: true) } } }
+        return ready
     }
     /// Servers found in iCloud that this TV does not have yet.
     var cloudServersMissingHere: [ServerConfig] {
@@ -76,16 +109,16 @@ final class TVModel: ObservableObject {
         c.selectedShares = shares; c.modifiedAt = Date()
         store.upsert(c); reload()
     }
-    /// Stores the paired servers with their secrets (local to this TV: tvOS has no iCloud Keychain)
-    /// and registers this Apple TV on each gateway. Returns the servers adopted.
+    /// Stores the paired servers with their credentials in the profile and registers this Apple TV
+    /// on each gateway. Returns the servers adopted.
     @discardableResult
     func adopt(_ p: PairingPayload) throws -> [ServerConfig] {
         var adopted: [ServerConfig] = []
         for item in p.all {
-            try keychain.set(apiKey: item.apiKey, for: item.server.id)
-            if let cf = item.cloudflare { try keychain.set(cloudflareToken: cf, for: item.server.id) }
-            if let u = item.username, let pw = item.password { try keychain.set(username: u, password: pw, for: item.server.id) }
-            var s = item.server; s.username = item.username
+            var s = item.server
+            let u = item.username.flatMap { u in item.password.map { (username: u, password: $0) } }
+            s.setCredentials(apiKey: item.apiKey, cloudflare: item.cloudflare, user: u)
+            if u == nil { s.username = item.username }
             store.upsert(s); adopted.append(s)
         }
         reload()

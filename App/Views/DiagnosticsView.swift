@@ -85,12 +85,11 @@ enum DiagnosticsReport {
         out.append("Device id: \(DeviceIdentity.id.prefix(8))… (\(DeviceIdentity.isProvisional ? "provisional" : "registered"))")
         out.append("iCloud sync: \(model.cloud.enabled ? "on" : "off") · servers in iCloud: \(model.cloud.remoteServerCount) · debug log: \(Diag.debugEnabled ? "on" : "off")")
         out.append("App group container: \(AppGroup.containerURL != nil ? "available" : "MISSING")")
-        let keychain = KeychainStore()
         for s in model.servers {
             if let server, server.id != s.id { continue }
             let m = model.maintenance[s.id] ?? model.storedMaintenance(s.id)
             let mm = m.map { "build \($0.build) gateway \($0.gatewayOK ? "ok" : "KO") location \($0.locationOK.map { $0 ? "ok" : "KO" } ?? "?") — \($0.detail)" } ?? "never"
-            out.append("Server \(s.name): \(s.url.host ?? "?") · \(s.accessMode) · user \(s.username ?? "-") · secrets \(s.isDemo ? "n/a" : (keychain.hasSecrets(for: s.id) ? "present" : "MISSING")) · shares \(s.selectedShares?.count.description ?? "all") · maintenance: \(mm)")
+            out.append("Server \(s.name): \(s.url.host ?? "?") · \(s.accessMode) · user \(s.username ?? "-") · credentials \(s.isDemo ? "n/a" : (s.hasCredentials ? "in profile" : "MISSING")) · shares \(s.selectedShares?.count.description ?? "all") · maintenance: \(mm)")
         }
         if !extra.isEmpty { out.append(""); out += extra }
         out.append(""); out.append("Last log lines:")

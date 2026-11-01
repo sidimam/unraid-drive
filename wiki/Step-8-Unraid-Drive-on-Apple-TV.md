@@ -8,9 +8,9 @@ The same **Unraid Drive** (universal purchase) also runs on Apple TV (tvOS 17 or
 2. On your iPhone, iPad or Mac open Unraid Drive › Settings › **Pair an Apple TV**, enter the code and choose what to send: **all servers** (default when you have more than one — the whole configuration, like a restore) or a single server.
 3. Within a few seconds the TV shows *Paired* and lists the servers; each one keeps the shares you chose on the phone.
 
-**Configuration found in iCloud.** If your other devices saved the configuration in iCloud (Settings › iCloud in the app), a new or reset Apple TV opens on *Configuration found in iCloud: N servers* with their names. Apple TV has no iCloud Keychain, so the credentials cannot be read there: the same pairing code brings them, and the TV registers itself on every gateway again (build 30+).
+**Configuration found in iCloud.** If your other devices saved the configuration in iCloud (Settings › iCloud in the app), a new or reset Apple TV opens on *Configuration found in iCloud: N servers* with their names. Since 1.5.3 the profiles in iCloud carry their credentials: choose **Use the iCloud configuration** and the TV adopts them and registers itself on every gateway — no code needed. Profiles saved by a version older than 1.5.3 arrive without credentials: update the app on that device and open it once, or pair with the code as below.
 
-How it works: the phone encrypts the server (URL, mode, Cloudflare token, Unraid user and password, API key) with a key derived from the code (AES-GCM) and drops it in your iCloud Key-Value Storage; the TV reads it, decrypts, stores the secrets in its own Keychain and deletes the record. iCloud only ever sees ciphertext; both devices must use the same Apple Account. Curious first? *Try the demo* on the TV shows sample folders offline.
+How it works: the phone encrypts the server (URL, mode, Cloudflare token, Unraid user and password, API key) with a key derived from the code (AES-GCM) and drops it in your iCloud Key-Value Storage; the TV reads it, decrypts, stores the profiles with their credentials and deletes the record. iCloud only ever sees ciphertext; both devices must use the same Apple Account. Curious first? *Try the demo* on the TV shows sample folders offline.
 
 ## Using it
 

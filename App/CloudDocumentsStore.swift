@@ -5,8 +5,8 @@ import UnraidGatewayKit
 /// (`iCloud Drive › Unraid Drive › servers.json`), next to the Key-Value Store copy.
 ///
 /// Why a file: it is visible, readable and versioned by iCloud, survives every reinstall and any
-/// device, and can be inspected or restored by hand. Secrets are never in it — they stay in iCloud
-/// Keychain (the *Passwords* of the Apple account) as synchronizable Keychain items.
+/// device, and can be inspected or restored by hand. Credentials are never in it: since 1.5.3 they
+/// travel with the profiles in iCloud Key-Value Storage (`CloudSync`).
 ///
 /// The container is `iCloud.com.sdimambro.unraid-drive`; when the account has iCloud Drive off, or
 /// the build was signed without the container, `url` is nil and everything here is a no-op that
@@ -16,7 +16,7 @@ actor CloudDocumentsStore {
     static let containerID = "iCloud.com.sdimambro.unraid-drive"
     static let fileName = "servers.json"
 
-    /// What the file holds. `servers` never carry secrets (`ServerConfig` has none).
+    /// What the file holds. `servers` never carry credentials (`write` strips them).
     struct Snapshot: Codable {
         var schema: Int = 1
         var updatedAt: Date
@@ -87,7 +87,8 @@ actor CloudDocumentsStore {
     /// Writes the list (demo excluded by the caller) atomically through file coordination.
     func write(_ servers: [ServerConfig]) throws {
         guard let url = fileURL() else { return }
-        let snap = Snapshot(updatedAt: Date(), updatedBy: GatewayClient.clientDescription, servers: servers)
+        // The file is readable and can be shared: never the credentials (they travel in the Key-Value Store).
+        let snap = Snapshot(updatedAt: Date(), updatedBy: GatewayClient.clientDescription, servers: servers.map(\.withoutSecrets))
         let enc = JSONEncoder(); enc.outputFormatting = [.prettyPrinted, .sortedKeys]; enc.dateEncodingStrategy = .iso8601
         let data = try enc.encode(snap)
         var coordError: NSError?

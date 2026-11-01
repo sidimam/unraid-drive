@@ -682,46 +682,6 @@
         }
       }
     },
-    "A configuration saved by Unraid Drive on another device was found. Restoring turns sync on; the secrets arrive through iCloud Keychain and this device is registered on each gateway again.": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "تم العثور على إعدادات حفظها Unraid Drive على جهاز آخر. الاستعادة تفعّل المزامنة؛ تصل الأسرار عبر سلسلة مفاتيح iCloud ويُعاد تسجيل هذا الجهاز على كل بوابة."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eine von Unraid Drive auf einem anderen Gerät gespeicherte Konfiguration wurde gefunden. Die Wiederherstellung schaltet die Synchronisierung ein; die Geheimnisse kommen über den iCloud-Schlüsselbund und dieses Gerät wird bei jedem Gateway erneut registriert."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Se encontró una configuración guardada por Unraid Drive en otro dispositivo. Restaurar activa la sincronización; los secretos llegan por el llavero de iCloud y este dispositivo vuelve a registrarse en cada gateway."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Une configuration enregistrée par Unraid Drive sur un autre appareil a été trouvée. La restauration active la synchronisation ; les secrets arrivent par le trousseau iCloud et cet appareil est réenregistré sur chaque passerelle."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "È stata trovata una configurazione salvata da Unraid Drive su un altro dispositivo. Il ripristino attiva la sincronizzazione; i segreti arrivano dal Portachiavi iCloud e questo dispositivo viene registrato di nuovo su ogni gateway."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "找到了 Unraid Drive 在另一台设备上保存的配置。恢复会开启同步；密钥通过 iCloud 钥匙串送达，本设备会重新在每个网关上注册。"
-          }
-        }
-      }
-    },
     "A configuration saved by Unraid Drive was found in your iCloud account.": {
       "localizations": {
         "ar": {
@@ -1362,46 +1322,6 @@
         }
       }
     },
-    "Another device (or this one, before a reinstall) saved %lld server(s) in iCloud. Restore them here: the list arrives from iCloud, the API keys, Cloudflare service tokens and Unraid passwords from iCloud Keychain, and this device registers itself on each gateway again.": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "حفظ جهاز آخر (أو هذا الجهاز قبل إعادة التثبيت) %lld خادمًا في iCloud. استعدها هنا: تصل القائمة من iCloud، ومفاتيح API ورموز خدمة Cloudflare وكلمات مرور Unraid من سلسلة مفاتيح iCloud، ويعيد هذا الجهاز تسجيل نفسه على كل بوابة."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ein anderes Gerät (oder dieses, vor einer Neuinstallation) hat %lld Server in iCloud gespeichert. Stellen Sie sie hier wieder her: die Liste kommt aus iCloud, API-Schlüssel, Cloudflare-Service-Tokens und Unraid-Passwörter aus dem iCloud-Schlüsselbund, und dieses Gerät registriert sich erneut bei jedem Gateway."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otro dispositivo (o este, antes de una reinstalación) guardó %lld servidor(es) en iCloud. Restáuralos aquí: la lista llega de iCloud, las claves API, los tokens de servicio de Cloudflare y las contraseñas de Unraid del llavero de iCloud, y este dispositivo vuelve a registrarse en cada gateway."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Un autre appareil (ou celui-ci, avant une réinstallation) a enregistré %lld serveur(s) dans iCloud. Restaurez-les ici : la liste vient d'iCloud, les clés API, jetons de service Cloudflare et mots de passe Unraid du trousseau iCloud, et cet appareil se réenregistre sur chaque passerelle."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Un altro dispositivo (o questo, prima di una reinstallazione) ha salvato %lld server in iCloud. Ripristinali qui: l'elenco arriva da iCloud, le chiavi API, i service token Cloudflare e le password Unraid dal Portachiavi iCloud, e questo dispositivo si registra di nuovo su ogni gateway."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "另一台设备（或本机在重装前）在 iCloud 中保存了 %lld 个服务器。在此恢复：列表来自 iCloud，API 密钥、Cloudflare 服务令牌和 Unraid 密码来自 iCloud 钥匙串，本设备会重新在每个网关上注册。"
-          }
-        }
-      }
-    },
     "Another version of the Unraid Drive extension is still running. Quit the app, wait a moment and open it again (or restart the device).": {
       "localizations": {
         "ar": {
@@ -1558,46 +1478,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "应用设置"
-          }
-        }
-      }
-    },
-    "Apple TV cannot read the credentials from iCloud Keychain. Open Unraid Drive on your iPhone, iPad or Mac, go to Settings › Pair an Apple TV, enter this code and send all the servers: the whole configuration arrives here encrypted with the code and this Apple TV registers itself on the gateways again.": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "لا يستطيع Apple TV قراءة بيانات الاعتماد من سلسلة مفاتيح iCloud. افتح Unraid Drive على iPhone أو iPad أو Mac، ثم الإعدادات › إقران Apple TV، وأدخل هذا الرمز وأرسل جميع الخوادم: تصل الإعدادات كاملة هنا مشفّرة بالرمز ويعيد هذا الـ Apple TV تسجيل نفسه على البوابات."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apple TV kann die Zugangsdaten nicht aus dem iCloud-Schlüsselbund lesen. Öffnen Sie Unraid Drive auf iPhone, iPad oder Mac, gehen Sie zu Einstellungen › Apple TV koppeln, geben Sie diesen Code ein und senden Sie alle Server: die gesamte Konfiguration kommt mit dem Code verschlüsselt hier an und dieses Apple TV registriert sich erneut bei den Gateways."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "El Apple TV no puede leer las credenciales del llavero de iCloud. Abre Unraid Drive en tu iPhone, iPad o Mac, ve a Ajustes › Emparejar un Apple TV, introduce este código y envía todos los servidores: toda la configuración llega aquí cifrada con el código y este Apple TV vuelve a registrarse en los gateways."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L'Apple TV ne peut pas lire les identifiants dans le trousseau iCloud. Ouvrez Unraid Drive sur votre iPhone, iPad ou Mac, allez dans Réglages › Jumeler une Apple TV, saisissez ce code et envoyez tous les serveurs : toute la configuration arrive ici chiffrée avec le code et cette Apple TV se réenregistre sur les passerelles."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apple TV non può leggere le credenziali dal Portachiavi iCloud. Apri Unraid Drive su iPhone, iPad o Mac, vai in Impostazioni › Abbina una Apple TV, inserisci questo codice e invia tutti i server: l'intera configurazione arriva qui cifrata con il codice e questa Apple TV si registra di nuovo sui gateway."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apple TV 无法从 iCloud 钥匙串读取凭据。请在 iPhone、iPad 或 Mac 上打开 Unraid Drive，进入“设置 › 配对 Apple TV”，输入此代码并发送所有服务器：整套配置将以该代码加密送达，此 Apple TV 会重新在网关上注册。"
           }
         }
       }
@@ -3967,46 +3847,6 @@
         }
       }
     },
-    "Create the key in Unraid under Settings › Management Access › API Keys. It is stored in this device's Keychain and sent only to your gateway.": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "أنشئ المفتاح في Unraid من Settings › Management Access › API Keys. يُحفظ في سلسلة مفاتيح هذا الجهاز ويُرسل إلى بوابتك فقط."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erstelle den Schlüssel in Unraid unter Settings › Management Access › API Keys. Er wird im Schlüsselbund dieses Geräts gespeichert und nur an dein Gateway gesendet."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Crea la clave en Unraid en Settings › Management Access › API Keys. Se guarda en el llavero de este dispositivo y solo se envía a tu gateway."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Créez la clé dans Unraid sous Settings › Management Access › API Keys. Elle est stockée dans le trousseau de cet appareil et envoyée uniquement à votre passerelle."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Crea la chiave in Unraid in Settings › Management Access › API Keys. Viene salvata nel portachiavi di questo dispositivo e inviata solo al tuo gateway."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "在 Unraid 的 Settings › Management Access › API Keys 中创建密钥。密钥保存在本设备的钥匙串中，只会发送给你的网关。"
-          }
-        }
-      }
-    },
     "Created": {
       "localizations": {
         "ar": {
@@ -4127,46 +3967,6 @@
         }
       }
     },
-    "Credentials missing from the Keychain. Use Edit to enter them again.": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "بيانات الاعتماد غير موجودة في سلسلة المفاتيح. استخدم «تعديل» لإدخالها مجددًا."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zugangsdaten fehlen im Schlüsselbund. Gib sie über „Bearbeiten“ erneut ein."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Faltan las credenciales en el llavero. Usa Editar para introducirlas de nuevo."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Identifiants absents du trousseau. Utilisez Modifier pour les saisir à nouveau."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Credenziali assenti dal portachiavi. Usa Modifica per inserirle di nuovo."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "钥匙串中缺少凭据。请使用“编辑”重新输入。"
-          }
-        }
-      }
-    },
     "Credentials missing on this Mac": {
       "localizations": {
         "ar": {
@@ -4203,46 +4003,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "此 Mac 上缺少凭据"
-          }
-        }
-      }
-    },
-    "Credentials not available yet. After an iCloud restore they arrive through iCloud Keychain within a minute; try again.": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "بيانات الاعتماد غير متاحة بعد. بعد الاستعادة من iCloud تصل عبر سلسلة مفاتيح iCloud خلال دقيقة؛ أعد المحاولة."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zugangsdaten noch nicht verfügbar. Nach einer iCloud-Wiederherstellung kommen sie innerhalb einer Minute über den iCloud-Schlüsselbund; bitte erneut versuchen."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Credenciales aún no disponibles. Tras una restauración de iCloud llegan por el Llavero de iCloud en un minuto; reintenta."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Identifiants pas encore disponibles. Après une restauration iCloud ils arrivent par le trousseau iCloud en une minute ; réessayez."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Credenziali non ancora disponibili. Dopo un ripristino da iCloud arrivano tramite il Portachiavi iCloud entro un minuto: riprova."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "凭据尚不可用。iCloud 恢复后它们会在一分钟内通过 iCloud 钥匙串到达，请重试。"
           }
         }
       }
@@ -10352,46 +10112,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "在 Apple TV 上打开 Unraid Drive：它会显示一个 6 位代码。在此输入并选择要发送的内容。凭据以该代码加密传输；电视通过你的 unraid-gateway 以你自己的权限连接。"
-          }
-        }
-      }
-    },
-    "One backup shared by iPhone, iPad, Vision Pro and Mac: the server list in iCloud and the secrets in iCloud Keychain, end-to-end encrypted. You can turn it on later in Settings › iCloud.": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "نسخة احتياطية واحدة مشتركة بين iPhone وiPad وVision Pro وMac: قائمة الخوادم في iCloud والأسرار في سلسلة مفاتيح iCloud بتشفير تام. يمكنك تفعيلها لاحقًا من الإعدادات › iCloud."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ein Backup für iPhone, iPad, Vision Pro und Mac: die Serverliste in iCloud und die Geheimnisse im iCloud-Schlüsselbund, Ende-zu-Ende verschlüsselt. Du kannst es später unter Einstellungen › iCloud einschalten."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Una única copia compartida por iPhone, iPad, Vision Pro y Mac: la lista de servidores en iCloud y los secretos en el Llavero de iCloud, cifrados de extremo a extremo. Puedes activarla más tarde en Ajustes › iCloud."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Une seule sauvegarde partagée par iPhone, iPad, Vision Pro et Mac : la liste des serveurs dans iCloud et les secrets dans le trousseau iCloud, chiffrés de bout en bout. Vous pourrez l’activer plus tard dans Réglages › iCloud."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Un unico backup condiviso da iPhone, iPad, Vision Pro e Mac: l’elenco dei server in iCloud e i segreti nel Portachiavi iCloud, cifrati end-to-end. Puoi attivarlo più tardi in Impostazioni › iCloud."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iPhone、iPad、Vision Pro 和 Mac 共用一份备份：服务器列表存于 iCloud，密钥存于 iCloud 钥匙串，端到端加密。你可以稍后在“设置”›“iCloud”中开启。"
           }
         }
       }
@@ -16892,46 +16612,6 @@
         }
       }
     },
-    "The credentials have not arrived from iCloud Keychain yet. Open the server and use Connect again.": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "لم تصل بيانات الاعتماد من سلسلة مفاتيح iCloud بعد. افتح الخادم واستخدم إعادة الاتصال."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die Zugangsdaten sind noch nicht aus dem iCloud-Schlüsselbund angekommen. Öffnen Sie den Server und verwenden Sie Erneut verbinden."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Las credenciales aún no han llegado del llavero de iCloud. Abre el servidor y usa Conectar de nuevo."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Les identifiants ne sont pas encore arrivés du trousseau iCloud. Ouvrez le serveur et utilisez Se reconnecter."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le credenziali non sono ancora arrivate dal Portachiavi iCloud. Apri il server e usa Connetti di nuovo."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "凭据尚未从 iCloud 钥匙串送达。请打开服务器并使用“重新连接”。"
-          }
-        }
-      }
-    },
     "The file is removed from the NAS. There is no trash on the gateway.": {
       "localizations": {
         "ar": {
@@ -17248,46 +16928,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "日志由本 App 写入，按 %lld × %lld MB 轮转。调试日志会额外记录对网关的每个请求；重现问题时开启，之后关闭。"
-          }
-        }
-      }
-    },
-    "The other devices keep their configuration; only the shared copy is deleted. Secrets in iCloud Keychain are not touched.": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "تحتفظ الأجهزة الأخرى بإعداداتها؛ تُحذف النسخة المشتركة فقط. لا تُمَس الأسرار في سلسلة مفاتيح iCloud."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die anderen Geräte behalten ihre Konfiguration; nur die gemeinsame Kopie wird gelöscht. Geheimnisse im iCloud-Schlüsselbund bleiben unberührt."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Los demás dispositivos conservan su configuración; solo se elimina la copia compartida. Los secretos del llavero de iCloud no se tocan."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Les autres appareils conservent leur configuration ; seule la copie partagée est supprimée. Les secrets du trousseau iCloud ne sont pas touchés."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gli altri dispositivi conservano la loro configurazione; viene eliminata solo la copia condivisa. I segreti nel Portachiavi iCloud non vengono toccati."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "其他设备保留各自的配置，仅删除共享副本。iCloud 钥匙串中的机密不受影响。"
           }
         }
       }
@@ -19135,86 +18775,6 @@
         }
       }
     },
-    "When on, the server list (names, URLs, connection mode) is stored in your iCloud account and the API keys and Cloudflare tokens in iCloud Keychain, end-to-end encrypted. After restoring or replacing a device, Restore brings the servers back and registers this device on each gateway. Turning sync off keeps the copy in iCloud for the other devices. The demo server is never synced.": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "عند التفعيل تُحفظ قائمة الخوادم (الأسماء وعناوين URL ووضع الاتصال) في حساب iCloud الخاص بك، وتُحفظ مفاتيح API ورموز Cloudflare في سلسلة مفاتيح iCloud بتشفير من طرف إلى طرف. بعد استعادة جهاز أو استبداله، يستعيد «استعادة» الخوادم ويسجّل هذا الجهاز على كل بوّابة. إيقاف المزامنة يحتفظ بالنسخة في iCloud للأجهزة الأخرى. لا يُزامَن خادم العرض التوضيحي أبداً."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wenn aktiviert, wird die Serverliste (Namen, URLs, Verbindungsmodus) in deinem iCloud-Account gespeichert und die API-Schlüssel und Cloudflare-Token im iCloud-Schlüsselbund, Ende-zu-Ende verschlüsselt. Nach dem Wiederherstellen oder Ersetzen eines Geräts bringt „Wiederherstellen“ die Server zurück und registriert dieses Gerät an jedem Gateway. Das Ausschalten der Synchronisierung behält die Kopie in iCloud für die anderen Geräte. Der Demo-Server wird nie synchronisiert."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Si está activo, la lista de servidores (nombres, URL, modo de conexión) se guarda en tu cuenta de iCloud y las claves API y los tokens de Cloudflare en el llavero de iCloud, con cifrado de extremo a extremo. Tras restaurar o sustituir un dispositivo, Restaurar recupera los servidores y registra este dispositivo en cada gateway. Desactivar la sincronización conserva la copia en iCloud para los demás dispositivos. El servidor de demostración nunca se sincroniza."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lorsqu'elle est activée, la liste des serveurs (noms, URL, mode de connexion) est stockée dans votre compte iCloud et les clés API et jetons Cloudflare dans le trousseau iCloud, chiffrés de bout en bout. Après la restauration ou le remplacement d'un appareil, Restaurer ramène les serveurs et enregistre cet appareil sur chaque passerelle. Désactiver la synchronisation conserve la copie dans iCloud pour les autres appareils. Le serveur de démonstration n'est jamais synchronisé."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Se attiva, l'elenco dei server (nomi, URL, modalità di connessione) viene salvato nel tuo account iCloud e le chiavi API e i token Cloudflare nel Portachiavi iCloud, con cifratura end-to-end. Dopo il ripristino o la sostituzione di un dispositivo, Ripristina riporta i server e registra questo dispositivo su ogni gateway. Disattivare la sincronizzazione lascia la copia in iCloud per gli altri dispositivi. Il server demo non viene mai sincronizzato."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "开启后，服务器列表（名称、URL、连接模式）保存在你的 iCloud 账户中，API 密钥和 Cloudflare 令牌保存在 iCloud 钥匙串中，端到端加密。恢复或更换设备后，“恢复”会找回服务器并在每个网关上注册此设备。关闭同步会为其他设备保留 iCloud 中的副本。演示服务器绝不同步。"
-          }
-        }
-      }
-    },
-    "When on, the server list (names, URLs, connection mode) is stored in your iCloud account and the API keys and Cloudflare tokens in iCloud Keychain, end-to-end encrypted. After restoring or replacing your iPhone, the app finds its configuration again. When off, everything stays on this device only. The demo server is never synced.": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "عند التفعيل تُحفظ قائمة الخوادم (الأسماء والعناوين ووضع الاتصال) في حساب iCloud الخاص بك، وتُحفظ مفاتيح API ورموز Cloudflare في سلسلة مفاتيح iCloud بتشفير طرفي. بعد استعادة iPhone أو استبداله يجد التطبيق إعداداته مجددًا. عند الإيقاف يبقى كل شيء على هذا الجهاز فقط. لا يُزامَن الخادم التجريبي أبدًا."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wenn aktiviert, wird die Serverliste (Namen, URLs, Verbindungsmodus) in deinem iCloud-Account gespeichert und API-Schlüssel sowie Cloudflare-Token im iCloud-Schlüsselbund, Ende-zu-Ende verschlüsselt. Nach einer Wiederherstellung oder einem Gerätewechsel findet die App ihre Konfiguration wieder. Wenn deaktiviert, bleibt alles nur auf diesem Gerät. Der Demo-Server wird nie synchronisiert."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Si está activado, la lista de servidores (nombres, URL, modo de conexión) se guarda en tu cuenta de iCloud y las claves API y tokens de Cloudflare en el llavero de iCloud, cifrados de extremo a extremo. Tras restaurar o cambiar de iPhone, la app recupera su configuración. Si está desactivado, todo queda solo en este dispositivo. El servidor demo nunca se sincroniza."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Si activé, la liste des serveurs (noms, URL, mode de connexion) est stockée dans votre compte iCloud et les clés API et jetons Cloudflare dans le trousseau iCloud, chiffrés de bout en bout. Après une restauration ou un changement d’iPhone, l’app retrouve sa configuration. Si désactivé, tout reste uniquement sur cet appareil. Le serveur démo n’est jamais synchronisé."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Se attivo, l’elenco dei server (nomi, URL, modalità di connessione) viene salvato nel tuo account iCloud e le chiavi API e i token Cloudflare nel portachiavi iCloud, cifrati end-to-end. Dopo un ripristino o un cambio di iPhone l’app ritrova la sua configurazione. Se disattivo, tutto resta solo su questo dispositivo. Il server demo non viene mai sincronizzato."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "开启后，服务器列表（名称、URL、连接方式）保存在你的 iCloud 账户中，API 密钥和 Cloudflare 令牌保存在 iCloud 钥匙串中，端到端加密。恢复或更换 iPhone 后，应用会重新找到配置。关闭时，所有内容仅保留在本设备。演示服务器永不同步。"
-          }
-        }
-      }
-    },
     "With a user, the gateway applies that user's share permissions exactly as over SMB: only the shares the user may read appear, and read-only shares stay read-only. Leave empty to use the container mounts as they are. Some gateways require it.": {
       "localizations": {
         "ar": {
@@ -20166,46 +19726,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "版本 %1$@ · %2$lld 毫秒"
-          }
-        }
-      }
-    },
-    "waiting for the credentials from iCloud Keychain…": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "بانتظار بيانات الاعتماد من سلسلة مفاتيح iCloud…"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "warte auf die Zugangsdaten aus dem iCloud-Schlüsselbund…"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "esperando las credenciales del llavero de iCloud…"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "en attente des identifiants du trousseau iCloud…"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "in attesa delle credenziali dal Portachiavi iCloud…"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "正在等待 iCloud 钥匙串中的凭据…"
           }
         }
       }
@@ -21650,46 +21170,6 @@
         }
       }
     },
-    "Credentials missing from the Keychain": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Credenziali assenti dal Portachiavi"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Faltan las credenciales en el llavero"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Identifiants absents du trousseau"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zugangsdaten fehlen im Schlüsselbund"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "钥匙串中缺少凭据"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "بيانات الاعتماد غير موجودة في سلسلة المفاتيح"
-          }
-        }
-      }
-    },
     "The demo server has no hardware to describe.": {
       "localizations": {
         "it": {
@@ -22206,86 +21686,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "إعادة الاتصال"
-          }
-        }
-      }
-    },
-    "Credentials missing from the Keychain: sign in again.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Credenziali assenti dal Portachiavi: accedi di nuovo."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Faltan las credenciales en el llavero: inicia sesión de nuevo."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Identifiants absents du trousseau : reconnectez-vous."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zugangsdaten fehlen im Schlüsselbund: erneut anmelden."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "钥匙串中缺少凭据：请重新登录。"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "بيانات الاعتماد مفقودة من سلسلة المفاتيح: سجّل الدخول مجددًا."
-          }
-        }
-      }
-    },
-    "Device registration waiting for the credentials from iCloud Keychain.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registrazione del dispositivo in attesa delle credenziali dal Portachiavi iCloud."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registro del dispositivo a la espera de las credenciales del llavero de iCloud."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrement de l’appareil en attente des identifiants du trousseau iCloud."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geräteregistrierung wartet auf die Zugangsdaten aus dem iCloud-Schlüsselbund."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "设备注册正在等待 iCloud 钥匙串中的凭据。"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "تسجيل الجهاز بانتظار بيانات الاعتماد من سلسلة مفاتيح iCloud."
           }
         }
       }
@@ -26130,46 +25530,6 @@
         }
       }
     },
-    "Credentials missing from the Keychain: open Unraid Drive and sign in again.": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Credenziali assenti dal Portachiavi: apri Unraid Drive e accedi di nuovo."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Faltan las credenciales en el llavero: abre Unraid Drive e inicia sesión de nuevo."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Identifiants absents du trousseau : ouvrez Unraid Drive et reconnectez-vous."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zugangsdaten fehlen im Schlüsselbund: Unraid Drive öffnen und erneut anmelden."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "钥匙串中缺少凭据：请打开 Unraid Drive 并重新登录。"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "بيانات الاعتماد مفقودة من سلسلة المفاتيح: افتح Unraid Drive وسجّل الدخول مجددًا."
-          }
-        }
-      }
-    },
     "%lld item(s) saved in %@.": {
       "localizations": {
         "it": {
@@ -26526,6 +25886,606 @@
           "stringUnit": {
             "state": "translated",
             "value": "تُزال الموقع ويُسجَّل من جديد: الملفات التي نُزّلت على هذا الجهاز تُنزَّل مرة أخرى عند فتحها، والتغييرات التي لم تُرفع بعد تضيع. استخدمه عندما يعرض تطبيق الملفات «المحتوى غير متاح» لهذا الخادم."
+          }
+        }
+      }
+    },
+    "This profile has no credentials: open it and use Edit to enter them.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo profilo non ha credenziali: aprilo e usa Modifica per inserirle."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este perfil no tiene credenciales: ábrelo y usa Editar para introducirlas."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce profil n’a pas d’identifiants : ouvrez-le et utilisez Modifier pour les saisir."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Profil hat keine Zugangsdaten: Öffne es und gib sie unter „Bearbeiten“ ein."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此配置文件没有凭据：打开它并使用“编辑”输入凭据。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يحتوي هذا الملف الشخصي على بيانات اعتماد: افتحه واستخدم «تعديل» لإدخالها."
+          }
+        }
+      }
+    },
+    "This profile has no credentials: open Unraid Drive and use Edit to enter them.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo profilo non ha credenziali: apri Unraid Drive e usa Modifica per inserirle."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este perfil no tiene credenciales: abre Unraid Drive y usa Editar para introducirlas."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce profil n’a pas d’identifiants : ouvrez Unraid Drive et utilisez Modifier pour les saisir."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Profil hat keine Zugangsdaten: Öffne Unraid Drive und gib sie unter „Bearbeiten“ ein."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此配置文件没有凭据：打开 Unraid Drive 并使用“编辑”输入凭据。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يحتوي هذا الملف الشخصي على بيانات اعتماد: افتح Unraid Drive واستخدم «تعديل» لإدخالها."
+          }
+        }
+      }
+    },
+    "Device registration waiting for the profile credentials from iCloud.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrazione del dispositivo in attesa delle credenziali del profilo da iCloud."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registro del dispositivo a la espera de las credenciales del perfil desde iCloud."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrement de l’appareil en attente des identifiants du profil depuis iCloud."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geräteregistrierung wartet auf die Zugangsdaten des Profils aus iCloud."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "设备注册正在等待来自 iCloud 的配置文件凭据。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تسجيل الجهاز بانتظار بيانات اعتماد الملف الشخصي من iCloud."
+          }
+        }
+      }
+    },
+    "waiting for the profile credentials from iCloud…": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in attesa delle credenziali del profilo da iCloud…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "esperando las credenciales del perfil desde iCloud…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "en attente des identifiants du profil depuis iCloud…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "wartet auf die Zugangsdaten des Profils aus iCloud …"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在等待来自 iCloud 的配置文件凭据…"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بانتظار بيانات اعتماد الملف الشخصي من iCloud…"
+          }
+        }
+      }
+    },
+    "This profile arrived from iCloud without credentials. Open it and use Edit to enter them, or update Unraid Drive on the device that saved it.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo profilo è arrivato da iCloud senza credenziali. Aprilo e usa Modifica per inserirle, oppure aggiorna Unraid Drive sul dispositivo che lo ha salvato."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este perfil llegó de iCloud sin credenciales. Ábrelo y usa Editar para introducirlas, o actualiza Unraid Drive en el dispositivo que lo guardó."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce profil est arrivé d’iCloud sans identifiants. Ouvrez-le et utilisez Modifier pour les saisir, ou mettez à jour Unraid Drive sur l’appareil qui l’a enregistré."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Profil kam ohne Zugangsdaten aus iCloud. Öffne es und gib sie unter „Bearbeiten“ ein, oder aktualisiere Unraid Drive auf dem Gerät, das es gespeichert hat."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此配置文件来自 iCloud，但没有凭据。打开它并使用“编辑”输入凭据，或在保存它的设备上更新 Unraid Drive。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "وصل هذا الملف الشخصي من iCloud دون بيانات اعتماد. افتحه واستخدم «تعديل» لإدخالها، أو حدّث Unraid Drive على الجهاز الذي حفظه."
+          }
+        }
+      }
+    },
+    "Create the key in Unraid under Settings › Management Access › API Keys. It is saved in the profile, synced with it through your iCloud, and sent only to your gateway.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crea la chiave in Unraid in Settings › Management Access › API Keys. Viene salvata nel profilo, sincronizzata con lui tramite il tuo iCloud e inviata solo al tuo gateway."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crea la clave en Unraid en Settings › Management Access › API Keys. Se guarda en el perfil, se sincroniza con él a través de tu iCloud y solo se envía a tu gateway."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créez la clé dans Unraid sous Settings › Management Access › API Keys. Elle est enregistrée dans le profil, synchronisée avec lui via votre iCloud et envoyée uniquement à votre passerelle."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erstelle den Schlüssel in Unraid unter Settings › Management Access › API Keys. Er wird im Profil gespeichert, mit ihm über dein iCloud synchronisiert und nur an dein Gateway gesendet."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Unraid 的 Settings › Management Access › API Keys 中创建密钥。密钥保存在配置文件中，随配置文件通过你的 iCloud 同步，只会发送给你的网关。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أنشئ المفتاح في Unraid من Settings › Management Access › API Keys. يُحفظ في الملف الشخصي ويُزامَن معه عبر iCloud الخاص بك ويُرسل إلى بوابتك فقط."
+          }
+        }
+      }
+    },
+    "The other devices keep their configuration; only the shared copy in iCloud (profiles and their credentials) is deleted.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gli altri dispositivi conservano la loro configurazione; viene eliminata solo la copia condivisa in iCloud (profili e relative credenziali)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los demás dispositivos conservan su configuración; solo se elimina la copia compartida en iCloud (perfiles y sus credenciales)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les autres appareils conservent leur configuration ; seule la copie partagée dans iCloud (profils et leurs identifiants) est supprimée."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die anderen Geräte behalten ihre Konfiguration; nur die gemeinsame Kopie in iCloud (Profile und ihre Zugangsdaten) wird gelöscht."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "其他设备保留各自的配置，仅删除 iCloud 中的共享副本（配置文件及其凭据）。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تحتفظ الأجهزة الأخرى بإعداداتها؛ تُحذف النسخة المشتركة في iCloud فقط (الملفات الشخصية وبيانات اعتمادها)."
+          }
+        }
+      }
+    },
+    "When on, each profile — name, URL, connection mode, shares to show and its credentials (Unraid API key, Cloudflare service token, Unraid user and password) — is saved in your iCloud, so a new or reinstalled device gets it complete. The readable servers.json in iCloud Drive › Unraid Drive has everything but the credentials. After restoring or replacing a device, Restore brings the profiles back and registers this device on each gateway. Turning sync off keeps the copies in iCloud for the other devices. The demo server is never synced.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se attiva, ogni profilo — nome, URL, modalità di connessione, condivisioni da mostrare e le sue credenziali (API key di Unraid, service token Cloudflare, utente e password Unraid) — viene salvato nel tuo iCloud, così un dispositivo nuovo o reinstallato lo ritrova completo. Il servers.json leggibile in iCloud Drive › Unraid Drive contiene tutto tranne le credenziali. Dopo il ripristino o la sostituzione di un dispositivo, Ripristina riporta i profili e registra questo dispositivo su ogni gateway. Disattivando la sincronizzazione le copie in iCloud restano per gli altri dispositivi. Il server demo non viene mai sincronizzato."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si está activada, cada perfil — nombre, URL, modo de conexión, recursos compartidos que mostrar y sus credenciales (clave API de Unraid, token de servicio de Cloudflare, usuario y contraseña de Unraid) — se guarda en tu iCloud, de modo que un dispositivo nuevo o reinstalado lo recibe completo. El servers.json legible en iCloud Drive › Unraid Drive lo contiene todo salvo las credenciales. Tras restaurar o sustituir un dispositivo, Restaurar recupera los perfiles y registra este dispositivo en cada gateway. Al desactivar la sincronización, las copias en iCloud se conservan para los demás dispositivos. El servidor de demostración nunca se sincroniza."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si elle est activée, chaque profil — nom, URL, mode de connexion, partages à afficher et ses identifiants (clé API Unraid, jeton de service Cloudflare, utilisateur et mot de passe Unraid) — est enregistré dans votre iCloud, si bien qu’un appareil neuf ou réinstallé le retrouve complet. Le servers.json lisible dans iCloud Drive › Unraid Drive contient tout sauf les identifiants. Après la restauration ou le remplacement d’un appareil, Restaurer ramène les profils et enregistre cet appareil sur chaque passerelle. Désactiver la synchronisation conserve les copies dans iCloud pour les autres appareils. Le serveur de démonstration n’est jamais synchronisé."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn aktiviert, wird jedes Profil — Name, URL, Verbindungsmodus, anzuzeigende Freigaben und seine Zugangsdaten (Unraid-API-Schlüssel, Cloudflare-Service-Token, Unraid-Benutzer und -Passwort) — in deinem iCloud gespeichert, sodass ein neues oder neu installiertes Gerät es vollständig erhält. Die lesbare servers.json in iCloud Drive › Unraid Drive enthält alles außer den Zugangsdaten. Nach dem Wiederherstellen oder Ersetzen eines Geräts holt „Wiederherstellen“ die Profile zurück und registriert dieses Gerät bei jedem Gateway. Beim Ausschalten bleiben die Kopien in iCloud für die anderen Geräte erhalten. Der Demo-Server wird nie synchronisiert."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开启后，每个配置文件——名称、URL、连接方式、要显示的共享及其凭据（Unraid API 密钥、Cloudflare 服务令牌、Unraid 用户名和密码）——都会保存在你的 iCloud 中，新设备或重装后的设备即可获得完整配置。iCloud 云盘 › Unraid Drive 中可读的 servers.json 包含除凭据外的所有内容。恢复或更换设备后，“恢复”会带回配置文件并在每个网关上注册本设备。关闭同步会为其他设备保留 iCloud 中的副本。演示服务器从不同步。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عند التفعيل، يُحفظ كل ملف شخصي — الاسم وعنوان URL ووضع الاتصال والمشاركات المعروضة وبيانات اعتماده (مفتاح Unraid API ورمز خدمة Cloudflare واسم مستخدم Unraid وكلمة مروره) — في iCloud الخاص بك، فيحصل عليه أي جهاز جديد أو مُعاد تثبيته كاملًا. يحتوي ملف servers.json المقروء في iCloud Drive › Unraid Drive على كل شيء عدا بيانات الاعتماد. بعد استعادة جهاز أو استبداله، يعيد «استعادة» الملفات الشخصية ويسجّل هذا الجهاز على كل بوابة. إيقاف المزامنة يُبقي النسخ في iCloud للأجهزة الأخرى. لا تتم مزامنة الخادم التجريبي أبدًا."
+          }
+        }
+      }
+    },
+    "Another device (or this one, before a reinstall) saved %lld server(s) in iCloud. Restore them here: every profile arrives from iCloud complete with its API key, Cloudflare service token and Unraid password, and this device registers itself on each gateway again.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un altro dispositivo (o questo, prima di una reinstallazione) ha salvato %lld server in iCloud. Ripristinali qui: ogni profilo arriva da iCloud completo di API key, service token Cloudflare e password Unraid, e questo dispositivo si registra di nuovo su ogni gateway."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otro dispositivo (o este, antes de una reinstalación) guardó %lld servidor(es) en iCloud. Restáuralos aquí: cada perfil llega de iCloud completo con su clave API, su token de servicio de Cloudflare y su contraseña de Unraid, y este dispositivo vuelve a registrarse en cada gateway."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un autre appareil (ou celui-ci, avant une réinstallation) a enregistré %lld serveur(s) dans iCloud. Restaurez-les ici : chaque profil arrive d’iCloud complet avec sa clé API, son jeton de service Cloudflare et son mot de passe Unraid, et cet appareil se réenregistre sur chaque passerelle."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein anderes Gerät (oder dieses, vor einer Neuinstallation) hat %lld Server in iCloud gespeichert. Stelle sie hier wieder her: Jedes Profil kommt vollständig mit API-Schlüssel, Cloudflare-Service-Token und Unraid-Passwort aus iCloud, und dieses Gerät registriert sich erneut bei jedem Gateway."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "另一台设备（或本机在重装前）在 iCloud 中保存了 %lld 个服务器。在此恢复：每个配置文件都会从 iCloud 完整送达，包括其 API 密钥、Cloudflare 服务令牌和 Unraid 密码，本设备会重新在每个网关上注册。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حفظ جهاز آخر (أو هذا الجهاز قبل إعادة التثبيت) %lld خادمًا في iCloud. استعدها هنا: يصل كل ملف شخصي من iCloud كاملًا بمفتاح API ورمز خدمة Cloudflare وكلمة مرور Unraid، ويعيد هذا الجهاز تسجيل نفسه على كل بوابة."
+          }
+        }
+      }
+    },
+    "One backup shared by iPhone, iPad, Vision Pro, Mac and Apple TV: the profiles, credentials included, in your iCloud. You can turn it on later in Settings › iCloud.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un unico backup condiviso da iPhone, iPad, Vision Pro, Mac e Apple TV: i profili, credenziali comprese, nel tuo iCloud. Puoi attivarlo più tardi in Impostazioni › iCloud."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una única copia compartida por iPhone, iPad, Vision Pro, Mac y Apple TV: los perfiles, credenciales incluidas, en tu iCloud. Puedes activarla más tarde en Ajustes › iCloud."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une seule sauvegarde partagée par iPhone, iPad, Vision Pro, Mac et Apple TV : les profils, identifiants compris, dans votre iCloud. Vous pourrez l’activer plus tard dans Réglages › iCloud."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Backup für iPhone, iPad, Vision Pro, Mac und Apple TV: die Profile samt Zugangsdaten in deinem iCloud. Du kannst es später unter Einstellungen › iCloud einschalten."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone、iPad、Vision Pro、Mac 和 Apple TV 共用一份备份：配置文件（含凭据）存于你的 iCloud。你可以稍后在“设置”›“iCloud”中开启。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نسخة احتياطية واحدة مشتركة بين iPhone وiPad وVision Pro وMac وApple TV: الملفات الشخصية مع بيانات اعتمادها في iCloud الخاص بك. يمكنك تفعيلها لاحقًا من الإعدادات › iCloud."
+          }
+        }
+      }
+    },
+    "A configuration saved by Unraid Drive on another device was found. Restoring turns sync on; the profiles arrive with their credentials and this device is registered on each gateway again.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "È stata trovata una configurazione salvata da Unraid Drive su un altro dispositivo. Il ripristino attiva la sincronizzazione; i profili arrivano con le loro credenziali e questo dispositivo viene registrato di nuovo su ogni gateway."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se encontró una configuración guardada por Unraid Drive en otro dispositivo. Restaurar activa la sincronización; los perfiles llegan con sus credenciales y este dispositivo vuelve a registrarse en cada gateway."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une configuration enregistrée par Unraid Drive sur un autre appareil a été trouvée. La restauration active la synchronisation ; les profils arrivent avec leurs identifiants et cet appareil est réenregistré sur chaque passerelle."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine von Unraid Drive auf einem anderen Gerät gespeicherte Konfiguration wurde gefunden. Die Wiederherstellung schaltet die Synchronisierung ein; die Profile kommen mit ihren Zugangsdaten und dieses Gerät wird bei jedem Gateway erneut registriert."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "找到了 Unraid Drive 在另一台设备上保存的配置。恢复会开启同步；配置文件连同凭据一起送达，本设备会重新在每个网关上注册。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم العثور على إعدادات حفظها Unraid Drive على جهاز آخر. الاستعادة تفعّل المزامنة؛ تصل الملفات الشخصية مع بيانات اعتمادها ويُعاد تسجيل هذا الجهاز على كل بوابة."
+          }
+        }
+      }
+    },
+    "These profiles were saved by an older version of Unraid Drive, without their credentials. Update Unraid Drive on your iPhone, iPad or Mac and open it once, or go there to Settings › Pair an Apple TV and enter this code.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questi profili sono stati salvati da una versione precedente di Unraid Drive, senza credenziali. Aggiorna Unraid Drive su iPhone, iPad o Mac e aprilo una volta, oppure vai lì in Impostazioni › Abbina una Apple TV e inserisci questo codice."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estos perfiles los guardó una versión anterior de Unraid Drive, sin sus credenciales. Actualiza Unraid Drive en tu iPhone, iPad o Mac y ábrelo una vez, o ve allí a Ajustes › Emparejar un Apple TV e introduce este código."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ces profils ont été enregistrés par une version antérieure d’Unraid Drive, sans leurs identifiants. Mettez à jour Unraid Drive sur votre iPhone, iPad ou Mac et ouvrez-le une fois, ou allez-y dans Réglages › Jumeler une Apple TV et saisissez ce code."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Profile wurden von einer älteren Version von Unraid Drive ohne Zugangsdaten gespeichert. Aktualisiere Unraid Drive auf iPhone, iPad oder Mac und öffne es einmal, oder gehe dort zu Einstellungen › Apple TV koppeln und gib diesen Code ein."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这些配置文件由旧版 Unraid Drive 保存，不含凭据。请在 iPhone、iPad 或 Mac 上更新 Unraid Drive 并打开一次，或在那里进入“设置 › 配对 Apple TV”并输入此代码。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حُفظت هذه الملفات الشخصية بإصدار أقدم من Unraid Drive دون بيانات اعتمادها. حدّث Unraid Drive على iPhone أو iPad أو Mac وافتحه مرة واحدة، أو انتقل هناك إلى الإعدادات › إقران Apple TV وأدخل هذا الرمز."
+          }
+        }
+      }
+    },
+    "The profiles arrive complete with their credentials and this Apple TV registers itself on each gateway.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I profili arrivano completi di credenziali e questa Apple TV si registra su ogni gateway."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los perfiles llegan completos con sus credenciales y este Apple TV se registra en cada gateway."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les profils arrivent complets avec leurs identifiants et cette Apple TV s’enregistre sur chaque passerelle."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Profile kommen vollständig mit ihren Zugangsdaten an und dieses Apple TV registriert sich bei jedem Gateway."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配置文件连同凭据完整送达，此 Apple TV 会在每个网关上注册。"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تصل الملفات الشخصية كاملة مع بيانات اعتمادها ويسجّل هذا الـ Apple TV نفسه على كل بوابة."
+          }
+        }
+      }
+    },
+    "Use the iCloud configuration": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usa la configurazione di iCloud"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usar la configuración de iCloud"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utiliser la configuration iCloud"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud-Konfiguration verwenden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 iCloud 配置"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استخدام إعدادات iCloud"
+          }
+        }
+      }
+    },
+    "Added from iCloud: %@": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiunti da iCloud: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadidos desde iCloud: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoutés depuis iCloud : %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus iCloud hinzugefügt: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已从 iCloud 添加：%@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أُضيفت من iCloud: %@"
           }
         }
       }

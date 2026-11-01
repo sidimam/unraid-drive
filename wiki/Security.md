@@ -13,7 +13,7 @@ The only thing exposed to the Internet is the gateway (through Cloudflare or you
 - **Unprivileged container.** It runs as `nobody:users` (99:100), so files it creates have the same ownership as files created over SMB, and it cannot touch anything not mounted.
 - **TLS end to end.** Cloudflare (or your proxy) terminates HTTPS; between Cloudflare and your NAS the tunnel is encrypted. Inside your LAN the hop from cloudflared to the gateway is plain HTTP on the same host.
 - **Optional Cloudflare Access.** With a service token, requests without the token never even reach your home.
-- **Secrets stay in the Keychain.** The API key and the Cloudflare token are stored in the device Keychain with *after first unlock, this device only* protection, shared only with the app's own extension.
+- **Credentials in the profile (1.5.3+).** The API key, the Cloudflare token and the optional Unraid login are part of the server profile, stored in the app's own container (app group) shared only with its extensions, and — with iCloud sync on — in your own iCloud Key-Value Storage, encrypted by Apple (end-to-end with Advanced Data Protection), so any device of yours and any reinstall gets them. They never go into the readable `servers.json`, the diagnostics or the log. Only the gateway session cache stays in the Keychain, this device only.
 
 ## Per-user access
 

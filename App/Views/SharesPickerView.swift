@@ -49,8 +49,7 @@ struct SharesToggleList: View {
 
     private func load() async {
         guard let client = model.client(for: server) else {
-            // Right after an iCloud restore the secrets may still be on their way through iCloud Keychain.
-            error = String(localized: "Credentials not available yet. After an iCloud restore they arrive through iCloud Keychain within a minute; try again.")
+            error = String(localized: "This profile has no credentials: open it and use Edit to enter them.")
             loading = false; return
         }
         do {

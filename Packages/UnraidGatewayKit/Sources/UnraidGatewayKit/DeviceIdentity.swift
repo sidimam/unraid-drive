@@ -9,8 +9,11 @@ import IOKit
 /// Keys shared by the app, the Apple TV app and the File Provider extension for the optional
 /// iCloud configuration backup (Key-Value Storage).
 public enum CloudKeys {
-    /// The server list (names, URLs, modes, chosen shares); secrets travel through iCloud Keychain.
+    /// The profiles (names, URLs, modes, chosen shares and, since 1.5.3, their credentials).
     public static let servers = "servers.v1"
+    /// 1.5.3: the credentials of every profile again, by profile id — a copy that older app versions
+    /// (which rewrite `servers.v1` without credentials) never touch.
+    public static let credentials = "credentials.v1"
     /// Map "hardware fingerprint → device id": lets a reinstalled app on the same device keep its
     /// gateway registration instead of appearing as a new device.
     public static let deviceIDs = "device.ids.v1"

@@ -43,6 +43,6 @@ Optionally add a second policy with action **Allow** and rule *Emails = your e�
 
 ## 4.5 In the app
 
-In **Add server** choose **Connection: Cloudflare Access** and paste the two values. The app stores them in the Keychain and adds the two headers to every request, including the ones made by the Files app extension in the background.
+In **Add server** choose **Connection: Cloudflare Access** and paste the two values. The app stores them in the profile (synced with it through iCloud, 1.5.3+) and adds the two headers to every request, including the ones made by the Files app extension in the background.
 
 → Next: [Step 5 — Add the server in the app](Step-5-Add-the-server-in-the-app)

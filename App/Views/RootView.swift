@@ -125,8 +125,8 @@ struct RootView: View {
             promptCredentials(for: server)
         }
         #if os(macOS)
-        // The Finder's "Sign in…" launches the app: offer the credentials sheet for a server whose
-        // secrets are not in this Mac's Keychain (typical after an iCloud restore without iCloud Keychain).
+        // The Finder's "Sign in…" launches the app: offer the credentials sheet for a profile without
+        // credentials (one saved in iCloud by a version older than 1.5.3).
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             guard signInServer == nil, !adding, let s = model.servers.first(where: { !$0.isDemo && model.client(for: $0) == nil }) else { return }
             promptCredentials(for: s)

@@ -9,8 +9,8 @@ let fpLog = Logger(subsystem: "com.sdimambro.unraid-drive", category: "fileprovi
 /// Replicated File Provider extension backed by unraid-gateway.
 ///
 /// One instance per domain; the domain identifier is the server id stored by
-/// the app, from which the gateway URL (shared defaults) and the API key
-/// (shared Keychain) are resolved.
+/// the app, from which the profile (shared defaults: URL and, since 1.5.3, its credentials) is
+/// resolved.
 final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     let domain: NSFileProviderDomain
     let client: GatewayClient?
@@ -29,7 +29,7 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
             client = nil
             let known = ServerStore().server(id: serverID) != nil
             fpLog.error("no server config or api key for domain \(serverID, privacy: .public)")
-            Diag.error("fileprovider", "extension started for domain \(serverID.prefix(8)) but \(known ? "its secrets are not readable from the Keychain" : "no server with this id is stored") — every operation will report notAuthenticated")
+            Diag.error("fileprovider", "extension started for domain \(serverID.prefix(8)) but \(known ? "its profile has no credentials" : "no server with this id is stored") — every operation will report notAuthenticated")
         }
         index = ItemIndex(domainID: serverID)
         let mgr = NSFileProviderManager(for: domain)

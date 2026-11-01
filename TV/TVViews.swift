@@ -174,8 +174,19 @@ struct TVPairView: View {
             } else {
                 Text("Configuration found in iCloud: \(waitingInCloud.count) server(s)").font(.title)
                 Text(waitingInCloud.map(\.name).joined(separator: " · ")).font(.title3).foregroundStyle(.tint)
-                Text("Apple TV cannot read the credentials from iCloud Keychain. Open Unraid Drive on your iPhone, iPad or Mac, go to Settings › Pair an Apple TV, enter this code and send all the servers: the whole configuration arrives here encrypted with the code and this Apple TV registers itself on the gateways again.")
-                    .multilineTextAlignment(.center).foregroundStyle(.secondary).frame(maxWidth: 900)
+                if model.cloudServersReady.isEmpty {
+                    Text("These profiles were saved by an older version of Unraid Drive, without their credentials. Update Unraid Drive on your iPhone, iPad or Mac and open it once, or go there to Settings › Pair an Apple TV and enter this code.")
+                        .multilineTextAlignment(.center).foregroundStyle(.secondary).frame(maxWidth: 900)
+                } else {
+                    Text("The profiles arrive complete with their credentials and this Apple TV registers itself on each gateway.")
+                        .multilineTextAlignment(.center).foregroundStyle(.secondary).frame(maxWidth: 900)
+                    Button("Use the iCloud configuration") {
+                        let adopted = model.adoptFromCloud()
+                        done = true; status = "Added from iCloud: \(adopted.map(\.name).joined(separator: ", "))"
+                        paired = adopted.map { model.current($0) }
+                    }
+                    .buttonStyle(TVPillButtonStyle())
+                }
             }
             Text(code.enumerated().map { $0.offset == 3 ? " \($0.element)" : String($0.element) }.joined())
                 .font(.system(.largeTitle, design: .rounded).weight(.bold)).monospacedDigit().foregroundStyle(.tint)

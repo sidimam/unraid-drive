@@ -177,7 +177,7 @@ final class ShareModel: ObservableObject {
 
     func save() async {
         guard let server, let client = GatewayClientFactory.client(for: server, keychain: keychain) else {
-            result = .init(ok: false, message: String(localized: "Credentials missing from the Keychain: open Unraid Drive and sign in again.")); return
+            result = .init(ok: false, message: String(localized: "This profile has no credentials: open Unraid Drive and use Edit to enter them.")); return
         }
         uploading = true; result = nil; progress = 0
         defer { uploading = false }

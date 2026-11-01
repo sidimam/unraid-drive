@@ -278,7 +278,7 @@ struct ServerDetailView: View {
     }
 
     private func load() async {
-        guard let client = model.client(for: server) else { error = "API key missing from Keychain"; return }
+        guard let client = model.client(for: server) else { error = String(localized: "This profile has no credentials: open it and use Edit to enter them."); return }
         loading = true; defer { loading = false }
         do {
             dashboard = try await client.graphQL(Dashboard.query, as: Dashboard.self)

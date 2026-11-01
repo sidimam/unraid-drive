@@ -117,14 +117,14 @@ struct SettingsView: View {
                         Button(role: .destructive) { confirmRemoveCloud = true } label: { Label("Remove the configuration from iCloud", systemImage: "icloud.slash") }
                             .confirmationDialog("Remove the server list from iCloud?", isPresented: $confirmRemoveCloud) {
                                 Button("Remove from iCloud", role: .destructive) { cloud.removeCloudCopy() }
-                            } message: { Text("The other devices keep their configuration; only the shared copy is deleted. Secrets in iCloud Keychain are not touched.") }
+                            } message: { Text("The other devices keep their configuration; only the shared copy in iCloud (profiles and their credentials) is deleted.") }
                     }
                     if let e = cloud.lastError { Label(e, systemImage: "exclamationmark.triangle").foregroundStyle(.red) }
                     Toggle(isOn: Binding(get: { AppGroup.defaults.bool(forKey: Continuity.resumeKey) }, set: { AppGroup.defaults.set($0, forKey: Continuity.resumeKey); continuityTick += 1 })) {
                         Label("Open where I left off on another device", systemImage: "arrow.triangle.turn.up.right.diamond")
                     }.id(continuityTick)
                 } header: { SectionTitle("iCloud") } footer: {
-                    Text("When on, the server list (names, URLs, connection mode, shares to show) is saved as a readable servers.json in iCloud Drive › Unraid Drive and in iCloud's key-value storage, and the API keys, Cloudflare tokens and Unraid passwords in iCloud Keychain (the Passwords of your Apple account), end-to-end encrypted — never in the file. After restoring or replacing a device, Restore brings the servers back and registers this device on each gateway. Turning sync off keeps the copies in iCloud for the other devices. The demo server is never synced.")
+                    Text("When on, each profile — name, URL, connection mode, shares to show and its credentials (Unraid API key, Cloudflare service token, Unraid user and password) — is saved in your iCloud, so a new or reinstalled device gets it complete. The readable servers.json in iCloud Drive › Unraid Drive has everything but the credentials. After restoring or replacing a device, Restore brings the profiles back and registers this device on each gateway. Turning sync off keeps the copies in iCloud for the other devices. The demo server is never synced.")
                     #if DEVELOPER_ID
                     Text("Apple grants an iCloud Drive folder only to App Store apps: this Homebrew build reads and writes the servers.json that iCloud Drive syncs from your other devices, and always keeps the list in iCloud key-value storage.")
                     #endif

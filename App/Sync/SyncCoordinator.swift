@@ -174,7 +174,7 @@ final class SyncCoordinator: ObservableObject {
             Diag.info("sync", "\(fresh.localLabel): skipped, not on Wi-Fi"); return
         }
         guard let c = client(forServer: fresh.serverID) else {
-            finish(fresh, SyncRunSummary(status: .failed, error: String(localized: "Credentials missing from the Keychain: sign in again."), trigger: trigger), []); return
+            finish(fresh, SyncRunSummary(status: .failed, error: String(localized: "This profile has no credentials: open it and use Edit to enter them."), trigger: trigger), []); return
         }
         // Paused on the gateway since the last run? One cheap request before moving any file.
         if let remote = try? await c.remoteSyncs().first(where: { $0.id == fresh.id }), !remote.enabled {

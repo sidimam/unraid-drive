@@ -6,7 +6,7 @@ Unraid Drive is an app for iPhone, iPad, Apple Vision Pro, Mac and Apple TV that
 
 ## Data the app processes
 
-- **Gateway URL, Unraid API key, optional Unraid username and password, optional Cloudflare Access service token.** Entered by you. Stored on your device in the iOS Keychain. Sent only to the gateway URL you entered, to authenticate. If you turn on *Sync configuration with iCloud* in Settings, the server list is stored in your iCloud account (Key-Value Storage) and the secrets in iCloud Keychain, both provided by Apple and end-to-end encrypted; this is off by default.
+- **Gateway URL, Unraid API key, optional Unraid username and password, optional Cloudflare Access service token.** Entered by you. Stored on your device as part of the server profile, in the app's own container shared only with its extensions. Sent only to the gateway URL you entered, to authenticate. With *Sync configuration with iCloud* on (Settings › iCloud; on by default, you can turn it off), the profiles, credentials included, are stored in your own iCloud account (Key-Value Storage, provided and encrypted by Apple; end-to-end with Advanced Data Protection) so your other devices and a reinstall get them; the readable `servers.json` in iCloud Drive never contains credentials.
 - **Your files.** Files you open, save or move are transferred directly between your device and your gateway. Files opened in the Files app are cached on your device like with any cloud provider and can be removed with *Remove Download*.
 - **Server information** shown in the dashboard (array, shares, containers, notifications) is read from your Unraid API through your gateway and displayed; it is not stored beyond the app's cache.
 
@@ -24,7 +24,7 @@ The demo server is a simulation that lives entirely on your device. Nothing is s
 
 ## Your choices
 
-You can delete all data by removing servers in the app (which also deletes their Keychain entries and Files app locations), turning iCloud sync off (which deletes the iCloud copy) and uninstalling the app.
+You can delete all data by removing servers in the app (which also deletes their credentials and Files app locations), *Remove the copy from iCloud* in Settings › iCloud and uninstalling the app.
 
 ## Contact
 

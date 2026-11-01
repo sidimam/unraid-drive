@@ -32,9 +32,9 @@ struct WalkthroughView: View {
     private var pages: [Page] {
         let icloudPage = restoreFirst
             ? Page(kind: .icloud, icon: "icloud.and.arrow.down", title: "Configuration found in iCloud",
-                   text: "Another device (or this one, before a reinstall) saved \(cloud.remoteServerCount) server(s) in iCloud. Restore them here: the list arrives from iCloud, the API keys, Cloudflare service tokens and Unraid passwords from iCloud Keychain, and this device registers itself on each gateway again.")
+                   text: "Another device (or this one, before a reinstall) saved \(cloud.remoteServerCount) server(s) in iCloud. Restore them here: every profile arrives from iCloud complete with its API key, Cloudflare service token and Unraid password, and this device registers itself on each gateway again.")
             : Page(kind: .icloud, icon: "icloud", title: "Your configuration in iCloud",
-                   text: "One backup shared by iPhone, iPad, Vision Pro and Mac: the server list in iCloud and the secrets in iCloud Keychain, end-to-end encrypted. You can turn it on later in Settings › iCloud.")
+                   text: "One backup shared by iPhone, iPad, Vision Pro, Mac and Apple TV: the profiles, credentials included, in your iCloud. You can turn it on later in Settings › iCloud.")
         var p: [Page] = []
         if restoreFirst { p.append(icloudPage) }
         p += [
@@ -118,7 +118,7 @@ struct WalkthroughView: View {
             } label: { Label("Restore \(cloud.remoteServerCount) server(s) from iCloud", systemImage: "arrow.down.circle") }
             .buttonStyle(.borderedProminent).disabled(busy)
             Text(cloud.remoteServers.map(\.name).joined(separator: " · ")).font(.callout).foregroundStyle(.tint).multilineTextAlignment(.center).padding(.horizontal)
-            Text("A configuration saved by Unraid Drive on another device was found. Restoring turns sync on; the secrets arrive through iCloud Keychain and this device is registered on each gateway again.").font(.footnote).foregroundStyle(.secondary).multilineTextAlignment(.center).padding(.horizontal)
+            Text("A configuration saved by Unraid Drive on another device was found. Restoring turns sync on; the profiles arrive with their credentials and this device is registered on each gateway again.").font(.footnote).foregroundStyle(.secondary).multilineTextAlignment(.center).padding(.horizontal)
         } else {
             Button {
                 Task { busy = true; await cloud.setEnabled(true); busy = false }
@@ -137,7 +137,7 @@ struct WalkthroughView: View {
                     switch model.restoreRegistration[s.id] {
                     case .registered: Image(systemName: "checkmark.circle.fill").foregroundStyle(.green); Text(s.name); Text("registered on the gateway").foregroundStyle(.secondary)
                     case .failed(let why): Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange); Text(s.name); Text(why).foregroundStyle(.secondary).lineLimit(3)
-                    case .waitingSecrets: ProgressView().controlSize(.small); Text(s.name); Text("waiting for the credentials from iCloud Keychain…").foregroundStyle(.secondary)
+                    case .waitingSecrets: ProgressView().controlSize(.small); Text(s.name); Text("waiting for the profile credentials from iCloud…").foregroundStyle(.secondary)
                     case nil: Image(systemName: "circle").foregroundStyle(.secondary); Text(s.name)
                     }
                 }.font(.footnote)

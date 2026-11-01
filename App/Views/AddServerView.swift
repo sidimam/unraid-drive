@@ -60,7 +60,7 @@ struct AddServerView: View {
                     SecretField(title: "Unraid API key", text: $apiKey)
                         .focused($focusedField, equals: .apiKey)
                 } header: { SectionTitle("Authentication") } footer: {
-                    Text("Create the key in Unraid under Settings › Management Access › API Keys. It is stored in this device's Keychain and sent only to your gateway.")
+                    Text("Create the key in Unraid under Settings › Management Access › API Keys. It is saved in the profile, synced with it through your iCloud, and sent only to your gateway.")
                 }
                 Section {
                     TextField("Unraid username", text: $unraidUser)
@@ -122,6 +122,10 @@ struct AddServerView: View {
                     name = e.name; urlText = e.url.absoluteString
                     mode = e.accessMode == .cloudflareAccess ? .cloudflare : .direct
                     unraidUser = e.username ?? ""
+                    // 1.5.3: the credentials are in the profile — editing shows them, no retyping.
+                    apiKey = e.apiKey ?? ""
+                    cfClientID = e.cloudflareClientID ?? ""; cfClientSecret = e.cloudflareClientSecret ?? ""
+                    unraidPassword = e.password ?? ""
                 }
             }
             .navigationTitle(editing == nil ? "Add server" : "Edit server")

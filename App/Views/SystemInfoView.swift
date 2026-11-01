@@ -99,7 +99,7 @@ struct SystemInfoView: View {
     private func bytes(_ n: Int64) -> String { ByteCountFormatter.string(fromByteCount: n, countStyle: .binary) }
 
     private func load() async {
-        guard let client = model.client(for: server) else { error = String(localized: "Credentials missing from the Keychain"); return }
+        guard let client = model.client(for: server) else { error = String(localized: "This profile has no credentials: open it and use Edit to enter them."); return }
         if server.isDemo { error = String(localized: "The demo server has no hardware to describe."); return }
         do { info = try await client.graphQL(SystemInfo.query, as: SystemInfo.self); error = nil }
         catch { self.error = error.localizedDescription }

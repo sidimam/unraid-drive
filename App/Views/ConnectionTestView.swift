@@ -161,7 +161,7 @@ struct ConnectionTestView: View {
         Diag.info("test", "connection test for \(server.name) (\(server.accessMode), \(server.url.host ?? "?"))")
         for i in steps.indices { steps[i].state = .pending }
         guard let client = model.client(for: server) else {
-            set("reach", .failed(String(localized: "Credentials missing from the Keychain. Use Edit to enter them again."))); return
+            set("reach", .failed(String(localized: "This profile has no credentials: open it and use Edit to enter them."))); return
         }
         // 1. reachability
         set("reach", .running)

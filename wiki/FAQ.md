@@ -25,7 +25,7 @@ Yes, natively. The Files app on visionOS shows Unraid Drive like on iPad.
 Not yet. A macOS version would need a separate File Provider build; it is on the roadmap.
 
 **I restored my iPhone: do I have to set everything up again?**
-Not if *Sync configuration with iCloud* was on (gear icon → Settings). The first launch offers *Restore from iCloud*: servers come back from iCloud Key-Value Storage and their secrets from iCloud Keychain. Without sync, add the server again with URL and key.
+Not if *Sync configuration with iCloud* was on (gear icon → Settings). The first launch offers *Restore from iCloud*: the profiles come back from iCloud complete with API key, Cloudflare token and Unraid login (1.5.3+; with older versions the credentials depended on iCloud Keychain and often went missing). Without sync, add the server again with URL and key.
 
 **Several Unraid servers?**
 Add each one as a server in the app. Each appears as its own folder in the Files app.

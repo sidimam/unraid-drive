@@ -36,73 +36,36 @@ public struct CloudflareServiceToken: Hashable, Sendable {
     }
 }
 
-/// Stores per-server secrets in the shared Keychain access group so the
-/// File Provider extension can authenticate without the app running.
+/// The Keychain items of the app (shared access group, so the extensions can read them).
 ///
-/// Items can be stored as *synchronizable*: iCloud Keychain then carries them
-/// (end-to-end encrypted) to the user's other devices and to a restored
-/// device. Reads always look for both variants.
+/// Since 1.5.3 the credentials (API key, Cloudflare service token, Unraid user/password) live in the
+/// profile (`ServerConfig`) and sync with it through iCloud. Until 1.5.2 they were Keychain items,
+/// synchronizable only when iCloud sync was on at the moment they were written — so a new or
+/// reinstalled device often got the profiles without them. What remains here: reading those legacy
+/// items (for `ServerStore.migrateSecretsFromKeychain` and as a fallback), deleting them with the
+/// server, and the device-local gateway session cache.
 public struct KeychainStore: Sendable {
     private let service = "com.sdimambro.unraid-drive.secrets"
     public init() {}
 
-    // MARK: API key
-    public func set(apiKey: String, for serverID: String, synchronizable: Bool = false) throws {
-        try set(apiKey, account: serverID, synchronizable: synchronizable)
-    }
-    public func apiKey(for serverID: String) -> String? { get(account: serverID) }
+    // MARK: Legacy credentials (1.5.2 and earlier) — read only
 
-    // MARK: Cloudflare Access service token
-    public func set(cloudflareToken t: CloudflareServiceToken, for serverID: String, synchronizable: Bool = false) throws {
-        try set(t.clientID, account: serverID + ".cf-id", synchronizable: synchronizable)
-        try set(t.clientSecret, account: serverID + ".cf-secret", synchronizable: synchronizable)
-    }
+    public func apiKey(for serverID: String) -> String? { get(account: serverID) }
     public func cloudflareToken(for serverID: String) -> CloudflareServiceToken? {
         guard let id = get(account: serverID + ".cf-id"), let secret = get(account: serverID + ".cf-secret") else { return nil }
         return CloudflareServiceToken(clientID: id, clientSecret: secret)
-    }
-
-    // MARK: Unraid user credentials
-    public func set(username: String, password: String, for serverID: String, synchronizable: Bool = false) throws {
-        try set(username, account: serverID + ".user", synchronizable: synchronizable)
-        try set(password, account: serverID + ".pass", synchronizable: synchronizable)
     }
     public func userCredentials(for serverID: String) -> (username: String, password: String)? {
         guard let u = get(account: serverID + ".user"), let p = get(account: serverID + ".pass"), !u.isEmpty else { return nil }
         return (u, p)
     }
-    public func removeUserCredentials(for serverID: String) {
-        for acct in [serverID + ".user", serverID + ".pass"] {
-            for sync in [false, true] { SecItemDelete(query(acct, synchronizable: sync) as CFDictionary) }
-        }
-    }
 
+    /// Deletes every item of a server (legacy credentials and session), local and iCloud Keychain.
     public func remove(for serverID: String) {
         for acct in accounts(serverID) {
             for sync in [false, true] { SecItemDelete(query(acct, synchronizable: sync) as CFDictionary) }
         }
     }
-
-    /// Re-stores every secret of a server with the requested synchronizable flag
-    /// (used when the user turns iCloud sync on or off).
-    ///
-    /// Non-destructive: each account is copied to the target variant first and the other variant
-    /// is dropped only after the copy succeeded; an account that cannot be read right now (keychain
-    /// still locked, item still travelling through iCloud Keychain) is left exactly as it is. Until
-    /// build 36 this removed all five items before re-adding what it had managed to read, which
-    /// silently destroyed secrets — "the API key disappeared" — whenever a read failed.
-    public func setSynchronizable(_ synchronizable: Bool, for serverID: String) throws {
-        var moved = 0, missing = 0
-        for acct in accounts(serverID) {
-            guard let value = get(account: acct) else { missing += 1; continue }
-            try set(value, account: acct, synchronizable: synchronizable)
-            moved += 1
-        }
-        Diag.info("keychain", "server \(serverID.prefix(8)): \(moved) secret(s) now \(synchronizable ? "synchronizable" : "local only"), \(missing) absent")
-    }
-
-    /// True when at least the API key of the server is readable right now.
-    public func hasSecrets(for serverID: String) -> Bool { get(account: serverID) != nil }
 
     // MARK: Cached gateway session (1.5.1) — this device only, never synchronised
 

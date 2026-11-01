@@ -57,13 +57,13 @@ The same section has the **App icon** colour dots (Unraid orange, red, blue, tea
 
 ## 5.6 Keep the configuration after a restore (iCloud sync)
 
-Tap the gear icon → **Sync configuration with iCloud**. When on:
+Settings › iCloud → **Sync configuration with iCloud** (on by default). When on:
 
-- the server list (names, URLs, connection modes) is stored in your iCloud account (Key-Value Storage);
-- API keys and Cloudflare service tokens are stored in **iCloud Keychain**, end-to-end encrypted by Apple;
-- after restoring, replacing or adding an iPhone/iPad/Vision Pro signed in to the same iCloud account, the app shows **Restore N server(s) from iCloud** on its first launch; one tap brings everything back, Files app locations included.
+- every **profile** — name, URL, connection mode, shares to show **and its credentials** (Unraid API key, Cloudflare service token Client ID + Client Secret, optional Unraid user and password) — is stored in your iCloud account (Key-Value Storage). Since **1.5.3** the credentials are part of the profile: until 1.5.2 they were separate Keychain items that often never reached iCloud Keychain, so a new iPhone got the servers without API key and Cloudflare headers;
+- a readable copy without credentials is kept in **iCloud Drive › Unraid Drive › servers.json**;
+- after restoring, replacing or adding an iPhone, iPad, Vision Pro, Mac or Apple TV signed in to the same iCloud account — or reinstalling the app from scratch — the app shows **Configuration found in iCloud**; *Restore* brings every profile back **ready to use** and registers the device on each gateway, Files app locations included.
 
-When off (the default), nothing leaves the device. Turning it off again deletes the copy in iCloud. The demo server is never synced. Requires iCloud Drive and iCloud Keychain enabled in iOS Settings for your Apple ID.
+Updating from 1.5.2 or earlier: at the first launch the app moves the credentials it finds in the Keychain into the profiles and saves them to iCloud — open 1.5.3 once on a device that works, and the others (and any reinstall) get complete profiles. When sync is off nothing leaves the device; *Remove the copy from iCloud* deletes the shared copy. The demo server is never synced. Requires iCloud (Key-Value Storage; iCloud Drive for servers.json) for your Apple Account.
 
 ## 5.7 Test the connection
 
@@ -71,7 +71,7 @@ Server page → **Test connection** runs five checks with a suggestion for whate
 
 ## 5.8 Removing a server
 
-Swipe left on it in the list → **Delete**. This removes the Files app location, the cached files and the key from the Keychain. Nothing changes on the NAS.
+Swipe left on it in the list → **Delete**. This removes the profile with its credentials, the Files app location and the cached files. Nothing changes on the NAS.
 
 → Next: [Step 6 — Use your shares in the Files app](Step-6-Using-the-Files-app)
 
@@ -92,5 +92,5 @@ A reinstall wipes the local data, not the registration on the gateway. Unraid Dr
 
 At the first launch and after every update the app opens a short walkthrough: the features and what's new, an **iCloud** step and a **notifications** step, then the four setup steps. Every step can be skipped.
 
-- **iCloud**: on a fresh or reinstalled device with a configuration in iCloud, this step comes **first** (build 30+): *Configuration found in iCloud* lists the server names, *Restore* brings the list from iCloud and the secrets from iCloud Keychain, then the device registers itself on every gateway (one status line per server: registered, waiting for the credentials, error). Otherwise the step offers *Enable iCloud sync*. It is one backup shared by iPhone, iPad, Vision Pro and Mac (server list in iCloud, secrets in iCloud Keychain). Skipped it? Settings › iCloud has the same switch and restore button.
+- **iCloud**: on a fresh or reinstalled device with a configuration in iCloud, this step comes **first** (build 30+): *Configuration found in iCloud* lists the server names, *Restore* brings the profiles from iCloud complete with their credentials, then the device registers itself on every gateway (one status line per server: registered, waiting for the credentials — only for a profile saved by a version older than 1.5.3 —, error). Otherwise the step offers *Enable iCloud sync*. It is one backup shared by iPhone, iPad, Vision Pro, Mac and Apple TV (profiles and credentials in your iCloud). Skipped it? Settings › iCloud has the same switch and restore button.
 - **Notifications**: *Allow notifications* asks the system permission once. Unraid Drive then notifies you when a gateway stops answering (and when it is back) and when a file could not be uploaded or downloaded by the Files app or the Finder. There are no switches in the app: Settings › *Notifications ›* opens the system page where you decide what to allow.

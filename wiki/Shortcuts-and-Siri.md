@@ -22,6 +22,6 @@ Siri phrases (in every app language), e.g. *"Save the clipboard to Unraid Drive"
 
 ## Notes
 
-- The actions use the server's API key stored in the Keychain of the device; if it is missing (typical on a new Mac without iCloud Keychain) the action says so — open the app and enter it.
+- The actions use the API key stored in the server profile; if a profile has no credentials (one saved by a version older than 1.5.3 on another device) the action says so — open the app and use *Edit*.
 - Paths are `share/folder`; the leading slash is optional. Uploads that would overwrite an existing file fail unless *Replace if it exists* is on.
 - Reading the clipboard from a shortcut may show the system paste confirmation on iOS.
