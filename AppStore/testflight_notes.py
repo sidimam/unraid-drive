@@ -3,7 +3,7 @@
 
     ASC_ISSUER=… ASC_KEY=…/AuthKey_Z9NY29WQ4M.p8 python3 AppStore/testflight_notes.py 40
 
-The text is the What's New of store_meta.py (7 locales) with a short preamble; a build that
+The text is RELEASE_NOTES of store_meta.py (the detailed notes; the App Store What's New stays generic) (7 locales) with a short preamble; a build that
 App Store Connect is still processing is reported and skipped — run the script again later.
 The JWT comes from the kit's ascjwt.swift (same folder as the key). Nothing is printed that is secret.
 """
@@ -33,7 +33,7 @@ PREAMBLE = {"en-US": "Build {b}: please check device registration, the iCloud ro
             "de-DE": "Build {b}: bitte Geräteregistrierung, die iCloud-Zeilen in den Einstellungen (servers.json in iCloud Drive), Diagnose und Protokoll sowie den Dateien-/Finder-Speicherort nach dem Update prüfen.\n\n",
             "zh-Hans": "Build {b}：请检查设备注册、设置中的 iCloud 行（iCloud 云盘中的 servers.json）、诊断与日志，以及更新后的“文件”/Finder 位置。\n\n",
             "ar-SA": "الإصدار {b}: يرجى التحقق من تسجيل الجهاز وصفوف iCloud في الإعدادات (servers.json في iCloud Drive) والتشخيص والسجل وموقع الملفات/Finder بعد التحديث.\n\n"}
-texts = {l: (PREAMBLE[l].format(b=build_no) + t)[:4000] for l, t in meta.WHATS_NEW.items()}
+texts = {l: (PREAMBLE[l].format(b=build_no) + t)[:4000] for l, t in meta.RELEASE_NOTES.items()}
 
 builds = call("GET", f"/builds?filter[app]={APP_ID}&filter[version]={build_no}&include=preReleaseVersion&limit=20")
 platforms = {i["id"]: i["attributes"]["platform"] for i in builds.get("included", []) if i["type"] == "preReleaseVersions"}
