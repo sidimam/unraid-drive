@@ -255,7 +255,7 @@ struct FileBrowserView: View {
                         #endif
                         .contextMenu { contextItems(e) }
                 } else if e.isDirectory {
-                    NavigationLink { FileBrowserView(server: server, path: e.path) } label: { row(e) }
+                    NavigationLink(value: FolderRoute(e.path)) { row(e) }
                         .contextMenu { contextItems(e) }
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) { swipeItems(e) }
                 } else {
@@ -285,7 +285,7 @@ struct FileBrowserView: View {
                             .background(selection.contains(e.id) ? AnyShapeStyle(.tint.opacity(0.12)) : AnyShapeStyle(.clear), in: RoundedRectangle(cornerRadius: 12))
                         }.buttonStyle(.plain).contextMenu { contextItems(e) }
                     } else if e.isDirectory {
-                        NavigationLink { FileBrowserView(server: server, path: e.path) } label: { tile(e) }.buttonStyle(.plain).contextMenu { contextItems(e) }
+                        NavigationLink(value: FolderRoute(e.path)) { tile(e) }.buttonStyle(.plain).contextMenu { contextItems(e) }
                     } else {
                         Button { open(e) } label: { tile(e) }.buttonStyle(.plain).contextMenu { contextItems(e) }
                     }

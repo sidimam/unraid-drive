@@ -52,3 +52,7 @@ If you add files on the NAS via SMB or another device, the Files app picks them 
 ## Photos backup, Downloads sync and the share sheet (1.5)
 
 On iPhone, iPad and Vision Pro the app can back the Photos library up to Unraid and send the Downloads folder (*Settings › Profiles › server › Sync*), also in the background when the system allows it. *Save to Unraid Drive* in the share sheet of any app uploads files, images, text and links to a folder of your choice. Details in [Sync and backup](Sync-and-Backup).
+
+## The explorer on iPad, Vision Pro and iPhone Duo
+
+Since 1.5.4 the explorer inside the app uses two columns at regular width — iPad, Apple Vision Pro and the iPhone Duo opened flat: the shares of the current profile on the left (with the health dot, the profile switcher and Settings at the top), the folders of the chosen share on the right. With the iPhone Duo standing half open, like a small laptop, the folders fill the half above the fold and the half below shows the profile, where you are (tap any level of the path, or **Up**) and the shares. The folder you are in stays the same when you open, close or fold the phone.

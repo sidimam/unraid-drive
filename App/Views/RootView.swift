@@ -15,12 +15,16 @@ struct RootView: View {
     @State private var showDiagnostics = false
     @State private var showDashboard = false
     @State private var showWalkthrough = false
-    @State private var route: [String] = []
+    /// The folders opened from the share root down (build 49: one route shared by every layout).
+    @State private var route: [FolderRoute] = []
     #if os(macOS)
     private let compact = false
     #else
     @Environment(\.horizontalSizeClass) private var sizeClass
     private var compact: Bool { sizeClass == .compact }
+    #endif
+    #if os(iOS)
+    @ObservedObject private var hinge = HingeMonitor.shared
     #endif
     /// Server whose connection test was requested from a Home Screen quick action.
     @State private var quickTestServer: ServerConfig?
@@ -36,21 +40,60 @@ struct RootView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { signInServer = server }
     }
 
-    var body: some View {
+    /// One column (iPhone, iPhone Duo closed, Mac): the share root and the folders pushed on it.
+    private var stack: some View {
         NavigationStack(path: $route) {
             Group {
                 if let current = model.current {
                     FileBrowserView(server: current, path: "/").id(current.id)
-                        .navigationDestination(for: String.self) { p in FileBrowserView(server: current, path: p) }
+                        .navigationDestination(for: FolderRoute.self) { r in FileBrowserView(server: current, path: r.path) }
                 } else {
                     welcome
                 }
             }
+        }
+    }
+
+    /// Build 49: two columns at regular width (iPad, iPhone Duo open, Vision Pro); on the iPhone Duo
+    /// half open, the folders above the fold and the control deck below. Mac and compact width keep
+    /// the single column.
+    @ViewBuilder private var layout: some View {
+        #if os(iOS)
+        if let current = model.current, hinge.isLaptopPosture {
+            HingeDeckLayout(server: current, route: $route, onDashboard: { showDashboard = true }, onSelectProfile: selectProfile) { stack }
+        } else if let current = model.current, !compact {
+            SplitExplorer(server: current, route: $route, onDashboard: { showDashboard = true }, onSelectProfile: selectProfile)
+        } else {
+            stack
+        }
+        #elseif os(visionOS)
+        if let current = model.current, !compact {
+            SplitExplorer(server: current, route: $route, onDashboard: { showDashboard = true }, onSelectProfile: selectProfile)
+        } else {
+            stack
+        }
+        #else
+        stack
+        #endif
+    }
+
+    private func selectProfile(_ s: ServerConfig) {
+        guard s.id != model.current?.id else { return }
+        route = []
+        model.select(s)
+    }
+
+    var body: some View {
+        layout
+            #if os(iOS)
+            // iPhone Duo: invisible, keeps HingeMonitor up to date.
+            .background(HingeObserverView())
+            #endif
             .onContinueUserActivity(Continuity.browseActivity) { a in
                 guard let (serverID, path) = Continuity.read(a), let s = model.servers.first(where: { $0.id == serverID }) else { return }
                 showSettings = false; showWalkthrough = false
                 model.select(s)
-                route = Continuity.chain(path)
+                route = FolderRoute.chain(path)
                 Diag.info("continuity", "handoff → \(s.name) \(path)")
             }
             #if !os(macOS)
@@ -103,7 +146,7 @@ struct RootView: View {
                     WalkthroughView.markSeen()
                     if let first = model.servers.first(where: { !$0.isDemo }) ?? model.servers.first { model.select(first) }
                 } else if Continuity.resumeEnabled, let (sid, p) = Continuity.lastFolderFromAnotherDevice(), let s = model.servers.first(where: { $0.id == sid }) {
-                    WalkthroughView.markSeen(); model.select(s); route = Continuity.chain(p)
+                    WalkthroughView.markSeen(); model.select(s); route = FolderRoute.chain(p)
                     Diag.info("continuity", "resumed \(s.name) \(p) from another device")
                 } else if WalkthroughView.shouldShow {
                     // Build 44: the walkthrough is for the first run only; with a profile configured
@@ -113,9 +156,12 @@ struct RootView: View {
                 #if DEBUG
                 // `-openDashboard`: the current profile's page (health row, dashboard, System information).
                 if ProcessInfo.processInfo.arguments.contains("-openDashboard") { WalkthroughView.markSeen(); showDashboard = true }
+                // `-openPath /share/folder`: land in that folder (layout regression: one column, two, hinge).
+                if let i = ProcessInfo.processInfo.arguments.firstIndex(of: "-openPath"), i + 1 < ProcessInfo.processInfo.arguments.count {
+                    WalkthroughView.markSeen(); route = FolderRoute.chain(ProcessInfo.processInfo.arguments[i + 1])
+                }
                 #endif
             }
-        }
         .sheet(item: $signInServer) { AddServerView(editing: $0) }
         .sheet(item: $quickTestServer) { ConnectionTestView(server: $0) }
         .onOpenURL { url in

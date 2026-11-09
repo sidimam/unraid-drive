@@ -2,6 +2,15 @@
 
 All notable changes to Unraid Drive. The server side has its own changelog in [unraid-gateway](https://github.com/sidimam/unraid-gateway/wiki/Changelog).
 
+## 1.5.4 (build 49) — 2026-11-09
+
+Two columns on the big screens, and the iPhone Duo used like a small laptop.
+
+- **Two columns on iPad, Vision Pro and the open iPhone Duo.** At regular width the explorer splits in two: the shares of the current profile in the sidebar (with the health dot that opens the dashboard, the profile switcher and Settings), the folders of the chosen share on the right. Until 1.5.3 these devices showed the iPhone's single column, one screen per folder. The iPhone and the closed iPhone Duo keep the single column.
+- **iPhone Duo half open ("laptop" posture).** With the phone standing half open, the folders fill the half above the fold and the half below becomes a control deck: profile, health and Settings, where you are (every level of the path is a button, plus *Up*) and the shares, one tap each. The posture comes from the system's hinge API (iOS 27.1+), the same used by aMule Remote 1.5.
+- **The folder follows the device.** The three layouts share one route — the chain of folders from the share down — so opening, closing or folding the iPhone Duo, or resizing the window on iPad, keeps you in the folder you were in. Handoff and *Open where I left off* land in the same place in every layout.
+- Under the hood: folder links are now value-based (`FolderRoute`), new `SplitExplorer`, `ShareSidebar`, `HingeDeckLayout` (`App/Views/AdaptiveLayout.swift`) and `HingeMonitor` (`App/HingeMonitor.swift`). Debug launch arguments for regression runs: `-openPath /share/folder` and `-hinge closed|partial|open`. Mac and Apple TV unchanged.
+
 ## 1.5.3 (build 48) — 2026-11-01
 
 The configuration synced with iCloud is complete again — credentials included — on a new iPhone or after a reinstall from scratch.
