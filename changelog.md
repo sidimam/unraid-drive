@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Repository: `CHANGELOG.md` renamed to `changelog.md`; every commit now adds its entry here. Links in the README, the site and the wiki updated.
+- Repository (2026-11-09): stale local tag `v1.5.1-build46` deleted from the local clone; its GitHub release and tag had already been removed when 1.5.4 (49) was published. Checked: local tags now match `git ls-remote --tags origin`.
 
 ## 1.5.4 (build 49) — 2026-11-09
 
