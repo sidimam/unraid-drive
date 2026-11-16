@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Repository: `CHANGELOG.md` renamed to `changelog.md`; every commit now adds its entry here. Links in the README, the site and the wiki updated.
+
 ## 1.5.4 (build 49) — 2026-11-09
 
 Two columns on the big screens, and the iPhone Duo used like a small laptop.

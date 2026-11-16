@@ -280,7 +280,7 @@ for l, m in META.items():
 
 # "What's New" for the 1.4 update (build 42). Limit 4000.
 # App Store "What's New": always the same generic sentence (user rule, 2/11/2026). The details of each
-# release live in CHANGELOG.md / GitHub releases and in RELEASE_NOTES below (TestFlight "What to test").
+# release live in changelog.md / GitHub releases and in RELEASE_NOTES below (TestFlight "What to test").
 WHATS_NEW = {
 'en-US': '• We update the app regularly to fix bugs, optimize performance and improve the experience.',
 'it': '• Aggiorniamo regolarmente l’app per correggere i bug, ottimizzare le prestazioni e migliorare l’esperienza.',
